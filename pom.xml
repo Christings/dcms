@@ -6,7 +6,7 @@
     <artifactId>dcms</artifactId>
     <packaging>war</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bdcms</name>
+    <name>dcms</name>
 
 
     <properties>
