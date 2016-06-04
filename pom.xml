@@ -9,6 +9,7 @@
     <name>dcms</name>
 
     <properties>
+
         <!-- 主要依赖库的版本定义 -->
         <junit.version>4.7</junit.version>
         <ojdbc14.version>10.2.0.4.0</ojdbc14.version>
