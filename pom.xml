@@ -8,6 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>bdcms</name>
 
+
     <properties>
         <!-- 主要依赖库的版本定义 -->
         <junit.version>4.7</junit.version>
