@@ -14,7 +14,7 @@
         <junit.version>4.7</junit.version>
         <ojdbc14.version>10.2.0.4.0</ojdbc14.version>
         <mysql.version>5.1.27</mysql.version>
-        <spring.version>4.3.0.RELEASE</spring.version>
+        <spring.version>4.2.6.RELEASE</spring.version>
         <org.quartz.version>1.6.2</org.quartz.version>
         <hibernate.version>4.3.8.Final</hibernate.version>
         <dom4j.version>1.6.1</dom4j.version>
