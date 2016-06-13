@@ -5,3 +5,7 @@ README.md
 *.iml
 
 .idea
+.DS_Store
+node_modules
+npm-debug.log
+dist
