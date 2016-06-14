@@ -15,7 +15,7 @@
         <ojdbc14.version>10.2.0.4.0</ojdbc14.version>
         <mysql.version>5.1.27</mysql.version>
         <spring.version>4.2.6.RELEASE</spring.version>
-        <org.quartz.version>1.6.2</org.quartz.version>
+        <org.quartz.version>2.1.0</org.quartz.version>
         <hibernate.version>4.3.8.Final</hibernate.version>
         <dom4j.version>1.6.1</dom4j.version>
         <slf4j.version>1.7.9</slf4j.version>
@@ -187,9 +187,14 @@
         </dependency>
         <!-- spring end -->
         <!-- spring quartz beg -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.springsource</groupId>
             <artifactId>org.quartz</artifactId>
+            <version>${org.quartz.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
             <version>${org.quartz.version}</version>
         </dependency>
         <!-- spring quartz end -->
@@ -227,6 +232,19 @@
             <artifactId>hibernate-commons-annotations</artifactId>
             <version>4.0.5.Final</version>
         </dependency>
+        <!-- mybatis配置-->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <!-- http://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <!-- mybatis end -->
         <!-- hibernate end -->
         <!-- slf4j -->
         <dependency>

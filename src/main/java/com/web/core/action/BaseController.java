@@ -20,7 +20,6 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import com.web.core.interceptors.DateConvertEditor;
-import com.web.core.service.CommonService;
 import com.web.core.util.ContextHolderUtils;
 import com.web.core.util.HashList;
 import com.web.core.util.JSONHelper;
@@ -39,8 +38,6 @@ public class BaseController {
 
 	@Resource
 	protected UserService userService;
-	@Resource
-	protected CommonService commonService;
 
 	/**
 	 * 将前台传递过来的日期格式的字符串，自动转化为Date类型
