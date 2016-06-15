@@ -1,9 +1,7 @@
 package com.web.mappers;
 
-import com.web.core.BaseMapper;
+import com.web.core.mapper.BaseMapper;
 import com.web.entity.User;
-
-import java.util.List;
 
 /**
  * Created by tians on 2016/6/12.
