@@ -27,27 +27,27 @@ public class UserServiceImpl implements UserService {
 
 public User getUserById(int id) {
 	UserMapper userMapper = (UserMapper)dao.getMapper(UserMapper.class);
-	User user = userMapper.getUser(id);
+	User user = userMapper.selectOneById(String.valueOf(id));
 	return user;
 	}
 
 	public List<User> getAllUsers(){
 		UserMapper userMapper = (UserMapper)dao.getMapper(UserMapper.class);
-		return userMapper.getAllUsers();
+		return userMapper.getAll();
 	}
 
 	public int saveUser(User user){
 		UserMapper userMapper = (UserMapper)dao.getMapper(UserMapper.class);
-		 return userMapper.saveUser(user);
+		 return userMapper.save(user);
 	}
 	public int updateUser(User user){
 		UserMapper userMapper = (UserMapper)dao.getMapper(UserMapper.class);
-		return userMapper.updateUser(user);
+		return userMapper.update(user);
 	}
 
 	public int deleteUser(int id){
 		UserMapper userMapper = (UserMapper)dao.getMapper(UserMapper.class);
-		return userMapper.deleteUser(id);
+		return userMapper.delete(String.valueOf(id));
 	}
 
 	public User getUserByName(String name){
