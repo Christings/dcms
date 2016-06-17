@@ -1,4 +1,19 @@
 import { ADD_ITEM, DELETE_ITEM, DELETE_ALL, FILTER_ITEM, CHANGE_MESSAGE} from '../constants/actionTypes'
+import * as types from '../constants/actionTypes'
+
+export function userName(item){
+    return{
+        type: types.USER_NAME,
+        item
+    }
+}
+
+export function userPassword(item){
+    return{
+        type: types.USER_PASSWORD,
+        item
+    }
+}
 
 export function addItem() {
     // return dispatch => {

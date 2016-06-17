@@ -33,7 +33,7 @@ let App = React.createClass({
         
         return (
             <div style={styles}>
-                <Login />
+                <Login userNameA={actions.userName} userPasswordA={actions.userPassword} loginName={this.props.loginName} loginPassword={this.props.loginPassword}/>
                 {/*
                 <Login />
                 <SideBar />
@@ -57,7 +57,9 @@ let App = React.createClass({
 export default connect(state => ({
     items: state.items,
     filter: state.filter,
-    change: state.change
+    change: state.change,
+    loginName: state.loginName,
+    loginPassword: state.loginPassword
 }), dispatch => ({
     actions: bindActionCreators(ItemsActions, dispatch)
 }))(App)
