@@ -2,11 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
          http://www.springframework.org/schema/mvc
-		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd ">
+		http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd ">
 
 	<!-- 自动扫描controller包下的所有类，使其认为spring mvc的控制器 -->
 	<!-- 加载controller的时候,不加载service,因为此时事物并未生效,若此时加载了service,那么事物无法对service进行拦截 -->
@@ -89,9 +89,6 @@
 						<value>loginController.do?goPwdInit</value>
 						<value>loginController.do?pwdInit</value>
 						<value>loginController.do?login</value>
-						<value>loginController.do?checkuser</value>
-						<value>repairController.do?repair</value>
-						<value>repairController.do?deleteAndRepair</value>
 					</list>
 				</property>
 			</bean>
@@ -99,7 +96,5 @@
 	</mvc:interceptors>
 
 	<mvc:annotation-driven />
-	<mvc:resources location="/easyui-1.3.6/" mapping="/easyui-1.3.6/**" />
-	<mvc:resources location="/css/" mapping="/css/**" />
-	<mvc:resources location="/js/" mapping="/js/**" />
+	<mvc:resources location="/webpages/" mapping="/webpages/**" />
 </beans>
