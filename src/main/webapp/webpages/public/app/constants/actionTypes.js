@@ -5,6 +5,8 @@ export default keyMirror({
     DELETE_ITEM: null,
     DELETE_ALL: null,
     FILTER_ITEM: null,
-    CHANGE_MESSAGE: null
+    CHANGE_MESSAGE: null,
+    USER_NAME: null,
+    USER_PASSWORD: null
     // SEARCH_EQUIPMENT: null
 })
