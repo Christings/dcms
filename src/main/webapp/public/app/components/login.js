@@ -1,13 +1,15 @@
 import React, {Component} from "react"
 import { FormGroup, FormControl, Form, Col, Grid, ControLabel, Checkbox, Button, Image,ButtonGroup,Panel} from "react-bootstrap"
-
+import $ from 'jquery';
 
 class Login extends Component{
 	constructor(...args){
 		super(...args);
 		this.state = {
 			saveNP: false,
-			getC: false
+			getC: false,
+			login: false,
+			userInformation: [userName: '', password: '']
 		};
 		this.handleLogin = this.handleLogin.bind(this);
 		this.getUserName = this.getUserName.bind(this);
@@ -17,7 +19,33 @@ class Login extends Component{
 	}	
 
 	handleLogin(){
-		if((this.props.loginName == "ding") && (this.props.loginPassword == "123456"))
+		this.setState({
+			userInformation:[
+				userName : this.props.loginName,
+				password : this.props.loginPassword
+			]
+		});
+		$.ajax({
+			url: '/login',
+			dataType: 'json',
+			type: 'POST',
+			data: this.state.userInformation,
+			success: function(){
+				this.setState({ login: true });
+				console.log("log in successfully!!!");
+				var date = new Date();
+				date.setDate(date.getDate() + 5);
+				document.cookie = "^userName=" + this.props.loginName + "^userPassword=" + this.props.loginPassword + "^;expires=" + date.toGMTString();
+				console.log("cookie success");
+			}.bind(this);
+			error: function(xhr, status, err){
+				console.error('/login', status, err.toString());
+			}.bind(this);
+		});
+		if( this.state.login ){
+			/* 跳转至首页*/
+		}
+		/*if((this.props.loginName == "ding") && (this.props.loginPassword == "123456"))
 		{
 			console.log("log in successfully!!!");
 			var date = new Date();
@@ -27,7 +55,7 @@ class Login extends Component{
 		}
 		else{
 			console.log("error!");
-		}
+		}*/
 	}
 
 	getUserName(e){
