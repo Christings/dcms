@@ -32,7 +32,7 @@ public class PrivilegeFilter implements Filter {
         String url = requestUri.substring(contextPath.length());
 
         // 不需要拦截路径
-        if (url.indexOf("/login") > -1) {
+        if (url.indexOf("/login") > -1||url.indexOf("/webpages/") > -1) {
             chain.doFilter(request, response);
         } else {
             //用户没有登录
