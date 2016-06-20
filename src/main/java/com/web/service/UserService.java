@@ -1,5 +1,6 @@
 package com.web.service;
 
+import com.web.core.util.page.PageBounds;
 import com.web.entity.User;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface UserService {
 	public int updateUser(User user);
 
 	public int deleteUser(int id);
+
+	public List<User> getUserPage(PageBounds bounds, User user);
 }

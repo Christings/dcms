@@ -70,12 +70,20 @@
         <!-- mybatis配置信息文件路径 -->
         <property name="configLocation" value="classpath:mybatis-config.xml" />
         <!-- 自动扫描加载所有的mappers文件夹下的sqlmap配置文件 -->
-        <property name="mapperLocations" value="classpath:mappers/*.xml" />
+        <property name="mapperLocations" value="classpath:mappers/mysql/*.xml" />
+        <!--dm SqlMap-->
+       <!-- <property name="mapperLocations" value="classpath:mappers/dm/*.xml" />-->
+        <!--oracle SqlMap-->
+        <!--<property name="mapperLocations" value="classpath:mappers/oracle/*.xml" />-->
+        <property name="plugins" >
+            <bean class="com.web.core.interceptors.mybatis.MySqlPageInterceptor"></bean>
+        </property>
       </bean>
+
     <!-- 配置扫描器 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <!-- 扫描这个包以及它的子包下的所有映射接口类 -->
-        <property name="basePackage" value="com.web.mappers" />
+        <property name="basePackage" value="com.web.core.mapper,com.web.mappers" />
         <property name="sqlSessionFactoryBeanName" value="sessionFactory" />
     </bean>
 

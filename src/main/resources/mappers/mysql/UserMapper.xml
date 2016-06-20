@@ -26,4 +26,8 @@
     <delete id="delete" flushCache="true" parameterType="int">
         DELETE from USER  where id = #{id}
     </delete>
+
+    <select id="getByPage" resultType="User">
+        select * from USER
+    </select>
 </mapper>

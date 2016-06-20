@@ -1,7 +1,10 @@
 package com.web.mappers;
 
 import com.web.core.mapper.BaseMapper;
+import com.web.core.util.page.PageBounds;
 import com.web.entity.User;
+
+import java.util.List;
 
 /**
  * Created by tians on 2016/6/12.
@@ -10,5 +13,7 @@ import com.web.entity.User;
 public interface UserMapper extends BaseMapper<User>{
 
     public User getUserByName(String name);
+
+    public List<User> getByPage(PageBounds bounds, User user);
 
 }
