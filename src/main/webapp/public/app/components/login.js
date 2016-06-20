@@ -110,7 +110,7 @@ class Login extends Component{
 				<div style={{height:"450",backgroundImage:'url(public/app/assets/img/2.png)'}}>
 					
 					<Col smOffset={7} sm={3}>
-					<Form horizontal className="well" style={{maxWidth: 400,minWidth:400,margin: '100px auto 0px'}}>
+					<Form horizontal className="well" style={{maxWidth: 400,minWidth:400,opacity:"1",margin: '100px auto 0px'}}>
 
 						<FormGroup controlId = "formHorizontalUserName">
 							{/*<Col style={{ textAlign : 'right'}}componentClass = {ControLabel} sm={4}>
@@ -126,7 +126,7 @@ class Login extends Component{
 							{/*<Col style={{ textAlign : 'right'}} componentClass = {ControLabel} sm={4}>
 								密码
 							</Col>*/}
-							<Col smOffset={1} sm={10}> 
+							<Col smOffset={1}  sm={10}> 
 								<FormControl type="password" placeholder="密码" onChange={this.getPassword} />
 							</Col>
 						</FormGroup>
