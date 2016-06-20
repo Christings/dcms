@@ -15,7 +15,7 @@ import org.springframework.web.servlet.view.RedirectView;
 /**
  * 权限拦截器
  * 
- * @author 张代浩
+ * @author 曲国龙
  * 
  */
 public class AuthInterceptor implements HandlerInterceptor {
@@ -46,15 +46,13 @@ public class AuthInterceptor implements HandlerInterceptor {
 	 * 在controller前拦截
 	 */
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
-		response.setHeader("Access-Control-Allow-Origin", "*");
 		return true;
 	}
 
 	/**
 	 * 转发
 	 * 
-	 * @param user
-	 * @param req
+	 * @param request
 	 * @return
 	 */
 	@RequestMapping(params = "forword")

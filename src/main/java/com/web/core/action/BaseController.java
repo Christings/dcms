@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import com.web.core.interceptors.DateConvertEditor;
 import com.web.core.util.ContextHolderUtils;
 import com.web.core.util.HashList;
-import com.web.core.util.JSONHelper;
 import com.web.core.util.page.Page;
 import com.web.service.UserService;
+import com.web.util.JSONUtil;
 
 /**
  * 基础控制器，其他控制器需集成此控制器获得initBinder自动转换的功能
@@ -84,7 +84,7 @@ public class BaseController {
 	 */
 	protected void writerResponse(HashList list, Page page, HttpServletResponse response) {
 		StringBuffer sb = new StringBuffer();
-		String str = JSONHelper.toJSONString(list);
+		String str = JSONUtil.list2Json(list);
 
 		sb.append("{");
 		sb.append("\"total\":").append(page == null ? list.size() : page.getCount()).append(",");
@@ -157,8 +157,8 @@ public class BaseController {
 		/**
 		 * 读取前台请求对象中指定名称的参数值，并转化指定名称的变量为单精度浮点型,如果该参? 值在请求对象中不存在，返回默认值。
 		 * 
-		 * @param req
-		 *            前台请求对象
+		 * 前台请求对象
+		 * 
 		 * @param paramName
 		 *            参数名称
 		 * @param defaultValue
@@ -180,8 +180,8 @@ public class BaseController {
 		/**
 		 * 读取前台请求对象中指定名称的参数值，并转化指定名称的变量为布尔型,如果该参数值在? 求对象中不存在，返回默认值。
 		 * 
-		 * @param req
-		 *            前台请求对象
+		 * 前台请求对象
+		 * 
 		 * @param paramName
 		 *            指定名称
 		 * @param defaultValue
@@ -208,8 +208,8 @@ public class BaseController {
 		/**
 		 * 读取前台请求对象中指定名称的参数值，并转化指定名称的变量为双精度浮点型,如果该参? 值在请求对象中不存在，返回默认值。
 		 * 
-		 * @param req
-		 *            前台请求对象
+		 * 前台请求对象
+		 * 
 		 * @param paramName
 		 *            指定名称
 		 * @param defaultValue
@@ -233,8 +233,8 @@ public class BaseController {
 		/**
 		 * 读取前台请求对象中指定名称的参数值，并转化指定名称的变量为整型,如果该参数值在请? 对象中不存在，返回默认值。
 		 * 
-		 * @param req
-		 *            前台请求对象
+		 * 前台请求对象
+		 * 
 		 * @param paramName
 		 *            指定名称
 		 * @param defaultValue
@@ -255,8 +255,8 @@ public class BaseController {
 		/**
 		 * 读取前台请求对象中指定名称的参数值，并转化指定名称的变量为长整型,如果该参数值在? 求对象中不存在，返回默认值。
 		 * 
-		 * @param req
-		 *            前台请求对象
+		 * 前台请求对象
+		 * 
 		 * @param paramName
 		 *            指定名称
 		 * @param defaultValue
@@ -288,7 +288,6 @@ public class BaseController {
 		 * 读取前台对象客户指定名称的参数值，并转化为日期类型
 		 * 
 		 * @param paramName
-		 * @param pattern
 		 * @return
 		 */
 		public static final Date getDate(String paramName) {

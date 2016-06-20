@@ -1,5 +1,8 @@
 package com.web.action;
 
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+
 import com.alibaba.fastjson.JSON;
 import com.web.core.action.BaseController;
 import com.web.entity.Menu;
@@ -16,9 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-
 /**
  * 菜单获取
  * @author 杜延雷
@@ -26,8 +26,8 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/menu")
-public class MenuAction extends BaseController {
-	private static final Logger LOGGER = LoggerFactory.getLogger(MenuAction.class);
+public class MenuController extends BaseController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class);
 
 	@Autowired
 	MenuService menuService;

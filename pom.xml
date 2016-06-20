@@ -16,7 +16,6 @@
         <mysql.version>5.1.27</mysql.version>
         <spring.version>4.2.6.RELEASE</spring.version>
         <org.quartz.version>2.1.0</org.quartz.version>
-        <hibernate.version>4.3.8.Final</hibernate.version>
         <dom4j.version>1.6.1</dom4j.version>
         <slf4j.version>1.7.9</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
@@ -24,9 +23,6 @@
         <commons-pool.version>1.6</commons-pool.version>
         <commons-dbcp.version>1.4</commons-dbcp.version>
         <druid.version>0.2.9</druid.version>
-        <jackson.version>1.8.4</jackson.version>
-        <jackson2.version>2.1.2</jackson2.version>
-        <json-lib.version>2.1</json-lib.version>
         <fastjson-lib.version>1.1.37</fastjson-lib.version>
 
         <commons-beanutils.version>1.7.0</commons-beanutils.version>
@@ -87,7 +83,6 @@
             <version>${junit.version}</version>
         </dependency>
         <!-- ojdbc <dependency> <groupId>com.oracle</groupId> <artifactId>ojdbc14</artifactId> <version>${ojdbc14.version}</version> </dependency> -->
-
         <!-- mysql -->
         <dependency>
             <groupId>mysql</groupId>
@@ -186,18 +181,15 @@
             <version>${spring.version}</version>
         </dependency>
         <!-- spring end -->
+
         <!-- spring quartz beg -->
-        <!--<dependency>
-            <groupId>com.springsource</groupId>
-            <artifactId>org.quartz</artifactId>
-            <version>${org.quartz.version}</version>
-        </dependency>-->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
             <version>${org.quartz.version}</version>
         </dependency>
         <!-- spring quartz end -->
+
         <!-- spring orm beg -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -211,41 +203,19 @@
         </dependency>
         <!-- spring orm end -->
 
-        <!-- hibernate beg -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-ehcache</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-proxool</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.common</groupId>
-            <artifactId>hibernate-commons-annotations</artifactId>
-            <version>4.0.5.Final</version>
-        </dependency>
         <!-- mybatis配置-->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <version>3.3.1</version>
         </dependency>
-        <!-- http://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
             <version>1.2.2</version>
         </dependency>
         <!-- mybatis end -->
-        <!-- hibernate end -->
+
         <!-- slf4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -275,27 +245,6 @@
         </dependency>
 
         <!-- JSON begin -->
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.13</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml</groupId>
-            <artifactId>classmate</artifactId>
-            <version>1.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.json-lib</groupId>
-            <artifactId>json-lib</artifactId>
-            <version>${json-lib.version}</version>
-            <classifier>jdk15</classifier>
-        </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -366,14 +315,14 @@
     </dependencies>
 
     <build>
-        <finalName>base</finalName>
+        <finalName>dcms</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
         </plugins>
