@@ -7,9 +7,7 @@ class Login extends Component{
 		super(...args);
 		this.state = {
 			saveNP: false,
-			getC: false,
-			login: false,
-			userInformation: [userName: '', password: '']
+			getC: false
 		};
 		this.handleLogin = this.handleLogin.bind(this);
 		this.getUserName = this.getUserName.bind(this);
@@ -19,30 +17,31 @@ class Login extends Component{
 	}	
 
 	handleLogin(){
-		this.setState({
-			userInformation:[
-				userName : this.props.loginName,
-				password : this.props.loginPassword
-			]
-		});
+		
+		var userInformation = { userName: '', password: ''};
+		var login = false;
+		userInformation['userName'] = this.props.loginName;
+		userInformation['password'] = this.props.loginPassword;
+		// console.log(userInformation['userName']);
+		// console.log(userInformation['password']);
 		$.ajax({
 			url: '/login',
 			dataType: 'json',
 			type: 'POST',
-			data: this.state.userInformation,
+			data: userInformation,
 			success: function(){
-				this.setState({ login: true });
+				login = true;
 				console.log("log in successfully!!!");
 				var date = new Date();
 				date.setDate(date.getDate() + 5);
 				document.cookie = "^userName=" + this.props.loginName + "^userPassword=" + this.props.loginPassword + "^;expires=" + date.toGMTString();
 				console.log("cookie success");
-			}.bind(this);
+			}.bind(this),
 			error: function(xhr, status, err){
 				console.error('/login', status, err.toString());
-			}.bind(this);
+			}.bind(this)
 		});
-		if( this.state.login ){
+		if( login ){
 			/* 跳转至首页*/
 		}
 		/*if((this.props.loginName == "ding") && (this.props.loginPassword == "123456"))
