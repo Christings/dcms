@@ -5,10 +5,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.web.core.action.BaseController;
 import com.web.entity.User;
+import com.web.util.AllResult;
 import com.web.util.MD5;
 import com.web.util.StringUtil;
 import com.web.util.WebUtils;
@@ -31,11 +33,12 @@ public class LoginController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping("/login")
-	public String login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/login")
+	@ResponseBody
+	public AllResult login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
 		System.out.println(request.getParameterMap());
 		if (StringUtil.isEmpty(username, password)) {
-			request.setAttribute("errorMsg", "用户名或密码不能为空！");
+			//request.setAttribute("errorMsg", "用户名或密码不能为空！");
 		} else {
 			// TODO 后期需要修改
 			// User user = userService.getUserByName(username);
@@ -51,9 +54,8 @@ public class LoginController extends BaseController {
 			user.setUsername(username);
 			user.setPassword(MD5.MD5Encode(password));
 			WebUtils.addUser(request, user);
-			return "/index.html"; // 登录成功后跳转的页面
 		}
-		return "/index.html";
+		return AllResult.build(1, "登录成功!");
 	}
 
 	/**
