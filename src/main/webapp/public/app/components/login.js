@@ -25,7 +25,7 @@ class Login extends Component{
 		// console.log(userInformation['userName']);
 		// console.log(userInformation['password']);
 		$.ajax({
-			url: 'login',
+			url: './login',
 			dataType: 'json',
 			type: 'POST',
 			data: userInformation,
@@ -38,7 +38,7 @@ class Login extends Component{
 				console.log("cookie success");
 			}.bind(this),
 			error: function(xhr, status, err){
-				console.error('login', status, err.toString());
+				console.error('./login', status, err.toString());
 			}.bind(this)
 		});
 		if( login ){
