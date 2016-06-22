@@ -28,10 +28,19 @@ public class WebUtils {
      * 将用户登录存到session中
      *
      * @param request Http请求
-     * @param user   登录的买家
+     * @param user   登录的用户
      */
     public static void addUser(HttpServletRequest request, User user) {
         request.getSession().setAttribute(SESSION_KEY_USER, user);
+    }
+
+    /**
+     * 将登录用户从session中删除
+     *
+     * @param request
+     */
+    public static void removeUser(HttpServletRequest request){
+        request.getSession().removeAttribute(SESSION_KEY_USER);
     }
 
 }

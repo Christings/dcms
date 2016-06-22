@@ -42,7 +42,7 @@
 	<bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:order="3">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
 		<property name="contentType" value="text/html" />
-		<property name="prefix" value="/webpages/" />
+		<property name="prefix" value="/" />
 		<property name="suffix" value="" />
 	</bean>
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" p:defaultEncoding="UTF-8">
@@ -87,8 +87,9 @@
 			<bean class="com.web.core.interceptors.AuthInterceptor">
 				<property name="excludeUrls">
 					<list>
-						<value>loginController.do?goPwdInit</value>
-						<value>loginController.do?pwdInit</value>
+						<value>/loginOut</value>
+						<value>/login</value>
+						<value>/</value>
 					</list>
 				</property>
 			</bean>
@@ -96,10 +97,10 @@
 	</mvc:interceptors>
 
 	<mvc:annotation-driven />
-	<mvc:resources location="/" mapping="/**/*.html"/>
-	<mvc:resources location="/" mapping="/**/*.js"/>
-	<mvc:resources location="/" mapping="/**/*.css"/>
-	<mvc:resources location="/" mapping="/**/*.png"/>
-	<mvc:resources location="/" mapping="/**/*.jpg"/>
-	<mvc:resources location="/" mapping="/**/*.gif"/>
+	<!--<mvc:resources location="/" mapping="/**/*.html"/>-->
+	<!--<mvc:resources location="/" mapping="/**/*.js"/>-->
+	<!--<mvc:resources location="/" mapping="/**/*.css"/>-->
+	<!--<mvc:resources location="/" mapping="/**/*.png"/>-->
+	<!--<mvc:resources location="/" mapping="/**/*.jpg"/>-->
+	<!--<mvc:resources location="/" mapping="/**/*.gif"/>-->
 </beans>
