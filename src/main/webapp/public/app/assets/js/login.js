@@ -21,7 +21,6 @@ function login(){
 	}
 	userInformation['username'] = username;
 	userInformation['password'] = password;
-	location.href = "index.html";
 	$.ajax({
 		type:"post",
 		url:"login",
@@ -31,8 +30,8 @@ function login(){
 			$("#loading").text("登录中，请稍后");
 		},
 		success:function(res){
-			if(res.msg == "1"){
-				location.href = "../../../../index.html";
+			if(res.status == "1"){
+				location.href = "index.html";
 			}
 			else{
 				$("#uconfirm").text("用户名或密码错误");
