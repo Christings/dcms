@@ -9,7 +9,7 @@ package com.web.util;
 public class RegExpUtil {
 
     //静态资源 正则
-    public static String resourceFile = "(.+\\.js|.+\\.png|.+\\.css|.+\\.jpg|.+\\.gif||.+\\.html|.+\\.ico|.+\\.htm)$";
+    public static String resourceFile = "(.+\\.js|.+\\.png|.+\\.css|.+\\.jpg|.+\\.gif|.+\\.ico)$";
 
     //邮箱
     public static String email = "\\w+@\\w+(\\.\\w+)+";

@@ -1,5 +1,13 @@
 package com.web.action;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.alibaba.fastjson.JSONObject;
 import com.web.core.action.BaseController;
 import com.web.entity.User;
@@ -7,13 +15,6 @@ import com.web.util.AllResult;
 import com.web.util.MD5;
 import com.web.util.StringUtil;
 import com.web.util.WebUtils;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 用户登录
@@ -22,7 +23,9 @@ import javax.servlet.http.HttpServletResponse;
  * 
  */
 @Controller
+@RequestMapping("/main")
 public class LoginController extends BaseController {
+	private Logger logger = Logger.getLogger(LoginController.class);
 
 	/**
 	 * web网页登录
@@ -33,15 +36,14 @@ public class LoginController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	//TODO  后期将 userName 修改为username
-	@RequestMapping(value = "/login",method = RequestMethod.POST)
+	@RequestMapping(value = "/login")
 	@ResponseBody
-	public Object login(String userName, String password, HttpServletRequest request, HttpServletResponse response) {
+	public Object login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
 		System.out.println(request.getParameterMap());
 		User user = new User();
-		if (StringUtil.isEmpty(userName, password)) {
-			//request.setAttribute("errorMsg", "用户名或密码不能为空！");
-			return AllResult.build(0,"用户名或密码不能为空");
+		if (StringUtil.isEmpty(username, password)) {
+			// request.setAttribute("errorMsg", "用户名或密码不能为空！");
+			return AllResult.build(0, "用户名或密码不能为空");
 		} else {
 			// TODO 后期需要修改
 			// User user = userService.getUserByName(username);
@@ -53,7 +55,7 @@ public class LoginController extends BaseController {
 			// request.setAttribute("errorMsg", "用户名或密码错误！");
 			// }
 
-			user.setUsername(userName);
+			user.setUsername(username);
 			user.setPassword(MD5.MD5Encode(password));
 			WebUtils.addUser(request, user);
 		}
@@ -72,7 +74,7 @@ public class LoginController extends BaseController {
 	@ResponseBody
 	public Object loginOut(HttpServletRequest request, HttpServletResponse response) {
 		WebUtils.removeUser(request);
-		return AllResult.build(1,"退出登录成功");
+		return AllResult.build(1, "退出登录成功");
 	}
 
 	/**
