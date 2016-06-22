@@ -87,8 +87,8 @@
 			<bean class="com.web.core.interceptors.AuthInterceptor">
 				<property name="excludeUrls">
 					<list>
-						<value>/loginOut</value>
-						<value>/login</value>
+						<value>/main/loginOut</value>
+						<value>/main/login</value>
 						<value>/</value>
 					</list>
 				</property>

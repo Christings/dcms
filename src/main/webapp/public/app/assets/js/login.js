@@ -23,7 +23,7 @@ function login(){
 	userInformation['password'] = password;
 	$.ajax({
 		type:"post",
-		url:"login",
+		url:"main/login",
 		dataType: 'json',
 		data: userInformation,
 		beforeSend:function(){
