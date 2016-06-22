@@ -33,7 +33,8 @@ let App = React.createClass({
         
         return (
             <div style={styles}>
-                <Login userNameA={actions.userName} userPasswordA={actions.userPassword} loginName={this.props.loginName} loginPassword={this.props.loginPassword}/>
+                <Navbars />
+                <SideBar />
                 {/*
                 <Login />
                 <SideBar />

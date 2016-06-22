@@ -18,9 +18,9 @@ class Login extends Component{
 
 	handleLogin(){
 		
-		var userInformation = { userName: '', password: ''};
+		var userInformation = { username: '', password: ''};
 		var login = false;
-		userInformation['userName'] = this.props.loginName;
+		userInformation['username'] = this.props.loginName;
 		userInformation['password'] = this.props.loginPassword;
 		// console.log(userInformation['userName']);
 		// console.log(userInformation['password']);
