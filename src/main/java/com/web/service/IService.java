@@ -1,5 +1,7 @@
 package com.web.service;
 
+import com.web.core.util.page.QueryResult;
+
 import java.util.List;
 
 /**
@@ -43,4 +45,5 @@ public interface IService<T, E> {
      * @return 返回所有实体对象的集合
      */
     List<T> getAll() ;
+
 }

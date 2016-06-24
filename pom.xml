@@ -312,6 +312,13 @@
             <artifactId>commons-compress</artifactId>
             <version>1.10</version>
         </dependency>
+
+        <!--分页依赖包-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>4.1.6</version>
+        </dependency>
     </dependencies>
 
     <build>

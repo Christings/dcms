@@ -1,11 +1,11 @@
 package com.web.action;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-
 import com.alibaba.fastjson.JSON;
 import com.web.core.action.BaseController;
+import com.web.core.util.page.PageViewResult;
+import com.web.core.util.page.QueryResult;
 import com.web.entity.Menu;
+import com.web.example.MenuExample;
 import com.web.service.MenuService;
 import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
@@ -17,7 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 菜单获取
@@ -216,5 +220,49 @@ public class MenuController extends BaseController {
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取所有菜单时失败") ;
+	}
+
+	/**
+	 * 分页获取菜单信息
+	 * @param page 当前页
+	 * @param count 显示多少行
+	 */
+	@RequestMapping(value = "/scroll", method = {RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public Object getScroll(@RequestParam(value = "page") int page,
+							@RequestParam(value = "count") int count,
+							HttpServletRequest request) {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("request param: [page: {}, count: {}]", page,count);
+		}
+
+		// 校验参数
+		if (page < 1 || count <1) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
+		}
+
+		try {
+
+			MenuExample example = new MenuExample();
+			//排序设置
+//			example.setOrderByClause("UPDATE_DATETIME DESC");
+			MenuExample.Criteria criteria = example.createCriteria();
+			//条件设置
+//			criteria.andIconIdIsNull();
+
+			QueryResult<Menu> queryResult = menuService.getScrollData(page, count, example);
+			PageViewResult<Menu> pageViewResult = new PageViewResult<>(count, page) ;
+			pageViewResult.setQueryResult(queryResult);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("queryResult record count: {}", queryResult.getResultList().size());
+			}
+
+			return AllResult.okJSON(pageViewResult);
+
+		} catch (Exception e) {
+			LOGGER.error("get scroll data error. page: {}, count: {}", page, count, e);
+		}
+
+		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 	}
 }
