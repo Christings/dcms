@@ -21,6 +21,7 @@ function login(){
 	}
 	userInformation['username'] = username;
 	userInformation['password'] = password;
+	location.href = "index.html";
 	$.ajax({
 		type:"post",
 		url:"main/login",

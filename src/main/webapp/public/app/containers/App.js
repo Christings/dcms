@@ -15,6 +15,7 @@ import { connect } from 'react-redux'
 import ImmutableRenderMixin from 'react-immutable-render-mixin'
 import * as ItemsActions from '../actions'
 import { bindActionCreators } from 'redux'
+import { Navbar, Nav, NavItem, NavDropdown, Button, Image,Collapse,Tab,Row, Glyphicon, ListGroup, ListGroupItem, Col } from "react-bootstrap"
 
 let App = React.createClass({
     mixins: [ImmutableRenderMixin],
@@ -27,14 +28,15 @@ let App = React.createClass({
         let styles = {
             // width: '200px',
             // margin: '30px auto 0'
-            textAlign: 'center'
+            textAlign: 'center',
+            margin: '0',
+            padding: '0'
         }
         const actions = this.props.actions
         
         return (
             <div style={styles}>
-                <Navbars />
-                <SideBar />
+                <Login userNameA={actions.userName} userPasswordA={actions.userPassword} loginName={this.props.loginName} loginPassword={this.props.loginPassword}/>
                 {/*
                 <Login />
                 <SideBar />

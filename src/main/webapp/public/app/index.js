@@ -1,11 +1,11 @@
 import '../scss/pure.scss'
 import React from 'react'
 import { render } from 'react-dom'
-import { Provider } from 'react-redux'
-import App from './containers/App'
-import configureStore from './configureStore'
 
-const store = configureStore()
+import IndexFrame from './containers/indexFrame'
+import Provide from './store/provide'
+import Login from './components/login'
+import { Router, Route, Link, IndexRoute, Redirect, hashHistory} from 'react-router';
 
 function renderDevTools(store) {
     if (__DEBUG__) {
@@ -21,11 +21,13 @@ function renderDevTools(store) {
     return null
 }
 
-render(
-    <div>
-        <Provider store={store}>
-            <App />
-        </Provider>
-        {renderDevTools(store)}
-    </div>,
+render((
+    <Router history={hashHistory}>
+        <Route path="/" component={IndexFrame}>
+            <Route path="A01" component={Provide} />
+            <Route path="A02" component={Login} />
+            <Route path="A03" component={Provide} />
+        </Route>
+    </Router>
+    ),
     document.getElementById('app'))
