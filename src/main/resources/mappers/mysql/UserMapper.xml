@@ -3,31 +3,31 @@
 <mapper namespace="com.web.mappers.UserMapper">
     <cache />
     <select id="selectOneById" resultType="User">
-        select * from user where id = #{id}
+        select * from t_s_user where id = #{id}
     </select>
     <select id="getUserByName" resultType="User">
-        select * from user where username = #{username}
+        select * from t_s_user where username = #{username}
     </select>
     <select id="getAll" resultType="User">
-        select * from user
+        select * from t_s_user
     </select>
     <insert id="save" flushCache="true" parameterType="com.web.entity.User">
-      INSERT INTO user
+      INSERT INTO t_s_user
       (ID, username, password, ip, telphone, email, createTime, lastLoginTime, level, extra, status)
       VALUES (#{id}, #{username}, #{password}, #{ip}, #{telphone}, #{email}, #{createTime}, #{lastLoginTime}, #{level}, #{extra}, #{status})
     </insert>
 
     <update id="update" flushCache="true" parameterType="com.web.entity.User">
-        UPDATE user SET username = #{username},password=#{password},ip=#{ip},telphone=#{telphone},
+        UPDATE t_s_user SET username = #{username},password=#{password},ip=#{ip},telphone=#{telphone},
         email=#{email},createTime=#{createTime},lastLoginTime=#{lastLoginTime},lastLoginTime=#{lastLoginTime},
         level=#{level},extra=#{extra},status=#{status} WHERE ID=#{id}
     </update>
 
     <delete id="delete" flushCache="true" parameterType="int">
-        DELETE from USER  where id = #{id}
+        DELETE from t_s_user  where id = #{id}
     </delete>
 
     <select id="getByPage" resultType="User">
-        select * from USER
+        select * from t_s_user
     </select>
 </mapper>
