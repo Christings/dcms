@@ -1,13 +1,5 @@
 package com.web.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.alibaba.fastjson.JSONObject;
 import com.web.core.action.BaseController;
 import com.web.entity.User;
@@ -15,6 +7,14 @@ import com.web.util.AllResult;
 import com.web.util.MD5;
 import com.web.util.StringUtil;
 import com.web.util.WebUtils;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 用户登录
@@ -25,7 +25,7 @@ import com.web.util.WebUtils;
 @Controller
 @RequestMapping("/main")
 public class LoginController extends BaseController {
-	private Logger logger = Logger.getLogger(LoginController.class);
+	private Logger LOGGER = Logger.getLogger(LoginController.class);
 
 	/**
 	 * web网页登录
@@ -36,30 +36,27 @@ public class LoginController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/login")
+	@RequestMapping(value = "/login",method = RequestMethod.POST)
 	@ResponseBody
 	public Object login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
-		System.out.println(request.getParameterMap());
-		User user = new User();
+//		System.out.println(request.getParameterMap());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("params[username: {}, password: {}]"+ username +","+ password);
+		}
 		if (StringUtil.isEmpty(username, password)) {
-			// request.setAttribute("errorMsg", "用户名或密码不能为空！");
 			return AllResult.build(0, "用户名或密码不能为空");
-		} else {
-			// TODO 后期需要修改
-			// User user = userService.getUserByName(username);
-			// if (null != user && null != user.getPassword() &&
-			// user.getPassword().equals(password)) {
-			// request.setAttribute("user", user);
-			// return "index.jsp";
-			// } else {
-			// request.setAttribute("errorMsg", "用户名或密码错误！");
-			// }
-
-			user.setUsername(username);
-			user.setPassword(MD5.MD5Encode(password));
-			WebUtils.addUser(request, user);
 		}
 
+		User user = userService.getUserByName(username);
+	 	if (null == user ) {
+			return AllResult.build(0, "该用户不存在!");
+	 	}
+
+		if(!MD5.MD5Encode(password).equals(user.getPassword())){
+			return AllResult.build(0, "密码输入错误!");
+		}
+
+		WebUtils.addUser(request, user);
 		return AllResult.okJSON(user);
 	}
 

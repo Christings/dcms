@@ -88,6 +88,10 @@ public class MenuController extends BaseController {
 		}
 
 		try {
+			List<Menu> menuList= menuService.getByParentId(key);
+			if(null != menuList && !menuList.isEmpty()){
+				return AllResult.build(0,"存在子菜单不允许删除");
+			}
 			int result = menuService.deleteById(key);
 
 			if (LOGGER.isDebugEnabled()) {
