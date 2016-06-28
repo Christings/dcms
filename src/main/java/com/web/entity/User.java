@@ -1,9 +1,9 @@
 package com.web.entity;
 
+import org.apache.ibatis.type.Alias;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import org.apache.ibatis.type.Alias;
 
 /**
  * 系统用户表
@@ -16,7 +16,7 @@ public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;
+	private String id;
 	private String username;
 	private String password;
 	private String ip;
@@ -28,11 +28,11 @@ public class User implements Serializable {
 	private String extra;
 	private Integer status;
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
