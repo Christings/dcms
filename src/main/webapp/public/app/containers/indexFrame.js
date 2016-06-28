@@ -1,14 +1,14 @@
 import React,{ Component } from 'react'
 import { Router, Route, Link, History } from 'react-router'
 import Navbars from '../components/navbars'
-import { Navbar, Nav, NavItem, NavDropdown, Button, Image,Collapse,Tab,Row, Glyphicon, ListGroup, ListGroupItem, Col } from "react-bootstrap"
+import { Navbar, Nav, NavItem, NavDropdown, Button, Image,Collapse,Tab,Row, Glyphicon, ListGroup, ListGroupItem, Col, OverlayTrigger, Popover } from "react-bootstrap"
 
 class IndexFrame extends Component{
 	mixins: [History]
 	constructor(...args){
 		super(...args);
 		this.state={ 
-			open: false,
+			open: true,
 			open1: false,
 			open1_1_1:false,
 			open1_1_2:false,
@@ -18,7 +18,9 @@ class IndexFrame extends Component{
 			open3: false,
 			open4: false,
 			open5: false,
-			wellStyles: {height:"1500",width:"20",margin: "0",padding: "0", textAlign:'left'}
+			left_cross: 2,
+			right_cross: 10,
+			wellStyles: {height:"1500",margin: "0",padding: "0", textAlign:'left'}
 		};
 		this.handleClick = this.handleClick.bind(this);
 	}
@@ -26,12 +28,16 @@ class IndexFrame extends Component{
 		if(this.state.open){
 			this.setState({
 				open: false,
-				wellStyles: {height:"1500",width:"20",margin: "0",padding: "0", textAlign:'left'}
+				left_cross: 1,
+				right_cross: 11
+				// wellStyles: {height:"1500",width:"60",margin: "0",padding: "0", textAlign:'left'}
 			});
 		}else{
 			this.setState({
 				open: true,
-				wellStyles: {height:"1500",width:"200",margin: "0",padding: "0", textAlign:'left'}
+				left_cross: 2,
+				right_cross: 10
+				// wellStyles: {height:"1500",width:"200",margin: "0",padding: "0", textAlign:'left'}
 			});
 		}
 	}
@@ -41,16 +47,37 @@ class IndexFrame extends Component{
 		const secondListStyles = {margin: "auto auto auto 20px"};
 		const thirdListStyles = {margin: "auto auto auto 40px"};
 		const constantStyles ={margin: "0"};
+		const book = (
+			<Popover>
+				<strong>
+					资产管理
+				</strong>
+				<ListGroup>
+					<ListGroupItem>
+						<Glyphicon glyph="home"/>机房列表
+					</ListGroupItem>
+					<ListGroupItem>
+						<Glyphicon glyph="book"/>未上架设备列表
+					</ListGroupItem>
+					<ListGroupItem>
+						<Glyphicon glyph="book"/>待确认设备列表
+					</ListGroupItem>
+					<ListGroupItem>
+						<Glyphicon glyph="book"/>区域列表
+					</ListGroupItem>
+				</ListGroup>
+			</Popover>
+		);
 		return(
 			<div>
 			<Col style={styles} sm={12}>
                 <Navbars />
             </Col>
-            <Col style={styles} sm={1}>
+            <Col style={styles} sm={this.state.left_cross}>
             	<div className="well" style={this.state.wellStyles}>
 					<ListGroup style={constantStyles}>
-						<ListGroupItem style={{textAlign:'left'}}>
-								<Glyphicon onClick={this.handleClick} glyph="align-justify"/>
+						<ListGroupItem >
+								<Glyphicon style={{textAlign:'left'}} onClick={this.handleClick} glyph="align-justify"/>
 						</ListGroupItem>
 					</ListGroup>
 					<Collapse in={this.state.open}>
@@ -206,9 +233,31 @@ class IndexFrame extends Component{
 								</ListGroup>
 						</div>
 					</Collapse>
+
+					<Collapse in={!this.state.open}>
+						<ListGroup>
+							<OverlayTrigger container={this} trigger="hover" placement="right" overlay={book}>
+								<ListGroupItem>
+									<Glyphicon style={{textAlign:'left'}}  glyph="book"/>
+								</ListGroupItem>
+							</OverlayTrigger>
+							<ListGroupItem>
+								<Glyphicon style={{textAlign:'left'}}  glyph="link"/>
+							</ListGroupItem>
+							<ListGroupItem>
+								<Glyphicon style={{textAlign:'left'}}  glyph="cog"/>
+							</ListGroupItem>
+							<ListGroupItem>
+								<Glyphicon style={{textAlign:'left'}}  glyph="Text-width"/>
+							</ListGroupItem>
+							<ListGroupItem>
+								<Glyphicon style={{textAlign:'left'}}  glyph="new-window"/>
+							</ListGroupItem>
+						</ListGroup>
+					</Collapse>
 				</div>
             </Col>
-            <Col style={styles} sm={10}>
+            <Col style={styles} sm={this.state.right_cross}>
             	{this.props.children}
             </Col>
             </div>
