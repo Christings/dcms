@@ -4,15 +4,15 @@
 
 <resultMap type="BaseResultMap" id="com.web.entity.User">
 <id column="id" property="id"/>
-<result column="user_name" property="user_name"/>
+<result column="user_name" property="username"/>
 <result column="account" property="account"/>
 <result column="password" property="password"/>
 <result column="identificationNo" property="identificationNo"/>
 <result column="mobile" property="mobile"/>
 <result column="sex" property="sex"/>
 <result column="enabled" property="enabled"/>
-<result column="creator_Id" property="creator_Id"/>
-<result column="create_Time" property="create_Time"/>
+<result column="creator_Id" property="creatorId"/>
+<result column="create_Time" property="createTime"/>
 <result column="remark" property="remark"/>
 <result column="deleted" property="deleted"/>
 <result column="superAdmin" property="superAdmin"/>
