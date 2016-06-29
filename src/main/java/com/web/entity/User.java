@@ -11,10 +11,7 @@ import java.util.Date;
 * @author 童云鹏 
 * @date 2016年6月29日 上午10:26:23 
 */
-public class User implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
+public class User  {
 	private String id;//主键ID
 	private String userName;//用户姓名
 	private String account;//登录账号
