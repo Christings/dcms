@@ -2,6 +2,8 @@ import React,{ Component } from 'react'
 import { Router, Route, Link, History } from 'react-router'
 import Navbars from '../components/navbars'
 import { Navbar, Nav, NavItem, NavDropdown, Button, Image,Collapse,Tab,Row, Glyphicon, ListGroup, ListGroupItem, Col, OverlayTrigger, Popover } from "react-bootstrap"
+import $ from 'jquery'
+
 
 class IndexFrame extends Component{
 	mixins: [History]
@@ -13,16 +15,18 @@ class IndexFrame extends Component{
 			open1_1_1:false,
 			open1_1_2:false,
 			open1_1_3:false,
-			open1_1_4: false,
+			open1_1_4:false,
 			open2: false,
 			open3: false,
 			open4: false,
 			open5: false,
 			left_cross: 2,
 			right_cross: 10,
-			wellStyles: {height:"1500",margin: "0",padding: "0", textAlign:'left'}
+			wellStyles: {height:"1500",margin: "0",padding: "0", textAlign:'left'},
+			menuData: ""
 		};
 		this.handleClick = this.handleClick.bind(this);
+		this.loadMenuMsg = this.loadMenuMsg.bind(this);
 	}
 	handleClick(){
 		if(this.state.open){
@@ -41,7 +45,25 @@ class IndexFrame extends Component{
 			});
 		}
 	}
+	loadMenuMsg(){
+		$.ajax({
+			url: "menu/getAll",
+			dataType: "json",
+			type: "post"
+		}).done((jsonData)=>{
+			const D = jsonData[0];
+			this.setState({
+				menuData : D.data["records"]
+			})
+		}).fail((err)=>{
+
+		});
+	}
+	componentDidMount(){
+		this.loadMenuMsg();
+	}
 	render(){
+		console.log(this.menuData);
 		const styles = { margin:'0',padding:'0'};
 		// const wellStyles = {height:"1500",minWidth:"200",margin: "0",padding: "0", textAlign:'left'};
 		const secondListStyles = {margin: "auto auto auto 20px"};
@@ -236,7 +258,7 @@ class IndexFrame extends Component{
 
 					<Collapse in={!this.state.open}>
 						<ListGroup>
-							<OverlayTrigger container={this} trigger="hover" placement="right" overlay={book}>
+							<OverlayTrigger container={this} trigger="hover " placement="right" overlay={book}>
 								<ListGroupItem>
 									<Glyphicon style={{textAlign:'left'}}  glyph="book"/>
 								</ListGroupItem>
