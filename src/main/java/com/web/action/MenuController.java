@@ -5,6 +5,7 @@ import com.web.core.action.BaseController;
 import com.web.core.util.page.PageViewResult;
 import com.web.core.util.page.QueryResult;
 import com.web.entity.Menu;
+import com.web.entity.MenuTree;
 import com.web.example.MenuExample;
 import com.web.service.MenuService;
 import com.web.util.AllResult;
@@ -21,252 +22,313 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 菜单获取
+ *
  * @author 杜延雷
  * @date 2016-06-20
  */
 @Controller
 @RequestMapping("/menu")
 public class MenuController extends BaseController {
-	private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class);
 
-	@Autowired
-	MenuService menuService;
+    @Autowired
+    MenuService menuService;
 
-	/**
-	 * 添加菜单
-	 * @param menu
-	 * @param request
+    /**
+     * 添加菜单
+     *
+     * @param menu
+     * @param request
      * @return
      */
-	@RequestMapping(value = "/add", method = {RequestMethod.GET, RequestMethod.POST})
-	@ResponseBody
-	public Object add(Menu menu, HttpServletRequest request){
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(menu));
-		}
+    @RequestMapping(value = "/add", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Object add(Menu menu, HttpServletRequest request) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("request param: [menu: {}]", JSON.toJSONString(menu));
+        }
 
-		//TODO 需要添加判断
-		if(StringUtils.isEmpty(menu.getName())){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常");
-		}
+        //TODO 需要添加判断
+        if (StringUtils.isEmpty(menu.getName())) {
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常");
+        }
 
-		try {
-			menu.setId(UUIDGenerator.generatorRandomUUID());
-			int result = menuService.save(menu);
+        try {
+            menu.setId(UUIDGenerator.generatorRandomUUID());
+            int result = menuService.save(menu);
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("save result: {}", result);
-			}
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("save result: {}", result);
+            }
 
-			return AllResult.okJSON(menu);
-		} catch (Exception e) {
-			LOGGER.error("save menu object error. : {}", JSON.toJSONString(menu), e);
-		}
+            return AllResult.okJSON(menu);
+        } catch (Exception e) {
+            LOGGER.error("save menu object error. : {}", JSON.toJSONString(menu), e);
+        }
 
-		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败") ;
-	}
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败");
+    }
 
-	/**
-	 * 删除菜单
-	 * @param key
-	 * @param request
+    /**
+     * 删除菜单
+     *
+     * @param key
+     * @param request
      * @return
      */
-	@RequestMapping(value = "/delete", method = {RequestMethod.GET, RequestMethod.POST})
-	@ResponseBody
-	public Object delete(String key, HttpServletRequest request){
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [key: {}]", key);
-		}
+    @RequestMapping(value = "/delete", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Object delete(String key, HttpServletRequest request) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("request param: [key: {}]", key);
+        }
 
-		if(StringUtils.isEmpty(key)){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常");
-		}
+        if (StringUtils.isEmpty(key)) {
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常");
+        }
 
-		try {
-			List<Menu> menuList= menuService.getByParentId(key);
-			if(null != menuList && !menuList.isEmpty()){
-				return AllResult.build(0,"存在子菜单不允许删除");
-			}
-			int result = menuService.deleteById(key);
+        try {
+            List<Menu> menuList = menuService.getByParentId(key);
+            if (null != menuList && !menuList.isEmpty()) {
+                return AllResult.build(0, "存在子菜单不允许删除");
+            }
+            int result = menuService.deleteById(key);
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("delete result: {}", result);
-			}
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("delete result: {}", result);
+            }
 
-			return AllResult.ok();
-		} catch (Exception e) {
-			LOGGER.error("delete menu object error. : {}", key, e);
-		}
+            return AllResult.ok();
+        } catch (Exception e) {
+            LOGGER.error("delete menu object error. : {}", key, e);
+        }
 
-		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,删除菜单失败") ;
-	}
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,删除菜单失败");
+    }
 
-	/**
-	 * 修改菜单信息
-	 * @param menu
-	 * @param request
+    /**
+     * 修改菜单信息
+     *
+     * @param menu
+     * @param request
      * @return
      */
-	@RequestMapping(value = "/update", method = {RequestMethod.GET, RequestMethod.POST})
-	@ResponseBody
-	public Object update(Menu menu,HttpServletRequest request) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("params[menu: {}]", JSON.toJSONString(menu));
-		}
+    @RequestMapping(value = "/update", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Object update(Menu menu, HttpServletRequest request) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("params[menu: {}]", JSON.toJSONString(menu));
+        }
 
-		//TODO 后期调整需要添加 验证信息
-		if (StringUtils.isEmpty(menu.getId()) || StringUtils.isEmpty(menu.getName()) ) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
-		}
+        //TODO 后期调整需要添加 验证信息
+        if (StringUtils.isEmpty(menu.getId()) || StringUtils.isEmpty(menu.getName())) {
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
+        }
 
-		try {
-			int result = menuService.updateById(menu);
+        try {
+            int result = menuService.updateById(menu);
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("update result: {}, after update menu: {}", result, JSON.toJSONString(menu));
-			}
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("update result: {}, after update menu: {}", result, JSON.toJSONString(menu));
+            }
 
-			return AllResult.okJSON(menu);
-		} catch (Exception e) {
-			LOGGER.error("update menu object error. : menu: {}", JSON.toJSONString(menu), e);
-		}
+            return AllResult.okJSON(menu);
+        } catch (Exception e) {
+            LOGGER.error("update menu object error. : menu: {}", JSON.toJSONString(menu), e);
+        }
 
-		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,更新菜单信息失败");
-	}
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,更新菜单信息失败");
+    }
 
-	/**
-	 * 获取某个菜单信息
-	 * @param key
-	 * @param request
+    /**
+     * 获取某个菜单信息
+     *
+     * @param key
+     * @param request
      * @return
      */
-	@RequestMapping(value = "/get", method = {RequestMethod.GET, RequestMethod.POST})
-	@ResponseBody
-	public Object get(String key,HttpServletRequest request){
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [key: {}]", key);
-		}
+    @RequestMapping(value = "/get", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Object get(String key, HttpServletRequest request) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("request param: [key: {}]", key);
+        }
 
-		if(StringUtils.isEmpty(key)){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常");
-		}
+        if (StringUtils.isEmpty(key)) {
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常");
+        }
 
-		try {
-			Menu menu = menuService.getById(key);
+        try {
+            Menu menu = menuService.getById(key);
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("menu result: {}", menu);
-			}
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("menu result: {}", menu);
+            }
 
-			return AllResult.okJSON(menu);
-		} catch (Exception e) {
-			LOGGER.error("menu object error. id:{}", key, e);
-		}
+            return AllResult.okJSON(menu);
+        } catch (Exception e) {
+            LOGGER.error("menu object error. id:{}", key, e);
+        }
 
-		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取菜单信息失败") ;
-	}
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取菜单信息失败");
+    }
 
-	/**
-	 * 获取根据父ID获取所有子ID
-	 * @param key
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value = "/getParentId", method = {RequestMethod.GET, RequestMethod.POST})
-	@ResponseBody
-	public Object getParentId(String key,HttpServletRequest request){
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [key: {}]", key);
-		}
+    /**
+     * 获取根据父ID获取所有子ID
+     *
+     * @param key
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getParentId", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Object getParentId(String key, HttpServletRequest request) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("request param: [key: {}]", key);
+        }
 
-		if(StringUtils.isEmpty(key)){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常");
-		}
+        try {
+            List<Menu> menuList = menuService.getByParentId(key);
 
-		try {
-			List<Menu> menuList= menuService.getByParentId(key);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
+            }
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
-			}
+            return AllResult.okJSON(menuList);
+        } catch (Exception e) {
+            LOGGER.error("menus object error. id:{}", key, e);
+        }
 
-			return AllResult.okJSON(menuList);
-		} catch (Exception e) {
-			LOGGER.error("menus object error. id:{}", key, e);
-		}
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取菜单信息失败");
+    }
 
-		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取菜单信息失败") ;
-	}
+    /**
+     * 获取所有菜单信息
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getAll", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Object getAll(HttpServletRequest request) {
+        try {
+            List<Menu> menuList = menuService.getAll();
 
-	/**
-	 * 获取所有菜单信息
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value = "/getAll", method = {RequestMethod.GET, RequestMethod.POST})
-	@ResponseBody
-	public Object getAll(HttpServletRequest request){
-		try {
-			List<Menu> menuList= menuService.getAll();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
+            }
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
-			}
+            return AllResult.okJSON(menuList);
+        } catch (Exception e) {
+            LOGGER.error("menus object error. getAll ", e);
+        }
 
-			return AllResult.okJSON(menuList);
-		} catch (Exception e) {
-			LOGGER.error("menus object error. getAll ", e);
-		}
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取所有菜单时失败");
+    }
 
-		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取所有菜单时失败") ;
-	}
+    /**
+     * 获取所有菜单信息
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/tree", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Object getTree(String key, HttpServletRequest request) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("request param: [key: {}]", key);
+        }
 
-	/**
-	 * 分页获取菜单信息
-	 * @param page 当前页
-	 * @param count 显示多少行
-	 */
-	@RequestMapping(value = "/scroll", method = {RequestMethod.GET, RequestMethod.POST})
-	@ResponseBody
-	public Object getScroll(@RequestParam(value = "page") int page,
-							@RequestParam(value = "count") int count,
-							HttpServletRequest request) {
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [page: {}, count: {}]", page,count);
-		}
+        try {
+            //根据条件查询某一级菜单（空时查询一级菜单；不等与空时查询该菜单下的所有子菜单）
+            List<Menu> menuList = menuService.getByParentId(key);
 
-		// 校验参数
-		if (page < 1 || count <1) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
-		}
+            //查询
+            List<MenuTree> menuTreeList = treeMenu(menuList);
 
-		try {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
+            }
 
-			MenuExample example = new MenuExample();
-			//排序设置
+            return AllResult.okJSON(menuTreeList);
+        } catch (Exception e) {
+            LOGGER.error("menus object error. id:{}", key, e);
+        }
+
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取菜单信息失败");
+    }
+
+    /**
+     * 分页获取菜单信息
+     *
+     * @param page  当前页
+     * @param count 显示多少行
+     */
+    @RequestMapping(value = "/scroll", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Object getScroll(@RequestParam(value = "page") int page,
+                            @RequestParam(value = "count") int count,
+                            HttpServletRequest request) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("request param: [page: {}, count: {}]", page, count);
+        }
+
+        // 校验参数
+        if (page < 1 || count < 1) {
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
+        }
+
+        try {
+
+            MenuExample example = new MenuExample();
+            //排序设置
 //			example.setOrderByClause("UPDATE_DATETIME DESC");
-			MenuExample.Criteria criteria = example.createCriteria();
-			//条件设置
+            MenuExample.Criteria criteria = example.createCriteria();
+            //条件设置
 //			criteria.andIconIdIsNull();
 
-			QueryResult<Menu> queryResult = menuService.getScrollData(page, count, example);
-			PageViewResult<Menu> pageViewResult = new PageViewResult<>(count, page) ;
-			pageViewResult.setQueryResult(queryResult);
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("queryResult record count: {}", queryResult.getResultList().size());
-			}
+            QueryResult<Menu> queryResult = menuService.getScrollData(page, count, example);
+            PageViewResult<Menu> pageViewResult = new PageViewResult<>(count, page);
+            pageViewResult.setQueryResult(queryResult);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("queryResult record count: {}", queryResult.getResultList().size());
+            }
 
-			return AllResult.okJSON(pageViewResult);
+            return AllResult.okJSON(pageViewResult);
 
-		} catch (Exception e) {
-			LOGGER.error("get scroll data error. page: {}, count: {}", page, count, e);
-		}
+        } catch (Exception e) {
+            LOGGER.error("get scroll data error. page: {}, count: {}", page, count, e);
+        }
 
-		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
-	}
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
+    }
+
+    /**
+     * 查询所有菜单子子菜单
+     */
+    private List<MenuTree> treeMenu(List<Menu> menus) {
+
+        if (null == menus) {
+            return null;
+        }
+
+        List<MenuTree> menuTrees = new ArrayList<MenuTree>(menus.size());
+
+        for (Menu menu : menus) {
+            MenuTree menuTree = MenuTree.convert(menu);
+            List<Menu> menuList = menuService.getByParentId(menu.getId());
+
+            if (null != menuList && menuList.size() > 0) {
+                menuTree.setChildMenu(treeMenu(menuList));
+            }
+            menuTrees.add(menuTree);
+        }
+
+        return menuTrees;
+    }
 }
