@@ -1,49 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.mappers.UserMapper">
+	<resultMap id="BaseResultMap" type="com.web.entity.User" >
+		<id column="id" property="id" />
+		<result column="user_name" property="username" />
+		<result column="account" property="account" />
+		<result column="password" property="password" />
+		<result column="identificationNo" property="identificationNo" />
+		<result column="mobile" property="mobile" />
+		<result column="sex" property="sex" />
+		<result column="enabled" property="enabled" />
+		<result column="creator_Id" property="creatorId" />
+		<result column="create_Time" property="createTime" />
+		<result column="remark" property="remark" />
+		<result column="deleted" property="deleted" />
+		<result column="superAdmin" property="superAdmin" />
+	</resultMap>
 
-<resultMap type="BaseResultMap" id="com.web.entity.User">
-<id column="id" property="id"/>
-<result column="user_name" property="username"/>
-<result column="account" property="account"/>
-<result column="password" property="password"/>
-<result column="identificationNo" property="identificationNo"/>
-<result column="mobile" property="mobile"/>
-<result column="sex" property="sex"/>
-<result column="enabled" property="enabled"/>
-<result column="creator_Id" property="creatorId"/>
-<result column="create_Time" property="createTime"/>
-<result column="remark" property="remark"/>
-<result column="deleted" property="deleted"/>
-<result column="superAdmin" property="superAdmin"/>
-</resultMap>
-    <cache />
-    <select id="selectOneById" resultType="BaseResultMap">
-        select * from t_s_user where id = #{id}
-    </select>
-    <select id="getUserByName" resultType="BaseResultMap">
-        select * from t_s_user where username = #{username}
-    </select>
-    <select id="getAll" resultType="User">
-        select * from t_s_user
-    </select>
-    <insert id="save" flushCache="true" parameterType="com.web.entity.User">
-      INSERT INTO t_s_user
-      (ID, username, password, ip, telphone, email, createTime, lastLoginTime, level, extra, status)
-      VALUES (#{id}, #{username}, #{password}, #{ip}, #{telphone}, #{email}, #{createTime}, #{lastLoginTime}, #{level}, #{extra}, #{status})
-    </insert>
+	<select id="selectOneById" resultMap="BaseResultMap">
+		select * from t_s_user where id = #{id}
+	</select>
+	<select id="getUserByName" resultMap="BaseResultMap">
+		select * from t_s_user where username = #{username}
+	</select>
+	<select id="getAll" resultType="User">
+		select * from t_s_user
+	</select>
+	<!-- <insert id="save" flushCache="true" parameterType="com.web.entity.User"> 
+		INSERT INTO t_s_user (ID, username, password, ip, telphone, email, createTime, 
+		lastLoginTime, level, extra, status) VALUES (#{id}, #{username}, #{password}, 
+		#{ip}, #{telphone}, #{email}, #{createTime}, #{lastLoginTime}, #{level}, 
+		#{extra}, #{status}) </insert> <update id="update" flushCache="true" parameterType="com.web.entity.User"> 
+		UPDATE t_s_user SET username = #{username},password=#{password},ip=#{ip},telphone=#{telphone}, 
+		email=#{email},createTime=#{createTime},lastLoginTime=#{lastLoginTime},lastLoginTime=#{lastLoginTime}, 
+		level=#{level},extra=#{extra},status=#{status} WHERE ID=#{id} </update> -->
 
-    <update id="update" flushCache="true" parameterType="com.web.entity.User">
-        UPDATE t_s_user SET username = #{username},password=#{password},ip=#{ip},telphone=#{telphone},
-        email=#{email},createTime=#{createTime},lastLoginTime=#{lastLoginTime},lastLoginTime=#{lastLoginTime},
-        level=#{level},extra=#{extra},status=#{status} WHERE ID=#{id}
-    </update>
+	<delete id="delete" flushCache="true" parameterType="int">
+		DELETE from t_s_user where id = #{id}
+	</delete>
 
-    <delete id="delete" flushCache="true" parameterType="int">
-        DELETE from t_s_user  where id = #{id}
-    </delete>
-
-    <select id="getByPage" resultType="BaseResultMap">
-        select * from t_s_user
-    </select>
+	<select id="getByPage" resultMap="BaseResultMap">
+		select * from t_s_user
+	</select>
 </mapper>
