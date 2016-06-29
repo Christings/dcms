@@ -3,7 +3,7 @@
 <mapper namespace="com.web.mappers.UserMapper">
 	<resultMap id="BaseResultMap" type="com.web.entity.User" >
 		<id column="id" property="id" />
-		<result column="user_name" property="username" />
+		<result column="user_name" property="userName" />
 		<result column="account" property="account" />
 		<result column="password" property="password" />
 		<result column="identificationNo" property="identificationNo" />
@@ -21,7 +21,7 @@
 		select * from t_s_user where id = #{id}
 	</select>
 	<select id="getUserByName" resultMap="BaseResultMap">
-		select * from t_s_user where username = #{username}
+		select * from t_s_user where user_name = #{username}
 	</select>
 	<select id="getAll" resultType="User">
 		select * from t_s_user
