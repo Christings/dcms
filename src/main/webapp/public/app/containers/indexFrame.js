@@ -1,6 +1,8 @@
 import React,{ Component } from 'react'
 import { Router, Route, Link, History } from 'react-router'
 import Navbars from '../components/navbars'
+import MenuAdd from '../components/menuAdd'
+import MenuUpdate from '../components/menuUpdate'
 import { Navbar, Nav, NavItem, NavDropdown, Button, Image,Collapse,Tab,Row, Glyphicon, ListGroup, ListGroupItem, Col, OverlayTrigger, Popover } from "react-bootstrap"
 import $ from 'jquery'
 
@@ -51,9 +53,9 @@ class IndexFrame extends Component{
 			dataType: "json",
 			type: "post"
 		}).done((jsonData)=>{
-			const D = jsonData[0];
+			const D = jsonData["data"];
 			this.setState({
-				menuData : D.data["records"]
+				menuData : D
 			})
 		}).fail((err)=>{
 
@@ -63,7 +65,8 @@ class IndexFrame extends Component{
 		this.loadMenuMsg();
 	}
 	render(){
-		console.log(this.menuData);
+		console.log(this.state.menuData);
+		console.log("duang!!!");
 		const styles = { margin:'0',padding:'0'};
 		// const wellStyles = {height:"1500",minWidth:"200",margin: "0",padding: "0", textAlign:'left'};
 		const secondListStyles = {margin: "auto auto auto 20px"};
@@ -86,6 +89,9 @@ class IndexFrame extends Component{
 					</ListGroupItem>
 					<ListGroupItem>
 						<Glyphicon glyph="book"/>区域列表
+					</ListGroupItem>
+					<ListGroupItem>
+						<Glyphicon glyph="book"/>测试列表
 					</ListGroupItem>
 				</ListGroup>
 			</Popover>
@@ -281,6 +287,7 @@ class IndexFrame extends Component{
             </Col>
             <Col style={styles} sm={this.state.right_cross}>
             	{this.props.children}
+            	<MenuAdd />
             </Col>
             </div>
 		)
