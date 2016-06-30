@@ -55,7 +55,12 @@ public class MenuController extends BaseController {
 
         //TODO 需要添加判断
         if (StringUtils.isEmpty(menu.getName())) {
-            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常");
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单名称不能为空");
+        }
+
+        //处理外键关联数据传空值问题
+        if (null != menu.getParentId() && "".equals(menu.getParentId().trim())) {
+            menu.setParentId(null);
         }
 
         try {
@@ -125,9 +130,14 @@ public class MenuController extends BaseController {
             LOGGER.debug("params[menu: {}]", JSON.toJSONString(menu));
         }
 
-        //TODO 后期调整需要添加 验证信息
-        if (StringUtils.isEmpty(menu.getId()) || StringUtils.isEmpty(menu.getName())) {
-            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
+        //TODO 需要添加判断 后期处理
+        if (StringUtils.isEmpty(menu.getName())) {
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单名称不能为空");
+        }
+
+        //处理外键关联数据传空值问题
+        if (null != menu.getParentId() && "".equals(menu.getParentId().trim())) {
+            menu.setParentId(null);
         }
 
         try {
