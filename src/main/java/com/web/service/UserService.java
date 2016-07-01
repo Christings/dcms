@@ -10,7 +10,7 @@ public interface UserService {
 	public User getUserById(int id);
 
 	/*根据name查询User*/
-	public User getUserByName(String name);
+	public User getUserByName(String name)throws Exception;
 
 	/*获取全部用户*/
 	public List<User> getAllUsers();
@@ -25,5 +25,5 @@ public interface UserService {
 
 	public int deleteUser(int id);
 
-	public List<User> getUserPage(PageBounds bounds, User user);
+	public List<User> getUserPage(PageBounds bounds, User user)throws Exception;
 }

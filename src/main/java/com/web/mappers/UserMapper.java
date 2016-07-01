@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface UserMapper extends BaseMapper<User>{
 
-    public User getUserByName(String name);
+    public User getUserByName(String name)throws Exception;
 
-    public List<User> getByPage(PageBounds bounds, User user);
+    public List<User> getByPage(PageBounds bounds, User user)throws Exception;
 
 }
