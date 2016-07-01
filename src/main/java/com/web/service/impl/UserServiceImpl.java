@@ -45,11 +45,11 @@ public User getUserById(int id) {
 		return userMapper.delete(String.valueOf(id));
 	}
 
-	public User getUserByName(String name){
+	public User getUserByName(String name)throws Exception{
 		return userMapper.getUserByName(name);
 	}
 
-	public List<User> getUserPage(PageBounds bounds, User user) {
+	public List<User> getUserPage(PageBounds bounds, User user)throws Exception {
 		List<User> users = userMapper.getByPage(bounds,user);
 		System.out.println(bounds.getTotal() + bounds.getLimit() + bounds.getOffset());
 		return users;
