@@ -7,7 +7,9 @@ import com.web.util.AllResult;
 import com.web.util.MD5;
 import com.web.util.StringUtil;
 import com.web.util.WebUtils;
+
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,18 +48,24 @@ public class LoginController extends BaseController {
 		if (StringUtil.isEmpty(username, password)) {
 			return AllResult.build(0, "用户名或密码不能为空");
 		}
+        try {
+        	User user = userService.getUserByName(username);
+    	 	if (null == user ) {
+    			return AllResult.build(0, "该用户不存在!");
+    	 	}
 
-		User user = userService.getUserByName(username);
-	 	if (null == user ) {
-			return AllResult.build(0, "该用户不存在!");
-	 	}
+    		if(!MD5.MD5Encode(password).equals(user.getPassword())){
+    			return AllResult.build(0, "密码输入错误!");
+    		}
 
-		if(!MD5.MD5Encode(password).equals(user.getPassword())){
-			return AllResult.build(0, "密码输入错误!");
+    		WebUtils.addUser(request, user);
+    		return AllResult.okJSON(user);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,登录失败") ;
 		}
-
-		WebUtils.addUser(request, user);
-		return AllResult.okJSON(user);
+		
 	}
 
 	/**
@@ -89,16 +97,25 @@ public class LoginController extends BaseController {
 			obj.put("msg", "用户名或密码不能为空！");
 			obj.put("status", "false");
 		} else {
-			User user = userService.getUserByName(username);
-			if (null != user && null != user.getPassword() && user.getPassword().equals(password)) {
-				obj.put("msg", "登录成功！");
-				obj.put("status", "true");
-				request.setAttribute("user", user);
-			} else {
-				obj.put("msg", "用户名或密码错误！");
-				obj.put("status", "false");
+			try {
+				User user = userService.getUserByName(username);
+				if (null != user && null != user.getPassword() && user.getPassword().equals(password)) {
+					obj.put("msg", "登录成功！");
+					obj.put("status", "true");
+					request.setAttribute("user", user);
+				} else {
+					obj.put("msg", "用户名或密码错误！");
+					obj.put("status", "false");
 
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				obj.put("msg", "系统异常，登录失败！");
+				obj.put("status", "false");
+				super.writerResponse(obj.toString(), response);
 			}
+			
 		}
 		super.writerResponse(obj.toString(), response);
 	}
