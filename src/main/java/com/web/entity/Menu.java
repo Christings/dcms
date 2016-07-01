@@ -1,86 +1,75 @@
 package com.web.entity;
 
-/**
- * 菜单实体对象
- */
-public class Menu {
-    private String id;
+import com.web.core.entity.BaseEntity;
 
-    private Short level;
+public class Menu extends BaseEntity {
+	private Short level;
 
-    private String name;
+	private String name;
 
-    private String order;
+	private String order;
 
-    private String url;
+	private String url;
 
-    private String parentId;
+	private String parentId;
 
-    private String iconId;
+	private String iconId;
 
-    private Short type;
+	private Short type;
 
-    public String getId() {
-        return id;
-    }
+	public Short getLevel() {
+		return level;
+	}
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
+	public void setLevel(Short level) {
+		this.level = level;
+	}
 
-    public Short getLevel() {
-        return level;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setLevel(Short level) {
-        this.level = level;
-    }
+	public void setName(String name) {
+		this.name = name == null ? null : name.trim();
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getOrder() {
+		return order;
+	}
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+	public void setOrder(String order) {
+		this.order = order == null ? null : order.trim();
+	}
 
-    public String getOrder() {
-        return order;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public void setOrder(String order) {
-        this.order = order == null ? null : order.trim();
-    }
+	public void setUrl(String url) {
+		this.url = url == null ? null : url.trim();
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public String getParentId() {
+		return parentId;
+	}
 
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
-    }
+	public void setParentId(String parentId) {
+		this.parentId = parentId == null ? null : parentId.trim();
+	}
 
-    public String getParentId() {
-        return parentId;
-    }
+	public String getIconId() {
+		return iconId;
+	}
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId == null ? null : parentId.trim();
-    }
+	public void setIconId(String iconId) {
+		this.iconId = iconId == null ? null : iconId.trim();
+	}
 
-    public String getIconId() {
-        return iconId;
-    }
+	public Short getType() {
+		return type;
+	}
 
-    public void setIconId(String iconId) {
-        this.iconId = iconId == null ? null : iconId.trim();
-    }
-
-    public Short getType() {
-        return type;
-    }
-
-    public void setType(Short type) {
-        this.type = type;
-    }
+	public void setType(Short type) {
+		this.type = type;
+	}
 }

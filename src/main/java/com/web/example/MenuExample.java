@@ -1,11 +1,9 @@
 package com.web.example;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-/**
- * 菜单 实体条件 组装对象
- */
 public class MenuExample {
     protected String orderByClause;
 
@@ -644,6 +642,266 @@ public class MenuExample {
 
         public Criteria andTypeNotBetween(Short value1, Short value2) {
             addCriterion("Y_TYPE not between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameIsNull() {
+            addCriterion("Y_UPDATENAME is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameIsNotNull() {
+            addCriterion("Y_UPDATENAME is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameEqualTo(String value) {
+            addCriterion("Y_UPDATENAME =", value, "updatename");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameNotEqualTo(String value) {
+            addCriterion("Y_UPDATENAME <>", value, "updatename");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameGreaterThan(String value) {
+            addCriterion("Y_UPDATENAME >", value, "updatename");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameGreaterThanOrEqualTo(String value) {
+            addCriterion("Y_UPDATENAME >=", value, "updatename");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameLessThan(String value) {
+            addCriterion("Y_UPDATENAME <", value, "updatename");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameLessThanOrEqualTo(String value) {
+            addCriterion("Y_UPDATENAME <=", value, "updatename");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameLike(String value) {
+            addCriterion("Y_UPDATENAME like", value, "updatename");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameNotLike(String value) {
+            addCriterion("Y_UPDATENAME not like", value, "updatename");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameIn(List<String> values) {
+            addCriterion("Y_UPDATENAME in", values, "updatename");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameNotIn(List<String> values) {
+            addCriterion("Y_UPDATENAME not in", values, "updatename");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameBetween(String value1, String value2) {
+            addCriterion("Y_UPDATENAME between", value1, value2, "updatename");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatenameNotBetween(String value1, String value2) {
+            addCriterion("Y_UPDATENAME not between", value1, value2, "updatename");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatecreateIsNull() {
+            addCriterion("Y_UPDATECREATE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatecreateIsNotNull() {
+            addCriterion("Y_UPDATECREATE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatecreateEqualTo(Date value) {
+            addCriterion("Y_UPDATECREATE =", value, "updatecreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatecreateNotEqualTo(Date value) {
+            addCriterion("Y_UPDATECREATE <>", value, "updatecreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatecreateGreaterThan(Date value) {
+            addCriterion("Y_UPDATECREATE >", value, "updatecreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatecreateGreaterThanOrEqualTo(Date value) {
+            addCriterion("Y_UPDATECREATE >=", value, "updatecreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatecreateLessThan(Date value) {
+            addCriterion("Y_UPDATECREATE <", value, "updatecreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatecreateLessThanOrEqualTo(Date value) {
+            addCriterion("Y_UPDATECREATE <=", value, "updatecreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatecreateIn(List<Date> values) {
+            addCriterion("Y_UPDATECREATE in", values, "updatecreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatecreateNotIn(List<Date> values) {
+            addCriterion("Y_UPDATECREATE not in", values, "updatecreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatecreateBetween(Date value1, Date value2) {
+            addCriterion("Y_UPDATECREATE between", value1, value2, "updatecreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatecreateNotBetween(Date value1, Date value2) {
+            addCriterion("Y_UPDATECREATE not between", value1, value2, "updatecreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameIsNull() {
+            addCriterion("Y_CREATENAME is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameIsNotNull() {
+            addCriterion("Y_CREATENAME is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameEqualTo(String value) {
+            addCriterion("Y_CREATENAME =", value, "createname");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameNotEqualTo(String value) {
+            addCriterion("Y_CREATENAME <>", value, "createname");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameGreaterThan(String value) {
+            addCriterion("Y_CREATENAME >", value, "createname");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameGreaterThanOrEqualTo(String value) {
+            addCriterion("Y_CREATENAME >=", value, "createname");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameLessThan(String value) {
+            addCriterion("Y_CREATENAME <", value, "createname");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameLessThanOrEqualTo(String value) {
+            addCriterion("Y_CREATENAME <=", value, "createname");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameLike(String value) {
+            addCriterion("Y_CREATENAME like", value, "createname");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameNotLike(String value) {
+            addCriterion("Y_CREATENAME not like", value, "createname");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameIn(List<String> values) {
+            addCriterion("Y_CREATENAME in", values, "createname");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameNotIn(List<String> values) {
+            addCriterion("Y_CREATENAME not in", values, "createname");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameBetween(String value1, String value2) {
+            addCriterion("Y_CREATENAME between", value1, value2, "createname");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatenameNotBetween(String value1, String value2) {
+            addCriterion("Y_CREATENAME not between", value1, value2, "createname");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedateIsNull() {
+            addCriterion("Y_CREATEDATE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedateIsNotNull() {
+            addCriterion("Y_CREATEDATE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedateEqualTo(Date value) {
+            addCriterion("Y_CREATEDATE =", value, "createdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedateNotEqualTo(Date value) {
+            addCriterion("Y_CREATEDATE <>", value, "createdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedateGreaterThan(Date value) {
+            addCriterion("Y_CREATEDATE >", value, "createdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedateGreaterThanOrEqualTo(Date value) {
+            addCriterion("Y_CREATEDATE >=", value, "createdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedateLessThan(Date value) {
+            addCriterion("Y_CREATEDATE <", value, "createdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedateLessThanOrEqualTo(Date value) {
+            addCriterion("Y_CREATEDATE <=", value, "createdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedateIn(List<Date> values) {
+            addCriterion("Y_CREATEDATE in", values, "createdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedateNotIn(List<Date> values) {
+            addCriterion("Y_CREATEDATE not in", values, "createdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedateBetween(Date value1, Date value2) {
+            addCriterion("Y_CREATEDATE between", value1, value2, "createdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedateNotBetween(Date value1, Date value2) {
+            addCriterion("Y_CREATEDATE not between", value1, value2, "createdate");
             return (Criteria) this;
         }
     }
