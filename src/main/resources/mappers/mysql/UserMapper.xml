@@ -137,7 +137,7 @@
 		WHERE ID=#{id}
 	</update>
 
-	<delete id="delete" flushCache="true" parameterType="int">
+	<delete id="delete" flushCache="true" parameterType="String">
 		DELETE from
 		t_s_user where id = #{id}
 	</delete>

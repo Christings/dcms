@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService {
 	/*根据ID查询User*/
-	public User getUserById(int id);
+	public User getUserById(String id);
 
 	/*根据name查询User*/
 	public User getUserByName(String name)throws Exception;
@@ -23,7 +23,7 @@ public interface UserService {
 
 	public int updateUser(User user);
 
-	public int deleteUser(int id);
+	public int deleteUser(String id);
 
 	public List<User> getUserPage(PageBounds bounds, User user)throws Exception;
 }

@@ -25,8 +25,8 @@ public class UserServiceImpl implements UserService {
 		this.userMapper = userMapper;
 	}
 
-public User getUserById(int id) {
-	User user = userMapper.selectOneById(String.valueOf(id));
+public User getUserById(String id) {
+	User user = userMapper.selectOneById(id);
 	return user;
 	}
 
@@ -41,8 +41,8 @@ public User getUserById(int id) {
 		return userMapper.update(user);
 	}
 
-	public int deleteUser(int id){
-		return userMapper.delete(String.valueOf(id));
+	public int deleteUser(String id){
+		return userMapper.delete(id);
 	}
 
 	public User getUserByName(String name)throws Exception{
@@ -54,4 +54,6 @@ public User getUserById(int id) {
 		System.out.println(bounds.getTotal() + bounds.getLimit() + bounds.getOffset());
 		return users;
 	}
+
+
 }
