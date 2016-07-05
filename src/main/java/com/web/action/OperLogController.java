@@ -19,7 +19,10 @@ import com.web.example.OperLogExample;
 import com.web.util.AllResult;
 
 /**
- * Created by 田军兴 on 2016/7/4. 日志管理控制器
+ * 业务日志控制器
+ *
+ * @author 田军兴
+ * @date 2016-06-29
  */
 @Controller
 @RequestMapping("/operLog")

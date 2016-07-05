@@ -4,6 +4,12 @@ import com.web.core.entity.BaseEntity;
 
 import java.util.Date;
 
+/**
+ * 业务日志实体类
+ *
+ * @author 田军兴
+ * @date 2016-06-29
+ */
 public class OperLog extends BaseEntity {
 	/**
 	 * 主键

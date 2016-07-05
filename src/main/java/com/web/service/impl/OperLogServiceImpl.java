@@ -23,7 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Created by 田军兴 on 2016/6/29.
+ * 业务日志service
+ *
+ * @author 田军兴
+ * @date 2016-06-29
  */
 @Service("operLogService")
 @Transactional

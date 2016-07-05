@@ -8,7 +8,10 @@ import com.web.entity.OperLog;
 import com.web.example.OperLogExample;
 
 /**
- * Created by 田军兴 on 2016/6/29.
+ * 业务日志mapper
+ *
+ * @author 田军兴
+ * @date 2016-06-29
  */
 public interface OperLogMapper {
     

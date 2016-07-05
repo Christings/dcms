@@ -9,7 +9,10 @@ import com.web.entity.OperLog;
 import com.web.example.OperLogExample;
 
 /**
- * Created by tians on 2016/6/29.
+ * 业务日志service
+ *
+ * @author 田军兴
+ * @date 2016-06-29
  */
 public interface OperLogService extends IService<OperLog, String> {
 
