@@ -31,7 +31,7 @@ public class OperLogController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class);
 
 	/**
-	 * 分页获取菜单信息
+	 * 分页查询日志相关信息
 	 *
 	 * @param page
 	 *            当前页
