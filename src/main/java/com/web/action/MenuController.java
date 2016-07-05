@@ -3,6 +3,7 @@ package com.web.action;
 import com.alibaba.fastjson.JSON;
 import com.web.bean.MenuTree;
 import com.web.core.action.BaseController;
+import com.web.core.util.fastjson.FastjsonUtils;
 import com.web.core.util.page.PageViewResult;
 import com.web.core.util.page.QueryResult;
 import com.web.entity.Menu;
@@ -76,7 +77,10 @@ public class MenuController extends BaseController {
 				LOGGER.debug("save result: {}", result);
 			}
 
-			return AllResult.okJSON(menu);
+			//去除不需要的字段
+			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("save menu object error. : {}", JSON.toJSONString(menu), e);
 		}
@@ -154,7 +158,10 @@ public class MenuController extends BaseController {
 				LOGGER.debug("update result: {}, after update menu: {}", result, JSON.toJSONString(menu));
 			}
 
-			return AllResult.okJSON(menu);
+			//去除不需要的字段
+			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("update menu object error. : menu: {}", JSON.toJSONString(menu), e);
 		}
@@ -186,7 +193,10 @@ public class MenuController extends BaseController {
 				LOGGER.debug("menu result: {}", menu);
 			}
 
-			return AllResult.okJSON(menu);
+			//去除不需要的字段
+			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("menu object error. id:{}", key, e);
 		}
@@ -215,7 +225,10 @@ public class MenuController extends BaseController {
 				LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
 			}
 
-			return AllResult.okJSON(menuList);
+			//去除不需要的字段
+			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("menus object error. id:{}", key, e);
 		}
@@ -239,7 +252,10 @@ public class MenuController extends BaseController {
 				LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
 			}
 
-			return AllResult.okJSON(menuList);
+			//去除不需要的字段
+			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("menus object error. getAll ", e);
 		}
@@ -271,7 +287,10 @@ public class MenuController extends BaseController {
 				LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
 			}
 
-			return AllResult.okJSON(menuTreeList);
+			//去除不需要的字段
+			String jsonStr = JSON.toJSONString(menuTreeList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("menus object error. id:{}", key, e);
 		}
@@ -316,7 +335,10 @@ public class MenuController extends BaseController {
 				LOGGER.debug("queryResult record count: {}", queryResult.getResultList().size());
 			}
 
-			return AllResult.okJSON(pageViewResult);
+			//去除不需要的字段
+			String jsonStr = JSON.toJSONString(pageViewResult,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 
 		} catch (Exception e) {
 			LOGGER.error("get scroll data error. page: {}, count: {}", page, count, e);
