@@ -23,7 +23,7 @@
         <commons-pool.version>1.6</commons-pool.version>
         <commons-dbcp.version>1.4</commons-dbcp.version>
         <druid.version>0.2.9</druid.version>
-        <fastjson-lib.version>1.1.37</fastjson-lib.version>
+        <fastjson-lib.version>1.2.9</fastjson-lib.version>
 
         <commons-beanutils.version>1.7.0</commons-beanutils.version>
         <commons-collections.version>3.2.1</commons-collections.version>
