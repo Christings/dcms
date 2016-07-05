@@ -10,11 +10,13 @@
 		<result column="mobile" property="mobile" />
 		<result column="sex" property="sex" />
 		<result column="enabled" property="enabled" />
-		<result column="creator_Id" property="createName" />
-		<result column="create_Time" property="createDate" />
+		<result column="create_Name" property="createName" />
+		<result column="create_Date" property="createDate" />
 		<result column="remark" property="remark" />
 		<result column="deleted" property="deleted" />
 		<result column="superAdmin" property="superAdmin" />
+		<result column="update_Name" property="updateName" />
+		<result column="update_date" property="updateCreate" />
 	</resultMap>
 
 	<select id="selectOneById" resultMap="BaseResultMap">
@@ -86,6 +88,8 @@
 		user_name=#{user_name},
 		account=#{account},
 		password=#{password},
+		update_Name=#{updateName},
+		update_date=#{updateCreate},
 		<choose>
 		<when test="identificationNo !=null and identificationNo !=''">
 		identificationNo=#{identificationNo},
@@ -146,4 +150,13 @@
 	<select id="getByPage" resultMap="BaseResultMap">
 		select * from t_s_user
 	</select>
+	<!--是否启用用户  -->
+	<update id="updateUserEnabled" flushCache="true" parameterType="Object">
+	UPDATE t_s_user SET enabled=#{enabled} where id=#{id}
+	</update>
+	<!--是否逻辑删除  -->
+	<update id="updateUserDelete" flushCache="true" parameterType="Object">
+	UPDATE t_s_user SET deleted=#{deleted} where id=#{id}
+	</update>
+	
 </mapper>

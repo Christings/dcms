@@ -190,6 +190,7 @@
         </dependency>
         <!-- spring quartz end -->
 
+
         <!-- spring orm beg -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -332,6 +333,19 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+            	<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<finalName>mobile</finalName>
+					<server>tomcat7</server>
+					<uriEncoding>UTF-8</uriEncoding>
+					<path>/dcms</path>
+					<!-- 在这里定义端口号 -->
+					<port>8050</port>
+				</configuration>
+			</plugin>
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
