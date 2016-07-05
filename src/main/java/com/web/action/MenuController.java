@@ -10,6 +10,7 @@ import com.web.example.MenuExample;
 import com.web.service.MenuService;
 import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
+import com.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,7 @@ public class MenuController extends BaseController {
 		}
 
 		try {
+			menu.setCreateName(WebUtils.getUser(request).getUserName());
 			menu.setCreateDate(new Date());
 			menu.setUpdateCreate(menu.getCreateDate());
 			menu.setId(UUIDGenerator.generatorRandomUUID());
@@ -144,6 +146,7 @@ public class MenuController extends BaseController {
 		}
 
 		try {
+			menu.setUpdateName(WebUtils.getUser(request).getUserName());
 			menu.setUpdateCreate(new Date());
 			int result = menuService.updateById(menu);
 
