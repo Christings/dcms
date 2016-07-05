@@ -11,10 +11,7 @@ import java.util.Date;
  * @date 2016-06-29
  */
 public class OperLog extends BaseEntity {
-	/**
-	 * 主键
-	 */
-	private String id;
+
 
 	/**
 	 * 设备名称
@@ -58,34 +55,6 @@ public class OperLog extends BaseEntity {
 	 * 备注
 	 */
 	private String comments;
-
-	public OperLog() {
-
-	}
-
-	/**
-	 */
-	public OperLog(String id, String deviceName, String operType, Integer logLevel, Integer action, String operProp, String operUserId,
-			String operUserName, Date operDate, String comments) {
-		this.id = id;
-		this.deviceName = deviceName;
-		this.operType = operType;
-		this.logLevel = logLevel;
-		this.action = action;
-		this.operProp = operProp;
-		this.operUserId = operUserId;
-		this.operUserName = operUserName;
-		this.operDate = operDate;
-		this.comments = comments;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getDeviceName() {
 		return deviceName;
