@@ -2,19 +2,46 @@ package com.web.entity;
 
 import com.web.core.entity.BaseEntity;
 
+/**
+ * 菜单实体
+ *
+ * @author 杜延雷
+ * @date 2016-07-06
+ */
 public class Menu extends BaseEntity {
+	/**
+	 * 菜单级别
+	 */
 	private Short level;
 
+	/**
+	 * 菜单名称
+	 */
 	private String name;
 
+	/**
+	 * 排序
+	 */
 	private String order;
 
+	/**
+	 * 访问链接
+	 */
 	private String url;
 
+	/**
+	 * 菜单父ID
+	 */
 	private String parentId;
 
+	/**
+	 * 菜单图标ID
+	 */
 	private String iconId;
 
+	/**
+	 * 菜单类型
+	 */
 	private Short type;
 
 	public Short getLevel() {
