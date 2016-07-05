@@ -1,29 +1,24 @@
 package com.web.service.impl;
 
-import com.web.core.dao.ICommonDao;
-import com.web.core.util.page.PageBounds;
-import com.web.mappers.UserMapper;
-import com.web.service.UserService;
-import org.junit.Test;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.web.core.util.page.PageBounds;
 import com.web.entity.User;
-
-import javax.annotation.Resource;
-import java.util.List;
+import com.web.mappers.UserMapper;
+import com.web.service.UserService;
 
 @Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService {
 
+	@Autowired
 	private  UserMapper userMapper;
 
-	@Resource
-	public void setUserMapper(UserMapper userMapper){
-		this.userMapper = userMapper;
-	}
+	
 
 public User getUserById(String id) {
 	User user = userMapper.selectOneById(id);
@@ -53,6 +48,18 @@ public User getUserById(String id) {
 		List<User> users = userMapper.getByPage(bounds,user);
 		System.out.println(bounds.getTotal() + bounds.getLimit() + bounds.getOffset());
 		return users;
+	}
+
+	@Override
+	public void updateUserEnabled(Integer enabled, String id) throws Exception {
+		// TODO Auto-generated method stub
+		userMapper.updateUserEnabled(enabled, id);
+	}
+
+	@Override
+	public void updateUserDelete(Integer deleted, String id) throws Exception {
+		// TODO Auto-generated method stub
+		userMapper.updateUserDelete(deleted, id);
 	}
 
 
