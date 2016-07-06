@@ -3,7 +3,7 @@ package com.web.action;
 import com.alibaba.fastjson.JSON;
 import com.web.bean.MenuTree;
 import com.web.core.action.BaseController;
-import com.web.core.util.fastjson.FastjsonUtils;
+import com.web.util.fastjson.FastjsonUtils;
 import com.web.core.util.page.PageViewResult;
 import com.web.core.util.page.QueryResult;
 import com.web.entity.Menu;

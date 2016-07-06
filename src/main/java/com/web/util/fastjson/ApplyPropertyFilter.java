@@ -1,4 +1,4 @@
-package com.web.core.util.fastjson;
+package com.web.util.fastjson;
 
 import com.alibaba.fastjson.serializer.PropertyFilter;
 
