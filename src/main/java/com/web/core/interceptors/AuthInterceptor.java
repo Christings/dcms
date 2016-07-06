@@ -1,5 +1,7 @@
 package com.web.core.interceptors;
 
+import com.web.util.RegExpUtil;
+import com.web.util.WebUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -45,18 +47,18 @@ public class AuthInterceptor implements HandlerInterceptor {
 	 * 在controller前拦截
 	 */
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
-//		String requestUri = request.getRequestURI();
-//		String contextPath = request.getContextPath();
-//		String url = requestUri.substring(contextPath.length());
-//
-//		if(!url.matches(RegExpUtil.resourceFile) && !excludeUrls.contains(url)){
-//			if(null == WebUtils.getUser(request)){
-//				response.sendRedirect(request.getContextPath()+"/login");
-//				System.out.println("==" + requestUri);
-//				return false;
-//			}
-//		}
-//		System.out.println(requestUri);
+		String requestUri = request.getRequestURI();
+		String contextPath = request.getContextPath();
+		String url = requestUri.substring(contextPath.length());
+
+		if(!url.matches(RegExpUtil.resourceFile) && !excludeUrls.contains(url)){
+			if(null == WebUtils.getUser(request)){
+				response.sendRedirect(request.getContextPath()+"/login");
+				System.out.println("==" + requestUri);
+				return false;
+			}
+		}
+		System.out.println(requestUri);
 		return true;
 	}
 
