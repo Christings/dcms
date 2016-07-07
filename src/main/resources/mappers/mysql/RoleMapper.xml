@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.mappers.RoleMapper">
+<resultMap type="com.web.entity.Role" id="BaseRelustMap">
+<id column="ID" property="id"/>
+<result column="rolecode" property="roleCode"/>
+<result column="rolename" property="roleName"/>
+<result column="update_name" property="updateName"/>
+<result column="update_date" property="updateCreate"/>
+<result column="create_name" property="createName"/>
+<result column="create_date" property="createDate"/>
+</resultMap>
+
+<insert id="save" parameterType="Object">
+insert into t_s_role(
+ID,
+rolecode,
+rolename,
+create_name,
+create_date
+) values(
+#{id},
+#{roleCode},
+#{roleName},
+#{createName},
+#{createDate}
+)
+</insert>
+
+<update id="update" parameterType="Object">
+update t_s_role set
+rolecode=#{roleCode},
+rolename=#{rolename},
+update_name=#{updateName},
+update_date=#{updateCreate} 
+where id=#{id}
+</update>
+
+<select id="getAll" resultMap="BaseRelustMap">
+ select * from t_s_role;
+</select>
+
+<select id="selectOneById" parameterType="Object" resultMap="BaseRelustMap">
+select * from t_s_role where id=#{id}
+</select>
+
+
+</mapper>
