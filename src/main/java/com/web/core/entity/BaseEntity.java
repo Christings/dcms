@@ -10,7 +10,7 @@ public class BaseEntity implements java.io.Serializable {
 	/** 修改人名 **/
 	private String updateName;
 	/** 修改时间 **/
-	private String updateCreate;
+	private Date updateCreate;
 	/** 创建人名 **/
 	private String createName;
 	/** 创建时间 **/
@@ -32,11 +32,11 @@ public class BaseEntity implements java.io.Serializable {
 		this.updateName = updateName;
 	}
 
-	public String getUpdateCreate() {
+	public Date getUpdateCreate() {
 		return updateCreate;
 	}
 
-	public void setUpdateCreate(String updateCreate) {
+	public void setUpdateCreate(Date updateCreate) {
 		this.updateCreate = updateCreate;
 	}
 

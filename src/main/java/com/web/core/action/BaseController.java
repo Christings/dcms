@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.web.service.OperLogService;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -38,6 +39,9 @@ public class BaseController {
 
 	@Resource
 	protected UserService userService;
+
+	@Resource
+	protected OperLogService operLogService;
 
 	/**
 	 * 将前台传递过来的日期格式的字符串，自动转化为Date类型

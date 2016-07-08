@@ -1,86 +1,102 @@
 package com.web.entity;
 
+import com.web.core.entity.BaseEntity;
+
 /**
- * 菜单实体对象
+ * 菜单实体
+ *
+ * @author 杜延雷
+ * @date 2016-07-06
  */
-public class Menu {
-    private String id;
+public class Menu extends BaseEntity {
+	/**
+	 * 菜单级别
+	 */
+	private Short level;
 
-    private Short level;
+	/**
+	 * 菜单名称
+	 */
+	private String name;
 
-    private String name;
+    /**
+     * 排序
+     */
+    private Short rank;
 
-    private String order;
+	/**
+	 * 访问链接
+	 */
+	private String url;
 
-    private String url;
+	/**
+	 * 菜单父ID
+	 */
+	private String parentId;
 
-    private String parentId;
+	/**
+	 * 菜单图标ID
+	 */
+	private String iconId;
 
-    private String iconId;
+	/**
+	 * 菜单类型
+	 */
+	private Short type;
 
-    private Short type;
+	public Short getLevel() {
+		return level;
+	}
 
-    public String getId() {
-        return id;
+	public void setLevel(Short level) {
+		this.level = level;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name == null ? null : name.trim();
+	}
+
+    public Short getRank() {
+        return rank;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setRank(Short rank) {
+        this.rank = rank;
     }
 
-    public Short getLevel() {
-        return level;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public void setLevel(Short level) {
-        this.level = level;
-    }
+	public void setUrl(String url) {
+		this.url = url == null ? null : url.trim();
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getParentId() {
+		return parentId;
+	}
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+	public void setParentId(String parentId) {
+		this.parentId = parentId == null ? null : parentId.trim();
+	}
 
-    public String getOrder() {
-        return order;
-    }
+	public String getIconId() {
+		return iconId;
+	}
 
-    public void setOrder(String order) {
-        this.order = order == null ? null : order.trim();
-    }
+	public void setIconId(String iconId) {
+		this.iconId = iconId == null ? null : iconId.trim();
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public Short getType() {
+		return type;
+	}
 
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId == null ? null : parentId.trim();
-    }
-
-    public String getIconId() {
-        return iconId;
-    }
-
-    public void setIconId(String iconId) {
-        this.iconId = iconId == null ? null : iconId.trim();
-    }
-
-    public Short getType() {
-        return type;
-    }
-
-    public void setType(Short type) {
-        this.type = type;
-    }
+	public void setType(Short type) {
+		this.type = type;
+	}
 }

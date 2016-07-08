@@ -125,6 +125,8 @@ public class MenuServiceImpl implements MenuService {
 
         //查询所有菜单
         MenuExample example = new MenuExample();
+        //排序
+        example.setOrderByClause("RANK");
         List<Menu> menuList = menuMapper.selectByExample(example);
 
         if (LOGGER.isInfoEnabled()) {
@@ -143,6 +145,9 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public QueryResult<Menu> getScrollData(int pageCurrent, int count, MenuExample example) {
+
+        //排序
+        example.setOrderByClause("RANK");
 
         // 分页
         PageHelper.startPage(pageCurrent, count) ;
@@ -175,6 +180,9 @@ public class MenuServiceImpl implements MenuService {
         }else {
             criteria.andParentIdEqualTo(key);
         }
+
+        //排序
+        example.setOrderByClause("RANK");
 
         List<Menu> menuList = menuMapper.selectByExample(example);
 
