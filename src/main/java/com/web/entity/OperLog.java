@@ -1,7 +1,5 @@
 package com.web.entity;
 
-import com.web.core.entity.BaseEntity;
-
 import java.util.Date;
 
 /**
@@ -10,8 +8,9 @@ import java.util.Date;
  * @author 田军兴
  * @date 2016-06-29
  */
-public class OperLog extends BaseEntity {
+public class OperLog {
 
+	private String id;
 
 	/**
 	 * 设备名称
@@ -31,7 +30,7 @@ public class OperLog extends BaseEntity {
 	/**
 	 * 行为
 	 */
-	private Integer action;
+	private String actionType;
 
 	/**
 	 */
@@ -55,6 +54,35 @@ public class OperLog extends BaseEntity {
 	 * 备注
 	 */
 	private String comments;
+
+	/**
+	 * 日志类型 0:系统日志 1:业务日志
+	 */
+	private int logType;
+
+	public enum operTypeEnum {
+		select, insert, update, delete
+	}
+
+	public enum logLevelEnum {
+		success, error
+	}
+
+	public enum actionSystemEnum {
+		user, role, menu, dataDic, login, logout,log
+	}
+
+	public enum actionBusinessEnum {
+		cabinet, device, jumper, cabinetPro, devicePro
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getDeviceName() {
 		return deviceName;
@@ -80,12 +108,12 @@ public class OperLog extends BaseEntity {
 		this.logLevel = logLevel;
 	}
 
-	public Integer getAction() {
-		return action;
+	public String getActionType() {
+		return actionType;
 	}
 
-	public void setAction(Integer action) {
-		this.action = action;
+	public void setActionType(String actionType) {
+		this.actionType = actionType;
 	}
 
 	public String getOperProp() {
@@ -126,5 +154,13 @@ public class OperLog extends BaseEntity {
 
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+
+	public int getLogType() {
+		return logType;
+	}
+
+	public void setLogType(int logType) {
+		this.logType = logType;
 	}
 }
