@@ -84,6 +84,33 @@ public interface OperLogService extends IService<OperLog, String> {
 	public static final int ACTION_VIEW_DEVICE = 10;
 
 	/**
+	 * 日志类型 系统日志
+	 * */
+	public static  final int LOG_TYPE_SYSTEM=0;
+
+	/**
+	 * 日志类型 业务日志
+	 * */
+	public static  final int LOG_TYPE_BUSINESS=1;
+
+	public enum operType{
+		select,insert,update,delete
+	}
+
+	public enum logLevel{
+		success,error
+	}
+
+	public enum logLType{
+		business,system
+	}
+
+	public enum systemAction{
+
+	}
+
+
+	/**
 	 * @param deviceName
 	 *            设备名称
 	 * @param operType
@@ -106,8 +133,23 @@ public interface OperLogService extends IService<OperLog, String> {
 	public int addOperLog(String deviceName, String operType, int logLevel, int action, String operProp, String userId,
 			String userName, Date operDate, String comment);
 
-	public int addOperLog(HttpServletRequest request, String deviceName, String operType, int logLevel, int action, String operProp,
+	public int addOperLog(String deviceName, String operType, int logLevel, int action, String operProp,
 			String comment);
+
+	/**
+	 * @param operType
+	 *            操作类型(增删改查)
+	 * @param logLevel
+	 *            日志级别
+	 * @param action
+	 *            动作
+	 * @param operProp
+	 *         操作的属性（JSON字符串格式）
+	 * @param comment
+	 *            备注
+	 */
+	public int addSystemLog(String operType, int logLevel, int action, String operProp,
+						  String comment);
 
 	/**
 	 * 分页查询日志

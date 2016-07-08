@@ -1,14 +1,5 @@
 package com.web.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.web.core.util.page.QueryResult;
@@ -19,8 +10,15 @@ import com.web.mappers.OperLogMapper;
 import com.web.service.OperLogService;
 import com.web.util.UUIDGenerator;
 import com.web.util.WebUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpSession;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 业务日志service
@@ -36,6 +34,9 @@ public class OperLogServiceImpl implements OperLogService {
 
 	@Autowired
 	private OperLogMapper operLogMapper;
+
+	@Autowired
+	private HttpSession session;
 
 	@Override
 	public int addOperLog(String deviceName, String operType, int logLevel, int action, String operProp, String userId,
@@ -53,6 +54,7 @@ public class OperLogServiceImpl implements OperLogService {
 			log.setOperUserName(userName);
 			log.setOperDate(operDate);
 			log.setComments(comment);
+			log.setLogType(OperLogService.LOG_TYPE_BUSINESS);
 			return operLogMapper.insert(log);
 		} catch (Exception e) {
 			if (LOGGER.isInfoEnabled()) {
@@ -64,10 +66,10 @@ public class OperLogServiceImpl implements OperLogService {
 	}
 
 	@Override
-	public int addOperLog(HttpServletRequest reqeust, String deviceName, String operType, int logLevel, int action, String operProp,
+	public int addOperLog(String deviceName, String operType, int logLevel, int action, String operProp,
 			String comment) {
 		try {
-			User user = WebUtils.getUser(reqeust);
+			User user = (User) session.getAttribute(WebUtils.SESSION_KEY_USER);
 			String id = UUIDGenerator.generatorRandomUUID();
 			OperLog operLog = new OperLog();
 			operLog.setId(id);
@@ -79,6 +81,31 @@ public class OperLogServiceImpl implements OperLogService {
 			operLog.setOperUserName(user.getUserName());
 			operLog.setOperDate(new Date());
 			operLog.setComments(comment);
+			operLog.setLogType(OperLogService.LOG_TYPE_BUSINESS);
+			return operLogMapper.insert(operLog);
+		} catch (Exception e) {
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.error("记录日志失败！");
+			}
+			return 0;
+		}
+	}
+
+	@Override
+	public int addSystemLog(String operType, int logLevel, int action, String operProp, String comment) {
+		try {
+			User user =(User)session.getAttribute(WebUtils.SESSION_KEY_USER);
+			String id = UUIDGenerator.generatorRandomUUID();
+			OperLog operLog = new OperLog();
+			operLog.setId(id);
+			operLog.setLogLevel(logLevel);
+			operLog.setAction(action);
+			operLog.setOperProp(operProp);
+			operLog.setOperUserId(user.getId());
+			operLog.setOperUserName(user.getUserName());
+			operLog.setOperDate(new Date());
+			operLog.setComments(comment);
+			operLog.setLogType(OperLogService.LOG_TYPE_SYSTEM);
 			return operLogMapper.insert(operLog);
 		} catch (Exception e) {
 			if (LOGGER.isInfoEnabled()) {
@@ -126,4 +153,5 @@ public class OperLogServiceImpl implements OperLogService {
 		}
 		return queryResult;
 	}
+
 }
