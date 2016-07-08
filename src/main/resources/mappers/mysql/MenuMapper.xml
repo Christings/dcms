@@ -1,325 +1,323 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.web.mappers.MenuMapper">
-    <resultMap id="BaseResultMap" type="com.web.entity.Menu">
-        <id column="Y_ID" property="id" jdbcType="VARCHAR"/>
-        <result column="Y_LEVEL" property="level" jdbcType="SMALLINT"/>
-        <result column="Y_NAME" property="name" jdbcType="VARCHAR"/>
-        <result column="Y_ORDER" property="order" jdbcType="VARCHAR"/>
-        <result column="Y_URL" property="url" jdbcType="VARCHAR"/>
-        <result column="Y_PARENT_ID" property="parentId" jdbcType="VARCHAR"/>
-        <result column="Y_ICON_ID" property="iconId" jdbcType="VARCHAR"/>
-        <result column="Y_TYPE" property="type" jdbcType="SMALLINT"/>
-        <result column="Y_UPDATENAME" property="updateName" jdbcType="VARCHAR"/>
-        <result column="Y_UPDATECREATE" property="updateCreate" jdbcType="TIMESTAMP"/>
-        <result column="Y_CREATENAME" property="createName" jdbcType="VARCHAR"/>
-        <result column="Y_CREATEDATE" property="createDate" jdbcType="TIMESTAMP"/>
-    </resultMap>
-    <sql id="Example_Where_Clause">
-        <where>
-            <foreach collection="oredCriteria" item="criteria" separator="or">
-                <if test="criteria.valid">
-                    <trim prefix="(" suffix=")" prefixOverrides="and">
-                        <foreach collection="criteria.criteria" item="criterion">
-                            <choose>
-                                <when test="criterion.noValue">
-                                    and ${criterion.condition}
-                                </when>
-                                <when test="criterion.singleValue">
-                                    and ${criterion.condition} #{criterion.value}
-                                </when>
-                                <when test="criterion.betweenValue">
-                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                                </when>
-                                <when test="criterion.listValue">
-                                    and ${criterion.condition}
-                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
-                                             separator=",">
-                                        #{listItem}
-                                    </foreach>
-                                </when>
-                            </choose>
-                        </foreach>
-                    </trim>
-                </if>
+<mapper namespace="com.web.mappers.MenuMapper" >
+  <resultMap id="BaseResultMap" type="com.web.entity.Menu" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="LEVEL" property="level" jdbcType="SMALLINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="RANK" property="rank" jdbcType="SMALLINT" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+    <result column="ICON_ID" property="iconId" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="SMALLINT" />
+    <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR" />
+    <result column="UPDATE_CREATE" property="updateCreate" jdbcType="TIMESTAMP" />
+    <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
             </foreach>
-        </where>
-    </sql>
-    <sql id="Update_By_Example_Where_Clause">
-        <where>
-            <foreach collection="example.oredCriteria" item="criteria" separator="or">
-                <if test="criteria.valid">
-                    <trim prefix="(" suffix=")" prefixOverrides="and">
-                        <foreach collection="criteria.criteria" item="criterion">
-                            <choose>
-                                <when test="criterion.noValue">
-                                    and ${criterion.condition}
-                                </when>
-                                <when test="criterion.singleValue">
-                                    and ${criterion.condition} #{criterion.value}
-                                </when>
-                                <when test="criterion.betweenValue">
-                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                                </when>
-                                <when test="criterion.listValue">
-                                    and ${criterion.condition}
-                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
-                                             separator=",">
-                                        #{listItem}
-                                    </foreach>
-                                </when>
-                            </choose>
-                        </foreach>
-                    </trim>
-                </if>
-            </foreach>
-        </where>
-    </sql>
-    <sql id="Base_Column_List">
-    Y_ID, Y_LEVEL, Y_NAME, Y_ORDER, Y_URL, Y_PARENT_ID, Y_ICON_ID, Y_TYPE, Y_UPDATENAME, 
-    Y_UPDATECREATE, Y_CREATENAME, Y_CREATEDATE
+          </trim>
+        </if>
+      </foreach>
+    </where>
   </sql>
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.MenuExample">
-        select
-        <if test="distinct">
-            distinct
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
         </if>
-        <include refid="Base_Column_List"/>
-        from t_s_menu
-        <if test="_parameter != null">
-            <include refid="Example_Where_Clause"/>
-        </if>
-        <if test="orderByClause != null">
-            order by ${orderByClause}
-        </if>
-    </select>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
-        select
-        <include refid="Base_Column_List"/>
-        from t_s_menu
-        where Y_ID = #{id,jdbcType=VARCHAR}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, LEVEL, NAME, RANK, URL, PARENT_ID, ICON_ID, TYPE, UPDATE_NAME, UPDATE_CREATE, 
+    CREATE_NAME, CREATE_DATE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.MenuExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_s_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_s_menu
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from t_s_menu
-    where Y_ID = #{id,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
   </delete>
-    <delete id="deleteByExample" parameterType="com.web.example.MenuExample">
-        delete from t_s_menu
-        <if test="_parameter != null">
-            <include refid="Example_Where_Clause"/>
-        </if>
-    </delete>
-    <insert id="insert" parameterType="com.web.entity.Menu">
-    insert into t_s_menu (Y_ID, Y_LEVEL, Y_NAME, 
-      Y_ORDER, Y_URL, Y_PARENT_ID, 
-      Y_ICON_ID, Y_TYPE, Y_UPDATENAME, 
-      Y_UPDATECREATE, Y_CREATENAME, Y_CREATEDATE
+  <delete id="deleteByExample" parameterType="com.web.example.MenuExample" >
+    delete from t_s_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.web.entity.Menu" >
+    insert into t_s_menu (ID, LEVEL, NAME, 
+      RANK, URL, PARENT_ID, 
+      ICON_ID, TYPE, UPDATE_NAME, 
+      UPDATE_CREATE, CREATE_NAME, CREATE_DATE
       )
     values (#{id,jdbcType=VARCHAR}, #{level,jdbcType=SMALLINT}, #{name,jdbcType=VARCHAR}, 
-      #{order,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
-      #{iconId,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, #{updateName,jdbcType=VARCHAR},
+      #{rank,jdbcType=SMALLINT}, #{url,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{iconId,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, #{updateName,jdbcType=VARCHAR}, 
       #{updateCreate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}
       )
   </insert>
-    <insert id="insertSelective" parameterType="com.web.entity.Menu">
-        insert into t_s_menu
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                Y_ID,
-            </if>
-            <if test="level != null">
-                Y_LEVEL,
-            </if>
-            <if test="name != null">
-                Y_NAME,
-            </if>
-            <if test="order != null">
-                Y_ORDER,
-            </if>
-            <if test="url != null">
-                Y_URL,
-            </if>
-            <if test="parentId != null">
-                Y_PARENT_ID,
-            </if>
-            <if test="iconId != null">
-                Y_ICON_ID,
-            </if>
-            <if test="type != null">
-                Y_TYPE,
-            </if>
-            <if test="updateName != null">
-                Y_UPDATENAME,
-            </if>
-            <if test="updateCreate != null">
-                Y_UPDATECREATE,
-            </if>
-            <if test="createName != null">
-                Y_CREATENAME,
-            </if>
-            <if test="createDate != null">
-                Y_CREATEDATE,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=VARCHAR},
-            </if>
-            <if test="level != null">
-                #{level,jdbcType=SMALLINT},
-            </if>
-            <if test="name != null">
-                #{name,jdbcType=VARCHAR},
-            </if>
-            <if test="order != null">
-                #{order,jdbcType=VARCHAR},
-            </if>
-            <if test="url != null">
-                #{url,jdbcType=VARCHAR},
-            </if>
-            <if test="parentId != null">
-                #{parentId,jdbcType=VARCHAR},
-            </if>
-            <if test="iconId != null">
-                #{iconId,jdbcType=VARCHAR},
-            </if>
-            <if test="type != null">
-                #{type,jdbcType=SMALLINT},
-            </if>
-            <if test="updateName != null">
-                #{updateName,jdbcType=VARCHAR},
-            </if>
-            <if test="updateCreate != null">
-                #{updateCreate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="createName != null">
-                #{createName,jdbcType=VARCHAR},
-            </if>
-            <if test="createDate != null">
-                #{createDate,jdbcType=TIMESTAMP},
-            </if>
-        </trim>
-    </insert>
-    <select id="countByExample" parameterType="com.web.example.MenuExample" resultType="java.lang.Integer">
-        select count(*) from t_s_menu
-        <if test="_parameter != null">
-            <include refid="Example_Where_Clause"/>
-        </if>
-    </select>
-    <update id="updateByExampleSelective" parameterType="map">
-        update t_s_menu
-        <set>
-            <if test="record.id != null">
-                Y_ID = #{record.id,jdbcType=VARCHAR},
-            </if>
-            <if test="record.level != null">
-                Y_LEVEL = #{record.level,jdbcType=SMALLINT},
-            </if>
-            <if test="record.name != null">
-                Y_NAME = #{record.name,jdbcType=VARCHAR},
-            </if>
-            <if test="record.order != null">
-                Y_ORDER = #{record.order,jdbcType=VARCHAR},
-            </if>
-            <if test="record.url != null">
-                Y_URL = #{record.url,jdbcType=VARCHAR},
-            </if>
-            <if test="record.parentId != null">
-                Y_PARENT_ID = #{record.parentId,jdbcType=VARCHAR},
-            </if>
-            <if test="record.iconId != null">
-                Y_ICON_ID = #{record.iconId,jdbcType=VARCHAR},
-            </if>
-            <if test="record.type != null">
-                Y_TYPE = #{record.type,jdbcType=SMALLINT},
-            </if>
-            <if test="record.updateName != null">
-                Y_UPDATENAME = #{record.updateName,jdbcType=VARCHAR},
-            </if>
-            <if test="record.updateCreate != null">
-                Y_UPDATECREATE = #{record.updateCreate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="record.createName != null">
-                Y_CREATENAME = #{record.createName,jdbcType=VARCHAR},
-            </if>
-            <if test="record.createDate != null">
-                Y_CREATEDATE = #{record.createDate,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        <if test="_parameter != null">
-            <include refid="Update_By_Example_Where_Clause"/>
-        </if>
-    </update>
-    <update id="updateByExample" parameterType="map">
-        update t_s_menu
-        set Y_ID = #{record.id,jdbcType=VARCHAR},
-        Y_LEVEL = #{record.level,jdbcType=SMALLINT},
-        Y_NAME = #{record.name,jdbcType=VARCHAR},
-        Y_ORDER = #{record.order,jdbcType=VARCHAR},
-        Y_URL = #{record.url,jdbcType=VARCHAR},
-        Y_PARENT_ID = #{record.parentId,jdbcType=VARCHAR},
-        Y_ICON_ID = #{record.iconId,jdbcType=VARCHAR},
-        Y_TYPE = #{record.type,jdbcType=SMALLINT},
-        Y_UPDATENAME = #{record.updateName,jdbcType=VARCHAR},
-        Y_UPDATECREATE = #{record.updateCreate,jdbcType=TIMESTAMP},
-        Y_CREATENAME = #{record.createName,jdbcType=VARCHAR},
-        Y_CREATEDATE = #{record.createDate,jdbcType=TIMESTAMP}
-        <if test="_parameter != null">
-            <include refid="Update_By_Example_Where_Clause"/>
-        </if>
-    </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.Menu">
-        update t_s_menu
-        <set>
-            <if test="level != null">
-                Y_LEVEL = #{level,jdbcType=SMALLINT},
-            </if>
-            <if test="name != null">
-                Y_NAME = #{name,jdbcType=VARCHAR},
-            </if>
-            <if test="order != null">
-                Y_ORDER = #{order,jdbcType=VARCHAR},
-            </if>
-            <if test="url != null">
-                Y_URL = #{url,jdbcType=VARCHAR},
-            </if>
-            <if test="parentId != null">
-                Y_PARENT_ID = #{parentId,jdbcType=VARCHAR},
-            </if>
-            <if test="iconId != null">
-                Y_ICON_ID = #{iconId,jdbcType=VARCHAR},
-            </if>
-            <if test="type != null">
-                Y_TYPE = #{type,jdbcType=SMALLINT},
-            </if>
-            <if test="updateName != null">
-                Y_UPDATENAME = #{updateName,jdbcType=VARCHAR},
-            </if>
-            <if test="updateCreate != null">
-                Y_UPDATECREATE = #{updateCreate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="createName != null">
-                Y_CREATENAME = #{createName,jdbcType=VARCHAR},
-            </if>
-            <if test="createDate != null">
-                Y_CREATEDATE = #{createDate,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        where Y_ID = #{id,jdbcType=VARCHAR}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.web.entity.Menu">
+  <insert id="insertSelective" parameterType="com.web.entity.Menu" >
+    insert into t_s_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="level != null" >
+        LEVEL,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="rank != null" >
+        RANK,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+      <if test="iconId != null" >
+        ICON_ID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="updateName != null" >
+        UPDATE_NAME,
+      </if>
+      <if test="updateCreate != null" >
+        UPDATE_CREATE,
+      </if>
+      <if test="createName != null" >
+        CREATE_NAME,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=SMALLINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null" >
+        #{rank,jdbcType=SMALLINT},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="iconId != null" >
+        #{iconId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="updateName != null" >
+        #{updateName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateCreate != null" >
+        #{updateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createName != null" >
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.web.example.MenuExample" resultType="java.lang.Integer" >
+    select count(*) from t_s_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
     update t_s_menu
-    set Y_LEVEL = #{level,jdbcType=SMALLINT},
-      Y_NAME = #{name,jdbcType=VARCHAR},
-      Y_ORDER = #{order,jdbcType=VARCHAR},
-      Y_URL = #{url,jdbcType=VARCHAR},
-      Y_PARENT_ID = #{parentId,jdbcType=VARCHAR},
-      Y_ICON_ID = #{iconId,jdbcType=VARCHAR},
-      Y_TYPE = #{type,jdbcType=SMALLINT},
-      Y_UPDATENAME = #{updateName,jdbcType=VARCHAR},
-      Y_UPDATECREATE = #{updateCreate,jdbcType=TIMESTAMP},
-      Y_CREATENAME = #{createName,jdbcType=VARCHAR},
-      Y_CREATEDATE = #{createDate,jdbcType=TIMESTAMP}
-    where Y_ID = #{id,jdbcType=VARCHAR}
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.level != null" >
+        LEVEL = #{record.level,jdbcType=SMALLINT},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rank != null" >
+        RANK = #{record.rank,jdbcType=SMALLINT},
+      </if>
+      <if test="record.url != null" >
+        URL = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentId != null" >
+        PARENT_ID = #{record.parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.iconId != null" >
+        ICON_ID = #{record.iconId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        TYPE = #{record.type,jdbcType=SMALLINT},
+      </if>
+      <if test="record.updateName != null" >
+        UPDATE_NAME = #{record.updateName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateCreate != null" >
+        UPDATE_CREATE = #{record.updateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createName != null" >
+        CREATE_NAME = #{record.createName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null" >
+        CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_s_menu
+    set ID = #{record.id,jdbcType=VARCHAR},
+      LEVEL = #{record.level,jdbcType=SMALLINT},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      RANK = #{record.rank,jdbcType=SMALLINT},
+      URL = #{record.url,jdbcType=VARCHAR},
+      PARENT_ID = #{record.parentId,jdbcType=VARCHAR},
+      ICON_ID = #{record.iconId,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=SMALLINT},
+      UPDATE_NAME = #{record.updateName,jdbcType=VARCHAR},
+      UPDATE_CREATE = #{record.updateCreate,jdbcType=TIMESTAMP},
+      CREATE_NAME = #{record.createName,jdbcType=VARCHAR},
+      CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.Menu" >
+    update t_s_menu
+    <set >
+      <if test="level != null" >
+        LEVEL = #{level,jdbcType=SMALLINT},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null" >
+        RANK = #{rank,jdbcType=SMALLINT},
+      </if>
+      <if test="url != null" >
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="iconId != null" >
+        ICON_ID = #{iconId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="updateName != null" >
+        UPDATE_NAME = #{updateName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateCreate != null" >
+        UPDATE_CREATE = #{updateCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createName != null" >
+        CREATE_NAME = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.web.entity.Menu" >
+    update t_s_menu
+    set LEVEL = #{level,jdbcType=SMALLINT},
+      NAME = #{name,jdbcType=VARCHAR},
+      RANK = #{rank,jdbcType=SMALLINT},
+      URL = #{url,jdbcType=VARCHAR},
+      PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      ICON_ID = #{iconId,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=SMALLINT},
+      UPDATE_NAME = #{updateName,jdbcType=VARCHAR},
+      UPDATE_CREATE = #{updateCreate,jdbcType=TIMESTAMP},
+      CREATE_NAME = #{createName,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

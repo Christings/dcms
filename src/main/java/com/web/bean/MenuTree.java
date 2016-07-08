@@ -20,7 +20,7 @@ public class MenuTree {
 
 	private String name;
 
-	private String order;
+	private Short rank;
 
 	private String url;
 
@@ -84,12 +84,12 @@ public class MenuTree {
 		this.name = name == null ? null : name.trim();
 	}
 
-	public String getOrder() {
-		return order;
+	public Short getRank() {
+		return rank;
 	}
 
-	public void setOrder(String order) {
-		this.order = order == null ? null : order.trim();
+	public void setRank(Short rank) {
+		this.rank = rank;
 	}
 
 	public String getUrl() {

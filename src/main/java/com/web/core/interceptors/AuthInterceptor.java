@@ -53,7 +53,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 		if(!url.matches(RegExpUtil.resourceFile) && !excludeUrls.contains(url)){
 			if(null == WebUtils.getUser(request)){
-				response.sendRedirect(request.getContextPath()+"/login");
+				response.sendRedirect(request.getContextPath()+"/");
 				System.out.println("==" + requestUri);
 				return false;
 			}

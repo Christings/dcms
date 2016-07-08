@@ -19,10 +19,10 @@ public class Menu extends BaseEntity {
 	 */
 	private String name;
 
-	/**
-	 * 排序
-	 */
-	private String order;
+    /**
+     * 排序
+     */
+    private Short rank;
 
 	/**
 	 * 访问链接
@@ -60,13 +60,13 @@ public class Menu extends BaseEntity {
 		this.name = name == null ? null : name.trim();
 	}
 
-	public String getOrder() {
-		return order;
-	}
+    public Short getRank() {
+        return rank;
+    }
 
-	public void setOrder(String order) {
-		this.order = order == null ? null : order.trim();
-	}
+    public void setRank(Short rank) {
+        this.rank = rank;
+    }
 
 	public String getUrl() {
 		return url;
