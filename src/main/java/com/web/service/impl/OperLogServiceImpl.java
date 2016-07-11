@@ -1,5 +1,16 @@
 package com.web.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.web.core.util.page.QueryResult;
@@ -10,15 +21,6 @@ import com.web.mappers.OperLogMapper;
 import com.web.service.OperLogService;
 import com.web.util.UUIDGenerator;
 import com.web.util.WebUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 业务日志service
@@ -34,110 +36,108 @@ public class OperLogServiceImpl implements OperLogService {
 
 	@Autowired
 	private OperLogMapper operLogMapper;
-
 	@Autowired
 	private HttpSession session;
 
 	@Override
-	public int addOperLog(String deviceName, String operType, int logLevel, int action, String operProp, String userId,
-			String userName, Date operDate, String comment) {
+	public int addSystemLog(OperLog.operTypeEnum operType, OperLog.actionSystemEnum systemAction, String operProp) {
 		try {
-			String id = UUIDGenerator.generatorRandomUUID();
-			OperLog log = new OperLog();
-			log.setId(id);
-			log.setDeviceName(deviceName);
-			log.setAction(action);
-			log.setLogLevel(logLevel);
-			log.setOperProp(operProp);
-            log.setOperType(operType);
-			log.setOperUserId(userId);
-			log.setOperUserName(userName);
-			log.setOperDate(operDate);
-			log.setComments(comment);
-			log.setLogType(OperLogService.LOG_TYPE_BUSINESS);
-			return operLogMapper.insert(log);
+			OperLog operLog = new OperLog();
+			User user = getCurrentUser();
+			operLog.setId(UUIDGenerator.generatorRandomUUID());
+			operLog.setOperType(getOperType(operType));
+			operLog.setActionType(getActionSystem(operType, systemAction));
+			operLog.setOperProp(operProp);
+			operLog.setOperUserId(user.getId());
+			operLog.setOperUserName(user.getUserName());
+			operLog.setOperDate(new Date());
+			operLog.setLogLevel(getLogLevel(OperLog.logLevelEnum.success));// 默认成功
+			operLog.setLogType(0);
+			return operLogMapper.insert(operLog);
 		} catch (Exception e) {
 			if (LOGGER.isInfoEnabled()) {
-				LOGGER.error("记录日志失败！");
+				LOGGER.error("OperLogService.addSystemLog出错！");
 			}
-            e.printStackTrace();
+			e.printStackTrace();
 			return 0;
 		}
 	}
 
 	@Override
-	public int addOperLog(String deviceName, String operType, int logLevel, int action, String operProp,
-			String comment) {
+	public int addSystemLog(OperLog.operTypeEnum operType, OperLog.actionSystemEnum systemAction, String operProp,
+			OperLog.logLevelEnum logLevel) {
 		try {
-			User user = (User) session.getAttribute(WebUtils.SESSION_KEY_USER);
-			String id = UUIDGenerator.generatorRandomUUID();
 			OperLog operLog = new OperLog();
-			operLog.setId(id);
+			User user = getCurrentUser();
+			operLog.setId(UUIDGenerator.generatorRandomUUID());
+			operLog.setOperType(getOperType(operType));
+			operLog.setActionType(getActionSystem(operType, systemAction));
+			operLog.setOperType(operProp);
+			operLog.setOperUserId(user.getId());
+			operLog.setOperUserName(user.getUserName());
+			operLog.setOperDate(new Date());
+			operLog.setLogLevel(getLogLevel(logLevel));// 默认成功
+			operLog.setLogType(0);
+			return operLogMapper.insert(operLog);
+		} catch (Exception e) {
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.error("OperLogService.addSystemLog出错！");
+			}
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public int addBusinessLog(String deviceName, OperLog.operTypeEnum operType, OperLog.actionBusinessEnum busiAction,
+			String operProp) {
+		try {
+			OperLog operLog = new OperLog();
+			User user = getCurrentUser();
+			operLog.setId(UUIDGenerator.generatorRandomUUID());
 			operLog.setDeviceName(deviceName);
-			operLog.setLogLevel(logLevel);
-			operLog.setAction(action);
-			operLog.setOperProp(operProp);
+			operLog.setOperType(getOperType(operType));
+			operLog.setActionType(getActionBusiness(operType, busiAction));
+			operLog.setOperType(operProp);
 			operLog.setOperUserId(user.getId());
 			operLog.setOperUserName(user.getUserName());
 			operLog.setOperDate(new Date());
-			operLog.setComments(comment);
-			operLog.setLogType(OperLogService.LOG_TYPE_BUSINESS);
+			operLog.setLogLevel(getLogLevel(OperLog.logLevelEnum.success));// 默认成功
+			operLog.setLogType(1);
 			return operLogMapper.insert(operLog);
 		} catch (Exception e) {
 			if (LOGGER.isInfoEnabled()) {
-				LOGGER.error("记录日志失败！");
+				LOGGER.error("OperLogService.addSystemLog出错！");
 			}
+			e.printStackTrace();
 			return 0;
 		}
 	}
 
 	@Override
-	public int addSystemLog(String operType, int logLevel, int action, String operProp, String comment) {
+	public int addBusinessLog(String deviceName, OperLog.operTypeEnum operType, OperLog.actionBusinessEnum busiAction, String operProp,
+			OperLog.logLevelEnum logLevel) {
 		try {
-			User user =(User)session.getAttribute(WebUtils.SESSION_KEY_USER);
-			String id = UUIDGenerator.generatorRandomUUID();
 			OperLog operLog = new OperLog();
-			operLog.setId(id);
-			operLog.setLogLevel(logLevel);
-			operLog.setAction(action);
-			operLog.setOperProp(operProp);
+			User user = getCurrentUser();
+			operLog.setId(UUIDGenerator.generatorRandomUUID());
+			operLog.setDeviceName(deviceName);
+			operLog.setOperType(getOperType(operType));
+			operLog.setActionType(getActionBusiness(operType, busiAction));
+			operLog.setOperType(operProp);
 			operLog.setOperUserId(user.getId());
 			operLog.setOperUserName(user.getUserName());
 			operLog.setOperDate(new Date());
-			operLog.setComments(comment);
-			operLog.setLogType(OperLogService.LOG_TYPE_SYSTEM);
+			operLog.setLogLevel(getLogLevel(logLevel));
+			operLog.setLogType(1);
 			return operLogMapper.insert(operLog);
 		} catch (Exception e) {
 			if (LOGGER.isInfoEnabled()) {
-				LOGGER.error("记录日志失败！");
+				LOGGER.error("OperLogService.addSystemLog出错！");
 			}
+			// e.printStackTrace();
 			return 0;
 		}
-	}
-
-	@Override
-	public int save(OperLog entity) {
-		return operLogMapper.insert(entity);
-	}
-
-	@Override
-	public int updateById(OperLog entity) {
-		return operLogMapper.updateByPrimaryKey(entity);
-	}
-
-	@Override
-	public int deleteById(String key) {
-		return operLogMapper.deleteByPrimaryKey(key);
-	}
-
-	@Override
-	public OperLog getById(String key) {
-		return operLogMapper.selectByPrimaryKey(key);
-	}
-
-	@Override
-	public List<OperLog> getAll() {
-		return null;
 	}
 
 	@Override
@@ -154,4 +154,89 @@ public class OperLogServiceImpl implements OperLogService {
 		return queryResult;
 	}
 
+	private String getOperType(OperLog.operTypeEnum operTypeEnum) {
+		switch (operTypeEnum) {
+		case select:
+			return "select";
+		case insert:
+			return "insert";
+		case update:
+			return "update";
+		case delete:
+			return "delete";
+		}
+		return "";
+	}
+
+	private String getActionSystem(OperLog.operTypeEnum operTypeEnum, OperLog.actionSystemEnum systemAction) {
+		String operType = getOperTypeCn(operTypeEnum);
+		switch (systemAction) {
+		case user:
+			return operType + "用户";
+		case menu:
+			return operType + "菜单";
+		case role:
+			return operType + "角色";
+		case dataDic:
+			return operType + "数据词典";
+		case login:
+			return "登陆系统";
+		case logout:
+			return "登出系统";
+		case log:
+			return operType + "日志";
+		}
+		return "";
+	}
+
+	private String getActionBusiness(OperLog.operTypeEnum operTypeEnum, OperLog.actionBusinessEnum businessAction) {
+		String operType = getOperTypeCn(operTypeEnum);
+		switch (businessAction) {
+		case cabinet:
+			return operType + "机柜";
+		case device:
+			return operType + "设备";
+		case jumper:
+			return operType + "跳线";
+		case cabinetPro:
+			return operType + "机柜属性";
+		case devicePro:
+			return operType + "设备属性";
+		}
+		return "";
+	}
+
+	private String getOperTypeCn(OperLog.operTypeEnum operTypeEnum) {
+		String operType = "";
+		switch (operTypeEnum) {
+		case select:
+			operType = "查询";
+			break;
+		case insert:
+			operType = "新建";
+			break;
+		case update:
+			operType = "修改";
+			break;
+		case delete:
+			operType = "删除";
+			break;
+		}
+		return operType;
+	}
+
+	private int getLogLevel(OperLog.logLevelEnum logLevelEnum) {
+		int logLevel = 0;
+		switch (logLevelEnum) {
+		case success:
+			logLevel = 0;
+		case error:
+			logLevel = 1;
+		}
+		return logLevel;
+	}
+
+	private User getCurrentUser() {
+		return (User) session.getAttribute(WebUtils.SESSION_KEY_USER);
+	}
 }

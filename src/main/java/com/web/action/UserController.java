@@ -1,5 +1,7 @@
 package com.web.action;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ import com.web.entity.User;
 import com.web.util.AllResult;
 import com.web.util.MD5;
 import com.web.util.UUIDGenerator;
+import com.web.util.WebUtils;
 /**
  * 用户管理Controller
 * @ClassName: UserController 
@@ -61,6 +64,8 @@ public class UserController extends BaseController{
 		try {
 			user.setId(UUIDGenerator.generatorRandomUUID());
 			user.setPassword(MD5.MD5Encode(user.getPassword()));
+			user.setCreateName(WebUtils.getUser(request).getUserName());
+			user.setCreateDate(new Date());
 			int result=userService.saveUser(user);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("save result: {}", result);
@@ -104,6 +109,8 @@ public class UserController extends BaseController{
 		try {
 			//user.setId(UUIDGenerator.generatorRandomUUID());
 			//user.setPassword(MD5.MD5Encode(user.getPassword()));
+			user.setUpdateName(WebUtils.getUser(request).getUserName());
+			user.setUpdateCreate(new Date());
 			int result=userService.updateUser(user);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("save result: {}", result);
@@ -139,6 +146,8 @@ public class UserController extends BaseController{
 		}
 
 		try {
+			user.setUpdateName(WebUtils.getUser(request).getUserName());
+			user.setUpdateCreate(new Date());
 			//user.setId(UUIDGenerator.generatorRandomUUID());
 			//user.setPassword(MD5.MD5Encode(user.getPassword()));
 			userService.updateUserDelete(user.getEnabled(), user.getId());
@@ -173,6 +182,8 @@ public class UserController extends BaseController{
 		}
 
 		try {
+			user.setUpdateName(WebUtils.getUser(request).getUserName());
+			user.setUpdateCreate(new Date());
 			//user.setId(UUIDGenerator.generatorRandomUUID());
 			//user.setPassword(MD5.MD5Encode(user.getPassword()));
 			userService.updateUserDelete(user.getDeleted(), user.getId());
