@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.mappers.UserRoleMapper">
+	<resultMap type="com.web.entity.UserRole" id="BaseResultMap">
+		<id column="ID" property="id" />
+		<result column="userid" property="userid" />
+		<result column="roleid" property="roleid" />
+		<result column="update_name" property="updateName" />
+		<result column="update_date" property="updateCreate" />
+		<result column="create_name" property="createName" />
+		<result column="create_date" property="createDate" />
+	</resultMap>
+	
+</mapper>
