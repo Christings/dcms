@@ -16,48 +16,47 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.web.core.action.BaseController;
+import com.web.entity.OperLog;
 import com.web.entity.User;
-import com.web.util.AllResult;
-import com.web.util.MD5;
-import com.web.util.UUIDGenerator;
-import com.web.util.WebUtils;
+import com.web.util.*;
+
 /**
  * 用户管理Controller
-* @ClassName: UserController 
-* @Description: TODO
-* @author 童云鹏 
-* @date 2016年7月5日 上午9:58:51
+ * 
+ * @ClassName: UserController
+ * @Description: TODO
+ * @author 童云鹏
+ * @date 2016年7月5日 上午9:58:51
  */
 @Controller
 @RequestMapping("/user")
-public class UserController extends BaseController{
+public class UserController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-	
+
 	/**
 	 * 新增用户
-	* @Title: addUser 
-	* @Description: TODO
-	* @param @param user
-	* @param @param request
-	* @param @return   参数 
-	* @return Object    返回类型 
-	* @throws 
-	* @author  童云鹏
-	* @date 2016年7月5日 上午9:59:16
+	 * 
+	 * @Title: addUser
+	 * @Description: TODO
+	 * @param user
+	 * @param request
+	 * @return Object 返回类型
+	 * @author 童云鹏
+	 * @date 2016年7月5日 上午9:59:16
 	 */
-	@RequestMapping(value="/addUser",method=RequestMethod.POST)
+	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
 	@ResponseBody
-	public Object addUser(@RequestBody User user, HttpServletRequest request){
-		
+	public Object addUser(@RequestBody User user, HttpServletRequest request) {
+
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
 		}
-		//TODO 需要添加判断
-		if(StringUtils.isEmpty(user.getAccount())){
+		// TODO 需要添加判断
+		if (StringUtils.isEmpty(user.getAccount())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:account用户账号不能为空");
-		}else if(StringUtils.isEmpty(user.getPassword())){
+		} else if (StringUtils.isEmpty(user.getPassword())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:password密码不能为空");
-		}else if(StringUtils.isEmpty(user.getUserName())){
+		} else if (StringUtils.isEmpty(user.getUserName())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:userName密码不能为空");
 		}
 
@@ -66,134 +65,175 @@ public class UserController extends BaseController{
 			user.setPassword(MD5.MD5Encode(user.getPassword()));
 			user.setCreateName(WebUtils.getUser(request).getUserName());
 			user.setCreateDate(new Date());
-			int result=userService.saveUser(user);
+			int result = userService.saveUser(user);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("save result: {}", result);
 			}
 			return AllResult.okJSON(user);
 		} catch (Exception e) {
 			LOGGER.error("save User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败") ;
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败");
 		}
-		
+
 	}
+
 	/**
 	 * 修改用户
-	* @Title: updateUser 
-	* @Description: TODO
-	* @param @param user
-	* @param @param request
-	* @param @return   参数 
-	* @return Object    返回类型 
-	* @throws 
-	* @author  童云鹏
-	* @date 2016年7月5日 上午9:59:38
+	 * 
+	 * @Title: updateUser
+	 * @Description: TODO
+	 * @param user
+	 * @param request
+	 * @return Object 返回类型
+	 * @author 童云鹏
+	 * @date 2016年7月5日 上午9:59:38
 	 */
-	@RequestMapping(value="/updateUser",method=RequestMethod.POST)
+	@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
 	@ResponseBody
-	public Object updateUser(@RequestBody User user,HttpServletRequest request){
+	public Object updateUser(@RequestBody User user, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
 		}
-		//TODO 需要添加判断
-		if(StringUtils.isEmpty(user.getAccount())){
+		// TODO 需要添加判断
+		if (StringUtils.isEmpty(user.getAccount())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:account用户账号不能为空");
-		}else if(StringUtils.isEmpty(user.getPassword())){
+		} else if (StringUtils.isEmpty(user.getPassword())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:password密码不能为空");
-		}else if(StringUtils.isEmpty(user.getUserName())){
+		} else if (StringUtils.isEmpty(user.getUserName())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:userName用户名不能为空");
-		}else if(StringUtils.isEmpty(user.getId())){
+		} else if (StringUtils.isEmpty(user.getId())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:userId不能为空");
 		}
 
 		try {
-			//user.setId(UUIDGenerator.generatorRandomUUID());
-			//user.setPassword(MD5.MD5Encode(user.getPassword()));
+			// user.setId(UUIDGenerator.generatorRandomUUID());
+			// user.setPassword(MD5.MD5Encode(user.getPassword()));
 			user.setUpdateName(WebUtils.getUser(request).getUserName());
 			user.setUpdateCreate(new Date());
-			int result=userService.updateUser(user);
+			int result = userService.updateUser(user);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("save result: {}", result);
 			}
 			return AllResult.okJSON(user);
 		} catch (Exception e) {
 			LOGGER.error("save User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败") ;
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败");
 		}
 	}
-	
+
 	/**
 	 * 
-	* @Title: updateUserEnabled 
-	* @Description: 设置用户是否启用
-	* @param @param user
-	* @param @param request
-	* @param @return   参数 
-	* @return Object    返回类型 
-	* @throws 
-	* @author  童云鹏
-	* @date 2016年7月5日 上午10:04:40
+	 * @Title: updateUserEnabled
+	 * @Description: 设置用户是否启用
+	 * @param user
+	 * @param request
+	 * @return Object 返回类型
+	 * @throws @author
+	 *             童云鹏
+	 * @date 2016年7月5日 上午10:04:40
 	 */
-	@RequestMapping(value="/updateUserEnabled",method=RequestMethod.POST)
+	@RequestMapping(value = "/updateUserEnabled", method = RequestMethod.POST)
 	@ResponseBody
-	public Object updateUserEnabled(@RequestBody User user,HttpServletRequest request){
+	public Object updateUserEnabled(@RequestBody User user, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
 		}
-		//TODO 需要添加判断
-		 if(StringUtils.isEmpty(user.getId())){
+		// TODO 需要添加判断
+		if (StringUtils.isEmpty(user.getId())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:userId不能为空");
 		}
 
 		try {
 			user.setUpdateName(WebUtils.getUser(request).getUserName());
 			user.setUpdateCreate(new Date());
-			//user.setId(UUIDGenerator.generatorRandomUUID());
-			//user.setPassword(MD5.MD5Encode(user.getPassword()));
+			// user.setId(UUIDGenerator.generatorRandomUUID());
+			// user.setPassword(MD5.MD5Encode(user.getPassword()));
 			userService.updateUserDelete(user.getEnabled(), user.getId());
 			return AllResult.okJSON(user);
 		} catch (Exception e) {
 			LOGGER.error("updateUserEnabled User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败") ;
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败");
 		}
 	}
-	
+
 	/**
 	 * 
-	* @Title: updateUserDelete 
-	* @Description: 用户逻辑删除
-	* @param @param user
-	* @param @param request
-	* @param @return   参数 
-	* @return Object    返回类型 
-	* @throws 
-	* @author  童云鹏
-	* @date 2016年7月5日 上午10:05:35
+	 * @Title: updateUserDelete
+	 * @Description: 用户逻辑删除
+	 * @param user
+	 * @param request
+	 * @return Object 返回类型
+	 * @throws @author
+	 *             童云鹏
+	 * @date 2016年7月5日 上午10:05:35
 	 */
-	@RequestMapping(value="/updateUserDelete",method=RequestMethod.POST)
+	@RequestMapping(value = "/updateUserDelete", method = RequestMethod.POST)
 	@ResponseBody
-	public Object updateUserDelete(@RequestBody User user,HttpServletRequest request){
+	public Object updateUserDelete(@RequestBody User user, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
 		}
-		//TODO 需要添加判断
-		if(StringUtils.isEmpty(user.getId())){
+		// TODO 需要添加判断
+		if (StringUtils.isEmpty(user.getId())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:userId不能为空");
 		}
 
 		try {
 			user.setUpdateName(WebUtils.getUser(request).getUserName());
 			user.setUpdateCreate(new Date());
-			//user.setId(UUIDGenerator.generatorRandomUUID());
-			//user.setPassword(MD5.MD5Encode(user.getPassword()));
+			// user.setId(UUIDGenerator.generatorRandomUUID());
+			// user.setPassword(MD5.MD5Encode(user.getPassword()));
 			userService.updateUserDelete(user.getDeleted(), user.getId());
-			
+
 			return AllResult.okJSON(user);
 		} catch (Exception e) {
 			LOGGER.error("delete User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败") ;
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败");
 		}
 	}
-	
 
+	/**
+	 *
+	 * @Description: 修改用户密码
+	 * @param user
+	 * @param request
+	 * @author 田军兴
+	 * @date 2016年7月9日
+	 */
+	@RequestMapping(value = "modifyPassword", method = { RequestMethod.POST, RequestMethod.GET })
+	@ResponseBody
+	public Object modifyPassword(@RequestBody User user, HttpServletRequest request) {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("request param: [user: {}]", JSON.toJSONString(user));
+		}
+		try {
+			if (StringUtil.isEmpty(user.getId())) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:用户ID不能为空");
+			}
+			if (StringUtil.isEmpty(user.getPassword())) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:密码不能为空");
+			}
+			User oldUser = userService.getUserById(user.getId());
+			if (oldUser.getPassword().equals(MD5.MD5Encode(user.getPassword()))) {
+				if (LOGGER.isInfoEnabled()) {
+					LOGGER.info("request param: [user: {}]", JSON.toJSONString(user));
+				}
+				return AllResult.okJSON(user);
+			}
+			user.setPassword(MD5.MD5Encode(user.getPassword()));
+			if (userService.updateUserPassword(user) > 0) {
+				// 增加日志
+				operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.user, JSON.toJSONString(user));
+				if (LOGGER.isInfoEnabled()) {
+					LOGGER.info("密码修改成功", JSON.toJSONString(user));
+				}
+				return AllResult.okJSON(user);
+			} else {
+				return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "密码修改失败:数据未能持久化");
+			}
+		} catch (Exception e) {
+			LOGGER.error("delete User fail:", e.getMessage());
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,修改密码失败");
+		}
+	}
 }

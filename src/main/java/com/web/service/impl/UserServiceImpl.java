@@ -15,31 +15,30 @@ import com.web.service.UserService;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private  UserMapper userMapper;
+	private UserMapper userMapper;
 
-	
-
-public User getUserById(String id) {
-	User user = userMapper.selectOneById(id);
-	return user;
+	public User getUserById(String id) {
+		User user = userMapper.selectOneById(id);
+		return user;
 	}
 
-	public List<User> getAllUsers(){
+	public List<User> getAllUsers() {
 		return userMapper.getAll();
 	}
 
-	public int saveUser(User user){
-		 return userMapper.save(user);
+	public int saveUser(User user) {
+		return userMapper.save(user);
 	}
-	public int updateUser(User user){
+
+	public int updateUser(User user) {
 		return userMapper.update(user);
 	}
 
-	public int deleteUser(String id){
+	public int deleteUser(String id) {
 		return userMapper.delete(id);
 	}
 
-	public User getUserByName(String name)throws Exception{
+	public User getUserByName(String name) throws Exception {
 		return userMapper.getUserByName(name);
 	}
 
@@ -56,7 +55,7 @@ public User getUserById(String id) {
 	}
 
 	@Override
-	public  int updateUserPassword(User user){
+	public int updateUserPassword(User user) {
 		return userMapper.updateUserPassword(user);
 	}
 
