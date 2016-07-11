@@ -76,7 +76,9 @@
         <!--oracle SqlMap-->
         <!--<property name="mapperLocations" value="classpath:mappers/oracle/*.xml" />-->
         <property name="plugins" >
-            <bean class="com.web.core.interceptors.mybatis.MySqlPageInterceptor"></bean>
+            <bean class="com.web.core.interceptors.mybatis.MybatisSpringPageInterceptor">
+            <property name="databaseType" value="mysql"/>
+            </bean>
         </property>
       </bean>
 
