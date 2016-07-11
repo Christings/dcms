@@ -1,7 +1,5 @@
 package com.web.service;
 
-import com.web.core.util.Page;
-import com.web.core.util.page.PageBounds;
 import com.web.entity.User;
 
 import java.util.List;
@@ -32,5 +30,6 @@ public interface UserService {
 
 	public int deleteUser(String id);
 
-	public List<User> getUserPage(Page<User> page)throws Exception;
+	public  int updateUserPassword(User user);
+
 }

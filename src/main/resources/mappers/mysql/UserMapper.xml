@@ -158,5 +158,9 @@
 	<update id="updateUserDelete" flushCache="true" parameterType="Object">
 	UPDATE t_s_user SET deleted=#{deleted} where id=#{id}
 	</update>
+	<!--修改密码-->
+	<update id="updateUserPassword" flushCache="true" parameterType="com.web.entity.User">
+		UPDATE t_s_user SET password=#{password} where id=#{id}
+	</update>
 	
 </mapper>

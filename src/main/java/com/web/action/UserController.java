@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.web.core.action.BaseController;
-import com.web.core.util.Page;
 import com.web.entity.User;
 import com.web.util.AllResult;
 import com.web.util.MD5;
@@ -195,18 +194,6 @@ public class UserController extends BaseController{
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败") ;
 		}
 	}
-	@RequestMapping(value="/getUsersByPage",method=RequestMethod.GET)
-	@ResponseBody
-	public Object getUsersByPage(@RequestBody Page<User> page,HttpServletRequest request){
-		page.setPageNo(1);
-		page.setPageSize(10);
-		try {
-			userService.getUserPage(page);
-			return AllResult.okJSON(page);
-		} catch (Exception e) {
-			LOGGER.error("delete User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败") ;
-		}
-	}
+	
 
 }
