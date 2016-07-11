@@ -1,5 +1,6 @@
 package com.web.service;
 
+import com.web.core.util.Page;
 import com.web.core.util.page.PageBounds;
 import com.web.entity.User;
 
@@ -31,5 +32,5 @@ public interface UserService {
 
 	public int deleteUser(String id);
 
-	public List<User> getUserPage(PageBounds bounds, User user)throws Exception;
+	public List<User> getUserPage(Page<User> page)throws Exception;
 }

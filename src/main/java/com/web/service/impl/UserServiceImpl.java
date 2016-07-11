@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.web.core.util.Page;
 import com.web.core.util.page.PageBounds;
 import com.web.entity.User;
 import com.web.mappers.UserMapper;
@@ -44,10 +45,10 @@ public User getUserById(String id) {
 		return userMapper.getUserByName(name);
 	}
 
-	public List<User> getUserPage(PageBounds bounds, User user)throws Exception {
-		List<User> users = userMapper.getByPage(bounds,user);
-		System.out.println(bounds.getTotal() + bounds.getLimit() + bounds.getOffset());
-		return users;
+	public List<User> getUserPage(Page<User> page)throws Exception {
+		/*List<User> users = userMapper.getByPage(page);
+		System.out.println(bounds.getTotal() + bounds.getLimit() + bounds.getOffset());*/
+		return userMapper.getByPage(page);
 	}
 
 	@Override

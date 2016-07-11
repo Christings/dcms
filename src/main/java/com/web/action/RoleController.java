@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.web.core.action.BaseController;
+import com.web.core.util.Page;
 import com.web.entity.Role;
+import com.web.entity.User;
 import com.web.service.RoleSerivce;
 import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
@@ -131,6 +133,24 @@ public class RoleController extends BaseController{
 				LOGGER.debug("save result: {}", list);
 			}
 			return AllResult.okJSON(list);
+		} catch (Exception e) {
+			LOGGER.error("save Role fail:", e.getMessage());
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,查询角色失败") ;
+		}
+	}
+	
+	@RequestMapping(value="/getRolesByPage",method=RequestMethod.GET)
+	@ResponseBody
+	public Object getRolesByPage(@RequestBody Page<Role> page,HttpServletRequest request){
+		page.setPageNo(1);
+		page.setPageSize(10);
+		try {
+			
+			List<Role> list=roleService.getByPage(page);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("save result: {}", list);
+			}
+			return AllResult.okJSON(page);
 		} catch (Exception e) {
 			LOGGER.error("save Role fail:", e.getMessage());
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,查询角色失败") ;

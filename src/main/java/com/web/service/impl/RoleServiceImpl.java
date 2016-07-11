@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.web.core.util.Page;
 import com.web.core.util.page.QueryResult;
 import com.web.entity.Menu;
 import com.web.entity.Role;
@@ -55,11 +56,12 @@ public class RoleServiceImpl implements RoleSerivce{
 		return roleMapper.getAll();
 	}
 
+	
+
 	@Override
-	public QueryResult<Menu> getScrollData(int pagination, int maxResult,
-			MenuExample example) {
+	public List<Role> getByPage(Page<Role> page) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return roleMapper.getByPage(page);
 	}
 
 }
