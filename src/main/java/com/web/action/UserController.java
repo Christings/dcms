@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.web.core.util.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -189,6 +190,20 @@ public class UserController extends BaseController {
 		} catch (Exception e) {
 			LOGGER.error("delete User fail:", e.getMessage());
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败");
+		}
+	}
+
+	@RequestMapping(value="/getUsersByPage",method=RequestMethod.GET)
+	@ResponseBody
+	public Object getUsersByPage(@RequestBody Page<User> page, HttpServletRequest request){
+		page.setPageNo(1);
+		page.setPageSize(10);
+		try {
+			userService.getUserPage(page);
+			return AllResult.okJSON(page);
+		} catch (Exception e) {
+			LOGGER.error("delete User fail:", e.getMessage());
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败") ;
 		}
 	}
 

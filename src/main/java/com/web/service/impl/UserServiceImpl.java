@@ -2,6 +2,7 @@ package com.web.service.impl;
 
 import java.util.List;
 
+import com.web.core.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +53,13 @@ public class UserServiceImpl implements UserService {
 	public void updateUserDelete(Integer deleted, String id) throws Exception {
 		// TODO Auto-generated method stub
 		userMapper.updateUserDelete(deleted, id);
+	}
+
+	@Override
+	public List<User> getUserPage(Page<User> page)throws Exception {
+		/*List<User> users = userMapper.getByPage(page);
+		System.out.println(bounds.getTotal() + bounds.getLimit() + bounds.getOffset());*/
+		return userMapper.getByPage(page);
 	}
 
 	@Override
