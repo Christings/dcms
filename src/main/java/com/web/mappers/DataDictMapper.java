@@ -8,9 +8,13 @@ import com.web.core.util.Page;
 import com.web.entity.DataDict;
 import com.web.example.DataDictExample;
 
+/**
+ * 数据词典MAPPER
+ *
+ * @author 田军兴
+ * @date 2016-07-09
+ */
 public interface DataDictMapper {
-
-	int countByExample(DataDictExample example);
 
 	int deleteByExample(DataDictExample example);
 
@@ -18,9 +22,9 @@ public interface DataDictMapper {
 
 	int insertSelective(DataDict record);
 
-	List<DataDict> selectByExample(DataDictExample example);
-
 	DataDict selectByPrimaryKey(String id);
+
+	List<DataDict> selectByExample(DataDictExample example);
 
 	int updateByExampleSelective(@Param("record") DataDict record, @Param("example") DataDictExample example);
 
@@ -30,5 +34,5 @@ public interface DataDictMapper {
 
 	List<DataDict> selectAll();
 
-	List<DataDict> getByPage(Page<DataDict> page) throws Exception;
+	List<DataDict> getByPage(Page<DataDict> page, DataDictExample example);
 }

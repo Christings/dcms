@@ -2,21 +2,19 @@ package com.web.service.impl;
 
 import java.util.List;
 
-import com.web.util.StringUtil;
-import com.web.util.UUIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.web.core.util.page.QueryResult;
+import com.web.core.util.Page;
 import com.web.entity.DataDict;
 import com.web.example.DataDictExample;
 import com.web.mappers.DataDictMapper;
 import com.web.service.DataDictService;
+import com.web.util.StringUtil;
+import com.web.util.UUIDGenerator;
 
 /**
  * 数据词典接口
@@ -34,25 +32,8 @@ public class DataDictServiceImpl implements DataDictService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataDictServiceImpl.class);
 
 	@Override
-	public QueryResult<DataDict> getByPage(int pageCurrent, int count, DataDictExample example) {
-
-		// 排序
-		example.setOrderByClause("SORT");
-
-		// 分页
-		PageHelper.startPage(pageCurrent, count);
-
-		// 查询数据
-		List<DataDict> menus = dataDictMapper.selectByExample(example);
-		PageInfo<DataDict> pageInfo = new PageInfo<DataDict>();
-
-		QueryResult<DataDict> queryResult = new QueryResult<>(pageInfo.getList(), pageInfo.getTotal());
-
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("get DataDict page object count: {}", queryResult.getTotalRecord());
-		}
-
-		return queryResult;
+	public List<DataDict> getByPage(Page<DataDict> page, DataDictExample example) {
+		return dataDictMapper.getByPage(page, example);
 	}
 
 	@Override

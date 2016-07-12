@@ -2,7 +2,7 @@ package com.web.service;
 
 import java.util.List;
 
-import com.web.core.util.page.QueryResult;
+import com.web.core.util.Page;
 import com.web.entity.DataDict;
 import com.web.example.DataDictExample;
 
@@ -14,7 +14,7 @@ import com.web.example.DataDictExample;
  */
 public interface DataDictService extends IService<DataDict, String> {
 
-	public QueryResult<DataDict> getByPage(int pageCurrent, int count, DataDictExample example);
+	public List<DataDict> getByPage(Page<DataDict> page, DataDictExample example);
 
 	public List<DataDict> getByGroupId(DataDict dataDict);
 }

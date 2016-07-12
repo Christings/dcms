@@ -9,7 +9,7 @@
         <result column="GROUP_NAME" property="groupName" jdbcType="VARCHAR"/>
         <result column="DICT_TYPE" property="dictType" jdbcType="SMALLINT"/>
         <result column="SORT" property="sort" jdbcType="SMALLINT"/>
-        <result column="COMMENT" property="type" jdbcType="VARCHAR"/>
+        <result column="COMMENT" property="comment" jdbcType="VARCHAR"/>
         <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR"/>
         <result column="UPDATE_CREATE" property="updateCreate" jdbcType="TIMESTAMP"/>
         <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
