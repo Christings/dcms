@@ -10,18 +10,39 @@ import com.web.core.entity.BaseEntity;
  */
 public class DataDict extends BaseEntity {
 
+	/**
+	 * 字典值
+	 */
 	private Integer dictValue;
 
+	/**
+	 * 字典名称
+	 */
 	private String dictName;
 
+	/**
+	 * 分组ID
+	 */
 	private String groupId;
 
+	/**
+	 * 分组名称
+	 */
 	private String groupName;
 
+	/**
+	 * 字典数据类型
+	 */
 	private Integer dictType;
 
+	/**
+	 * 字典数据排序
+	 */
 	private Integer sort;
 
+	/**
+	 * 备注
+	 */
 	private String comment;
 
 	public Integer getDictValue() {
