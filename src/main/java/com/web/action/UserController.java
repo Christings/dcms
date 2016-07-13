@@ -64,7 +64,7 @@ public class UserController extends BaseController {
 		try {
 			user.setId(UUIDGenerator.generatorRandomUUID());
 			user.setPassword(MD5.MD5Encode(user.getPassword()));
-			user.setCreateName(WebUtils.getUser(request).getUserName());
+			user.setCreateName("admin");
 			user.setCreateDate(new Date());
 			int result = userService.saveUser(user);
 			if (LOGGER.isDebugEnabled()) {
@@ -72,8 +72,9 @@ public class UserController extends BaseController {
 			}
 			return AllResult.okJSON(user);
 		} catch (Exception e) {
+			e.printStackTrace();
 			LOGGER.error("save User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败");
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加用户失败");
 		}
 
 	}
