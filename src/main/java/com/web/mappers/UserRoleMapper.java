@@ -5,6 +5,8 @@ import java.util.List;
 import com.web.core.mapper.BaseMapper;
 import com.web.core.util.Page;
 import com.web.entity.UserRole;
+import com.web.example.RoleUserExample;
+
 /**
  * 
 * @ClassName: UserRoleMapper 
@@ -15,4 +17,14 @@ import com.web.entity.UserRole;
 public interface UserRoleMapper extends BaseMapper<UserRole>{
 
 	public List<UserRole> getUserRoleByPage(Page<UserRole> page)throws Exception;
+
+	public int countByExample(RoleUserExample example);
+
+	public List<UserRole> selectByExample(RoleUserExample example);
+
+	public int saveList(List<UserRole> list);
+
+	public int deleteByUserId(String userId);
+
+
 }
