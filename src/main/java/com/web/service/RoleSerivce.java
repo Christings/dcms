@@ -2,10 +2,8 @@ package com.web.service;
 
 import java.util.List;
 
-import com.web.core.util.page.QueryResult;
-import com.web.entity.Menu;
+import com.web.core.util.Page;
 import com.web.entity.Role;
-import com.web.example.MenuExample;
 
 public interface RoleSerivce extends IService<Role, String>{
 	/**
@@ -15,6 +13,6 @@ public interface RoleSerivce extends IService<Role, String>{
      * @param example
      * @return
      */
-    QueryResult<Menu> getScrollData(int pagination, int maxResult, MenuExample example);
+	public List<Role> getByPage(Page<Role> page)throws Exception;
     
 }

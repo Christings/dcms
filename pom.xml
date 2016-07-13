@@ -11,7 +11,7 @@
     <properties>
 
         <!-- 主要依赖库的版本定义 -->
-        <junit.version>4.7</junit.version>
+        <junit.version>4.9</junit.version>
         <ojdbc14.version>10.2.0.4.0</ojdbc14.version>
         <mysql.version>5.1.27</mysql.version>
         <spring.version>4.2.6.RELEASE</spring.version>
@@ -82,6 +82,12 @@
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
         </dependency>
+        <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-test</artifactId>
+    <version>3.2.3.RELEASE</version>
+    <scope>test</scope>
+</dependency>
         <!-- ojdbc <dependency> <groupId>com.oracle</groupId> <artifactId>ojdbc14</artifactId> <version>${ojdbc14.version}</version> </dependency> -->
         <!-- mysql -->
         <dependency>
@@ -178,6 +184,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
         </dependency>
         <!-- spring end -->
@@ -313,6 +324,12 @@
             <artifactId>commons-compress</artifactId>
             <version>1.10</version>
         </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>test</scope>
+        </dependency>
 
         <!--分页依赖包-->
         <dependency>
@@ -333,19 +350,19 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-            	<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<finalName>mobile</finalName>
-					<server>tomcat7</server>
-					<uriEncoding>UTF-8</uriEncoding>
-					<path>/dcms</path>
-					<!-- 在这里定义端口号 -->
-					<port>8050</port>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <finalName>mobile</finalName>
+                    <server>tomcat7</server>
+                    <uriEncoding>UTF-8</uriEncoding>
+                    <path>/dcms</path>
+                    <!-- 在这里定义端口号 -->
+                    <port>8050</port>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>

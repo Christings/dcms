@@ -2,11 +2,11 @@ package com.web.service.impl;
 
 import java.util.List;
 
+import com.web.core.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.web.core.util.page.PageBounds;
 import com.web.entity.User;
 import com.web.mappers.UserMapper;
 import com.web.service.UserService;
@@ -16,38 +16,31 @@ import com.web.service.UserService;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private  UserMapper userMapper;
+	private UserMapper userMapper;
 
-	
-
-public User getUserById(String id) {
-	User user = userMapper.selectOneById(id);
-	return user;
+	public User getUserById(String id) {
+		User user = userMapper.selectOneById(id);
+		return user;
 	}
 
-	public List<User> getAllUsers(){
+	public List<User> getAllUsers() {
 		return userMapper.getAll();
 	}
 
-	public int saveUser(User user){
-		 return userMapper.save(user);
+	public int saveUser(User user) {
+		return userMapper.save(user);
 	}
-	public int updateUser(User user){
+
+	public int updateUser(User user) {
 		return userMapper.update(user);
 	}
 
-	public int deleteUser(String id){
+	public int deleteUser(String id) {
 		return userMapper.delete(id);
 	}
 
-	public User getUserByName(String name)throws Exception{
+	public User getUserByName(String name) throws Exception {
 		return userMapper.getUserByName(name);
-	}
-
-	public List<User> getUserPage(PageBounds bounds, User user)throws Exception {
-		List<User> users = userMapper.getByPage(bounds,user);
-		System.out.println(bounds.getTotal() + bounds.getLimit() + bounds.getOffset());
-		return users;
 	}
 
 	@Override
@@ -62,5 +55,16 @@ public User getUserById(String id) {
 		userMapper.updateUserDelete(deleted, id);
 	}
 
+	@Override
+	public List<User> getUserPage(Page<User> page)throws Exception {
+		/*List<User> users = userMapper.getByPage(page);
+		System.out.println(bounds.getTotal() + bounds.getLimit() + bounds.getOffset());*/
+		return userMapper.getByPage(page);
+	}
+
+	@Override
+	public int updateUserPassword(User user) {
+		return userMapper.updateUserPassword(user);
+	}
 
 }

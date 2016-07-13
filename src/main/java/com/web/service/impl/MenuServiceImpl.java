@@ -144,6 +144,7 @@ public class MenuServiceImpl implements MenuService {
      * @return
      */
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS,readOnly = true)
     public QueryResult<Menu> getScrollData(int pageCurrent, int count, MenuExample example) {
 
         //排序
