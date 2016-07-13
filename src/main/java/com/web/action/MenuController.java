@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 菜单获取
+ * 菜单接口
  *
  * @author 杜延雷
  * @date 2016-06-20

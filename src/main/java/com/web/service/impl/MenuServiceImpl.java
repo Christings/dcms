@@ -38,7 +38,7 @@ public class MenuServiceImpl implements MenuService {
         }
 
         if (null == menu) {
-            LOGGER.warn("the wangdianItem object is null.");
+            LOGGER.warn("the menu object is null.");
             return 0 ;
         }
 
@@ -59,7 +59,7 @@ public class MenuServiceImpl implements MenuService {
         }
 
         if (null == menu) {
-            LOGGER.warn("the wangdianItem object is null.");
+            LOGGER.warn("the menu object is null.");
             return 0 ;
         }
 
