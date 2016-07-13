@@ -35,4 +35,6 @@ public interface DataDictMapper {
 	List<DataDict> selectAll();
 
 	List<DataDict> getByPage(Page<DataDict> page, DataDictExample example);
+
+	int selectMaxSort(String groupId);
 }

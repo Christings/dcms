@@ -156,7 +156,7 @@ public class DataDictController extends BaseController {
 	 * @param dataDict
 	 * @param request
 	 */
-	@RequestMapping(value = "/selectById", method = RequestMethod.POST)
+	@RequestMapping(value = "/selectById", method = {RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
 	public Object selectById(DataDict dataDict, HttpServletRequest request) {
 		try {
@@ -188,7 +188,7 @@ public class DataDictController extends BaseController {
 	 * @param dataDict
 	 * @param request
 	 */
-	@RequestMapping(value = "/selectByGroup", method = RequestMethod.POST)
+	@RequestMapping(value = "/selectByGroup", method = {RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
 	public Object selectByGroup(DataDict dataDict, HttpServletRequest request) {
 		try {
