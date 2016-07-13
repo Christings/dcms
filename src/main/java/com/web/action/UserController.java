@@ -35,13 +35,7 @@ public class UserController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	/**
-	 * 新增用户
-	 * 
-	 * @Title: addUser
-	 * @Description: TODO
-	 * @param user
-	 * @param request
-	 * @return Object 返回类型
+	 * @Description:  新增用户
 	 * @author 童云鹏
 	 * @date 2016年7月5日 上午9:59:16
 	 */
@@ -64,7 +58,7 @@ public class UserController extends BaseController {
 		try {
 			user.setId(UUIDGenerator.generatorRandomUUID());
 			user.setPassword(MD5.MD5Encode(user.getPassword()));
-			user.setCreateName(WebUtils.getUser(request).getUserName());
+			user.setCreateName("admin");
 			user.setCreateDate(new Date());
 			int result = userService.saveUser(user);
 			if (LOGGER.isDebugEnabled()) {
@@ -72,20 +66,15 @@ public class UserController extends BaseController {
 			}
 			return AllResult.okJSON(user);
 		} catch (Exception e) {
+			e.printStackTrace();
 			LOGGER.error("save User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败");
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加用户失败");
 		}
 
 	}
 
 	/**
-	 * 修改用户
-	 * 
-	 * @Title: updateUser
-	 * @Description: TODO
-	 * @param user
-	 * @param request
-	 * @return Object 返回类型
+	 * @Description: 修改用户
 	 * @author 童云鹏
 	 * @date 2016年7月5日 上午9:59:38
 	 */
@@ -117,20 +106,15 @@ public class UserController extends BaseController {
 			}
 			return AllResult.okJSON(user);
 		} catch (Exception e) {
+			e.printStackTrace();
 			LOGGER.error("save User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败");
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,修改失败");
 		}
 	}
 
 	/**
-	 * 
-	 * @Title: updateUserEnabled
 	 * @Description: 设置用户是否启用
-	 * @param user
-	 * @param request
-	 * @return Object 返回类型
-	 * @throws @author
-	 *             童云鹏
+     * @author         童云鹏
 	 * @date 2016年7月5日 上午10:04:40
 	 */
 	@RequestMapping(value = "/updateUserEnabled", method = RequestMethod.POST)
@@ -153,19 +137,13 @@ public class UserController extends BaseController {
 			return AllResult.okJSON(user);
 		} catch (Exception e) {
 			LOGGER.error("updateUserEnabled User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败");
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,设置用户是否启用失败");
 		}
 	}
 
 	/**
-	 * 
-	 * @Title: updateUserDelete
 	 * @Description: 用户逻辑删除
-	 * @param user
-	 * @param request
-	 * @return Object 返回类型
-	 * @throws @author
-	 *             童云鹏
+	 * @author  童云鹏
 	 * @date 2016年7月5日 上午10:05:35
 	 */
 	@RequestMapping(value = "/updateUserDelete", method = RequestMethod.POST)
@@ -189,10 +167,15 @@ public class UserController extends BaseController {
 			return AllResult.okJSON(user);
 		} catch (Exception e) {
 			LOGGER.error("delete User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败");
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误, 用户逻辑删除失败");
 		}
 	}
 
+	/**
+	* @Description: 分页查询
+	* @author  童云鹏
+	* @date 2016年7月13日 上午11:41:44
+	 */
 	@RequestMapping(value="/getUsersByPage",method=RequestMethod.GET)
 	@ResponseBody
 	public Object getUsersByPage(@RequestBody Page<User> page, HttpServletRequest request){
@@ -203,7 +186,7 @@ public class UserController extends BaseController {
 			return AllResult.okJSON(page);
 		} catch (Exception e) {
 			LOGGER.error("delete User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败") ;
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,分页查询失败") ;
 		}
 	}
 

@@ -7,20 +7,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.web.core.action.BaseController;
-import com.web.core.util.Page;
+import com.web.core.util.page.PageViewResult;
+import com.web.core.util.page.QueryResult;
 import com.web.entity.DataDict;
 import com.web.entity.OperLog;
 import com.web.example.DataDictExample;
 import com.web.service.DataDictService;
 import com.web.util.AllResult;
 import com.web.util.StringUtil;
+import com.web.util.fastjson.FastjsonUtils;
 
 /**
  * 数据词典控制器
@@ -36,6 +38,12 @@ public class DataDictController extends BaseController {
 	@Autowired
 	private DataDictService dataDictService;
 
+	/**
+	 * 新增数据词典
+	 *
+	 * @param dataDict
+	 * @param request
+	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public Object save(DataDict dataDict, HttpServletRequest request) {
@@ -66,6 +74,12 @@ public class DataDictController extends BaseController {
 		}
 	}
 
+	/**
+	 * 编辑数据词典
+	 *
+	 * @param dataDict
+	 * @param request
+	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
 	public Object update(DataDict dataDict, HttpServletRequest request) {
@@ -98,6 +112,12 @@ public class DataDictController extends BaseController {
 		}
 	}
 
+	/**
+	 * 删除词典数据
+	 *
+	 * @param dataDict
+	 * @param request
+	 */
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
 	public Object delete(DataDict dataDict, HttpServletRequest request) {
@@ -130,6 +150,12 @@ public class DataDictController extends BaseController {
 		}
 	}
 
+	/**
+	 * 根据ID查询数据词典
+	 *
+	 * @param dataDict
+	 * @param request
+	 */
 	@RequestMapping(value = "/selectById", method = RequestMethod.POST)
 	@ResponseBody
 	public Object selectById(DataDict dataDict, HttpServletRequest request) {
@@ -156,6 +182,12 @@ public class DataDictController extends BaseController {
 		}
 	}
 
+	/**
+	 * 根据GROUP_ID查询数据
+	 *
+	 * @param dataDict
+	 * @param request
+	 */
 	@RequestMapping(value = "/selectByGroup", method = RequestMethod.POST)
 	@ResponseBody
 	public Object selectByGroup(DataDict dataDict, HttpServletRequest request) {
@@ -182,14 +214,24 @@ public class DataDictController extends BaseController {
 		}
 	}
 
+	/**
+	 * 分页查询词典数据
+	 *
+	 * @param page
+	 *            当前页
+	 * @param count
+	 *            每页条数
+	 * @param request
+	 */
 	@RequestMapping(value = "/getPage", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
-	public Object getPageData(@RequestBody Page<DataDict> page, HttpServletRequest request) {
+	public Object getPageData(@RequestParam(value = "page") int page, @RequestParam(value = "count") int count,
+			HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [page: {}, count: {}]", page.getPageNo(), page.getPageSize());
+			LOGGER.info("request param: [page: {}, count: {}]", page, count);
 		}
 		// 校验参数
-		if (page.getPageNo() < 1 || page.getPageSize() < 1) {
+		if (page < 1 || count < 1) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
 		}
 		try {
@@ -197,12 +239,16 @@ public class DataDictController extends BaseController {
 			// 排序设置
 			example.setOrderByClause("SORT asc");
 			DataDictExample.Criteria criteria = example.createCriteria();
-			dataDictService.getByPage(page, example);
-
+			PageViewResult<DataDict> pageViewResult = new PageViewResult<>(count, page);
+			QueryResult<DataDict> queryResult = dataDictService.getByPage(page, count, example);
+			pageViewResult.setQueryResult(queryResult);
+			// 去除不需要的字段
+			String jsonStr = JSON.toJSONString(pageViewResult,
+					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateCreate", "createName", "createDate"));
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("queryResult record count: {}", page.getPageSize());
+				LOGGER.debug("queryResult record count: {}", queryResult.getResultList().size());
 			}
-			return AllResult.okJSON(page);
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("get dataDict data error. page: {}, count: {}", page, e);
 		}

@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.web.core.util.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.web.core.util.page.QueryResult;
 import com.web.entity.DataDict;
 import com.web.example.DataDictExample;
 import com.web.mappers.DataDictMapper;
@@ -18,7 +20,7 @@ import com.web.util.UUIDGenerator;
 
 /**
  * 数据词典接口
- * 
+ *
  * @author 田军兴
  * @date 2016-07-09
  */
@@ -32,8 +34,21 @@ public class DataDictServiceImpl implements DataDictService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataDictServiceImpl.class);
 
 	@Override
-	public List<DataDict> getByPage(Page<DataDict> page, DataDictExample example) {
-		return dataDictMapper.getByPage(page, example);
+	public QueryResult<DataDict> getByPage(int pageCurrent, int count, DataDictExample example) {
+		// 分页
+		PageHelper.startPage(pageCurrent, count);
+
+		// 查询数据
+		List<DataDict> DataDicts = dataDictMapper.selectByExample(example);
+		PageInfo<DataDict> pageInfo = new PageInfo<>(DataDicts);
+
+		QueryResult<DataDict> queryResult = new QueryResult<>(pageInfo.getList(), pageInfo.getTotal());
+
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("get data dict object count: {}", queryResult.getTotalRecord());
+		}
+
+		return queryResult;
 	}
 
 	@Override
