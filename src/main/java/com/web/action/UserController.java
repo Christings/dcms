@@ -50,8 +50,8 @@ public class UserController extends BaseController {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
 		}
 		// TODO 需要添加判断
-		if (StringUtils.isEmpty(user.getAccount())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:account用户账号不能为空");
+		if (StringUtils.isEmpty(user.getRealName())) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:realName用户账号不能为空");
 		} else if (StringUtils.isEmpty(user.getPassword())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:password密码不能为空");
 		} else if (StringUtils.isEmpty(user.getUserName())) {
@@ -88,8 +88,8 @@ public class UserController extends BaseController {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
 		}
 		// TODO 需要添加判断
-		if (StringUtils.isEmpty(user.getAccount())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:account用户账号不能为空");
+		if (StringUtils.isEmpty(user.getRealName())) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:realName用户账号不能为空");
 		} else if (StringUtils.isEmpty(user.getPassword())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:password密码不能为空");
 		} else if (StringUtils.isEmpty(user.getUserName())) {
