@@ -1,6 +1,7 @@
 package com.web.mappers;
 
 import com.web.core.util.Page;
+import com.web.example.UserExample;
 import org.apache.ibatis.annotations.Param;
 
 import com.web.core.mapper.BaseMapper;
@@ -24,4 +25,7 @@ public interface UserMapper extends BaseMapper<User>{
 
     public int updateUserPassword(User user);
 
+    public List<User> selectByExample(UserExample example);
+
+   public int countByExample(UserExample example);
 }

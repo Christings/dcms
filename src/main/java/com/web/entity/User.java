@@ -17,7 +17,7 @@ public class User  extends BaseEntity{
 	private static final long serialVersionUID = -5268511121173326164L;
 	//private String id;//主键ID
 	private String userName;//用户姓名
-	private String account;//登录账号
+	private String realName;//登录账号
 	private String password;//登录密码
 	private String identificationNo;//身份证号
 	private String mobile;//手机号
@@ -35,11 +35,11 @@ public class User  extends BaseEntity{
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getAccount() {
-		return account;
+	public String getRealName() {
+		return realName;
 	}
-	public void setAccount(String account) {
-		this.account = account;
+	public void setRealName(String realName) {
+		this.realName = realName;
 	}
 	public String getPassword() {
 		return password;

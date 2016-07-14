@@ -57,6 +57,10 @@ public class DataDictServiceImpl implements DataDictService {
 		// 如果分组的ID是空的，那么重新生成一个新的ID
 		if (StringUtil.isEmpty(entity.getGroupId())) {
 			entity.setGroupId(UUIDGenerator.generatorRandomUUID());
+			entity.setSort(1);
+		} else {
+			int maxSort = dataDictMapper.selectMaxSort(entity.getGroupId());
+			entity.setSort(maxSort + 1);
 		}
 		return dataDictMapper.insertSelective(entity);
 	}
