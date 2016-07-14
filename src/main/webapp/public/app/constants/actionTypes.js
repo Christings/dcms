@@ -7,6 +7,16 @@ export default keyMirror({
     FILTER_ITEM: null,
     CHANGE_MESSAGE: null,
     USER_NAME: null,
-    USER_PASSWORD: null
+    USER_PASSWORD: null,
+
+    MENU_ID: null,
+    MENU_NAME: null,
+    MENU_ORDER: null,
+    MENU_LEVEL: null,
+    MENU_URL: null,
+    MENU_PARENTID: null,
+    MENU_ICONID: null,
+    MENU_TYPE:null,
+    MENU_OPEN: null
     // SEARCH_EQUIPMENT: null
 })
