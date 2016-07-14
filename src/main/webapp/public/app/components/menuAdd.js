@@ -15,7 +15,7 @@ class MenuAdd extends Component{
 			console.log(1);
 			$("#form").submit(function(){
 				var name = $("#name").val();
-				var order = $("#order").val();
+				var rank = $("#rank").val();
 				var level = $("#level").val();
 				var url = $("#url").val();
 				var parentId = $("#parentId").val();
@@ -26,9 +26,9 @@ class MenuAdd extends Component{
 					$("#alert").text("请输入菜单名称");
 					return false;
 				}
-				var menuInfo = { name:'', order:'',parentId:'', level:'', url:'', iconId:'', type:''};
+				var menuInfo = { name:'', rank:'',parentId:'', level:'', url:'', iconId:'', type:''};
 				menuInfo['name'] = name;
-				menuInfo['order'] = order;
+				menuInfo['rank'] = rank;
 				if(level == ''){
 					menuInfo['level'] = 1;
 				}
@@ -63,13 +63,14 @@ class MenuAdd extends Component{
 		return(	
 			<form id = "form">
 				<FormGroup controlId="formControlsName">
+					<ControlLabel>增加菜单</ControlLabel>
 					<ControlLabel>Name</ControlLabel>
 					<FormControl id="name" type="text" placeholder="name"/>
 					<span id="alert"></span>
 				</FormGroup>
-				<FormGroup controlId="formControlOrder">
-					<ControlLabel>Order</ControlLabel>
-					<FormControl id="order" type="text" placeholder="order"/>
+				<FormGroup controlId="formControlRank">
+					<ControlLabel>Rank</ControlLabel>
+					<FormControl id="rank" type="text" placeholder="rank"/>
 				</FormGroup>
 				<FormGroup controlId="formControlLevel">
 					<ControlLabel>Level</ControlLabel>

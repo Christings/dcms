@@ -16,7 +16,7 @@ class MenuUpdate extends Component{
 			$("#form").submit(function(){
 				var id = $("#id").val();
 				var name = $("#name").val();
-				var order = $("#order").val();
+				var rank = $("#rank").val();
 				var level = $("#level").val();
 				var url = $("#url").val();
 				var parentId = $("#parentId").val();
@@ -31,10 +31,10 @@ class MenuUpdate extends Component{
 				{
 					$("#alertId").text("请输入菜单ID");
 				}
-				var menuInfo = { id:'', name:'', order:'', level:'', url:'', parentId:'', iconId:'', type:''};
+				var menuInfo = { id:'', name:'', rank:'', level:'', url:'', parentId:'', iconId:'', type:''};
 				menuInfo['id'] = id;
 				menuInfo['name'] = name;
-				menuInfo['order'] = order;
+				menuInfo['rank'] = rank;
 				if(level == ''){
 					menuInfo['level'] = 1;
 				}
@@ -69,6 +69,7 @@ class MenuUpdate extends Component{
 		return(	
 			<form id = "form">
 				<FormGroup controlId="formControlsId">
+					<ControlLabel>修改菜单</ControlLabel>
 					<ControlLabel>Id</ControlLabel>
 					<FormControl id="id" type="text" placeholder="id"/>
 					<span id="alertId"></span>
@@ -78,9 +79,9 @@ class MenuUpdate extends Component{
 					<FormControl id="name" type="text" placeholder="name"/>
 					<span id="alertName"></span>
 				</FormGroup>
-				<FormGroup controlId="formControlOrder">
-					<ControlLabel>Order</ControlLabel>
-					<FormControl id="order" type="text" placeholder="order"/>
+				<FormGroup controlId="formControlrank">
+					<ControlLabel>Rank</ControlLabel>
+					<FormControl id="rank" type="text" placeholder="rank"/>
 				</FormGroup>
 				<FormGroup controlId="formControlLevel">
 					<ControlLabel>Level</ControlLabel>
