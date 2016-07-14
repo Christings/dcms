@@ -25,8 +25,17 @@
         <package name="com.web.entity"/>
     </typeAliases>
 
-    <!-- 配置分页插件 -->
+
     <plugins>
+        <!-- Insert和Update拦截器插件 -->
+        <plugin interceptor="com.web.core.interceptors.AutoColumnInterceptor">
+            <property name="updateName" value="update_name"/>
+            <property name="updateDate" value="update_date"/>
+            <property name="createName" value="create_name"/>
+            <property name="createDate" value="create_date"/>
+            <property name="ignoreTables" value="t_s_role_menu"/><!--忽略的表    表1,表2,...-->
+        </plugin>
+        <!-- 配置分页插件 -->
         <plugin interceptor="com.github.pagehelper.PageHelper">
             <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库-->
             <property name="dialect" value="Mysql"/>
