@@ -4,7 +4,10 @@
 	<resultMap type="com.web.entity.UserRole" id="BaseResultMap">
 		<id column="ID" property="id" />
 		<result column="userid" property="userid" />
+		<result column="user_name" property="userName"/>
+		<result column="real_name" property="realName"/>
 		<result column="roleid" property="roleid" />
+		<result column="role_name" property="realName"/>
 		<result column="update_name" property="updateName" />
 		<result column="update_date" property="updateCreate" />
 		<result column="create_name" property="createName" />
@@ -83,6 +86,23 @@
         -->
 		ID, roleid, userid, create_name, create_date, update_name, update_date
 	</sql>
+	<sql id="Relation_Colum_list">
+     id,userid,user_name,real_name,roleid,role_name
+	</sql>
+	<select id="selectByUserId" parameterType="Object" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Relation_Colum_list"/>
+		FROM  t_s_role_user
+		where userid=#{userId}
+		order by create_name DESC
+	</select>
+	<select id="selectByRoleId" parameterType="Object" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Relation_Colum_list"/>
+		FROM  t_s_role_user
+		where roleid=#{roleId}
+		order by create_name DESC
+	</select>
 	<select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.RoleUserExample" >
 		<!--
           WARNING - @mbggenerated
@@ -144,14 +164,9 @@
 		)
 		</foreach>
 	</insert>
-
 	<delete id="deleteByUserId" flushCache="true" parameterType="String">
 		DELETE from t_s_role_user where userid=#{userId}
 	</delete>
-
-
-
-
 	<update id="update"  flushCache="true" parameterType="com.web.entity.UserRole">
 
 		UPDATE  t_s_role_user SET

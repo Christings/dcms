@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 
 import configureStore from './configureStore'
 import App from '../containers/App.js'
+import IndexPage from '../containers/indexFrame.js'
 
 const store = configureStore();
 
@@ -12,7 +13,7 @@ const Provide = React.createClass({
         return(
             <div>
                 <Provider store={store}>
-                	<App />
+                	<IndexPage />
                 </Provider>
             </div>
         );

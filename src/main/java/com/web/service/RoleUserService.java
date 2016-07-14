@@ -23,4 +23,8 @@ public interface RoleUserService extends IService<UserRole,String> {
     public int saveList(List<UserRole> list);
 
     public int deleteByUserId(String userId);
+
+    public QueryResult<UserRole> getScrollDataByUserId(int pageCurrent, int count, String userId);
+
+    public QueryResult<UserRole> getScrollDataByRoleId(int pageCurrent, int count, String roleId);
 }

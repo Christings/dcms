@@ -1,6 +1,7 @@
 package com.web.action;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -192,7 +193,23 @@ public class UserController extends BaseController {
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,分页查询失败") ;
 		}
 	}
+	/**
+	 * @Description: 查询所有用户
+	 * @author  童云鹏
+	 * @date 2016年7月13日 上午11:41:44
+	 */
+	@RequestMapping(value="/getUsersAll",method=RequestMethod.GET)
+	@ResponseBody
+	public Object getUsersAll(HttpServletRequest request){
 
+		try {
+			List<User> list=userService.getAllUsers();
+			return AllResult.okJSON(list);
+		} catch (Exception e) {
+			LOGGER.error("delete User fail:", e.getMessage());
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,分页查询失败") ;
+		}
+	}
 	/**
 	 * 分页查询
 	 * @param page

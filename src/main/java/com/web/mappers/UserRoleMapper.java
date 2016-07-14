@@ -26,5 +26,8 @@ public interface UserRoleMapper extends BaseMapper<UserRole>{
 
 	public int deleteByUserId(String userId);
 
+	public List<UserRole> selectByUserId(String userId);
+
+	public List<UserRole> selectByRoleId(String roleId);
 
 }

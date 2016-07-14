@@ -50,6 +50,71 @@ export function changeMessage(){
     }
 }
 
+export function menuId(item){
+    return{
+        type: types.MENU_ID,
+        item
+    }
+}
+
+export function menuName(item){
+    return{
+        type: types.MENU_NAME,
+        item
+    }
+}
+
+export function menuOrder(item){
+    return{
+        type: types.MENU_ORDER,
+        item
+    }
+}
+
+export function menuLevel(item){
+    return{
+        type: types.MENU_LEVEL,
+        item
+    }
+}
+
+export function menuUrl(item){
+    return{
+        type: types.MENU_URL,
+        item
+    }
+}
+
+
+export function menuParentId(item){
+    return{
+        type: types.MENU_PARENTID,
+        item
+    }
+}
+
+
+export function menuIconId(item){
+    return{
+        type: types.MENU_ICONID,
+        item
+    }
+}
+
+
+export function menuType(item){
+    return{
+        type: types.MENU_TYPE,
+        item
+    }
+}
+
+export function menuOpen(item){
+    return{
+        type: types.MENU_OPEN,
+        item
+    }
+}
 // export function searchEquipment(){
 //     return {
 //         type: SEARCH_EQUIPMENT
