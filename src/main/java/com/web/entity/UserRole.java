@@ -12,6 +12,9 @@ public class UserRole extends BaseEntity{
 
 	private String userid;//用户ID
 	private String roleid;//角色ID
+	private String UserName;
+	private String realName;
+	private String roleName;
 	public String getUserid() {
 		return userid;
 	}
@@ -24,6 +27,28 @@ public class UserRole extends BaseEntity{
 	public void setRoleid(String roleid) {
 		this.roleid = roleid;
 	}
-	
-	
+
+	public String getUserName() {
+		return UserName;
+	}
+
+	public void setUserName(String userName) {
+		UserName = userName;
+	}
+
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
 }

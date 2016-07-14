@@ -19,15 +19,23 @@ import com.web.entity.User;
 import com.web.mappers.UserMapper;
 import com.web.service.UserService;
 
+/**
+ * 用户Service
+ */
 @Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class) ;
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
 	private UserMapper userMapper;
 
+	/**
+	 *
+	 * @param id
+	 * @return
+     */
 	public User getUserById(String id) {
 		User user = userMapper.selectOneById(id);
 		return user;
@@ -66,9 +74,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> getUserPage(Page<User> page)throws Exception {
-		/*List<User> users = userMapper.getByPage(page);
-		System.out.println(bounds.getTotal() + bounds.getLimit() + bounds.getOffset());*/
+	public List<User> getUserPage(Page<User> page) throws Exception {
+		/*
+		 * List<User> users = userMapper.getByPage(page);
+		 * System.out.println(bounds.getTotal() + bounds.getLimit() +
+		 * bounds.getOffset());
+		 */
 		return userMapper.getByPage(page);
 	}
 
@@ -79,17 +90,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public QueryResult<User> getScrollData(int pageCurrent, int count, UserExample example) {
-		//排序
+		// 排序
 		example.setOrderByClause("CREATE_DATE");
 
 		// 分页
-		PageHelper.startPage(pageCurrent, count) ;
+		PageHelper.startPage(pageCurrent, count);
 
 		// 查询数据
 		List<User> users = userMapper.selectByExample(example);
-		PageInfo<User> pageInfo = new PageInfo<>(users) ;
+		PageInfo<User> pageInfo = new PageInfo<>(users);
 
-		QueryResult<User> queryResult = new QueryResult<>(pageInfo.getList(), pageInfo.getTotal()) ;
+		QueryResult<User> queryResult = new QueryResult<>(pageInfo.getList(), pageInfo.getTotal());
 
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("get menu scroll object count: {}", queryResult.getTotalRecord());
@@ -97,7 +108,6 @@ public class UserServiceImpl implements UserService {
 
 		return queryResult;
 	}
-
 
 	@Override
 	public int countByExample(UserExample example) {
