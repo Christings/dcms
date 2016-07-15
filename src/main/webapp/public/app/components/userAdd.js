@@ -54,7 +54,7 @@ class UserAdd extends Component{
 					dataType: 'json',
 					contentType: "application/json",
 					data: JSON.stringify(userInfo),
-					data: userInfo,
+
 					success: function(res){
 						if(res.status == "1"){
 							console.log("添加用户成功" + res.data);
