@@ -1,6 +1,6 @@
 package com.web.service;
 
-import com.web.core.util.page.QueryResult;
+import com.web.core.util.page.Page;
 import com.web.entity.Menu;
 import com.web.example.MenuExample;
 
@@ -27,5 +27,5 @@ public interface MenuService extends IService<Menu, String> {
      * @param example
      * @return
      */
-    QueryResult<Menu> getScrollData(int pagination, int maxResult, MenuExample example);
+    Page<Menu> getScrollData(int pagination, int maxResult, MenuExample example);
 }

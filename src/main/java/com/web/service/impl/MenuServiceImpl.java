@@ -2,8 +2,7 @@ package com.web.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.web.core.util.page.QueryResult;
+import com.web.core.util.page.Page;
 import com.web.entity.Menu;
 import com.web.example.MenuExample;
 import com.web.mappers.MenuMapper;
@@ -145,25 +144,21 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     @Transactional(propagation = Propagation.SUPPORTS,readOnly = true)
-    public QueryResult<Menu> getScrollData(int pageCurrent, int count, MenuExample example) {
-
-        //排序
-        example.setOrderByClause("RANK");
+    public Page<Menu> getScrollData(int pageCurrent, int count, MenuExample example) {
 
         // 分页
         PageHelper.startPage(pageCurrent, count) ;
+        PageHelper.orderBy("RANK");
 
         // 查询数据
         List<Menu> menus = menuMapper.selectByExample(example);
-        PageInfo<Menu> pageInfo = new PageInfo<>(menus) ;
-
-        QueryResult<Menu> queryResult = new QueryResult<>(pageInfo.getList(), pageInfo.getTotal()) ;
+        Page<Menu> page = new Page<>(menus) ;
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("get menu scroll object count: {}", queryResult.getTotalRecord());
+            LOGGER.info("get menu scroll object count: {}", page.getCount());
         }
 
-        return queryResult;
+        return page;
     }
 
     @Override

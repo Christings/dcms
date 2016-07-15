@@ -4,8 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.web.bean.MenuTree;
 import com.web.core.action.BaseController;
-import com.web.core.util.page.PageViewResult;
-import com.web.core.util.page.QueryResult;
+import com.web.core.util.page.Page;
 import com.web.entity.Menu;
 import com.web.example.MenuExample;
 import com.web.service.MenuService;
@@ -319,23 +318,15 @@ public class MenuController extends BaseController {
 		}
 
 		try {
-
 			MenuExample example = new MenuExample();
-			// 排序设置
-			// example.setOrderByClause("UPDATE_DATETIME DESC");
-			MenuExample.Criteria criteria = example.createCriteria();
-			// 条件设置
-			// criteria.andIconIdIsNull();
 
-			QueryResult<Menu> queryResult = menuService.getScrollData(page, count, example);
-			PageViewResult<Menu> pageViewResult = new PageViewResult<>(count, page);
-			pageViewResult.setQueryResult(queryResult);
+			Page<Menu> queryResult = menuService.getScrollData(page, count, example);
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("queryResult record count: {}", queryResult.getResultList().size());
+				LOGGER.debug("queryResult record count: {}", queryResult.getRecords().size());
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(pageViewResult,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(queryResult,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 

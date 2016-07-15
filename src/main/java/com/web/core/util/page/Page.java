@@ -1,107 +1,60 @@
 package com.web.core.util.page;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+
 /**
- * 说明： 分页功能
+ * 分页功能
  * 
- * @author QGL
- * @version 创建时间：Oct 18, 2010 1:33:10 PM
+ * @author 杜延雷
+ * @date 2016-07-15
  */
-public class Page {
+public class Page<T> implements Serializable {
 
-	public final int DEFAULT_PAGESIZE = 10; // 每页记录数
-	public final int DEFAULT_PAGE = 1; // 默认显示第几页
+	private int pageNum; //当前页
+	private int pageSize; //每页的数量
+	private int size; //当前页的数量
+	private long count; //总记录数
+	private int pageCount; //总页数
+	private List<T> records; //结果集
 
-	// =========================================================================================
-	protected int count; // 总的记录数
-	protected int pageSize; // 每页记录数
-	protected int pageCount; // 总的页数
-	protected int pageNo; // 本页页号
-	protected int start; // 起始记录下标(MySql从0开始,Oracle从1开始,syBase从0开始)
-	private boolean isOracle = true; // (MySql从0开始,Oracle从1开始,syBase从0开始)
 
-	// =========================================================================================
-
-	protected String sortname;// 排序字段名
-	protected String sortorder;// 排序方向
-
-	/**
-	 * 构造方法 ,默认每页20条记录,显示第一页
-	 * 
-	 */
 	public Page() {
-		pageSize = DEFAULT_PAGESIZE; // 每页大小
-		pageNo = DEFAULT_PAGE; // 本页页号
 	}
-
 	/**
-	 * 构造方法
-	 * 
-	 * @param nPageSize
-	 *            每页记录数
-	 * @param nPage
-	 *            本页页号
+	 * 封装数据对象
+	 *
+	 * @param list
 	 */
-	public Page(int nPageSize, int nPage) {
-		pageSize = nPageSize; // 每页大小
-		pageNo = nPage; // 本页页号
-	}
+	public Page(List<T> list) {
+		if (list instanceof com.github.pagehelper.Page) {
+			com.github.pagehelper.Page page = (com.github.pagehelper.Page) list;
+			this.pageNum = page.getPageNum();
+			this.pageSize = page.getPageSize();
 
-	/**
-	 * 分页初始化
-	 * 
-	 * @param nCount
-	 *            总的记录数
-	 */
-	public void init(int nCount) {
-		init(nCount, pageSize, pageNo);
-	}
+			this.pageCount = page.getPages();
+			this.records = page;
+			this.size = page.size();
+			this.count = page.getTotal();
 
-	/**
-	 * 分页初始化；记录总记录数，每页记录数，当前页，并计算总页数、本页大小和检测当前页是否有效
-	 * 
-	 * @param nCount
-	 *            总的记录数
-	 * @param nPageSize
-	 *            每页记录数
-	 * @param nPage
-	 *            本页页号
-	 */
-	public void init(int nCount, int nPageSize, int nPage) {
-		count = nCount; // 总的记录数
-		pageNo = nPage; // 本页页号
-		pageSize = nPageSize; // 每页大小
-		if (0 >= pageSize) {
-			pageSize = DEFAULT_PAGESIZE;
-		}
-		pageCount = (nCount + pageSize - 1) / pageSize; // 计算总的页数
+		} else if (list instanceof Collection) {
+			this.pageNum = 1;
+			this.pageSize = list.size();
 
-		// 防止 Page 超范围并计算当前页大小
-		if (pageNo > pageCount) {
-			pageNo = pageCount;
-		}
-		if (pageNo < 1) {
-			pageNo = DEFAULT_PAGE;
+			this.pageCount = 1;
+			this.records = list;
+			this.size = list.size();
+			this.count = list.size();
 		}
 	}
 
-	public String toString() {
-		final StringBuffer sbf = new StringBuffer();
-		sbf.append(" 总的记录数:" + count);
-		sbf.append(" 每页记录数:" + pageSize);
-		sbf.append(" 总的页数:" + pageCount);
-		sbf.append(" 本页页号:" + pageNo);
-		sbf.append(" 起始记录下标:" + start);
-		sbf.append(" 排序字段：" + sortname);
-		sbf.append(" 排序方向：" + sortorder);
-		return sbf.toString();
+	public int getPageNum() {
+		return pageNum;
 	}
 
-	public int getCount() {
-		return count;
-	}
-
-	public void setCount(int count) {
-		this.count = count;
+	public void setPageNum(int pageNum) {
+		this.pageNum = pageNum;
 	}
 
 	public int getPageSize() {
@@ -112,6 +65,22 @@ public class Page {
 		this.pageSize = pageSize;
 	}
 
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
+	public long getCount() {
+		return count;
+	}
+
+	public void setCount(long count) {
+		this.count = count;
+	}
+
 	public int getPageCount() {
 		return pageCount;
 	}
@@ -120,49 +89,31 @@ public class Page {
 		this.pageCount = pageCount;
 	}
 
-	public int getPageNo() {
-		return pageNo;
+	public List<T> getRecords() {
+		return records;
 	}
 
-	public void setPageNo(int pageNo) {
-		this.pageNo = pageNo;
+	public void setRecords(List<T> records) {
+		this.records = records;
 	}
 
-	public int getStart() {
-		if (isOracle) {
-			start = (this.getPageNo() - 1) * this.getPageSize() + 1;
-		} else {
-			start = (this.getPageNo() - 1) * this.getPageSize();
+	@Override
+	public String toString() {
+		final StringBuffer sb = new StringBuffer("PageInfo{");
+		sb.append("pageNum=").append(pageNum);
+		sb.append(", pageSize=").append(pageSize);
+		sb.append(", size=").append(size);
+		sb.append(", count=").append(count);
+		sb.append(", pageCount=").append(pageCount);
+		sb.append(", records=");
+		if (records == null) sb.append("null");
+		else {
+			sb.append('[');
+			for (int i = 0; i < records.size(); ++i)
+				sb.append(i == 0 ? "" : ", ").append(records.get(i));
+			sb.append(']');
 		}
-		return start;
+		sb.append('}');
+		return sb.toString();
 	}
-
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	public boolean isOracle() {
-		return isOracle;
-	}
-
-	public void setOracle(boolean isOracle) {
-		this.isOracle = isOracle;
-	}
-
-	public String getSortname() {
-		return sortname;
-	}
-
-	public void setSortname(String sortname) {
-		this.sortname = sortname;
-	}
-
-	public String getSortorder() {
-		return sortorder;
-	}
-
-	public void setSortorder(String sortorder) {
-		this.sortorder = sortorder;
-	}
-
 }
