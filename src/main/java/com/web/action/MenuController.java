@@ -304,7 +304,7 @@ public class MenuController extends BaseController {
 	 * @param pageSize
 	 *            显示多少行
 	 */
-	@RequestMapping(value = "/scroll", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/datagrid", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public Object getScroll(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
 			HttpServletRequest request) {
