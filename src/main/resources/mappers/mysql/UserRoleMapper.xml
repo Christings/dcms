@@ -9,7 +9,7 @@
 		<result column="roleid" property="roleid" />
 		<result column="role_name" property="realName"/>
 		<result column="update_name" property="updateName" />
-		<result column="update_date" property="updateCreate" />
+		<result column="update_date" property="updateDate" />
 		<result column="create_name" property="createName" />
 		<result column="create_date" property="createDate" />
 	</resultMap>

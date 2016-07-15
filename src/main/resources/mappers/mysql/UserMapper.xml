@@ -16,7 +16,7 @@
 		<result column="deleted" property="deleted" />
 		<result column="superAdmin" property="superAdmin" />
 		<result column="update_Name" property="updateName" />
-		<result column="update_date" property="updateCreate" />
+		<result column="update_date" property="updateDate" />
 	</resultMap>
 	<sql id="Example_Where_Clause" >
 		<!--
@@ -193,7 +193,7 @@
 		real_name=#{realName},
 		password=#{password},
 		update_Name=#{updateName},
-		update_date=#{updateCreate},
+		update_date=#{updateDate},
 		<choose>
 		<when test="identificationNo !=null and identificationNo !=''">
 		identificationNo=#{identificationNo},

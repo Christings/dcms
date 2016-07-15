@@ -6,7 +6,7 @@
 <result column="rolecode" property="roleCode"/>
 <result column="rolename" property="roleName"/>
 <result column="update_name" property="updateName"/>
-<result column="update_date" property="updateCreate"/>
+<result column="update_date" property="updateDate"/>
 <result column="create_name" property="createName"/>
 <result column="create_date" property="createDate"/>
 </resultMap>
@@ -133,7 +133,7 @@ update t_s_role set
 rolecode=#{roleCode},
 rolename=#{rolename},
 update_name=#{updateName},
-update_date=#{updateCreate} 
+update_date=#{updateDate}
 where id=#{id}
 </update>
 

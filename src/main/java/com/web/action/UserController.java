@@ -103,7 +103,7 @@ public class UserController extends BaseController {
 			// user.setId(UUIDGenerator.generatorRandomUUID());
 			// user.setPassword(MD5.MD5Encode(user.getPassword()));
 			user.setUpdateName(WebUtils.getUser(request).getUserName());
-			user.setUpdateCreate(new Date());
+			user.setUpdateDate(new Date());
 			int result = userService.updateUser(user);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("save result: {}", result);
@@ -134,7 +134,7 @@ public class UserController extends BaseController {
 
 		try {
 			user.setUpdateName(WebUtils.getUser(request).getUserName());
-			user.setUpdateCreate(new Date());
+			user.setUpdateDate(new Date());
 			// user.setId(UUIDGenerator.generatorRandomUUID());
 			// user.setPassword(MD5.MD5Encode(user.getPassword()));
 			userService.updateUserDelete(user.getEnabled(), user.getId());
@@ -163,7 +163,7 @@ public class UserController extends BaseController {
 
 		try {
 			user.setUpdateName(WebUtils.getUser(request).getUserName());
-			user.setUpdateCreate(new Date());
+			user.setUpdateDate(new Date());
 			// user.setId(UUIDGenerator.generatorRandomUUID());
 			// user.setPassword(MD5.MD5Encode(user.getPassword()));
 			userService.updateUserDelete(user.getDeleted(), user.getId());
