@@ -219,9 +219,84 @@ class IndexPage extends Component{
 			});
 			return element;
 		}
+		// var parseIconTreeJson = function(treeNodes){
+		// 	if(treeNodes == null || treeNodes.length == 0){
+		// 		return;
+		// 	}
+		// 	var arr = [];
+		// 	var childElement = [];
 
+		// 	for(var j = 0; j < treeNodes.length; j++)
+		// 	{
+		// 		arr.push({
+		// 			name: treeNodes[j]["name"],
+		// 			iconId: treeNodes[j]["iconId"],
+		// 			level: treeNodes[j]["level"],
+		// 			id: treeNodes[j]["id"],
+		// 			childMenu: treeNodes[j]["childMenu"]	
+		// 		});
+			
+		// 		var childs = treeNodes[j]["childMenu"];
+		// 		childElement[j] = parseTreeJson(childs);
+		// 	}
+		// 	var distance = arr[0]["level"]*20 - 20;
+		// 	// console.log("distance::"+distance);
+		// 	var left = "auto auto auto "+ distance +"px";
+		// 	var listStyles = {margin: left};
+		// 	var temp = -1;
+		// 	function callH_(menu, menus){
+		// 		// console.log("callH_"+menu);
+		// 		that.callBack(menu, menus);
+		// 		// console.log(id);
+		// 		// console.log(that.props.menuOpen[id]);
+		// 		// console.log(that.props.menuOpen);
+		// 	}
+		// 	function callH(menu, menus){
+		// 		// console.log("callH"+id);
+		// 		const that = this;
+		// 		return function(){
+		// 			callH_.call(that, menu, menus);
+		// 		}
+		// 	};
+		// 	var element = arr.map(function(e){
+		// 		temp++;
+		// 		var url = "/" + e["id"];
+		// 		// console.log("Collapse" + that.props.menuOpen[e["id"]]);
 
-		var elements = parseTreeJson( menuTree);
+		// 		if(e["childMenu"] != null){
+		// 			opens[e["id"]] = false;
+		// 			var index = e["id"];
+		// 			return(
+		// 				<div style={{ margin:'0',padding:'0'}}>
+		// 					<ListGroupItem onClick={callH.call(that, e, menuData)} key={index}>
+		// 						<Glyphicon style={listStyles} glyph={e["iconId"]} />{e["name"]}
+		// 					</ListGroupItem>
+		// 					<Collapse in={that.state.opens[e["id"]]}>
+		// 						<ListGroup style={{ margin:'0',padding:'0'}}>
+		// 							{childElement[temp]}
+		// 						</ListGroup>
+		// 					</Collapse>
+		// 				</div>
+		// 			);
+		// 		}
+		// 		else{
+		// 			return(
+		// 				<div style={{ margin:'0',padding:'0'}}>
+		// 					<Link to={url}>
+		// 					<ListGroupItem key={e["id"]}>
+		// 						<Glyphicon style={listStyles} glyph={e["iconId"]} />{e["name"]}
+		// 					</ListGroupItem>
+		// 					</Link>
+							
+		// 				</div>);
+		// 		}
+		// 	});
+		// 	return element;
+		// }
+
+		var elements = parseTreeJson(menuTree);
+		// var elementIcons = parseIconTreeJson(menuTree);
+		
 		// this.props.actions.menuOpen(opens);
 		// this.callBack(opens);
 		// console.log("call");

@@ -17,7 +17,7 @@ class UserAdd extends Component{
 			$("#form").submit(function(){
 				console.log("3");
 				var userName = $("#userName").val();
-				var account = $("#account").val();
+				var realName = $("#realName").val();
 				var password = $("#password").val();
 				var identificationNo = $("#identificationNo").val();
 				var mobile = $("#mobile").val();
@@ -29,7 +29,7 @@ class UserAdd extends Component{
 					$("#alert_1").text("请输入用户名");
 					return false;
 				};
-				if (account == ""){
+				if (realName == ""){
 					$("#alert_2").text("请输入用户帐号");
 					return false;
 				}
@@ -37,16 +37,16 @@ class UserAdd extends Component{
 					$("#alert_3").text("请输入用户密码");
 					return false;
 				}
-				var userInfo = {userName: '', account: '', password: '', identificationNo:'',mobile:'',sex:'',enabled: '',remark:'',superAdmin:''};
+				var userInfo = {userName: '', realName: '', password: ''};// identificationNo:'',mobile:'',sex:'',enabled: '',remark:'',superAdmin:''
 				userInfo['userName'] = userName;
-				userInfo['account'] = account;
+				userInfo['realName'] = realName;
 				userInfo['password'] = password;
-				userInfo['identificationNo'] = identificationNo;
-				userInfo['mobile'] = mobile;
-				userInfo['sex'] = sex;
-				userInfo['enabled'] = enabled;
-				userInfo['remark'] = remark;
-				userInfo['superAdmin'] = superAdmin;
+				// userInfo['identificationNo'] = identificationNo;
+				// userInfo['mobile'] = mobile;
+				// userInfo['sex'] = sex;
+				// userInfo['enabled'] = enabled;
+				// userInfo['remark'] = remark;
+				// userInfo['superAdmin'] = superAdmin;
 				console.log(userInfo);
 				$.ajax({
 					type:"post",
@@ -82,7 +82,7 @@ class UserAdd extends Component{
 				</FormGroup>
 				<FormGroup >
 					<ControlLabel>用户帐号</ControlLabel>
-					<FormControl id="account" type="text" placeholder="account"/>
+					<FormControl id="realName" type="text" placeholder="realName"/>
 					<span id="alert_2"></span>
 				</FormGroup>
 				<FormGroup >

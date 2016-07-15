@@ -28,6 +28,8 @@ function login(){
 		dataType: 'json',
 		data: userInformation,
 		beforeSend:function(){
+			$("#uconfirm").text("");
+			$("#pconfirm").text("");
 			$("#loading").text("登录中，请稍后");
 		},
 		success:function(res){
