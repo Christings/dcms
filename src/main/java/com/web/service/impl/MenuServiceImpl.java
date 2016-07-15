@@ -137,17 +137,17 @@ public class MenuServiceImpl implements MenuService {
 
     /**
      * 分页处理
-     * @param pageCurrent
-     * @param count
+     * @param pageNum
+     * @param pageSize
      * @param example
      * @return
      */
     @Override
     @Transactional(propagation = Propagation.SUPPORTS,readOnly = true)
-    public Page<Menu> getScrollData(int pageCurrent, int count, MenuExample example) {
+    public Page<Menu> getScrollData(int pageNum, int pageSize, MenuExample example) {
 
         // 分页
-        PageHelper.startPage(pageCurrent, count) ;
+        PageHelper.startPage(pageNum, pageSize) ;
         PageHelper.orderBy("RANK");
 
         // 查询数据
