@@ -1,6 +1,6 @@
 package com.web.service;
 
-import com.web.core.util.page.QueryResult;
+
 
 import java.util.List;
 

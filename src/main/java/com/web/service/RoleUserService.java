@@ -1,7 +1,6 @@
 package com.web.service;
 
-import com.web.core.util.Page;
-import com.web.core.util.page.QueryResult;
+import com.web.core.util.page.Page;
 import com.web.entity.UserRole;
 import com.web.example.RoleUserExample;
 
@@ -12,19 +11,19 @@ import java.util.List;
  */
 public interface RoleUserService extends IService<UserRole,String> {
 
-    public List<UserRole> getUserRoleByPage(Page<UserRole> page)throws Exception;
+
 
     public int countByExample(RoleUserExample example);
 
     public List<UserRole> selectByExample(RoleUserExample example);
 
-    public QueryResult<UserRole> getScrollData(int pageCurrent, int count, RoleUserExample example);
+    public Page<UserRole> getScrollData(int pageNum, int pageSize,  RoleUserExample example);
 
     public int saveList(List<UserRole> list);
 
     public int deleteByUserId(String userId);
 
-    public QueryResult<UserRole> getScrollDataByUserId(int pageCurrent, int count, String userId);
+    public Page<UserRole> getScrollDataByUserId(int pageNum, int pageSize,  String userId);
 
-    public QueryResult<UserRole> getScrollDataByRoleId(int pageCurrent, int count, String roleId);
+    public Page<UserRole> getScrollDataByRoleId(int pageNum, int pageSize,  String roleId);
 }

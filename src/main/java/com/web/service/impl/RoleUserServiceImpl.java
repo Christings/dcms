@@ -1,9 +1,7 @@
 package com.web.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.web.core.util.Page;
-import com.web.core.util.page.QueryResult;
+import com.web.core.util.page.Page;
 import com.web.entity.UserRole;
 import com.web.example.RoleUserExample;
 import com.web.mappers.UserRoleMapper;
@@ -24,10 +22,7 @@ public class RoleUserServiceImpl implements RoleUserService {
 
     @Autowired
     private UserRoleMapper userRoleMapper;
-    @Override
-    public List<UserRole> getUserRoleByPage(Page<UserRole> page) throws Exception {
-        return userRoleMapper.getUserRoleByPage(page);
-    }
+
 
     @Override
     public int countByExample(RoleUserExample example) {
@@ -40,16 +35,16 @@ public class RoleUserServiceImpl implements RoleUserService {
     }
 
     @Override
-    public QueryResult<UserRole> getScrollData(int pageCurrent, int count, RoleUserExample example) {
-        PageHelper.startPage(pageCurrent,count);
-        example.setOrderByClause("create_date");
+    public Page<UserRole> getScrollData(int pageNum, int pageSize,  RoleUserExample example) {
+        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.orderBy("create_date");
         List<UserRole> list=userRoleMapper.selectByExample(example);
-        PageInfo<UserRole> pageInfo=new PageInfo<>(list);
-        QueryResult<UserRole> queryResult=new QueryResult<>(pageInfo.getList(),pageInfo.getTotal());
+        Page<UserRole> page=new Page<>(list);
+
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("get menu scroll object count: {}", queryResult.getTotalRecord());
+            LOGGER.info("get menu scroll object count: {}", page.getCount());
         }
-        return queryResult;
+        return page;
 
     }
 
@@ -64,30 +59,30 @@ public class RoleUserServiceImpl implements RoleUserService {
     }
 
     @Override
-    public QueryResult<UserRole> getScrollDataByUserId(int pageCurrent, int count, String userId) {
+    public Page<UserRole> getScrollDataByUserId(int pageNum, int pageSize,  String userId) {
         // 分页
-        PageHelper.startPage(pageCurrent, count);
+        PageHelper.startPage(pageNum, pageSize);
         List<UserRole> list=userRoleMapper.selectByUserId(userId);
-        PageInfo<UserRole> pageInfo=new PageInfo<>(list);
-        QueryResult<UserRole> queryResult=new QueryResult<>(pageInfo.getList(),pageInfo.getTotal());
+        Page<UserRole> page=new Page<>(list);
+
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("get menu scroll object count: {}", queryResult.getTotalRecord());
+            LOGGER.info("get menu scroll object count: {}", page.getCount());
         }
-        return queryResult;
+        return page;
     }
 
     @Override
-    public QueryResult<UserRole> getScrollDataByRoleId(int pageCurrent, int count, String roleId) {
+    public Page<UserRole> getScrollDataByRoleId(int pageNum, int pageSize,  String roleId) {
         // 分页
-        PageHelper.startPage(pageCurrent, count);
+        PageHelper.startPage(pageNum, pageSize);
 
         List<UserRole> list=userRoleMapper.selectByUserId(roleId);
-        PageInfo<UserRole> pageInfo=new PageInfo<>(list);
-        QueryResult<UserRole> queryResult=new QueryResult<>(pageInfo.getList(),pageInfo.getTotal());
+        Page<UserRole> page=new Page<>(list);
+
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("get menu scroll object count: {}", queryResult.getTotalRecord());
+            LOGGER.info("get menu scroll object count: {}", page.getCount());
         }
-        return queryResult;
+        return page;
     }
 
     @Override

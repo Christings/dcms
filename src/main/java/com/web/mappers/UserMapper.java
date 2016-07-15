@@ -1,11 +1,9 @@
 package com.web.mappers;
 
-import com.web.core.util.Page;
-import com.web.example.UserExample;
-import org.apache.ibatis.annotations.Param;
-
 import com.web.core.mapper.BaseMapper;
 import com.web.entity.User;
+import com.web.example.UserExample;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,7 +19,7 @@ public interface UserMapper extends BaseMapper<User>{
     
     public void updateUserDelete(@Param("deleted")Integer deleted,@Param("id")String id)throws Exception;
 
-    public List<User> getByPage(Page<User> page)throws Exception;
+
 
     public int updateUserPassword(User user);
 
