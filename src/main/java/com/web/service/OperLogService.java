@@ -1,10 +1,6 @@
 package com.web.service;
 
-import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.web.core.util.page.QueryResult;
+import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
 import com.web.example.OperLogExample;
 
@@ -69,6 +65,6 @@ public interface OperLogService {
 	/**
 	 * 分页查询日志
 	 */
-	public QueryResult<OperLog> getPageData(int pagination, int maxResult, OperLogExample operLogExample);
+	public Page<OperLog> getPageData(int pagination, int maxResult, OperLogExample operLogExample);
 
 }

@@ -1,10 +1,10 @@
 package com.web.service;
 
-import java.util.List;
-
-import com.web.core.util.page.QueryResult;
+import com.web.core.util.page.Page;
 import com.web.entity.DataDict;
 import com.web.example.DataDictExample;
+
+import java.util.List;
 
 /**
  * 数据词典接口
@@ -19,7 +19,7 @@ public interface DataDictService extends IService<DataDict, String> {
 	 *
 	 * @param example
 	 */
-	public QueryResult<DataDict> getByPage(int pageCurrent, int count, DataDictExample example);
+	public Page<DataDict> getByPage(int pageCurrent, int count, DataDictExample example);
 
 	/**
 	 * 根据groupId查询
