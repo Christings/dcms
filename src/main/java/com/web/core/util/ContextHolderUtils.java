@@ -5,12 +5,13 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
 /**
-* @ClassName: ContextHolderUtils 
-* @Description: TODO(上下文工具类) 
-* @author  张代浩 
-* @date 2012-12-15 下午11:27:39 
-*
+ * 获取request，session工具类
+ * 
+ * @author 曲国龙
+ * @date 2016-07-11
+ *
  */
 public class ContextHolderUtils {
 	/**
@@ -21,8 +22,8 @@ public class ContextHolderUtils {
 	public static HttpServletRequest getRequest() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		return request;
-
 	}
+
 	/**
 	 * SpringMvc下获取session
 	 * 
@@ -31,7 +32,6 @@ public class ContextHolderUtils {
 	public static HttpSession getSession() {
 		HttpSession session = getRequest().getSession();
 		return session;
-
 	}
 
 }

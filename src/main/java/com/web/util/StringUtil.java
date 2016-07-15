@@ -1,13 +1,7 @@
 package com.web.util;
 
 import java.beans.XMLDecoder;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.math.BigInteger;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -16,15 +10,7 @@ import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -148,10 +134,10 @@ public class StringUtil {
 	}
 
 	/**
-	 * 截取字符串　超出的字符用symbol代替 　　
+	 * 截取字符串 超出的字符用symbol代替
 	 * 
 	 * @param len
-	 *            　字符串长度　长度计量单位为一个GBK汉字　　两个英文字母计算为一个单位长度
+	 *            字符串长度 长度计量单位为一个GBK汉字 两个英文字母计算为一个单位长度
 	 * @param str
 	 * @param symbol
 	 * @return
@@ -189,10 +175,10 @@ public class StringUtil {
 	}
 
 	/**
-	 * 截取字符串　超出的字符用symbol代替 　　
+	 * 截取字符串 超出的字符用symbol代替
 	 * 
 	 * @param len
-	 *            　字符串长度　长度计量单位为一个GBK汉字　　两个英文字母计算为一个单位长度
+	 *            字符串长度 长度计量单位为一个GBK汉字 两个英文字母计算为一个单位长度
 	 * @param str
 	 * @param symbol
 	 * @return12
@@ -1086,10 +1072,8 @@ public class StringUtil {
 		// boolean find() 尝试在目标字符串里查找下一个匹配子串。
 		while (matcher.find()) {
 			for (int i = 0; i < matcher.groupCount(); i++) { // int groupCount()
-																// 返回当前查找所获得的匹配组的数量。
-				// org.jeecgframework.core.util.LogUtil.info(matcher.group(i));
+				// 返回当前查找所获得的匹配组的数量。
 				result.add(matcher.group(i));
-
 			}
 		}
 		String[] resultStr = null;
@@ -1730,7 +1714,8 @@ public class StringUtil {
 	/**
 	 * MD5加密
 	 * 
-	 * @param @param string
+	 * @param @param
+	 *            string
 	 * @return String
 	 */
 	public static String getMD5(String string) {

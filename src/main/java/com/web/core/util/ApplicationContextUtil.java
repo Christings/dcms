@@ -5,14 +5,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 /**
+ * spring上下文获取工具类
  * 
- * @author qgl
+ * @author 曲国龙
  */
 public class ApplicationContextUtil implements ApplicationContextAware {
 
 	private static ApplicationContext context;
 
-	@SuppressWarnings("static-access")
 	public void setApplicationContext(ApplicationContext context) throws BeansException {
 		this.context = context;
 	}

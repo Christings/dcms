@@ -41,10 +41,6 @@
 	<listener>
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
-	<!-- 系统初始化监听器 -->
-	<listener>
-		<listener-class>com.web.core.listener.InitListener</listener-class>
-	</listener>
 
 	<!-- spring mvc 配置 -->
 	<servlet>
