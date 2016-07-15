@@ -1,7 +1,8 @@
 package com.web.service;
 
-import com.web.core.util.Page;
-import com.web.core.util.page.QueryResult;
+
+import com.web.core.util.page.Page;
+
 import com.web.entity.Menu;
 import com.web.entity.User;
 
@@ -35,13 +36,12 @@ public interface UserService {
 
 	public int deleteUser(String id);
 
-	public List<User> getUserPage(Page<User> page)throws Exception;
 
 	public  int updateUserPassword(User user);
 
 
 
-	public QueryResult<User> getScrollData(int pageCurrent, int count, UserExample example);
+	public Page<User> getScrollData(int pageNum, int pageSize, UserExample example);
 
 	public int countByExample(UserExample example);
 

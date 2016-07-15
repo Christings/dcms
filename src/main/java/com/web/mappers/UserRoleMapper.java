@@ -1,11 +1,10 @@
 package com.web.mappers;
 
-import java.util.List;
-
 import com.web.core.mapper.BaseMapper;
-import com.web.core.util.Page;
 import com.web.entity.UserRole;
 import com.web.example.RoleUserExample;
+
+import java.util.List;
 
 /**
  * 
@@ -16,7 +15,7 @@ import com.web.example.RoleUserExample;
  */
 public interface UserRoleMapper extends BaseMapper<UserRole>{
 
-	public List<UserRole> getUserRoleByPage(Page<UserRole> page)throws Exception;
+
 
 	public int countByExample(RoleUserExample example);
 

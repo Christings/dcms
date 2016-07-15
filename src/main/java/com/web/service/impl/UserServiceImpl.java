@@ -1,23 +1,19 @@
 package com.web.service.impl;
 
-import java.util.List;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.web.core.util.Page;
-import com.web.core.util.page.QueryResult;
-import com.web.entity.Menu;
-import com.web.example.MenuExample;
+import com.web.core.util.page.Page;
+import com.web.entity.User;
 import com.web.example.UserExample;
+import com.web.mappers.UserMapper;
+import com.web.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.web.entity.User;
-import com.web.mappers.UserMapper;
-import com.web.service.UserService;
+import java.util.List;
 
 /**
  * 用户Service
@@ -73,15 +69,7 @@ public class UserServiceImpl implements UserService {
 		userMapper.updateUserDelete(deleted, id);
 	}
 
-	@Override
-	public List<User> getUserPage(Page<User> page) throws Exception {
-		/*
-		 * List<User> users = userMapper.getByPage(page);
-		 * System.out.println(bounds.getTotal() + bounds.getLimit() +
-		 * bounds.getOffset());
-		 */
-		return userMapper.getByPage(page);
-	}
+
 
 	@Override
 	public int updateUserPassword(User user) {
@@ -89,24 +77,26 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public QueryResult<User> getScrollData(int pageCurrent, int count, UserExample example) {
-		// 排序
-		example.setOrderByClause("CREATE_DATE");
+	public Page<User> getScrollData(int pageNum, int pageSize, UserExample example) {
+
+		//example.setOrderByClause("CREATE_DATE");
 
 		// 分页
-		PageHelper.startPage(pageCurrent, count);
+		PageHelper.startPage(pageNum, pageSize);
+		// 排序
+		PageHelper.orderBy("CREATE_DATE");
 
 		// 查询数据
 		List<User> users = userMapper.selectByExample(example);
-		PageInfo<User> pageInfo = new PageInfo<>(users);
+		Page<User> page = new Page<>(users);
 
-		QueryResult<User> queryResult = new QueryResult<>(pageInfo.getList(), pageInfo.getTotal());
+
 
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("get menu scroll object count: {}", queryResult.getTotalRecord());
+			LOGGER.info("get menu scroll object count: {}", page.getCount());
 		}
 
-		return queryResult;
+		return page;
 	}
 
 	@Override

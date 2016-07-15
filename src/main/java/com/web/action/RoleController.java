@@ -1,13 +1,14 @@
 package com.web.action;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.web.core.util.page.PageViewResult;
-import com.web.core.util.page.QueryResult;
+import com.alibaba.fastjson.JSON;
+import com.web.core.action.BaseController;
+import com.web.core.util.page.Page;
+import com.web.entity.Role;
 import com.web.example.RoleExample;
+import com.web.service.RoleSerivce;
+import com.web.util.AllResult;
+import com.web.util.UUIDGenerator;
+import com.web.util.WebUtils;
 import com.web.util.fastjson.FastjsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,15 +18,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import com.alibaba.fastjson.JSON;
-import com.web.core.action.BaseController;
-import com.web.core.util.Page;
-import com.web.entity.Role;
-import com.web.entity.User;
-import com.web.service.RoleSerivce;
-import com.web.util.AllResult;
-import com.web.util.UUIDGenerator;
-import com.web.util.WebUtils;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/role")
@@ -139,41 +134,25 @@ public class RoleController extends BaseController{
 		}
 	}
 	
-	@RequestMapping(value="/getRolesByPage",method=RequestMethod.GET)
-	@ResponseBody
-	public Object getRolesByPage(@RequestBody Page<Role> page,HttpServletRequest request){
-		page.setPageNo(1);
-		page.setPageSize(10);
-		try {
-			
-			List<Role> list=roleService.getByPage(page);
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("save result: {}", list);
-			}
-			return AllResult.okJSON(page);
-		} catch (Exception e) {
-			LOGGER.error("save Role fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,查询角色失败") ;
-		}
-	}
+
 
 	/**
 	 * 分页查询
-	 * @param page
-	 * @param count
+	 * @param pageNum
+	 * @param pageSize
 	 * @param request
      * @return
      */
 	@RequestMapping(value="/scroll",method= { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
-	public Object getScroll(@RequestParam(value = "page") int page, @RequestParam(value = "count") int count,
+	public Object getScroll(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
 							HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [page: {}, count: {}]", page, count);
+			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
 		}
 
 		// 校验参数
-		if (page < 1 || count < 1) {
+		if (pageNum < 1 || pageSize < 1) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
 		}
 
@@ -186,20 +165,19 @@ public class RoleController extends BaseController{
 			// 条件设置
 			// criteria.andIconIdIsNull();
 
-			QueryResult<Role> queryResult = roleService.getScrollData(page, count, example);
-			PageViewResult<Role> pageViewResult = new PageViewResult<>(count, page);
-			pageViewResult.setQueryResult(queryResult);
+			Page<Role> queryResult = roleService.getScrollData(pageNum, pageSize, example);
+
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("queryResult record count: {}", queryResult.getResultList().size());
+				LOGGER.debug("queryResult record count: {}", queryResult.getRecords().size());
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(pageViewResult, FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(queryResult, FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 
 		} catch (Exception e) {
-			LOGGER.error("get scroll data error. page: {}, count: {}", page, count, e);
+			LOGGER.error("get scroll data error. page: {}, count: {}", pageNum, pageSize, e);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");

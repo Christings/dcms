@@ -1,24 +1,18 @@
 package com.web.service.impl;
 
-import java.util.List;
-
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.web.core.util.page.Page;
+import com.web.entity.Role;
 import com.web.example.RoleExample;
-import com.web.example.UserExample;
+import com.web.mappers.RoleMapper;
+import com.web.service.RoleSerivce;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.web.core.util.Page;
-import com.web.core.util.page.QueryResult;
-import com.web.entity.Menu;
-import com.web.entity.Role;
-import com.web.example.MenuExample;
-import com.web.mappers.RoleMapper;
-import com.web.service.RoleSerivce;
+import java.util.List;
 /**
  * 
 * @ClassName: RoleServiceImpl 
@@ -67,11 +61,7 @@ public class RoleServiceImpl implements RoleSerivce{
 
 	
 
-	@Override
-	public List<Role> getByPage(Page<Role> page) throws Exception {
-		// TODO Auto-generated method stub
-		return roleMapper.getByPage(page);
-	}
+
 
 	@Override
 	public int countByExample(RoleExample example) {
@@ -79,21 +69,22 @@ public class RoleServiceImpl implements RoleSerivce{
 	}
 
 	@Override
-	public QueryResult<Role> getScrollData(int pageCurrent, int count, RoleExample example) {
-      example.setOrderByClause("create_date");
+	public Page<Role> getScrollData(int pageNum, int pageSize, RoleExample example) {
+
 		// 分页
-		PageHelper.startPage(pageCurrent, count) ;
+		PageHelper.startPage(pageNum, pageSize);
+		PageHelper.orderBy("create_date");
 
 		List<Role> roles=roleMapper.selectByExample(example);
-		PageInfo<Role> pageInfo = new PageInfo<>(roles) ;
+		Page<Role> page = new Page<>(roles) ;
 
-		QueryResult<Role> queryResult = new QueryResult<>(pageInfo.getList(), pageInfo.getTotal()) ;
+
 
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("get menu scroll object count: {}", queryResult.getTotalRecord());
+			LOGGER.info("get menu scroll object count: {}", page.getCount());
 		}
 
-		return queryResult;
+		return page;
 	}
 
 

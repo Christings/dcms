@@ -251,9 +251,9 @@
 	</delete>
 	
 
-	<select id="getByPage" resultMap="BaseResultMap">
-		select * from t_s_user
-	</select>
+	<!--<select id="getByPage" resultMap="BaseResultMap">-->
+		<!--select * from t_s_user-->
+	<!--</select>-->
 	<!--是否启用用户  -->
 	<update id="updateUserEnabled" flushCache="true" parameterType="Object">
 	UPDATE t_s_user SET enabled=#{enabled} where id=#{id}
