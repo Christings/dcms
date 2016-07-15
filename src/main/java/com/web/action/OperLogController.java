@@ -1,7 +1,10 @@
 package com.web.action;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.web.core.action.BaseController;
+import com.web.core.util.page.Page;
+import com.web.entity.OperLog;
+import com.web.example.OperLogExample;
+import com.web.util.AllResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -11,12 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.web.core.action.BaseController;
-import com.web.core.util.page.PageViewResult;
-import com.web.core.util.page.QueryResult;
-import com.web.entity.OperLog;
-import com.web.example.OperLogExample;
-import com.web.util.AllResult;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 业务日志控制器
@@ -57,16 +55,12 @@ public class OperLogController extends BaseController {
 			// 排序设置
 			// example.setOrderByClause("UPDATE_DATETIME DESC");
 			OperLogExample.Criteria criteria = operLogExample.createCriteria();
-			// 条件设置
-			// criteria.andIconIdIsNull();
 
-			QueryResult<OperLog> queryResult = operLogService.getPageData(page, count, operLogExample);
-			PageViewResult<OperLog> pageViewResult = new PageViewResult<>(count, page);
-			pageViewResult.setQueryResult(queryResult);
+			Page<OperLog> queryResult = operLogService.getPageData(page, count, operLogExample);
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("queryResult record count: {}", queryResult.getResultList().size());
+				LOGGER.debug("queryResult record count: {}", queryResult.getRecords().size());
 			}
-			return AllResult.okJSON(pageViewResult);
+			return AllResult.okJSON(queryResult);
 		} catch (Exception e) {
 			LOGGER.error("get scroll data error. page: {}, count: {}", page, count, e);
 		}
