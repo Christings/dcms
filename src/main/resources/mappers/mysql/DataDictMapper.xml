@@ -11,7 +11,7 @@
         <result column="SORT" property="sort" jdbcType="SMALLINT"/>
         <result column="COMMENT" property="comment" jdbcType="VARCHAR"/>
         <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR"/>
-        <result column="UPDATE_CREATE" property="updateCreate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
         <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
         <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -77,7 +77,7 @@
     </sql>
     <sql id="Base_Column_List">
     ID, DICT_VALUE, DICT_NAME, GROUP_ID, GROUP_NAME, DICT_TYPE, SORT, COMMENT, UPDATE_NAME, 
-    UPDATE_CREATE, CREATE_NAME, CREATE_DATE
+    UPDATE_DATE, CREATE_NAME, CREATE_DATE
   </sql>
     <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.DataDictExample">
         select
@@ -129,8 +129,8 @@
             <if test="updateName != null">
                 UPDATE_NAME,
             </if>
-            <if test="updateCreate != null">
-                UPDATE_CREATE,
+            <if test="updateDate != null">
+                UPDATE_DATE,
             </if>
             <if test="createName != null">
                 CREATE_NAME,
@@ -167,8 +167,8 @@
             <if test="updateName != null">
                 #{updateName,jdbcType=VARCHAR},
             </if>
-            <if test="updateCreate != null">
-                #{updateCreate,jdbcType=DATE},
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=DATE},
             </if>
             <if test="createName != null">
                 #{createName,jdbcType=VARCHAR},
@@ -214,8 +214,8 @@
             <if test="record.updateName != null">
                 UPDATE_NAME = #{record.updateName,jdbcType=VARCHAR},
             </if>
-            <if test="record.updateCreate != null">
-                UPDATE_CREATE = #{record.updateCreate,jdbcType=DATE},
+            <if test="record.updateDate != null">
+                UPDATE_DATE = #{record.updateDate,jdbcType=DATE},
             </if>
             <if test="record.createName != null">
                 CREATE_NAME = #{record.createName,jdbcType=VARCHAR},
@@ -239,7 +239,7 @@
         SORT = #{record.sort,jdbcType=INTEGER},
         COMMENT = #{record.comment,jdbcType=VARCHAR},
         UPDATE_NAME = #{record.updateName,jdbcType=VARCHAR},
-        UPDATE_CREATE = #{record.updateCreate,jdbcType=DATE},
+        UPDATE_DATE = #{record.updateDate,jdbcType=DATE},
         CREATE_NAME = #{record.createName,jdbcType=VARCHAR},
         CREATE_DATE = #{record.createDate,jdbcType=DATE}
         <if test="_parameter != null">
@@ -273,8 +273,8 @@
             <if test="updateName != null">
                 UPDATE_NAME = #{updateName,jdbcType=VARCHAR},
             </if>
-            <if test="updateCreate != null">
-                UPDATE_CREATE = #{updateCreate,jdbcType=DATE},
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=DATE},
             </if>
             <if test="createName != null">
                 CREATE_NAME = #{createName,jdbcType=VARCHAR},
