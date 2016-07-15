@@ -1,12 +1,10 @@
 package com.web.mappers;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
-import com.web.core.util.Page;
 import com.web.entity.DataDict;
 import com.web.example.DataDictExample;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 数据词典MAPPER
@@ -33,8 +31,6 @@ public interface DataDictMapper {
 	int updateByPrimaryKey(DataDict record);
 
 	List<DataDict> selectAll();
-
-	List<DataDict> getByPage(Page<DataDict> page, DataDictExample example);
 
 	int selectMaxSort(String groupId);
 }
