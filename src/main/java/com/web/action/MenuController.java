@@ -299,28 +299,28 @@ public class MenuController extends BaseController {
 	/**
 	 * 分页获取菜单信息
 	 *
-	 * @param page
+	 * @param pageNum
 	 *            当前页
-	 * @param count
+	 * @param pageSize
 	 *            显示多少行
 	 */
 	@RequestMapping(value = "/scroll", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
-	public Object getScroll(@RequestParam(value = "page") int page, @RequestParam(value = "count") int count,
+	public Object getScroll(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
 			HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [page: {}, count: {}]", page, count);
+			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
 		}
 
 		// 校验参数
-		if (page < 1 || count < 1) {
+		if (pageNum < 1 || pageSize < 1) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
 		}
 
 		try {
 			MenuExample example = new MenuExample();
 
-			Page<Menu> queryResult = menuService.getScrollData(page, count, example);
+			Page<Menu> queryResult = menuService.getScrollData(pageNum, pageSize, example);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("queryResult record count: {}", queryResult.getRecords().size());
 			}
@@ -331,7 +331,7 @@ public class MenuController extends BaseController {
 			return AllResult.okJSON(JSON.parse(jsonStr));
 
 		} catch (Exception e) {
-			LOGGER.error("get scroll data error. page: {}, count: {}", page, count, e);
+			LOGGER.error("get scroll data error. page: {}, count: {}", pageNum, pageSize, e);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");

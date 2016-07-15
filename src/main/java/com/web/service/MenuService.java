@@ -22,10 +22,10 @@ public interface MenuService extends IService<Menu, String> {
 
     /**
      * 分页处理 根据查询条件进行分页
-     * @param pagination
-     * @param maxResult
+     * @param pageNum
+     * @param pageSize
      * @param example
      * @return
      */
-    Page<Menu> getScrollData(int pagination, int maxResult, MenuExample example);
+    Page<Menu> getScrollData(int pageNum, int pageSize, MenuExample example);
 }
