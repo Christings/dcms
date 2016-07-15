@@ -11,7 +11,7 @@
     <result column="ICON_ID" property="iconId" jdbcType="VARCHAR" />
     <result column="TYPE" property="type" jdbcType="SMALLINT" />
     <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR" />
-    <result column="UPDATE_CREATE" property="updateCreate" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
     <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -74,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ID, LEVEL, NAME, RANK, URL, PARENT_ID, ICON_ID, TYPE, UPDATE_NAME, UPDATE_CREATE, 
+    ID, LEVEL, NAME, RANK, URL, PARENT_ID, ICON_ID, TYPE, UPDATE_NAME, UPDATE_DATE,
     CREATE_NAME, CREATE_DATE
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.MenuExample" >
@@ -111,12 +111,12 @@
     insert into t_s_menu (ID, LEVEL, NAME, 
       RANK, URL, PARENT_ID, 
       ICON_ID, TYPE, UPDATE_NAME, 
-      UPDATE_CREATE, CREATE_NAME, CREATE_DATE
+      UPDATE_DATE, CREATE_NAME, CREATE_DATE
       )
     values (#{id,jdbcType=VARCHAR}, #{level,jdbcType=SMALLINT}, #{name,jdbcType=VARCHAR}, 
       #{rank,jdbcType=SMALLINT}, #{url,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
       #{iconId,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, #{updateName,jdbcType=VARCHAR}, 
-      #{updateCreate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}
+      #{updateDate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.web.entity.Menu" >
@@ -149,8 +149,8 @@
       <if test="updateName != null" >
         UPDATE_NAME,
       </if>
-      <if test="updateCreate != null" >
-        UPDATE_CREATE,
+      <if test="updateDate != null" >
+        UPDATE_DATE,
       </if>
       <if test="createName != null" >
         CREATE_NAME,
@@ -187,8 +187,8 @@
       <if test="updateName != null" >
         #{updateName,jdbcType=VARCHAR},
       </if>
-      <if test="updateCreate != null" >
-        #{updateCreate,jdbcType=TIMESTAMP},
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
       </if>
       <if test="createName != null" >
         #{createName,jdbcType=VARCHAR},
@@ -234,8 +234,8 @@
       <if test="record.updateName != null" >
         UPDATE_NAME = #{record.updateName,jdbcType=VARCHAR},
       </if>
-      <if test="record.updateCreate != null" >
-        UPDATE_CREATE = #{record.updateCreate,jdbcType=TIMESTAMP},
+      <if test="record.updateDate != null" >
+        UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP},
       </if>
       <if test="record.createName != null" >
         CREATE_NAME = #{record.createName,jdbcType=VARCHAR},
@@ -259,7 +259,7 @@
       ICON_ID = #{record.iconId,jdbcType=VARCHAR},
       TYPE = #{record.type,jdbcType=SMALLINT},
       UPDATE_NAME = #{record.updateName,jdbcType=VARCHAR},
-      UPDATE_CREATE = #{record.updateCreate,jdbcType=TIMESTAMP},
+      UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP},
       CREATE_NAME = #{record.createName,jdbcType=VARCHAR},
       CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
@@ -293,8 +293,8 @@
       <if test="updateName != null" >
         UPDATE_NAME = #{updateName,jdbcType=VARCHAR},
       </if>
-      <if test="updateCreate != null" >
-        UPDATE_CREATE = #{updateCreate,jdbcType=TIMESTAMP},
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
       </if>
       <if test="createName != null" >
         CREATE_NAME = #{createName,jdbcType=VARCHAR},
@@ -315,7 +315,7 @@
       ICON_ID = #{iconId,jdbcType=VARCHAR},
       TYPE = #{type,jdbcType=SMALLINT},
       UPDATE_NAME = #{updateName,jdbcType=VARCHAR},
-      UPDATE_CREATE = #{updateCreate,jdbcType=TIMESTAMP},
+      UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
       CREATE_NAME = #{createName,jdbcType=VARCHAR},
       CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
     where ID = #{id,jdbcType=VARCHAR}

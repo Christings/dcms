@@ -2,6 +2,9 @@ package com.web.core.entity;
 
 import java.util.Date;
 
+/**
+ * 基础实体类
+ */
 public class BaseEntity implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -10,7 +13,7 @@ public class BaseEntity implements java.io.Serializable {
 	/** 修改人名 **/
 	private String updateName;
 	/** 修改时间 **/
-	private Date updateCreate;
+	private Date updateDate;
 	/** 创建人名 **/
 	private String createName;
 	/** 创建时间 **/
@@ -32,12 +35,12 @@ public class BaseEntity implements java.io.Serializable {
 		this.updateName = updateName;
 	}
 
-	public Date getUpdateCreate() {
-		return updateCreate;
+	public Date getUpdateDate() {
+		return updateDate;
 	}
 
-	public void setUpdateCreate(Date updateCreate) {
-		this.updateCreate = updateCreate;
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public String getCreateName() {

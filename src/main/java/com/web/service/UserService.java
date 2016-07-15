@@ -1,10 +1,14 @@
 package com.web.service;
 
-import com.web.core.util.page.PageBounds;
+import com.web.core.util.Page;
+import com.web.core.util.page.QueryResult;
+import com.web.entity.Menu;
 import com.web.entity.User;
 
 import java.util.List;
 
+import com.web.example.MenuExample;
+import com.web.example.UserExample;
 import org.apache.ibatis.annotations.Param;
 
 public interface UserService {
@@ -31,5 +35,14 @@ public interface UserService {
 
 	public int deleteUser(String id);
 
-	public List<User> getUserPage(PageBounds bounds, User user)throws Exception;
+	public List<User> getUserPage(Page<User> page)throws Exception;
+
+	public  int updateUserPassword(User user);
+
+
+
+	public QueryResult<User> getScrollData(int pageCurrent, int count, UserExample example);
+
+	public int countByExample(UserExample example);
+
 }

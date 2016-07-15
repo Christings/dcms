@@ -1,9 +1,9 @@
 package com.web.action;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.web.bean.MenuTree;
 import com.web.core.action.BaseController;
-import com.web.util.fastjson.FastjsonUtils;
 import com.web.core.util.page.PageViewResult;
 import com.web.core.util.page.QueryResult;
 import com.web.entity.Menu;
@@ -11,7 +11,7 @@ import com.web.example.MenuExample;
 import com.web.service.MenuService;
 import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
-import com.web.util.WebUtils;
+import com.web.util.fastjson.FastjsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +25,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
- * 菜单获取
+ * 菜单接口
  *
  * @author 杜延雷
  * @date 2016-06-20
@@ -67,9 +66,9 @@ public class MenuController extends BaseController {
 		}
 
 		try {
-			menu.setCreateName(WebUtils.getUser(request).getUserName());
-			menu.setCreateDate(new Date());
-			menu.setUpdateCreate(menu.getCreateDate());
+//			menu.setCreateName(WebUtils.getUser(request).getUserName());
+//			menu.setCreateDate(new Date());
+//			menu.setUpdateDate(menu.getCreateDate());
 			menu.setId(UUIDGenerator.generatorRandomUUID());
 			int result = menuService.save(menu);
 
@@ -78,7 +77,7 @@ public class MenuController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"), SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -150,8 +149,8 @@ public class MenuController extends BaseController {
 		}
 
 		try {
-			menu.setUpdateName(WebUtils.getUser(request).getUserName());
-			menu.setUpdateCreate(new Date());
+//			menu.setUpdateName(WebUtils.getUser(request).getUserName());
+//			menu.setUpdateDate(new Date());
 			int result = menuService.updateById(menu);
 
 			if (LOGGER.isDebugEnabled()) {
@@ -159,7 +158,7 @@ public class MenuController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"), SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -194,7 +193,7 @@ public class MenuController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -226,7 +225,7 @@ public class MenuController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -253,7 +252,7 @@ public class MenuController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -288,7 +287,7 @@ public class MenuController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(menuTreeList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(menuTreeList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -336,7 +335,7 @@ public class MenuController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(pageViewResult,FastjsonUtils.newIgnorePropertyFilter("updateName","updateCreate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(pageViewResult,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 

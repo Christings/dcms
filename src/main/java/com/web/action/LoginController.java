@@ -2,6 +2,7 @@ package com.web.action;
 
 import com.alibaba.fastjson.JSONObject;
 import com.web.core.action.BaseController;
+import com.web.entity.OperLog;
 import com.web.entity.User;
 import com.web.util.AllResult;
 import com.web.util.MD5;
@@ -59,6 +60,7 @@ public class LoginController extends BaseController {
     		}
 
     		WebUtils.addUser(request, user);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.login,null);
     		return AllResult.okJSON(user);
 		} catch (Exception e) {
 			// TODO: handle exception
