@@ -137,7 +137,7 @@
 	<insert id="save" parameterType="com.web.entity.User">
 		INSERT INTO
 		t_s_user
-		<trim prefix="(" suffix=")" prefixOverrides=",">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id!=null and id!=''">
 				id,
 			</if>
@@ -181,7 +181,7 @@
 				CREATE_DATE,
 			</if>
 		</trim>
-		<trim prefix="values (" suffix=")" prefixOverrides=",">
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id !=null and id !=''">
 				#{id},
 			</if>
