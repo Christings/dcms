@@ -134,62 +134,102 @@
 	<select id="getAll" resultMap="BaseResultMap">
 		select * from t_s_user
 	</select>
-	<insert id="save" flushCache="true" parameterType="com.web.entity.User">
+	<insert id="save" parameterType="com.web.entity.User">
 		INSERT INTO
-		t_s_user (
-		id,
-		user_name,
-		real_name,
-		password,
-		identificationNo,
-		mobile,
-		sex,
-		enabled,
-		create_Name,
-		create_Date,
-		remark,
-		superAdmin
-		)
-		VALUES (
-		#{id},
-		#{userName},
-		#{realName},
-		#{password},
-		#{identificationNo},
-		#{mobile},
-		<choose>
-			<when test="sex !=null and sex !=''">
-				#{sex},
-			</when>
-			<otherwise>
-				0,
-			</otherwise>
-		</choose>
-		<choose>
-			<when test="enabled !=null and enabled !=''">
-				#{enabled},
-			</when>
-			<otherwise>
-				0,
-			</otherwise>
-		</choose>
-		#{createName},
-		now(),
-		#{remark},
-		<choose>
-			<when test="superAdmin != null and superAdmin !=''">
-				#{superAdmin}
-			</when>
-			<otherwise>
-				0
-			</otherwise>
-		</choose>
-		)
+		t_s_user
+		<trim prefix="(" suffix=")" prefixOverrides=",">
+			<if test="id!=null and id!=''">
+				id,
+			</if>
+			<if test="userName!=null and userName!=''">
+			user_name,
+			</if>
+			<if test="realName!=null and realName!=''">
+			real_name,
+			</if>
+			<if test="password!=null and password!=''">
+			password,
+			</if>
+			<if test="identificationNo!=null and identificationNo!=''">
+			identificationNo,
+			</if>
+			<if test="mobile!=null and mobile!=''">
+			mobile,
+			</if>
+			<if test="sex!=null and sex!=''">
+			sex,
+			</if>
+			<if test="enabled!=null and enabled!=''">
+			enabled,
+			</if>
+			<if test="remark!=null and remark!=''">
+			remark,
+			</if>
+			<if test="superAdmin!=null and superAdmin!=''">
+			superAdmin,
+			</if>
+			<if test="updateName != null" >
+				UPDATE_NAME,
+			</if>
+			<if test="updateDate != null" >
+				UPDATE_DATE,
+			</if>
+			<if test="createName != null" >
+				CREATE_NAME,
+			</if>
+			<if test="createDate != null" >
+				CREATE_DATE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" prefixOverrides=",">
+			<if test="id !=null and id !=''">
+				#{id},
+			</if>
+			<if test="userName !=null and userName !=''">
+			#{userName},
+			</if>
+			<if test="realName !=null and realName !=''">
+			#{realName},
+			</if>
+			<if test="password !=null and password !=''">
+			#{password},
+			</if>
+			<if test="identificationNo !=null and identificationNo !=''">
+					#{identificationNo},
+			</if>
+			<if test="mobile !=null and mobile !=''">
+					#{mobile},
+			</if>
+			<if test="sex !=null and sex !=''">
+					#{sex},
+			</if>
+			<if test="enabled !=null and enabled !=''">
+					#{enabled},
+			</if>
+			<if test="remark !=null and remark !=''">
+					#{remark},
+			</if>
+			<if test="superAdmin !=null and superAdmin !=''">
+					#{superAdmin},
+			</if>
+			<if test="updateName != null" >
+				#{updateName,jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null" >
+				#{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createName != null" >
+				#{createName,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null" >
+				#{createDate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
 	</insert>
 	<update id="update" flushCache="true" parameterType="com.web.entity.User">
 		UPDATE
 		t_s_user SET
-		user_name=#{user_name},
+		user_name=#{userName},
 		real_name=#{realName},
 		password=#{password},
 		update_Name=#{updateName},

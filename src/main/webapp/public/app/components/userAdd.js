@@ -37,16 +37,16 @@ class UserAdd extends Component{
 					$("#alert_3").text("请输入用户密码");
 					return false;
 				}
-				var userInfo = {userName: '', realName: '', password: ''};// identificationNo:'',mobile:'',sex:'',enabled: '',remark:'',superAdmin:''
+				var userInfo = {userName: '', realName: '', password: '',identificationNo:'',mobile:'',sex:'',enabled: '',remark:'',superAdmin:''};// 
 				userInfo['userName'] = userName;
 				userInfo['realName'] = realName;
 				userInfo['password'] = password;
-				// userInfo['identificationNo'] = identificationNo;
-				// userInfo['mobile'] = mobile;
-				// userInfo['sex'] = sex;
-				// userInfo['enabled'] = enabled;
-				// userInfo['remark'] = remark;
-				// userInfo['superAdmin'] = superAdmin;
+				userInfo['identificationNo'] = identificationNo;
+				userInfo['mobile'] = mobile;
+				userInfo['sex'] = sex;
+				userInfo['enabled'] = enabled;
+				userInfo['remark'] = remark;
+				userInfo['superAdmin'] = superAdmin;
 				console.log(userInfo);
 				$.ajax({
 					type:"post",
@@ -54,7 +54,6 @@ class UserAdd extends Component{
 					dataType: 'json',
 					contentType: "application/json",
 					data: JSON.stringify(userInfo),
-
 					success: function(res){
 						if(res.status == "1"){
 							console.log("添加用户成功" + res.data);

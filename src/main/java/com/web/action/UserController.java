@@ -56,8 +56,8 @@ public class UserController extends BaseController {
 		try {
 			user.setId(UUIDGenerator.generatorRandomUUID());
 			user.setPassword(MD5.MD5Encode(user.getPassword()));
-			user.setCreateName("admin");
-			user.setCreateDate(new Date());
+			//user.setCreateName("admin");
+			//user.setCreateDate(new Date());
 			int result = userService.saveUser(user);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("save result: {}", result);
@@ -194,9 +194,9 @@ public class UserController extends BaseController {
 	 * @param request
      * @return
      */
-	@RequestMapping(value="/scroll",method= { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value="/datagrid",method= { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
-	public Object getScroll(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
+	public Object datagrid(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
 							HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);

@@ -143,9 +143,9 @@ public class RoleController extends BaseController{
 	 * @param request
      * @return
      */
-	@RequestMapping(value="/scroll",method= { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value="/datagrid",method= { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
-	public Object getScroll(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
+	public Object datagrid(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
 							HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
