@@ -42,7 +42,7 @@ public class UserController extends BaseController {
 	public Object addUser(@RequestBody User user, HttpServletRequest request) {
 
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
+			LOGGER.info("request param: [user: {}]", JSON.toJSONString(user));
 		}
 		// TODO 需要添加判断
 		if (StringUtils.isEmpty(user.getRealName())) {
@@ -194,9 +194,9 @@ public class UserController extends BaseController {
 	 * @param request
      * @return
      */
-	@RequestMapping(value="/datagrid",method= { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value="/getDataGrid",method= { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
-	public Object datagrid(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
+	public Object getDataGrid(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
 							HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);

@@ -8,13 +8,23 @@ import com.web.core.entity.BaseEntity;
 * @author 童云鹏 
 * @date 2016年7月11日 下午1:59:04
  */
-public class UserRole extends BaseEntity{
+public class UserRole {
 
+	private String id;
 	private String userid;//用户ID
 	private String roleid;//角色ID
 	private String UserName;
 	private String realName;
 	private String roleName;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public String getUserid() {
 		return userid;
 	}

@@ -10,13 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
  * Created by tong_yunpeng on 2016/7/13.
  */
-@Service
+@Service("roleUserService")
+@Transactional
 public class RoleUserServiceImpl implements RoleUserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RoleUserServiceImpl.class);
 
@@ -37,10 +39,8 @@ public class RoleUserServiceImpl implements RoleUserService {
     @Override
     public Page<UserRole> getScrollData(int pageNum, int pageSize,  RoleUserExample example) {
         PageHelper.startPage(pageNum,pageSize);
-        PageHelper.orderBy("create_date");
         List<UserRole> list=userRoleMapper.selectByExample(example);
         Page<UserRole> page=new Page<>(list);
-
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("get menu scroll object count: {}", page.getCount());
         }
@@ -50,6 +50,7 @@ public class RoleUserServiceImpl implements RoleUserService {
 
     @Override
     public int saveList(List<UserRole> list) {
+        deleteByUserId(list.get(0).getUserid());
         return userRoleMapper.saveList(list);
     }
 
