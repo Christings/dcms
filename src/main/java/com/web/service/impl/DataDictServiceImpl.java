@@ -1,5 +1,13 @@
 package com.web.service.impl;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.github.pagehelper.PageHelper;
 import com.web.core.util.page.Page;
 import com.web.entity.DataDict;
@@ -8,13 +16,6 @@ import com.web.mappers.DataDictMapper;
 import com.web.service.DataDictService;
 import com.web.util.StringUtil;
 import com.web.util.UUIDGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * 数据词典接口
@@ -55,7 +56,9 @@ public class DataDictServiceImpl implements DataDictService {
 			entity.setGroupId(UUIDGenerator.generatorRandomUUID());
 			entity.setSort(1);
 		} else {
-			int maxSort = dataDictMapper.selectMaxSort(entity.getGroupId());
+			Integer maxSort = 0;
+			maxSort = dataDictMapper.selectMaxSort(entity.getGroupId());
+			maxSort = maxSort == null ? 0 : maxSort;
 			entity.setSort(maxSort + 1);
 		}
 		return dataDictMapper.insertSelective(entity);

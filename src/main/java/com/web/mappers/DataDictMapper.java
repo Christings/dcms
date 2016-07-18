@@ -32,5 +32,5 @@ public interface DataDictMapper {
 
 	List<DataDict> selectAll();
 
-	int selectMaxSort(String groupId);
+	Integer selectMaxSort(String groupId);
 }
