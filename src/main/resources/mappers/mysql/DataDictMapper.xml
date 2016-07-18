@@ -292,6 +292,6 @@
         DELETE  FROM  t_s_data_dict WHERE id = #{id}
     </delete>
     <select id="selectMaxSort" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT max(sort) FROM t_s_data_dict WHERE group_id = #{groupId}
+        SELECT max(sort) sort FROM t_s_data_dict WHERE group_id = #{groupId}
     </select>
 </mapper>

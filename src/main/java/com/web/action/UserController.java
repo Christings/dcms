@@ -244,7 +244,7 @@ public class UserController extends BaseController {
 	 * @author 田军兴
 	 * @date 2016年7月9日
 	 */
-	@RequestMapping(value = "modifyPassword", method = { RequestMethod.POST, RequestMethod.GET })
+	@RequestMapping(value = "modifyPassword", method = RequestMethod.POST)
 	@ResponseBody
 	public Object modifyPassword(@RequestBody User user, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
