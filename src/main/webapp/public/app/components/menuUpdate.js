@@ -6,15 +6,15 @@ class MenuUpdate extends Component{
 	constructor(...args){
 		super(...args);
 		this.state={
-
 		};
 		this.handleClick = this.handleClick.bind(this);
 	}
 	handleClick(){
+		var updateId = this.props.updateMenuData;
 		$(document).ready(function(){
 			console.log(1);
 			$("#form").submit(function(){
-				var id = $("#id").val();
+				var id = updateId;
 				var name = $("#name").val();
 				var rank = $("#rank").val();
 				var level = $("#level").val();
@@ -26,10 +26,6 @@ class MenuUpdate extends Component{
 				{
 					$("#alertName").text("请输入菜单名称");
 					return false;
-				}
-				if(id == "")
-				{
-					$("#alertId").text("请输入菜单ID");
 				}
 				var menuInfo = { id:'', name:'', rank:'', level:'', url:'', parentId:'', iconId:'', type:''};
 				menuInfo['id'] = id;
@@ -64,47 +60,45 @@ class MenuUpdate extends Component{
 			});
 		});
 	}
-	
+
 	render(){
+		var arr = [];
+		var menuMsg = this.props.updateMenuData;
+		console.log("menuMsg" + menuMsg);
 		return(	
 			<form id = "form">
-				<FormGroup controlId="formControlsId">
-					<ControlLabel>修改菜单</ControlLabel>
-					<ControlLabel>Id</ControlLabel>
-					<FormControl id="id" type="text" placeholder="id"/>
-					<span id="alertId"></span>
-				</FormGroup>
 				<FormGroup controlId="formControlsName">
+					<ControlLabel>修改菜单</ControlLabel>
 					<ControlLabel>Name</ControlLabel>
-					<FormControl id="name" type="text" placeholder="name"/>
+					<FormControl id="name" type="text" defaultValue={menuMsg["name"]}/>
 					<span id="alertName"></span>
 				</FormGroup>
 				<FormGroup controlId="formControlrank">
 					<ControlLabel>Rank</ControlLabel>
-					<FormControl id="rank" type="text" placeholder="rank"/>
+					<FormControl id="rank" type="text" defaultValue={menuMsg["rank"]}/>
 				</FormGroup>
 				<FormGroup controlId="formControlLevel">
 					<ControlLabel>Level</ControlLabel>
-					<FormControl id="level" type="number" placeholder="level"/>
+					<FormControl id="level" type="number" defaultValue={menuMsg["level"]}/>
 				</FormGroup>
 				<FormGroup controlId="formControlUrl">
 					<ControlLabel>Url</ControlLabel>
-					<FormControl id="url" type="text" placeholder="url"/>
+					<FormControl id="url" type="text" defaultValue={menuMsg["url"]}/>
 				</FormGroup>
 				<FormGroup controlId="formControlParentId">
 					<ControlLabel>ParentId</ControlLabel>
-					<FormControl id="parentId" type="text" placeholder="parentId"/>
+					<FormControl id="parentId" type="text" defaultValue={menuMsg["parentId"]} />
 				</FormGroup>
 				<FormGroup controlId="formControlIconId">
 					<ControlLabel>iconId</ControlLabel>
-					<FormControl id="iconId" type="text" placeholder="1"/>
+					<FormControl id="iconId" type="text" defaultValue={menuMsg["iconId"]} />
 				</FormGroup>
 				<FormGroup controlId="formControlType">
 					<ControlLabel>Type</ControlLabel>
-					<FormControl id="type" type="number" placeholder="type"/>
+					<FormControl id="type" type="number" defaultValue={menuMsg["type"]} />
 				</FormGroup>
 				<Button type="submit" onClick={this.handleClick}>
-					提交
+					确认修改
 				</Button>
 			</form>
 		)

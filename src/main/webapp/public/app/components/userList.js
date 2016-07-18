@@ -6,15 +6,18 @@ class UserList extends Component{
 	constructor(...args){
 		super(...args);
 		this.state={
+			page: 1,
+			count: 10,
 			usersData: ""
 		};
 		this.loadUserMsg = this.loadUserMsg.bind(this);
 	}
 	loadUserMsg(){
+        var userLControl = { page: this.state.page, count: this.state.count};
 		$.ajax({
-			url: "user/getAllUsers",
+			url: "user/scroll",
 			dataType: "json",
-			data: "",
+			data: JSON.stringify(userLControl),
 			contentType: "application/json",
 			type: "post"
 		}).done((jsonData)=>{
@@ -41,7 +44,9 @@ class UserList extends Component{
 				);
 			});
 		}
-
+		var totalRecord = this.state.usersData["totalRecord"];
+		var totalPage = this.state.usersData["totalPage"];
+		console.log("Page" + totalPage + "Record" + totalRecord);
 		return(
 			<div>
 				{list}

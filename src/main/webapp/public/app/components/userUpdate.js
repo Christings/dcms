@@ -33,7 +33,7 @@ class UserUpdate extends Component{
 		$(document).ready(function(){
 			$("#form").submit(function(){
 				var userName = $("#userName").val();
-				var account = $("#account").val();
+				var realName = $("#realName").val();
 				var password = $("#password").val();
 				var identificationNo = $("#identificationNo").val();
 				var mobile = $("#mobile").val();
@@ -45,7 +45,7 @@ class UserUpdate extends Component{
 					$("#alert_1").text("请输入用户名");
 					return false;
 				};
-				if (account == ""){
+				if (realName == ""){
 					$("#alert_2").text("请输入用户帐号");
 					return false;
 				}
@@ -55,7 +55,7 @@ class UserUpdate extends Component{
 				}
 				var userInfo = [];
 				userInfo['userName'] = userName;
-				userInfo['account'] = account;
+				userInfo['realName'] = realName;
 				userInfo['password'] = password;
 				userInfo['identificationNo'] = identificationNo;
 				userInfo['mobile'] = mobile;
@@ -68,12 +68,13 @@ class UserUpdate extends Component{
 					type:"post",
 					url: "user/updateUser",
 					dataType: 'json',
-					data: userInfo,
+					contentType: "application/json",
+					data: JSON.stringify(userInfo),
 					success: function(res){
 						if(res.status == "1"){
-							console.log("添加用户成功");
+							console.log("修改用户成功");
 						}else{
-							console.log("添加用户失败" + res.msg);
+							console.log("修改用户失败" + res.msg);
 						}
 					}
 				});
@@ -115,7 +116,7 @@ class UserUpdate extends Component{
 				</FormGroup>
 				<FormGroup >
 					<ControlLabel>用户帐号</ControlLabel>
-					<FormControl id="account" type="text" value={this.state.userData["account"]} placeholder="account"/>
+					<FormControl id="realName" type="text" value={this.state.userData["realName"]} placeholder="realName"/>
 					<span id="alert_2"></span>
 				</FormGroup>
 				<FormGroup >

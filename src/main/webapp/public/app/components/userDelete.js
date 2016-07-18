@@ -27,8 +27,8 @@ class UserDelete extends Component{
 				$.ajax({
 					type:"post",
 					url: "user/updateUserDelete",
-					dataType: 'json',
-					data: userInfo,
+					contentType: "application/json",
+					data: JSON.stringify(userInfo),
 					success: function(res){
 						if(res.status == "1"){
 							console.log("删除用户成功");
@@ -44,16 +44,17 @@ class UserDelete extends Component{
 	}
 
 	render(){
+		var deleUserData = this.props.deleteUserData;
 		return(
 			<form id = "form">
 				<FormGroup >
 					<ControlLabel>删除用户信息</ControlLabel>
-					<ControlLabel>输入用户Id</ControlLabel>
-					<FormControl id="id" type="text" placeholder="id" />
+					<ControlLabel>{deleUserData["realName"]}</ControlLabel>
+					<FormControl id="id" type="text" defaultValue = {deleUserData["id"]} />
 					<span id="alert"></span>
 				</FormGroup>
 				<Button type="submit" onClick={this.handleClick}>
-					删除
+					确认删除
 				</Button>
 			</form>
 		);
