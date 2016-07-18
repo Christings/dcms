@@ -39,7 +39,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
 	@ResponseBody
-	public Object addUser(@RequestBody User user, HttpServletRequest request) {
+	public Object addUser(User user, HttpServletRequest request) {
 
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [user: {}]", JSON.toJSONString(user));
@@ -78,7 +78,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
 	@ResponseBody
-	public Object updateUser(@RequestBody User user, HttpServletRequest request) {
+	public Object updateUser(User user, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
 		}
@@ -117,7 +117,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateUserEnabled", method = RequestMethod.POST)
 	@ResponseBody
-	public Object updateUserEnabled(@RequestBody User user, HttpServletRequest request) {
+	public Object updateUserEnabled(User user, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
 		}
@@ -146,7 +146,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateUserDelete", method = RequestMethod.POST)
 	@ResponseBody
-	public Object updateUserDelete(@RequestBody User user, HttpServletRequest request) {
+	public Object updateUserDelete(User user, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
 		}
@@ -194,9 +194,9 @@ public class UserController extends BaseController {
 	 * @param request
      * @return
      */
-	@RequestMapping(value="/getDataGrid",method= { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value="/getDataGrid",method= {RequestMethod.POST, RequestMethod.GET})
 	@ResponseBody
-	public Object getDataGrid(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
+	public Object getDataGrid(Integer pageNum, Integer pageSize,
 							HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
@@ -244,7 +244,7 @@ public class UserController extends BaseController {
 	 * @author 田军兴
 	 * @date 2016年7月9日
 	 */
-	@RequestMapping(value = "modifyPassword", method = { RequestMethod.POST, RequestMethod.GET })
+	@RequestMapping(value = "modifyPassword", method = RequestMethod.POST)
 	@ResponseBody
 	public Object modifyPassword(@RequestBody User user, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {

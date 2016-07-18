@@ -44,7 +44,9 @@ public class OperLogServiceImpl implements OperLogService {
 			operLog.setId(UUIDGenerator.generatorRandomUUID());
 			operLog.setOperType(getOperType(operType));
 			operLog.setActionType(getActionSystem(operType, systemAction));
-			operLog.setOperProp(operProp);
+			if (!OperLog.operTypeEnum.select.equals(operType)) {// 如果是查询，不存储属性
+				operLog.setOperProp(operProp);
+			}
 			operLog.setOperUserId(user.getId());
 			operLog.setOperUserName(user.getUserName());
 			operLog.setOperDate(new Date());
@@ -67,7 +69,9 @@ public class OperLogServiceImpl implements OperLogService {
 			OperLog operLog = new OperLog();
 			User user = getCurrentUser();
 			operLog.setId(UUIDGenerator.generatorRandomUUID());
-			operLog.setOperType(getOperType(operType));
+			if (!OperLog.operTypeEnum.select.equals(operType)) {// 如果是查询，不存储属性
+				operLog.setOperProp(operProp);
+			}
 			operLog.setActionType(getActionSystem(operType, systemAction));
 			operLog.setOperType(operProp);
 			operLog.setOperUserId(user.getId());
@@ -93,7 +97,9 @@ public class OperLogServiceImpl implements OperLogService {
 			User user = getCurrentUser();
 			operLog.setId(UUIDGenerator.generatorRandomUUID());
 			operLog.setDeviceName(deviceName);
-			operLog.setOperType(getOperType(operType));
+			if (!OperLog.operTypeEnum.select.equals(operType)) {// 如果是查询，不存储属性
+				operLog.setOperProp(operProp);
+			}
 			operLog.setActionType(getActionBusiness(operType, busiAction));
 			operLog.setOperType(operProp);
 			operLog.setOperUserId(user.getId());
@@ -119,7 +125,9 @@ public class OperLogServiceImpl implements OperLogService {
 			User user = getCurrentUser();
 			operLog.setId(UUIDGenerator.generatorRandomUUID());
 			operLog.setDeviceName(deviceName);
-			operLog.setOperType(getOperType(operType));
+			if (!OperLog.operTypeEnum.select.equals(operType)) {// 如果是查询，不存储属性
+				operLog.setOperProp(operProp);
+			}
 			operLog.setActionType(getActionBusiness(operType, busiAction));
 			operLog.setOperType(operProp);
 			operLog.setOperUserId(user.getId());

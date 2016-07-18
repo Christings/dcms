@@ -29,12 +29,15 @@ public class SpringTest {
 
 	@Autowired
 	private UserService uservice;
+	@Autowired
+	private DataDictService ;
 	@Test
 	public void test1(){
 		Page<User> page=new Page<User>();
 		page.setPageNo(1);
 		page.setPageSize(10);
 		try {
+
 			uservice.getUserPage(page);
 			System.out.println(JSON.toJSONString(page));
 			System.out.println(JSON.toJSONString(uservice.getAllUsers()));
