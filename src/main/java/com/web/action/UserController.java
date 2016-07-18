@@ -194,9 +194,9 @@ public class UserController extends BaseController {
 	 * @param request
      * @return
      */
-	@RequestMapping(value="/getDataGrid",method= { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value="/getDataGrid",method= {RequestMethod.POST })
 	@ResponseBody
-	public Object getDataGrid(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
+	public Object getDataGrid(@RequestParam(value = "pageNum") Integer pageNum, @RequestParam(value = "pageSize") Integer pageSize,
 							HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);

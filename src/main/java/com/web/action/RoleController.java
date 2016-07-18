@@ -221,4 +221,40 @@ public class RoleController extends BaseController{
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,查询角色失败") ;
 		}
 	}
+
+	/**
+	 *
+	 * @Title: getRoleById
+	 * @Description: 根据ID查询Role
+	 * @param @param id
+	 * @param @param request
+	 * @param @return   参数
+	 * @return Object    返回类型
+	 * @throws
+	 * @author  童云鹏
+	 * @date 2016年7月7日 下午3:10:41
+	 */
+	@RequestMapping(value="/deleteById/{id}",method=RequestMethod.GET)
+	@ResponseBody
+	public Object deleteById(@PathVariable String id, HttpServletRequest request){
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("request param: [role: {}]", JSON.toJSONString(id));
+		}
+
+		if(StringUtils.isEmpty(id)){
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常不能为空");
+		}
+
+		try {
+
+			int result=roleService.deleteById(id);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("delete result: {}", result);
+			}
+			return AllResult.okJSON(result);
+		} catch (Exception e) {
+			LOGGER.error("delete Role fail:", e.getMessage());
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,删除角色失败") ;
+		}
+	}
 }
