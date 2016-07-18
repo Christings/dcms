@@ -113,27 +113,21 @@
  </select>
 
 <insert id="save" parameterType="Object">
-insert into t_s_role(
+insert into t_s_role,
 ID,
 rolecode,
-rolename,
-create_name,
-create_date
+rolename
 ) values(
 #{id},
 #{roleCode},
-#{roleName},
-#{createName},
-#{createDate}
+#{roleName}
 )
 </insert>
 
 <update id="update" parameterType="Object">
 update t_s_role set
 rolecode=#{roleCode},
-rolename=#{rolename},
-update_name=#{updateName},
-update_date=#{updateDate}
+rolename=#{rolename}
 where id=#{id}
 </update>
 

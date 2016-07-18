@@ -3,6 +3,7 @@ package com.web.action;
 import com.alibaba.fastjson.JSON;
 import com.web.core.action.BaseController;
 import com.web.entity.MenuRole;
+import com.web.entity.OperLog;
 import com.web.service.MenuRoleService;
 import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
@@ -58,6 +59,11 @@ public class MenuRoleController extends BaseController {
 			menuRole.setId(UUIDGenerator.generatorRandomUUID());
 			int result = menuRoleService.save(menuRole);
 
+			if(result > 0){
+				operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menuRole,
+						JSON.toJSONString(menuRole));
+			}
+
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("save menuRole result: {}", result);
 			}
@@ -98,6 +104,9 @@ public class MenuRoleController extends BaseController {
 		try {
 			menuRoleService.batchRoleMenu(roleId,menuIdArr);
 
+			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menuRole,
+					"角色ID："+roleId+",菜单IDs:["+menuIdArr+"]");
+
 			return AllResult.ok();
 		} catch (Exception e) {
 			LOGGER.error("batchMenus save object error. : {}", e);
@@ -134,6 +143,9 @@ public class MenuRoleController extends BaseController {
 		try {
 			menuRoleService.batchMenuRole(menuId,reloIdArr);
 
+			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menuRole,
+					"菜单ID："+menuId+",角色IDs:["+reloIdArr+"]");
+
 			return AllResult.okJSON("保存成功");
 		} catch (Exception e) {
 			LOGGER.error("batchRoles save object error. : {}", e);
@@ -152,15 +164,29 @@ public class MenuRoleController extends BaseController {
 	@ResponseBody
 	public Object getRoleId(String key,HttpServletRequest request) {
 		try {
+			if(StringUtils.isEmpty(key)){
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
+			}
+
 			List<MenuRole> menuRoleList = menuRoleService.getRoleMenu(key);
+
+			if(null == menuRoleList || menuRoleList.size() == 0){
+				return AllResult.build(1, "未查询到相关数据");
+			}
 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("menuRoleList result: {}", JSON.toJSONString(menuRoleList));
 			}
 
+			// 增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
+
 			return AllResult.okJSON(menuRoleList);
 		} catch (Exception e) {
 			LOGGER.error("menuRole object error. getMenuRoleList ", e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole, null,
+					OperLog.logLevelEnum.error);
+
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取角色菜单时失败");
@@ -176,15 +202,28 @@ public class MenuRoleController extends BaseController {
 	@ResponseBody
 	public Object getMenuId(String key,HttpServletRequest request) {
 		try {
+			if(StringUtils.isEmpty(key)){
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单ID不能为空");
+			}
+
 			List<MenuRole> menuRoleList = menuRoleService.getMenuRole(key);
+
+			if(null == menuRoleList || menuRoleList.size() == 0){
+				return AllResult.build(1, "未查询到相关数据");
+			}
 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("menuRoleList result: {}", JSON.toJSONString(menuRoleList));
 			}
 
+			// 增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
+
 			return AllResult.okJSON(menuRoleList);
 		} catch (Exception e) {
 			LOGGER.error("menuRole object error. getMenuRoleList ", e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole, null,
+					OperLog.logLevelEnum.error);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取菜单角色时失败");
@@ -202,13 +241,22 @@ public class MenuRoleController extends BaseController {
 		try {
 			List<MenuRole> menuRoleList = menuRoleService.getAll();
 
+			if(null == menuRoleList || menuRoleList.size() == 0){
+				return AllResult.build(1, "未查询到相关数据");
+			}
+
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("menuRoleList result: {}", JSON.toJSONString(menuRoleList));
 			}
 
+			// 增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
+
 			return AllResult.okJSON(menuRoleList);
 		} catch (Exception e) {
 			LOGGER.error("menuRole object error. getAll ", e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole, null,
+					OperLog.logLevelEnum.error);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取所有角色菜单失败");

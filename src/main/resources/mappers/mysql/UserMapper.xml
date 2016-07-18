@@ -228,12 +228,11 @@
 	</insert>
 	<update id="update" flushCache="true" parameterType="com.web.entity.User">
 		UPDATE
-		t_s_user SET
+		t_s_user
+		<set>
 		user_name=#{userName},
 		real_name=#{realName},
 		password=#{password},
-		update_Name=#{updateName},
-		update_date=#{updateDate},
 		<choose>
 		<when test="identificationNo !=null and identificationNo !=''">
 		identificationNo=#{identificationNo},
@@ -282,6 +281,7 @@
 		superAdmin=0
 		</otherwise>
 		</choose>
+		</set>
 		WHERE ID=#{id}
 	</update>
 

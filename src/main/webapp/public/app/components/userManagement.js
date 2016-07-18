@@ -31,9 +31,11 @@ class UserManage extends Component{
 		this.userDeleteClose = this.userDeleteClose.bind(this);
 	}
 	loadUserMsg(){
-		var getUserData = {pageNum: "1", pageSize: "10"}
+		//var getUserData = {pageNum: "1", pageSize: "10"}
+		var getUserData = {page: "1", count: "10"}
 		$.ajax({
-			url: "user/getDataGrid",
+			//url: "user/getDataGrid",
+			url: "menu/scroll",
 			dataType: "json",
 			contentType: "application/json",
 			data: JSON.stringify(getUserData),
@@ -82,6 +84,7 @@ class UserManage extends Component{
 	}
 	render(){
 		var userMsg = this.state.userData;
+		
 		var arr = [];
 		for(var j = 0; j < userMsg.length; j++)
 		{

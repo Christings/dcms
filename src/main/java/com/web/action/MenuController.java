@@ -6,6 +6,7 @@ import com.web.bean.MenuTree;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.Menu;
+import com.web.entity.OperLog;
 import com.web.example.MenuExample;
 import com.web.service.MenuService;
 import com.web.util.AllResult;
@@ -65,12 +66,12 @@ public class MenuController extends BaseController {
 		}
 
 		try {
-//			menu.setCreateName(WebUtils.getUser(request).getUserName());
-//			menu.setCreateDate(new Date());
-//			menu.setUpdateDate(menu.getCreateDate());
 			menu.setId(UUIDGenerator.generatorRandomUUID());
 			int result = menuService.save(menu);
 
+			// 增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menu,
+					JSON.toJSONString(menu));
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("save result: {}", result);
 			}
@@ -105,11 +106,23 @@ public class MenuController extends BaseController {
 		}
 
 		try {
+			Menu menu = menuService.getById(key);
+			if(null == menu){
+				return AllResult.build(1, "菜单不存在");
+			}
+
 			List<Menu> menuList = menuService.getByParentId(key);
 			if (null != menuList && !menuList.isEmpty()) {
 				return AllResult.build(0, "存在子菜单不允许删除");
 			}
+
 			int result = menuService.deleteById(key);
+
+			if(result > 0){
+				// 增加日志
+				operLogService.addSystemLog(OperLog.operTypeEnum.delete, OperLog.actionSystemEnum.menu,
+						JSON.toJSONString(menu));
+			}
 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("delete result: {}", result);
@@ -118,6 +131,8 @@ public class MenuController extends BaseController {
 			return AllResult.ok();
 		} catch (Exception e) {
 			LOGGER.error("delete menu object error. : {}", key, e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.delete, OperLog.actionSystemEnum.menu, null,
+					OperLog.logLevelEnum.error);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,删除菜单失败");
@@ -148,9 +163,13 @@ public class MenuController extends BaseController {
 		}
 
 		try {
-//			menu.setUpdateName(WebUtils.getUser(request).getUserName());
-//			menu.setUpdateDate(new Date());
 			int result = menuService.updateById(menu);
+
+			if(result > 0){
+				// 增加日志
+				operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.menu,
+						JSON.toJSONString(menu));
+			}
 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("update result: {}, after update menu: {}", result, JSON.toJSONString(menu));
@@ -162,6 +181,8 @@ public class MenuController extends BaseController {
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("update menu object error. : menu: {}", JSON.toJSONString(menu), e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.menu, null,
+					OperLog.logLevelEnum.error);
 		}
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,更新菜单信息失败");
 	}
@@ -187,16 +208,23 @@ public class MenuController extends BaseController {
 		try {
 			Menu menu = menuService.getById(key);
 
+			if(null == menu){
+				return AllResult.build(1, "菜单不存在");
+			}
+
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu, "查询条件key:"+key);
+
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("menu result: {}", menu);
 			}
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
-
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("menu object error. id:{}", key, e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu, null,
+					OperLog.logLevelEnum.error);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取菜单信息失败");
@@ -219,6 +247,10 @@ public class MenuController extends BaseController {
 		try {
 			List<Menu> menuList = menuService.getByParentId(key);
 
+			if(null == menuList || menuList.size() == 0){
+				return AllResult.build(1, "未获取到菜单");
+			}
+
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
 			}
@@ -226,9 +258,14 @@ public class MenuController extends BaseController {
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
+			// 增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr);
+
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("menus object error. id:{}", key, e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu, null,
+					OperLog.logLevelEnum.error);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取菜单信息失败");
@@ -250,12 +287,21 @@ public class MenuController extends BaseController {
 				LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
 			}
 
+			if(null == menuList || menuList.size() == 0){
+				return AllResult.build(1, "未获取到菜单");
+			}
+
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
+
+			// 增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("menus object error. getAll ", e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu, null,
+					OperLog.logLevelEnum.error);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取所有菜单时失败");
@@ -278,6 +324,10 @@ public class MenuController extends BaseController {
 			// 根据条件查询某一级菜单（空时查询一级菜单；不等与空时查询该菜单下的所有子菜单）
 			List<Menu> menuList = menuService.getByParentId(key);
 
+			if(null == menuList || menuList.size() == 0){
+				return AllResult.build(1, "未获取到菜单");
+			}
+
 			// 查询
 			List<MenuTree> menuTreeList = treeMenu(menuList);
 
@@ -288,9 +338,14 @@ public class MenuController extends BaseController {
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuTreeList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
+			// 增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr);
+
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("menus object error. id:{}", key, e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu, null,
+					OperLog.logLevelEnum.error);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取菜单信息失败");
@@ -328,10 +383,15 @@ public class MenuController extends BaseController {
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
+			// 增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr);
+
 			return AllResult.okJSON(JSON.parse(jsonStr));
 
 		} catch (Exception e) {
 			LOGGER.error("get scroll data error. page: {}, count: {}", pageNum, pageSize, e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu, null,
+					OperLog.logLevelEnum.error);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
