@@ -8,10 +8,12 @@ import { Router, Route, Link, History, hashHistory } from 'react-router'
 import MenuAdd from '../components/menuAdd'
 import MenuDelete from '../components/menuDelete'
 import MenuUpdate from '../components/menuUpdate'
+import MenuManage from '../components/menuManagement'
 import UserAdd from '../components/userAdd'
 import UserUpdate from '../components/userUpdate'
 import UserDelete from '../components/userDelete'
 import UserList from '../components/userList'
+import UserManage from '../components/userManagement'
 import IndexPage from './indexFrame'
 class RoutesComponent extends Component{
     constructor(...args){
@@ -60,6 +62,8 @@ class RoutesComponent extends Component{
                     <Route path="ff80bc76b3c54d0f8da29764a0edf69c" component={UserUpdate} />
                     <Route path="90249f6b08a0424f869f11b3abb4cc2d" component={UserDelete} />
                     <Route path="3531420becef4ed193f019029aaf1093" component={UserList} />
+                    <Route path="06b77c17ee0e4d15a0167e3db96059ee" component={UserManage} />
+                    <Route path="a08005aca60943e0a76b4addcfb04498" component={MenuManage} />
                 </Route>
             </Router>
         );
