@@ -39,7 +39,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
 	@ResponseBody
-	public Object addUser(@RequestBody User user, HttpServletRequest request) {
+	public Object addUser(User user, HttpServletRequest request) {
 
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [user: {}]", JSON.toJSONString(user));
@@ -78,7 +78,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
 	@ResponseBody
-	public Object updateUser(@RequestBody User user, HttpServletRequest request) {
+	public Object updateUser(User user, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
 		}
@@ -117,7 +117,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateUserEnabled", method = RequestMethod.POST)
 	@ResponseBody
-	public Object updateUserEnabled(@RequestBody User user, HttpServletRequest request) {
+	public Object updateUserEnabled(User user, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
 		}
@@ -146,7 +146,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateUserDelete", method = RequestMethod.POST)
 	@ResponseBody
-	public Object updateUserDelete(@RequestBody User user, HttpServletRequest request) {
+	public Object updateUserDelete(User user, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(user));
 		}

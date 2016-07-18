@@ -42,7 +42,7 @@ public class RoleController extends BaseController{
 	 */
 	@RequestMapping(value="/save",method=RequestMethod.POST)
 	@ResponseBody
-	public Object save(@RequestBody Role role, HttpServletRequest request){
+	public Object save(Role role, HttpServletRequest request){
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [role: {}]", JSON.toJSONString(role));
 		}
@@ -81,7 +81,7 @@ public class RoleController extends BaseController{
 	 */
 	@RequestMapping(value="/update",method=RequestMethod.POST)
 	@ResponseBody
-	public Object update(@RequestBody Role role, HttpServletRequest request){
+	public Object update(Role role, HttpServletRequest request){
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [role: {}]", JSON.toJSONString(role));
 		}
