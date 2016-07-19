@@ -49,6 +49,7 @@ class MenuManage extends Component{
 
 	menuUpdate(e){
 		var data = e.target.value;
+		console.log("data"+data);
 		this.setState( {
 			updateMenuData: data,
 			showMenuUpdate : true
@@ -71,7 +72,9 @@ class MenuManage extends Component{
 	menuDeleteClose(){
 		this.setState({ showMenuDelete: false });
 	}
-
+	componentWillMount(){
+		console.log("what");
+	}
 	componentDidMount(){
 		this.loadMenuMsg();
 		console.log("biangbiang");
@@ -113,6 +116,11 @@ class MenuManage extends Component{
 				</tr>
 			);
 		});
+		// console.log();
+		console.log("state-update:"+this.state.updateMenuData);
+		console.log("open-update:"+this.state.showMenuUpdate);
+		var menuUpdateElement = (<MenuUpdate updateMenuData={this.state.updateMenuData} />);
+		var menuDeleteElement = (<MenuDelete deleteMenuData={this.state.deleteMenuData} />);
 		return(
 			<div>
 				<Col sm={10}>
@@ -154,7 +162,7 @@ class MenuManage extends Component{
 						<Modal.Title>菜单编辑</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<MenuUpdate updateMenuData={this.state.updateMenuData} />
+						{menuUpdateElement}
 					</Modal.Body>
 				</Modal>
 				<Modal show = {this.state.showMenuDelete} onHide={this.menuDeleteClose}>
@@ -162,7 +170,7 @@ class MenuManage extends Component{
 						<Modal.Title>菜单删除</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<MenuDelete deleteMenuData={this.state.deleteMenuData} />
+						{menuDeleteElement}
 					</Modal.Body>
 				</Modal>
 				</Col>

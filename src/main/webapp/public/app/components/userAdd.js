@@ -52,6 +52,7 @@ class UserAdd extends Component{
 					type:"post",
 					url: "user/addUser",
 					dataType: 'json',
+					// data: userInfo,
 					contentType: "application/json",
 					data: JSON.stringify(userInfo),
 					success: function(res){

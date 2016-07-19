@@ -32,22 +32,42 @@ class UserManage extends Component{
 	}
 	loadUserMsg(){
 		//var getUserData = {pageNum: "1", pageSize: "10"}
-		var getUserData = {page: "1", count: "10"}
+		var getUserData = {pageNum: "1", pageSize: "10"}
+		// var getUserData = {page: "1", count: "10"}
 		$.ajax({
 			//url: "user/getDataGrid",
-			url: "menu/scroll",
+			url: "user/getDataGrid",
+			// url: "menu/datagrid",
 			dataType: "json",
-			contentType: "application/json",
-			data: JSON.stringify(getUserData),
-			type: "post"
-		}).done((jsonData)=>{
-			const D = jsonData["data"]["list"];
-			this.setState({
-				userData : D
-			});
-		}).fail((err)=>{
-
+			//contentType: "application/json",
+			// contentType: "application/x-www-form-urlencoded",
+			// data: JSON.stringify(getUserData),
+			data : getUserData,
+			type: "get",
+			success: function(res){
+				if(res.status == "1"){
+					console.log("binggo");
+					console.log(res["data"]);
+					console.log(res["data"].records);
+					console.log(res["data"].records[0]);
+					this.setState({
+						userData: res["data"]
+					});
+				}else{
+					console.log("失败");
+				}
+			}
 		});
+		// .done((jsonData)=>{
+		// 	console.log("jsonData"+jsonData);
+		// 	const D = jsonData.data;
+		// 	console.log("D"+D);
+		// 	this.setState({
+		// 		userData : D
+		// 	});
+		// }).fail((err)=>{
+		// 	console.log(err);
+		// });
 	}
 	userAdd(){
 		this.setState( {showUserAdd : true});
@@ -77,14 +97,45 @@ class UserManage extends Component{
 	userDeleteClose(){
 		this.setState({ showUserDelete: false });
 	}
-
+	componentWillMount(){
+		console.log("what");
+		this.loadUserMsg();
+	}
 	componentDidMount(){
 		this.loadUserMsg();
 		console.log("biangbiang");
 	}
 	render(){
-		var userMsg = this.state.userData;
-		
+		var getUserData = {pageNum: "1", pageSize: "10"}
+		var userMsg;
+		// var getUserData = {page: "1", count: "10"}
+		// $.ajax({
+		// 	//url: "user/getDataGrid",
+		// 	url: "user/getDataGrid",
+		// 	// url: "menu/datagrid",
+		// 	dataType: "json",
+		// 	//contentType: "application/json",
+		// 	// contentType: "application/x-www-form-urlencoded",
+		// 	// data: JSON.stringify(getUserData),
+		// 	data : getUserData,
+		// 	type: "get",
+		// 	success: function(res){
+		// 		if(res.status == "1"){
+		// 			console.log("binggo");
+		// 			console.log(res["data"]);
+		// 			console.log(res["data"].records);
+		// 			console.log(res["data"].records[0]);
+		// 			userMsg = res["data"].records;
+		// 		}else{
+		// 			console.log("失败");
+		// 		}
+		// 	}
+		// });
+
+		var user = this.state.userData;
+		console.log("user"+user);
+		var userMsg = user.records;
+		console.log("userMsg"+userMsg);
 		var arr = [];
 		for(var j = 0; j < userMsg.length; j++)
 		{
@@ -95,7 +146,6 @@ class UserManage extends Component{
 				enabled: userMsg[j]["enabled"],
 				id: userMsg[j]["id"]
 			});
-		
 		}
 		var that = this;
 		var num = 0;

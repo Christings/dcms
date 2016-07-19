@@ -10,7 +10,7 @@ class MenuUpdate extends Component{
 		this.handleClick = this.handleClick.bind(this);
 	}
 	handleClick(){
-		var updateId = this.props.updateMenuData;
+		var updateId = this.props.updateMenuData["id"];
 		$(document).ready(function(){
 			console.log(1);
 			$("#form").submit(function(){

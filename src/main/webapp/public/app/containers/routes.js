@@ -9,6 +9,8 @@ import MenuAdd from '../components/menuAdd'
 import MenuDelete from '../components/menuDelete'
 import MenuUpdate from '../components/menuUpdate'
 import MenuManage from '../components/menuManagement'
+import MenuGridManage from '../components/menuGridManage'
+
 import UserAdd from '../components/userAdd'
 import UserUpdate from '../components/userUpdate'
 import UserDelete from '../components/userDelete'
@@ -64,6 +66,7 @@ class RoutesComponent extends Component{
                     <Route path="3531420becef4ed193f019029aaf1093" component={UserList} />
                     <Route path="06b77c17ee0e4d15a0167e3db96059ee" component={UserManage} />
                     <Route path="a08005aca60943e0a76b4addcfb04498" component={MenuManage} />
+                    <Route path="66fb474fe8ca475ab45cdd7a50de38e9" component={MenuGridManage} />
                 </Route>
             </Router>
         );
