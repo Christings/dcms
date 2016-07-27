@@ -2,10 +2,10 @@ import React,{ Component } from 'react'
 import { Pagination,Modal,Table,Navbar, Nav, NavItem, NavDropdown, Button, Image,Collapse,Tab,Row, Glyphicon, ListGroup, ListGroupItem, Col, OverlayTrigger, Popover } from "react-bootstrap"
 import $ from 'jquery'
 
-import MenuAdd from './menuAdd'
-import MenuUpdate from './menuUpdate'
-import MenuDelete from './menuDelete'
-class MenuGridManage extends Component{
+import UserAdd from './userAdd'
+import UserUpdate from './userUpdate'
+import UserDelete from './userDelete'
+class UserGridManage extends Component{
 
 	constructor(...args){
 		super(...args);
@@ -38,10 +38,10 @@ class MenuGridManage extends Component{
 	loadMenuMsg(pageNum,pageSize){
 		var getMenuData = {pageNum: pageNum, pageSize: pageSize};
 		$.ajax({
-			url: "menu/datagrid",
+			url: "user/getDataGrid",
 			dataType: "json",
 			data: getMenuData,
-			type: "post"
+			type: "get"
 		}).done((jsonData)=>{
 			const D = jsonData["data"]["records"];
 			const totalPage = jsonData["data"]["pageCount"];
@@ -70,7 +70,7 @@ class MenuGridManage extends Component{
 		this.loadMenuMsg(this.state.pageNum,eventKey);
 	}
 	menuAdd(){
-		this.setState({showMenuAdd : true});
+		this.setState( {showMenuAdd : true});
 	}
 
 	menuUpdate(e){
@@ -111,18 +111,22 @@ class MenuGridManage extends Component{
 	render(){
 		var menuMsg = this.state.menuData;
 		console.log("gridMsg:"+menuMsg);
+		console.log("totalPage"+this.state.totalPage);
 		var arr = [];
 		for(var j = 0; j < menuMsg.length; j++)
 		{
 			arr.push({
-				name: menuMsg[j]["name"],
-				iconId: menuMsg[j]["iconId"],
-				rank: menuMsg[j]["rank"],
+				realName: menuMsg[j]["realName"],
+				userName: menuMsg[j]["userName"],
+				password: menuMsg[j]["password"],
+				identificationNo: menuMsg[j]["identificationNo"],
 				id: menuMsg[j]["id"],
-				type: menuMsg[j]["type"],
-				parentId : menuMsg[j]["parentId"],
-				url: menuMsg[j]["url"],
-				level : menuMsg[j]["level"]
+				enabled: menuMsg[j]["enabled"],
+				superAdmin : menuMsg[j]["superAdmin"],
+				deleted: menuMsg[j]["deleted"],
+				sex: menuMsg[j]["sex"],
+				mobile: menuMsg[j]["mobile"],
+				remark: menuMsg[j]["remark"]
 			});
 		
 		}
@@ -130,15 +134,37 @@ class MenuGridManage extends Component{
 		var num = 0;
 		var content = arr.map(function(menu){
 			num++;
+			var userRole;
+			var userState;
+			switch(menu["superAdmin"]){
+				case 0:
+					userRole = "普通用户" ;
+					break;
+				case 1:
+					userRole = "管理员";
+					break;
+				default :
+					userRole = "普通用户";
+					break;
+			}
+			switch(menu["enabled"]){
+				case 0:
+					userState = "未激活";
+					break;
+				case 1:
+					userState = "激活";
+					break;
+				default:
+					userState = "未激活";
+					break;
+			}
 			return(
 				<tr>
 					<td>{num}</td>
-					<td>{menu["name"]}</td>
-					<td>{menu["iconId"]}</td>
-					<td>{menu["type"]}</td>
-					<td>{menu["id"]}</td>
-					<td>{menu["level"]}</td>
-					<td>{menu["rank"]}</td>
+					<td>{menu["userName"]}</td>
+					<td>{menu["realName"]}</td>
+					<td>{userRole}</td>
+					<td>{userState}</td>
 					<td>
 						<label value={menu} onClick={that.menuUpdate}>编辑</label>|
 						<label value={menu} onClick={that.menuDelete}>删除</label>
@@ -149,40 +175,36 @@ class MenuGridManage extends Component{
 		// console.log();
 		console.log("state-update:"+this.state.updateMenuData);
 		console.log("open-update:"+this.state.showMenuUpdate);
-		var menuUpdateElement = (<MenuUpdate updateMenuData={this.state.updateMenuData} />);
-		var menuDeleteElement = (<MenuDelete deleteMenuData={this.state.deleteMenuData} />);
+		var userUpdateElement = (<UserUpdate updateUserData={this.state.updateMenuData} />);
+		var userDeleteElement = (<UserDelete deleteUserData={this.state.deleteMenuData} />);
 		return(
 			<div>
 				<Col sm={10}>
 				<ListGroup style={{padding: '0',margin: '0'}}>
 					<ListGroupItem>
-						菜单管理
+						用户管理
 					</ListGroupItem>
 				</ListGroup>
 				<Nav bsStyle="pills" activeKey={1} onSelect={this.menuAdd}>
-				    <NavItem eventKey={1} onClick={this.menuAdd}><Glyphicon  glyph="plus" />菜单录入</NavItem>
+				    <NavItem eventKey={1} onClick={this.menuAdd}><Glyphicon  glyph="plus" />添加用户</NavItem>
 				</Nav>
-				<div style={{position:'relative',height:'400',overflow:'scroll'}}>
-					<Table  striped bordered condensed hover>
-						<thead>
-							<tr>
-								<th></th>
-								<th>菜单名称</th>
-								<th>图标</th>
-								<th>菜单类型</th>
-								<th>菜单地址</th>
-								<th>菜单等级</th>
-								<th>菜单顺序</th>
-								<th>操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							{content}
-						</tbody>
-					</Table>
-				</div>
-				<div style={{position:'relative',bottom: '0'}}>
-					<Col >
+				<Table striped bordered condensed hover>
+					<thead>
+						<tr>
+							<th></th>
+							<th>用户名称</th>
+							<th>真实姓名</th>
+							<th>角色</th>
+							<th>状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{content}
+					</tbody>
+				</Table>
+				<div>
+					<Col sm={2}>
 						<label>每页显示
 							<select onChange={this.handleSelectPageSize}>
 								<option selected = "selected" value = {this.state.pageSize}>{this.state.pageSize}</option>
@@ -193,32 +215,32 @@ class MenuGridManage extends Component{
 							</select>行
 						</label>
 					</Col>
-					<Col >
+					<Col sm={8}>
 						<Pagination prev next first last boundaryLinks items={this.state.totalPage} maxButtons={this.state.maxButton} activePage={this.state.activePage} onSelect={this.handleSelect}/>
 					</Col>
 				</div>
 				<Modal show = {this.state.showMenuAdd} onHide={this.menuAddClose}>
 					<Modal.Header closeButton>
-						<Modal.Title>添加用户</Modal.Title>
+						<Modal.Title>菜单录入</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<MenuAdd />
+						<UserAdd />
 					</Modal.Body>
 				</Modal>
 				<Modal show = {this.state.showMenuUpdate} onHide={this.menuUpdateClose}>
 					<Modal.Header closeButton>
-						<Modal.Title>用户编辑</Modal.Title>
+						<Modal.Title>菜单编辑</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						{menuUpdateElement}
+						{userUpdateElement}
 					</Modal.Body>
 				</Modal>
 				<Modal show = {this.state.showMenuDelete} onHide={this.menuDeleteClose}>
 					<Modal.Header closeButton>
-						<Modal.Title>用户删除</Modal.Title>
+						<Modal.Title>菜单删除</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						{menuDeleteElement}
+						{userDeleteElement}
 					</Modal.Body>
 				</Modal>
 
@@ -229,7 +251,7 @@ class MenuGridManage extends Component{
 
 }
 
-export default MenuGridManage;
+export default UserGridManage;
 
 
 

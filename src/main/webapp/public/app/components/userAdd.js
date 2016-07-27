@@ -30,7 +30,7 @@ class UserAdd extends Component{
 					return false;
 				};
 				if (realName == ""){
-					$("#alert_2").text("请输入用户帐号");
+					$("#alert_2").text("请输入真实姓名");
 					return false;
 				}
 				if (password == ""){
@@ -81,7 +81,7 @@ class UserAdd extends Component{
 					<span id="alert_1"></span>
 				</FormGroup>
 				<FormGroup >
-					<ControlLabel>用户帐号</ControlLabel>
+					<ControlLabel>真实姓名</ControlLabel>
 					<FormControl id="realName" type="text" placeholder="realName"/>
 					<span id="alert_2"></span>
 				</FormGroup>
@@ -101,7 +101,7 @@ class UserAdd extends Component{
 				<FormGroup >
 					<ControlLabel>性别</ControlLabel>
 					<select id="sex">
-						<option value = {y}>男</option>
+						<option defaultValue = {y}>男</option>
 						<option value = {n}>女</option>
 					</select>
 				</FormGroup>
@@ -109,8 +109,8 @@ class UserAdd extends Component{
 				<FormGroup >
 					<ControlLabel>是否启用</ControlLabel>
 					<select id="enabled">
+					<option defaultValue = {n}>否</option>
 						<option value = {y}>是</option>
-						<option selected = "selected" value = {n}>否</option>
 					</select>
 				</FormGroup>
 				<FormGroup >
@@ -120,7 +120,10 @@ class UserAdd extends Component{
 				
 				<FormGroup>
 					<ControlLabel>超级管理员</ControlLabel>
-					<FormControl id="superAdmin" type="number" placeholder="0or1"/>
+					<select id="superAdmin">
+						<option defaultValue = {n}>否</option>
+						<option value = {y}>是</option>
+					</select>
 				</FormGroup>
 				<Button type="submit" onClick={this.handleClick}>
 					提交

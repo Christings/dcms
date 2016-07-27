@@ -48,7 +48,7 @@ class MenuDelete extends Component{
 			<form id = "form">
 				<FormGroup>
 					<ControlLabel>删除菜单{this.props.deleteMenuData["name"]}</ControlLabel>
-					<FormControl id="id" type="text" defaultValue={this.props.deleteMenuData["id"]}/>
+					<FormControl id="id" type="text" value={this.props.deleteMenuData["id"]}/>
 					<span id="alert"></span>
 				</FormGroup>
 				<Button type="submit" onClick={this.handleClick}>
