@@ -33,7 +33,7 @@ class IndexPage extends Component{
 			opens: [],
 			left_cross: 2,
 			right_cross: 10,
-			wellStyles: {height:"1500",margin: "0",padding: "0", textAlign:'left'},
+			wellStyles: {margin: "0",padding: "0", textAlign:'left'},
 			menuData: "",
 			menuTree: ""
 		};
@@ -50,7 +50,7 @@ class IndexPage extends Component{
 				open: false,
 				left_cross: 1,
 				right_cross: 11
-				// wellStyles: {height:"1500",width:"60",margin: "0",padding: "0", textAlign:'left'}
+				//wellStyles: {height:"1500",width:"60",margin: "0",padding: "0", textAlign:'left'}
 			});
 		}else{
 			this.setState({
@@ -137,7 +137,8 @@ class IndexPage extends Component{
 		var menuTree = this.state.menuTree;
 		console.log(menuTree);
 
-		const styles = { margin:'0',padding:'0'};
+		const styles = { margin:'0',padding:'0',};
+		const contentStyles = { margin: '0', padding: '0',height: "500"};
 		// const wellStyles = {height:"1500",minWidth:"200",margin: "0",padding: "0", textAlign:'left'};
 		const secondListStyles = {margin: "auto auto auto 20px"};
 		// const thirdListStyles = {margin: "auto auto auto 40px"};
@@ -410,7 +411,7 @@ class IndexPage extends Component{
             <Col style={styles} sm={this.state.left_cross}>
             	<div className="well" style={this.state.wellStyles}>
 					<ListGroup style={constantStyles}>
-						<ListGroupItem >
+						<ListGroupItem>
 								<Glyphicon style={{textAlign:'left'}} onClick={this.handleClick} glyph="align-justify"/>
 						</ListGroupItem>
 					</ListGroup>
@@ -597,7 +598,7 @@ class IndexPage extends Component{
 					</ListGroup>
 				</div>
             </Col>
-            <Col style={styles} sm={this.state.right_cross}>
+            <Col style={contentStyles} sm={this.state.right_cross}>
             	{this.props.children}
             </Col>
             </div>
