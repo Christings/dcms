@@ -1,12 +1,90 @@
 <html>
-  <head>
+<head>
+	<meta charset="UTF-8">
     <title>dcms</title>
-    <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
-  </head>
-  <body>
-    <div id="app">
-    </div>
-    <script src="./dist/bundle.js"></script>
-  </body>
+    <link rel="stylesheet" href="./assets/css/style.css"> 
+    <script src="./assets/js/jquery.min.js"></script>
+    <script src="./assets/js/bootstrap.min.js"></script>
+    <script src="./assets/js/arrow.js"></script>
+</head>
+<body>
+	<div class="top-bar">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">3S DCIM数据中心基础设施可视化管理平台</a>
+				</div>
+			
+				<!-- Collect the nav links, forms, and other content for toggling -->
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      
+			      <ul class="nav navbar-nav navbar-right">
+			        <li><a href="#">Link</a></li>
+			        <li class="dropdown">
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+			          <ul class="dropdown-menu">
+			            <li><a href="#">Action</a></li>
+			            <li><a href="#">Another action</a></li>
+			            <li><a href="#">Something else here</a></li>
+			            <li role="separator" class="divider"></li>
+			            <li><a href="#">Separated link</a></li>
+			          </ul>
+			        </li>
+			      </ul>
+			    </div><!-- /.navbar-collapse -->
+			</div>
+		</nav>
+	<div>
+	<div class="well side-bar">
+		<ul class="list-group">
+			<li class="list-group-item">
+				<button type="button" class="btn btn-default" aria-label="Left Align">
+					<span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+				</button>
+			</li>
+			<li class="list-group-item">
+				<a href="#systemSetting" class="nav-header collapsed" data-toggle="collapse">
+		            <i class="glyphicon glyphicon-cog"></i>
+		            系统管理
+		               <span class="pull-right glyphicon glyphicon-chevron-toggle"></span>
+		        </a>
+		     </li>
+            <ul id="systemSetting" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                <li class="list-group-item"><a href="#"><i class="glyphicon glyphicon-user"></i>&nbsp;用户管理</a></li>
+                <li class="list-group-item"><a href="#"><i class="glyphicon glyphicon-th-list"></i>&nbsp;菜单管理</a></li>
+                <li class="list-group-item"><a href="#"><i class="glyphicon glyphicon-asterisk"></i>&nbsp;角色管理</a></li>
+                <li class="list-group-item"><a href="#"><i class="glyphicon glyphicon-edit"></i>&nbsp;修改密码</a></li>
+                <li class="list-group-item"><a href="#"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;日志查看</a></li>
+            </ul>
+           
+			<li class="list-group-item">
+				<i class="glyphicon glyphicon-align-justify" aria-hidden="true">
+				</i>
+				<span class="title">
+					菜单管理
+				</span>
+				<span class="arrow glyphicon glyphicon-menu-left">
+				</span>
+			</li>
+			<li class="list-group-item">用户管理</li>
+			<li class="list-group-item">角色管理</li>
+			<li class="list-group-item">项目管理</li>
+			<li class="list-group-item">任务管理</li>
+		</ul>
+		<!--<nav class="navbar navbar-default">
+			<ul class="nav nav-tabs nav-stacked">
+				<li >
+					<button type="button" class="btn btn-default" aria-label="Left Align">
+						<span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
+					</button>
+				</li>
+				<li><a href="#">菜单管理</a></li>
+				<li><a href="#">用户管理</a></li> 
+				<li><a href="#">角色管理</a></li> 
+				<li><a href="#">项目管理</a></li> 
+			</ul>
+		</nav>-->
+	</div>
+</body>
 </html>
