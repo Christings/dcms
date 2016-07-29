@@ -1,0 +1,28 @@
+body {
+	 padding-top:50px;
+}
+div .well{
+	position: fixed;
+	height:100%;
+}
+div .side-bar{
+	padding: 0;
+	width:15%;
+}
+div .side-bar button{
+	padding: 0;
+}
+ul ul{
+	margin: 0;
+}
+div .side-bar .arrow{
+	float: right;
+}
+
+.nav-header.collapsed > span.glyphicon-chevron-toggle:before {
+    content: "\e114";
+}
+
+.nav-header > span.glyphicon-chevron-toggle:before {
+    content: "\e113";
+}
