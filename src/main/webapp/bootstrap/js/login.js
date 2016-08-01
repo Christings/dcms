@@ -34,7 +34,7 @@ function login(){
 		},
 		success:function(res){
 			if(res.status == "1"){
-				location.href = "index.html";
+				location.href = "index.html?"+username;
 			}
 			else{
 				$("#uconfirm").text("用户名或密码错误");

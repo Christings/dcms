@@ -1,0 +1,111 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+    <title>dcms</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
+    <script src="../bootstrap/js/jquery.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script src="../bootstrap/js/menuManage.js"></script>
+</head>
+<body>
+	<ul class="list-group" style="margin:0">
+		<li class="list-group-item">菜单管理</li>
+	</ul>
+	<div class="panel panel-default">
+		<div class="panel-heading" style="padding:0">
+			<ul class="nav nav-pills" style="margin: 0;padding:0">
+				<li role="presentation" class="active" data-toggle="modal" data-target="#menuadd">
+					<a href="">菜单录入</a>
+				</li>
+			</ul>
+		</div>
+		<!-- <ul class="nav nav-pills">
+			<li role="presentation" class="active" data-toggle="modal" data-target="#menuadd"><a href="">菜单录入</a></li>
+		</ul> -->
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th></th>
+					<th>菜单名称</th>
+					<th>图标</th>
+					<th>菜单类型</th>
+					<th>菜单地址</th>
+					<th>菜单等级</th>
+					<th>菜单顺序</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody id="menubody">
+				<tr>
+					<td>1</td>
+					<td>
+						<a href=".a" class="collapsed" data-toggle="collapse">资产管理<span class="pull-right glyphicon glyphicon-chevron-toggle"></span></a>
+					</td>
+					<td>b</td>
+					<td>b</td>
+					<td>b</td>
+					<td>b</td>
+					<td>b</td>
+					<td>b</td>
+				</tr>
+				<tbody id="a" class="collapse a">
+					<tr >
+						<td>2</td>
+						<td>
+							<a href=".b" class="collapsed" data-toggle="collapse">管理<span class="pull-right glyphicon glyphicon-chevron-toggle"></span></a>
+						</td>
+						<td>c</td>
+						<td>c</td>
+						<td>c</td>
+						<td>c</td>
+						<td>c</td>
+						<td>c</td>
+					</tr> 
+					<tbody id="b" class="collapse a b">
+						<tr>
+							<td>3</td>
+							<td>c</td>
+							<td>c</td>
+							<td>c</td>
+							<td>c</td>
+							<td>c</td>
+							<td>c</td>
+							<td>c</td>
+						</tr>
+					</tbody>
+				</tbody>
+				
+			</tbody>
+		</table>
+	</div>
+	<!-- 模态框（Modal） -->
+
+	<div class="modal fade" id="menuadd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	        <div class="modal-content">
+		        <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                  &times;
+		            </button>
+		            <h4 class="modal-title" id="myModalLabel">
+		                菜单录入
+		            </h4>
+		        </div>
+	        <div class="modal-body">
+	            
+	        </div>
+		        <div class="modal-footer">
+		            <button type="button" class="btn btn-default" 
+		               data-dismiss="modal">关闭
+		            </button>
+		            <button type="button" onclick="test()" class="btn btn-primary">
+		               提交更改
+		            </button>
+		            <label data-id="a" onclick="test(this)">good</label>
+		        </div>
+		    </div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+	<script src="../bootstrap/js/test.js"></script>
+</body>
+</html>
