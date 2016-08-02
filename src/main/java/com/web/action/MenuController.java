@@ -14,6 +14,7 @@ import com.web.util.UUIDGenerator;
 import com.web.util.fastjson.FastjsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -374,14 +375,26 @@ public class MenuController extends BaseController {
 
 		try {
 			MenuExample example = new MenuExample();
+			MenuExample.Criteria criteria = example.createCriteria();
+			criteria.andParentIdIsNull();
 
 			Page<Menu> queryResult = menuService.getScrollData(pageNum, pageSize, example);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("queryResult record count: {}", queryResult.getRecords().size());
 			}
 
+			if(null == queryResult.getRecords() || queryResult.getRecords().size() == 0){
+				return AllResult.build(1, "未获取到菜单");
+			}
+
+			// 查询
+			List<MenuTree> menuTreeList = treeMenu(queryResult.getRecords());
+			Page<MenuTree> treePage = new Page<>();
+			BeanUtils.copyProperties(queryResult,treePage);
+			treePage.setRecords(menuTreeList);
+
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(queryResult,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(treePage,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
 			// 增加日志
 			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr);
