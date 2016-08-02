@@ -57,7 +57,7 @@ function parseTreeJson(treeNodes){
 	var distance = arr[0]["level"]*20 - 20;
 	// console.log("distance::"+distance);
 	var left = "auto auto 0 "+ distance +"px";
-	var liStyle_level_1 = "margin: 0;"
+	var liStyle_level_1 = "margin: 0";
 	var liStyle = "margin: 0;padding: 0";
 	var ulStyle = "padding: 0;";
 	// var listStyles = {margin: left};
@@ -81,12 +81,11 @@ function parseTreeJson(treeNodes){
 						"<td>"+e["level"]+"</td>"+
 						"<td>"+e["rank"]+"</td>"+
 						"<td>"+
-							"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menuupdate\" data-value=\""+e+"\" onclick=\"menuUpdateInit(this)\">编辑</label>|"+
-							"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menudelete\" data-value=\""+e+"\" onclick=\"menuDeleteInit(this)\">删除</label>"+
+							"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menuupdate\" data-value=\""+e["id"]+"\" onclick=\"menuUpdateInit(this)\">编辑</label>|"+
+							"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menudelete\" data-value=\""+e["id"]+"\" onclick=\"menuDeleteInit(this)\">删除</label>"+
 						"</td>"+
 					"</tr>"+
 					childElement[temp]
-
 				);
 
 			}else{
@@ -100,8 +99,8 @@ function parseTreeJson(treeNodes){
 						"<td>"+e["level"]+"</td>"+
 						"<td>"+e["rank"]+"</td>"+
 						"<td>"+
-							"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menuupdate\" data-value=\""+e+"\" onclick=\"menuUpdateInit(this)\">编辑</label>|"+
-							"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menudelete\" data-value=\""+e+"\" onclick=\"menuDeleteInit(this)\">删除</label>"+
+							"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menuupdate\" data-value=\""+e["id"]+"\" onclick=\"menuUpdateInit(this)\">编辑</label>|"+
+							"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menudelete\" data-value=\""+e["id"]+"\" onclick=\"menuDeleteInit(this)\">删除</label>"+
 						"</td>"+
 					"</tr>"+
 					childElement[temp]
@@ -121,8 +120,8 @@ function parseTreeJson(treeNodes){
 						"<td>"+e["level"]+"</td>"+
 						"<td>"+e["rank"]+"</td>"+
 						"<td>"+
-						"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menuupdate\" data-value=\""+e+"\" onclick=\"menuUpdateInit(this)\">编辑</label>|"+
-							"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menudelete\" data-value=\""+e+"\" onclick=\"menuDeleteInit(this)\">删除</label>"+
+						"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menuupdate\" data-value=\""+e["id"]+"\" onclick=\"menuUpdateInit(this)\">编辑</label>|"+
+							"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menudelete\" data-value=\""+e["id"]+"\" onclick=\"menuDeleteInit(this)\">删除</label>"+
 						"</td>"+
 					"</tr>"
 				);
@@ -137,8 +136,8 @@ function parseTreeJson(treeNodes){
 						"<td>"+e["level"]+"</td>"+
 						"<td>"+e["rank"]+"</td>"+
 						"<td>"+
-						"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menuupdate\" data-value=\""+e+"\" onclick=\"menuUpdateInit(this)\">编辑</label>|"+
-							"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menudelete\" data-value=\""+e+"\" onclick=\"menuDeleteInit(this)\">删除</label>"+
+						"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menuupdate\" data-value=\""+e["id"]+"\" onclick=\"menuUpdateInit(this)\">编辑</label>|"+
+							"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#menudelete\" data-value=\""+e["id"]+"\" onclick=\"menuDeleteInit(this)\">删除</label>"+
 						"</td>"+
 					"</tr>"
 				);
