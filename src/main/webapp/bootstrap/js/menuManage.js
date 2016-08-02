@@ -56,7 +56,7 @@ function parseTreeJson(treeNodes){
 	}
 	var distance = arr[0]["level"]*20 - 20;
 	// console.log("distance::"+distance);
-	var left = "auto auto 0 "+ distance +"px";
+	var left = "margin:auto auto 0 "+ distance +"px";
 	var liStyle_level_1 = "margin: 0";
 	var liStyle = "margin: 0;padding: 0";
 	var ulStyle = "padding: 0;";
@@ -74,7 +74,7 @@ function parseTreeJson(treeNodes){
 				return(
 					"<tr class=\"collapse "+e["parentId"]+"\">"+
 						"<td></td>"+
-						"<td><a href=\"."+e["id"]+"\"class=\"collapsed\" data-toggle=\"collapse\">"+e["name"]+"<span class=\"pull-right glyphicon glyphicon-chevron-toggle\"></span></a></td>"+
+						"<td><a style=\""+ left +"\" href=\"."+e["id"]+"\"class=\"collapsed\" data-toggle=\"collapse\">"+e["name"]+"<span class=\"pull-right glyphicon glyphicon-chevron-toggle\"></span></a></td>"+
 						"<td>"+e["iconId"]+"</td>"+
 						"<td>"+e["type"]+"</td>"+
 						"<td>"+e["id"]+"</td>"+
@@ -92,7 +92,7 @@ function parseTreeJson(treeNodes){
 				return(
 					"<tr>"+
 						"<td></td>"+
-						"<td><a href=\"."+e["id"]+"\"class=\"collapsed\" data-toggle=\"collapse\">"+e["name"]+"<span class=\"pull-right glyphicon glyphicon-chevron-toggle\"></span></a></td>"+
+						"<td><a style=\""+ left +"\" href=\"."+e["id"]+"\"class=\"collapsed\" data-toggle=\"collapse\">"+e["name"]+"<span class=\"pull-right glyphicon glyphicon-chevron-toggle\"></span></a></td>"+
 						"<td>"+e["iconId"]+"</td>"+
 						"<td>"+e["type"]+"</td>"+
 						"<td>"+e["id"]+"</td>"+
@@ -113,7 +113,7 @@ function parseTreeJson(treeNodes){
 				return(
 					"<tr class=\"collapse "+e["parentId"]+"\">"+
 						"<td></td>"+
-						"<td><a href=\"."+e["id"]+"\">"+e["name"]+"</a></td>"+
+						"<td><a style=\""+ left +"\" href=\"."+e["id"]+"\">"+e["name"]+"</a></td>"+
 						"<td>"+e["iconId"]+"</td>"+
 						"<td>"+e["type"]+"</td>"+
 						"<td>"+e["id"]+"</td>"+
@@ -129,7 +129,7 @@ function parseTreeJson(treeNodes){
 				return(
 					"<tr>"+
 						"<td></td>"+
-						"<td><a href=\"."+e["id"]+"\">"+e["name"]+"</a></td>"+
+						"<td><a style=\""+ left +"\" href=\"."+e["id"]+"\">"+e["name"]+"</a></td>"+
 						"<td>"+e["iconId"]+"</td>"+
 						"<td>"+e["type"]+"</td>"+
 						"<td>"+e["id"]+"</td>"+

@@ -11,7 +11,7 @@
 	<ul class="list-group" style="margin:0">
 		<li class="list-group-item">菜单管理</li>
 	</ul>
-	<div class="panel panel-default">
+	<div  class="panel panel-default">
 		<div class="panel-heading" style="padding:0">
 			<ul class="nav nav-pills" style="margin: 0;padding:0">
 				<li role="presentation" class="active" data-toggle="modal" data-target="#menuadd">
@@ -35,31 +35,7 @@
 					<th>操作</th>
 				</tr>
 			</thead>
-			<tbody id="menubody">
-				<tr>
-					<td>1</td>
-					<td>
-						<a href="#a" class="collapsed" data-toggle="collapse">资产管理<span class="pull-right glyphicon glyphicon-chevron-toggle"></span></a>
-					</td>
-					<td>b</td>
-					<td>b</td>
-					<td>b</td>
-					<td>b</td>
-					<td>b</td>
-					<td>b</td>
-				</tr>
-				<div id="a" class="collapse">
-				<tr >
-					<td>2</td>
-					<td>c</td>
-					<td>c</td>
-					<td>c</td>
-					<td>c</td>
-					<td>c</td>
-					<td>c</td>
-					<td>c</td>
-				</tr>
-				</div>
+			<tbody style="position:relative;overflow: scroll;" id="menubody">
 			</tbody>
 		</table>
 	</div>
