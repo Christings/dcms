@@ -33,7 +33,7 @@ public class MenuTree {
 	private String updateName;
 
 	@JSONField(format = "yyyy-MM-dd")
-	private Date updateCreate;
+	private Date updateDate;
 
 	private String createName;
 
@@ -140,12 +140,12 @@ public class MenuTree {
 		this.updateName = updateName;
 	}
 
-	public Date getUpdateCreate() {
-		return updateCreate;
+	public Date getUpdateDate() {
+		return updateDate;
 	}
 
-	public void setUpdateCreate(Date updateCreate) {
-		this.updateCreate = updateCreate;
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public String getCreateName() {
