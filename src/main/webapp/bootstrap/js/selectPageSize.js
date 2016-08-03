@@ -1,47 +1,16 @@
 var menuTree;
 var elements;
-var pageCount;
-// function selectPage1(e){
-// 	var size = 10;
-// 	console.log("size:"+size);
-// 	var num = e.getAttribute("data-value");
-// 	var getMenuData = {pageNum: num, pageSize: size};
-// 	var htm_ele="";
-// 	var htm_final_ele="";
-// 	$.ajax({
-// 		// url: "menu/tree",
-// 		url: "menu/datagrid",
-// 		dataType: "json",
-// 		//data: "",
-// 		data: getMenuData,
-// 		type: "post"
-// 	}).done((jsonData)=>{
-// 		menuTree = jsonData["data"]["records"]
-// 		elements = parseTreeJson(menuTree);
-// 		for(var i=0,len=elements.length;i<len;i++){
-// 			htm_ele+=elements[i];
-// 		}
-// 		var articleId = function(){
-// 			var segments = htm_ele.split(",");
-// 			var length = segments.length - 1;
-// 			for(var i=0;i<=length;i++){
-// 				htm_final_ele += segments[i];
-// 			}
-// 		}
-// 		articleId();
-// 		console.log(htm_final_ele);
-// 		var index = document.getElementById("menubody");
-// 		index.innerHTML = htm_final_ele;
-// 	}).fail((err)=>{
+var num = 1; 
 
-// 	});
-// }
-
-function loadMenuBody(){
+function selectPageSize(){
+		// var obj = document.getElementById("selectPageSize");
 		var htm_ele="";
 		var htm_final_ele="";
+		var pageCount;
 		var ulContent="";//分页
-		var getMenuData = {pageNum: 1, pageSize: 10};
+		var size = $("#selectPageSize option:selected").val();
+		console.log("size:"+size);
+		var getMenuData = {pageNum: 1, pageSize: size};
 		$.ajax({
 			// url: "menu/tree",
 			url: "menu/datagrid",
@@ -80,6 +49,68 @@ function loadMenuBody(){
 		}).fail((err)=>{
 
 		});
+}
+
+function tablePerfom(num,size){
+	var getMenuData = {pageNum: num, pageSize: size};
+	var htm_ele="";
+	var htm_final_ele="";
+	$.ajax({
+		// url: "menu/tree",
+		url: "menu/datagrid",
+		dataType: "json",
+		//data: "",
+		data: getMenuData,
+		type: "post"
+	}).done((jsonData)=>{
+		menuTree = jsonData["data"]["records"];
+		pageCount = jsonData["data"]["pageCount"];
+		elements = parseTreeJson(menuTree);
+		for(var i=0,len=elements.length;i<len;i++){
+			htm_ele+=elements[i];
+		}
+		var articleId = function(){
+			var segments = htm_ele.split(",");
+			var length = segments.length - 1;
+			for(var i=0;i<=length;i++){
+				htm_final_ele += segments[i];
+			}
+		}
+		articleId();
+		console.log(htm_final_ele);
+		var index = document.getElementById("menubody");
+		index.innerHTML = htm_final_ele;
+	}).fail((err)=>{
+
+	});
+}
+
+function selectPage(e){
+	var size = $("#selectPageSize option:selected").val();
+	console.log("size:"+size);
+	num = e.getAttribute("data-value");
+	tablePerfom(num,size);
+}
+
+function pagePlus(){
+	var size = $("#selectPageSize option:selected").val();
+	console.log(pageCount);
+	if(num < pageCount){
+		num++;
+	}else{
+		num = 1;
+	}
+	tablePerfom(num,size);
+}
+
+function pageMinus(){
+	var size = $("#selectPageSize option:selected").val();
+	if(num > 1){
+		num--;
+	}else{
+		num = pageCount;
+	}
+	tablePerfom(num,size);
 }
 
 function parseTreeJson(treeNodes){
@@ -125,7 +156,7 @@ function parseTreeJson(treeNodes){
 				return(
 					"<tr class=\"collapse "+e["parentId"]+"\">"+
 						"<td></td>"+
-						"<td><a style=\""+ left +"\" href=\"."+e["id"]+"\"class=\"table-header collapsed\" data-toggle=\"collapse\">"+e["name"]+"<span class=\"pull-right glyphicon glyphicon-chevron-toggle\"></span></a></td>"+
+						"<td><a style=\""+ left +"\" href=\"."+e["id"]+"\"class=\"collapsed\" data-toggle=\"collapse\">"+e["name"]+"<span class=\"pull-right glyphicon glyphicon-chevron-toggle\"></span></a></td>"+
 						"<td>"+e["iconId"]+"</td>"+
 						"<td>"+e["type"]+"</td>"+
 						"<td>"+e["id"]+"</td>"+
@@ -143,7 +174,7 @@ function parseTreeJson(treeNodes){
 				return(
 					"<tr>"+
 						"<td></td>"+
-						"<td><a style=\""+ left +"\" href=\"."+e["id"]+"\"class=\"table-header collapsed\" data-toggle=\"collapse\">"+e["name"]+"<span class=\"pull-right glyphicon glyphicon-chevron-toggle\"></span></a></td>"+
+						"<td><a style=\""+ left +"\" href=\"."+e["id"]+"\"class=\"collapsed\" data-toggle=\"collapse\">"+e["name"]+"<span class=\"pull-right glyphicon glyphicon-chevron-toggle\"></span></a></td>"+
 						"<td>"+e["iconId"]+"</td>"+
 						"<td>"+e["type"]+"</td>"+
 						"<td>"+e["id"]+"</td>"+
@@ -198,6 +229,3 @@ function parseTreeJson(treeNodes){
 	console.log(element);
 	return element;
 }
-
-loadMenuBody();
-

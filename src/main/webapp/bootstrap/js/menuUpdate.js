@@ -100,7 +100,7 @@ function menuUpdateInit(e){
 			}else{
 				parentId = menu["parentId"];
 			}
-			console.log("parentId:"+menu["parentId"]);
+			//console.log("parentId:"+menu["parentId"]);
 			var html = "<form role=\"form\" id=\"menuUpdateForm\">"+
 					"<div class=\"form-group\">"+
 					    "<label for=\"name\">菜单名称</label>"+

@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
     <script src="./bootstrap/js/jquery.min.js"></script>
     <script src="./bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./bootstrap/css/style.css"> 
 </head>
 <body>
 	<ul class="list-group" style="margin:0">
@@ -35,9 +36,22 @@
 					<th>操作</th>
 				</tr>
 			</thead>
-			<tbody style="position:relative;overflow: scroll;" id="menubody">
+			<tbody id="menubody">
 			</tbody>
 		</table>
+		<ul class="list-group menuTableFoot">
+			<label>每页显示
+				<select id="selectPageSize" onchange="selectPageSize()">
+					<option value = '2'>2</option>
+					<option value = '5'>5</option>
+					<option selected = "selected" value = '10'>10</option>
+					<option value = '15'>15</option>
+				</select>行
+			</label>
+			<label id="pagination">
+				
+			</label>
+		</ul>
 	</div>
 	<!-- 模态框（Modal） -->
 
@@ -160,6 +174,7 @@
 	</div>
 
  	<script src="./bootstrap/js/menuManage.js"></script>
+ 	<script src="./bootstrap/js/selectPageSize.js"></script>
  	<script src="./bootstrap/js/menuAdd.js"></script>
  	<script src="./bootstrap/js/menuUpdate.js"></script>
  	<script src="./bootstrap/js/menuDelete.js"></script>

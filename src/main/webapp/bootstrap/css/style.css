@@ -9,6 +9,7 @@ div .side-bar{
 	padding: 0;
 	width:20%;
 }
+
 div .side-bar button{
 	padding: 0;
 }
@@ -23,4 +24,21 @@ div .side-bar .arrow{
 
 .nav-header > span.glyphicon-chevron-toggle:before {
     content: "\e113";
+}
+
+.table-header.collapsed > span.glyphicon-chevron-toggle:before {
+    content: "\e114";
+}
+
+.table-header > span.glyphicon-chevron-toggle:before {
+    content: "\e113";
+}
+
+.menuTableFoot{
+	position: relative;
+	bottom: 0;
+}
+#menubody{
+	position: relative;
+	overflow: scroll;
 }
