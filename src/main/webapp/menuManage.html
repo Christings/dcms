@@ -6,13 +6,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
     <script src="./bootstrap/js/jquery.min.js"></script>
     <script src="./bootstrap/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="./bootstrap/css/style.css"> 
+   
 </head>
 <body>
-	<ul class="list-group" style="margin:0">
+	<!-- <ul class="list-group" style="position:fixed;margin:0">
 		<li class="list-group-item">菜单管理</li>
-	</ul>
-	<div  class="panel panel-default">
+	</ul> -->
+	<div  class="panel panel-default" style="position:fixed;top:0;width:100%;background-color:#fff;">
 		<div class="panel-heading" style="padding:0">
 			<ul class="nav nav-pills" style="margin: 0;padding:0">
 				<li role="presentation" class="active" data-toggle="modal" data-target="#menuadd">
@@ -20,39 +20,42 @@
 				</li>
 			</ul>
 		</div>
+	</div>
 		<!-- <ul class="nav nav-pills">
 			<li role="presentation" class="active" data-toggle="modal" data-target="#menuadd"><a href="">菜单录入</a></li>
 		</ul> -->
-		<table class="table table-bordered table-hover">
-			<thead>
-				<tr>
-					<th></th>
-					<th>菜单名称</th>
-					<th>图标</th>
-					<th>菜单类型</th>
-					<th>菜单地址</th>
-					<th>菜单等级</th>
-					<th>菜单顺序</th>
-					<th>操作</th>
-				</tr>
-			</thead>
-			<tbody id="menubody">
-			</tbody>
-		</table>
-		<ul class="list-group menuTableFoot">
-			<label>每页显示
-				<select id="selectPageSize" onchange="selectPageSize()">
-					<option value = '2'>2</option>
-					<option value = '5'>5</option>
-					<option selected = "selected" value = '10'>10</option>
-					<option value = '15'>15</option>
-				</select>行
-			</label>
-			<label id="pagination">
-				
-			</label>
-		</ul>
+	
+	<table  class="table table-bordered table-hover" style="margin-top:43px;">
+		<thead>
+			<tr>
+				<th></th>
+				<th>菜单名称</th>
+				<th>图标</th>
+				<th>菜单类型</th>
+				<th>菜单地址</th>
+				<th>菜单等级</th>
+				<th>菜单顺序</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody id="menubody">
+		</tbody>
+	</table>
+
+	<div style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
+		<label>每页显示
+			<select id="selectPageSize" onchange="selectPageSize()">
+				<option value = '2'>2</option>
+				<option value = '5'>5</option>
+				<option selected = "selected" value = '10'>10</option>
+				<option value = '15'>15</option>
+			</select>行
+		</label>
+		<label id="pagination" style="margin:0;padding:0">
+			
+		</label>
 	</div>
+	
 	<!-- 模态框（Modal） -->
 
 	<div class="modal fade" id="menuadd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -173,10 +176,10 @@
 		</div><!-- /.modal -->
 	</div>
 
- 	<script src="./bootstrap/js/menuManage.js"></script>
- 	<script src="./bootstrap/js/selectPageSize.js"></script>
- 	<script src="./bootstrap/js/menuAdd.js"></script>
- 	<script src="./bootstrap/js/menuUpdate.js"></script>
- 	<script src="./bootstrap/js/menuDelete.js"></script>
+ 	<script src="./bootstrap/components/menuManage.js"></script>
+ 	<script src="./bootstrap/components/selectPageSize.js"></script>
+ 	<script src="./bootstrap/components/menuAdd.js"></script>
+ 	<script src="./bootstrap/components/menuUpdate.js"></script>
+ 	<script src="./bootstrap/components/menuDelete.js"></script>
 </body>
 </html>

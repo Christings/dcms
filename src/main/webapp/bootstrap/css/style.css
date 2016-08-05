@@ -7,16 +7,13 @@ div .well{
 }
 div .side-bar{
 	padding: 0;
-	width:20%;
+	width:15%;
 }
 
 div .side-bar button{
 	padding: 0;
 }
 
-div .side-bar .arrow{
-	float: right;
-}
 
 .nav-header.collapsed > span.glyphicon-chevron-toggle:before {
     content: "\e114";
@@ -41,4 +38,18 @@ div .side-bar .arrow{
 #menubody{
 	position: relative;
 	overflow: scroll;
+}
+
+#iframe-content{
+	position: absolute;
+	top:90px;
+	left:17%;
+	width:83%;
+	height: 100%;
+}
+#menu-navbar {
+	position: absolute;
+	top: 50px;
+	left: 16%;
+	width: 83%;
 }
