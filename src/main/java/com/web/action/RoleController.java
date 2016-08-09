@@ -55,7 +55,7 @@ public class RoleController extends BaseController{
 
 		try {
 			role.setId(UUIDGenerator.generatorRandomUUID());
-			role.setCreateName(WebUtils.getUser(request).getUserName());
+			role.setCreateName(WebUtils.getUser(request).getUsername());
 			role.setCreateDate(new Date());
 			int result=roleService.save(role);
 			if (LOGGER.isDebugEnabled()) {
@@ -94,7 +94,7 @@ public class RoleController extends BaseController{
 
 		try {
 			//role.setId(UUIDGenerator.generatorRandomUUID());
-			role.setUpdateName(WebUtils.getUser(request).getUserName());
+			role.setUpdateName(WebUtils.getUser(request).getUsername());
 			role.setUpdateDate(new Date());
 			int result=roleService.updateById(role);
 			if (LOGGER.isDebugEnabled()) {

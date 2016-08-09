@@ -2,47 +2,30 @@ package com.web.service;
 
 
 import com.web.core.util.page.Page;
-
-import com.web.entity.Menu;
 import com.web.entity.User;
-
-import java.util.List;
-
-import com.web.example.MenuExample;
 import com.web.example.UserExample;
-import org.apache.ibatis.annotations.Param;
 
-public interface UserService {
-	/*根据ID查询User*/
-	public User getUserById(String id);
-
-	/*根据name查询User*/
-	public User getUserByName(String name)throws Exception;
-
-	/*获取全部用户*/
-	public List<User> getAllUsers();
-	/*是否启用用户*/
-    public void updateUserEnabled(Integer enabled,String id)throws Exception;
-    /*是否逻辑删除*/
-    public void updateUserDelete(Integer deleted,String id)throws Exception;
+public interface UserService extends IService<User,String> {
 
 	/**
-	 * @param user
-	 * 保存用户
-	 * */
-	public int saveUser(User user);
+	 * 根据查询条件获取查询数量
+     */
+	int count(UserExample example);
 
-	public int updateUser(User user);
+	/**
+	 * 根据用户登录名称查询用户
+	 *
+	 * @param username
+	 * @return
+     */
+	User getUserByName(String username);
 
-	public int deleteUser(String id);
-
-
-	public  int updateUserPassword(User user);
-
-
-
-	public Page<User> getScrollData(int pageNum, int pageSize, UserExample example);
-
-	public int countByExample(UserExample example);
-
+	/**
+	 * 分页处理 根据查询条件进行分页
+	 * @param pageNum
+	 * @param pageSize
+	 * @param example
+	 * @return
+	 */
+	Page<User> getScrollData(int pageNum, int pageSize, UserExample example);
 }

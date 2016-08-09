@@ -48,7 +48,7 @@ public class OperLogServiceImpl implements OperLogService {
 				operLog.setOperProp(operProp);
 			}
 			operLog.setOperUserId(user.getId());
-			operLog.setOperUserName(user.getUserName());
+			operLog.setOperUserName(user.getUsername());
 			operLog.setOperDate(new Date());
 			operLog.setLogLevel(getLogLevel(OperLog.logLevelEnum.success));// 默认成功
 			operLog.setLogType(0);
@@ -75,7 +75,7 @@ public class OperLogServiceImpl implements OperLogService {
 			operLog.setActionType(getActionSystem(operType, systemAction));
 			operLog.setOperType(operProp);
 			operLog.setOperUserId(user.getId());
-			operLog.setOperUserName(user.getUserName());
+			operLog.setOperUserName(user.getUsername());
 			operLog.setOperDate(new Date());
 			operLog.setLogLevel(getLogLevel(logLevel));// 默认成功
 			operLog.setLogType(0);
@@ -103,7 +103,7 @@ public class OperLogServiceImpl implements OperLogService {
 			operLog.setActionType(getActionBusiness(operType, busiAction));
 			operLog.setOperType(operProp);
 			operLog.setOperUserId(user.getId());
-			operLog.setOperUserName(user.getUserName());
+			operLog.setOperUserName(user.getUsername());
 			operLog.setOperDate(new Date());
 			operLog.setLogLevel(getLogLevel(OperLog.logLevelEnum.success));// 默认成功
 			operLog.setLogType(1);
@@ -131,7 +131,7 @@ public class OperLogServiceImpl implements OperLogService {
 			operLog.setActionType(getActionBusiness(operType, busiAction));
 			operLog.setOperType(operProp);
 			operLog.setOperUserId(user.getId());
-			operLog.setOperUserName(user.getUserName());
+			operLog.setOperUserName(user.getUsername());
 			operLog.setOperDate(new Date());
 			operLog.setLogLevel(getLogLevel(logLevel));
 			operLog.setLogType(1);

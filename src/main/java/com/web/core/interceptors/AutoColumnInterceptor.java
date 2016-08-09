@@ -84,7 +84,7 @@ public class AutoColumnInterceptor implements Interceptor {
 			}
 			Update update = (Update)stmt;
 			if(!ingoreTab(update.getTables())){
-				newSql = addUpdateStringToSql(stmt,originalSql, updateName, WebUtils.getUser(ContextHolderUtils.getRequest()).getUserName());
+				newSql = addUpdateStringToSql(stmt,originalSql, updateName, WebUtils.getUser(ContextHolderUtils.getRequest()).getUsername());
 				newSql = addUpdateDateToSql(stmt,newSql, updateDate);
 			}
 		}else if(sqlCmdType == SqlCommandType.INSERT){
@@ -93,7 +93,7 @@ public class AutoColumnInterceptor implements Interceptor {
 			}
 			Insert insert = (Insert)stmt;
 			if(!ingoreTab(insert.getTable().getName())){
-				newSql = addCreateStringToSql(stmt,originalSql, createName, WebUtils.getUser(ContextHolderUtils.getRequest()).getUserName());
+				newSql = addCreateStringToSql(stmt,originalSql, createName, WebUtils.getUser(ContextHolderUtils.getRequest()).getUsername());
 				newSql = addCreateDateToSql(stmt,newSql, createDate);
 			}
 		}

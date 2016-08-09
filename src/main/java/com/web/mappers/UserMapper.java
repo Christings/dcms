@@ -1,29 +1,31 @@
 package com.web.mappers;
 
-import com.web.core.mapper.BaseMapper;
 import com.web.entity.User;
 import com.web.example.UserExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-/**
- * Created by tians on 2016/6/12.
- * user表数据操作接口，不需要实现，但是方法名要与对应的mapper.xml中sql操作的配置文件ID相对应,相当于DAO
- */
-public interface UserMapper extends BaseMapper<User>{
- 
-    public User getUserByName(String name)throws Exception;
-    
-    public void updateUserEnabled(@Param("enabled")Integer enabled,@Param("id")String id)throws Exception;
-    
-    public void updateUserDelete(@Param("deleted")Integer deleted,@Param("id")String id)throws Exception;
+public interface UserMapper {
+    int countByExample(UserExample example);
 
+    int deleteByExample(UserExample example);
 
+    int deleteByPrimaryKey(String id);
 
-    public int updateUserPassword(User user);
+    int insert(User record);
 
-    public List<User> selectByExample(UserExample example);
+    int insertSelective(User record);
 
-   public int countByExample(UserExample example);
+    List<User> selectByExample(UserExample example);
+
+    User selectByPrimaryKey(String id);
+
+    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByExample(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByPrimaryKeySelective(User record);
+
+    int updateByPrimaryKey(User record);
 }
