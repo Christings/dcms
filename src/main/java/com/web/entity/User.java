@@ -1,6 +1,6 @@
 package com.web.entity;
 
-import java.util.Date;
+import com.web.core.entity.BaseEntity;
 
 /**
  * 用户实体
@@ -8,11 +8,7 @@ import java.util.Date;
  * @author 杜延雷
  * @date 2016-08-09
  */
-public class User {
-    /**
-     * 主键ID
-     */
-    private String id;
+public class User extends BaseEntity{
 
     /**
      * 登录名
@@ -63,34 +59,6 @@ public class User {
      * 备注
      */
     private String remark;
-
-    /**
-     * 修改人
-     */
-    private String updateName;
-
-    /**
-     * 修改时间
-     */
-    private Date updateDate;
-
-    /**
-     * 创建人
-     */
-    private String createName;
-
-    /**
-     * 创建时间
-     */
-    private Date createDate;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
 
     public String getUsername() {
         return username;
@@ -170,37 +138,5 @@ public class User {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
-    }
-
-    public String getUpdateName() {
-        return updateName;
-    }
-
-    public void setUpdateName(String updateName) {
-        this.updateName = updateName == null ? null : updateName.trim();
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public String getCreateName() {
-        return createName;
-    }
-
-    public void setCreateName(String createName) {
-        this.createName = createName == null ? null : createName.trim();
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
     }
 }
