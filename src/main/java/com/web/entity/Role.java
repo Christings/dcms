@@ -3,34 +3,35 @@ package com.web.entity;
 import com.web.core.entity.BaseEntity;
 
 /**
- * 角色实体类
- * 
- * @author think
+ * 角色实体对象
  *
+ * @author 杜延雷
+ * @date 2016-08-10
  */
-public class Role extends BaseEntity {
+public class Role extends BaseEntity{
+    /**
+     * 角色编码
+     */
+    private String rolecode;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4534815857132405090L;
-	private String roleCode;// 角色编码
-	private String roleName;// 角色名称
+    /**
+     * 角色名
+     */
+    private String rolename;
 
-	public String getRoleCode() {
-		return roleCode;
-	}
+    public String getRolecode() {
+        return rolecode;
+    }
 
-	public void setRoleCode(String roleCode) {
-		this.roleCode = roleCode;
-	}
+    public void setRolecode(String rolecode) {
+        this.rolecode = rolecode == null ? null : rolecode.trim();
+    }
 
-	public String getRoleName() {
-		return roleName;
-	}
+    public String getRolename() {
+        return rolename;
+    }
 
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
-	}
-
+    public void setRolename(String rolename) {
+        this.rolename = rolename == null ? null : rolename.trim();
+    }
 }

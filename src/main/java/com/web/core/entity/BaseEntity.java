@@ -8,7 +8,7 @@ import java.util.Date;
 public class BaseEntity implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
-	/** 用户ID **/
+	/** 主键ID **/
 	private String id;
 	/** 修改人名 **/
 	private String updateName;
