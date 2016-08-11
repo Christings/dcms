@@ -3,6 +3,7 @@ package com.web.action;
 import com.alibaba.fastjson.JSON;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
+import com.web.entity.OperLog;
 import com.web.entity.Role;
 import com.web.example.RoleExample;
 import com.web.service.RoleSerivce;
@@ -64,6 +65,10 @@ public class RoleController extends BaseController{
 			role.setId(UUIDGenerator.generatorRandomUUID());
 			int result=roleService.save(role);
 
+			// 增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.role,
+					JSON.toJSONString(role));
+
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("save result: {}", result);
 			}
@@ -114,6 +119,13 @@ public class RoleController extends BaseController{
 
 		try {
 			int result=roleService.updateById(role);
+
+			if(result > 0){
+				// 增加日志
+				operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.role,
+						JSON.toJSONString(role));
+			}
+
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("update result: {}", result);
 			}
@@ -210,6 +222,13 @@ public class RoleController extends BaseController{
 
 		try {
 			Role role=roleService.getById(id);
+
+			// 增加日志
+//			if(null != role){
+//				operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.role,
+//					JSON.toJSONString(role));
+//			}
+
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("get result: {}", role);
 			}
@@ -241,6 +260,13 @@ public class RoleController extends BaseController{
 
 		try {
 			int result=roleService.deleteById(id);
+
+			if(result > 0){
+				// 增加日志
+				operLogService.addSystemLog(OperLog.operTypeEnum.delete, OperLog.actionSystemEnum.role,
+						"delete role id:"+id);
+			}
+
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("delete result: {}", result);
 			}
