@@ -2,9 +2,19 @@ body {
 	 padding-top:50px;
 }
 div .well{
-	
+	background-color:black;
 	height: 100%;
 }
+#menutree li{
+	background-color:#555;
+}
+#menutree li:hover:{
+	background-color:gray;
+}
+#menutree li a{
+	color: white;
+}
+
 div .side-bar{
 	padding: 0;
 	width:15%;

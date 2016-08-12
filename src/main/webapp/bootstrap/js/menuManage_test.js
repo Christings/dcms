@@ -20,13 +20,14 @@ function menuUpdate(){
 		console.log(iconId);
 		var type = $("#menuType").val();
 		console.log(type);
+		return false;
 		if(name == "")
 		{
 			$("#alertName").text("请输入菜单名称");
 			return false;
 		}
-		console.log(3);
-		// console.log(name);
+		console.log(2);
+		console.log(name);
 		var menuInfo = { id:'', name:'', rank:'', level:'', url:'', parentId:'', iconId:'', type:''};
 		menuInfo['id'] = id;
 		menuInfo['name'] = name;
@@ -41,38 +42,38 @@ function menuUpdate(){
 		menuInfo['parentId'] = parentId;
 		menuInfo['iconId'] = iconId;
 		menuInfo['type'] = type;
-		console.log(4);
+
 		// var getMenuData = {pageNum: 1, pageSize: 10};
-		$.ajax({
-			type:"post",
-			url:"menu/update",
-			dataType: 'json',
-			data: menuInfo,
-			success:function(res){
-				if(res.status == "1"){
-					console.log("修改菜单成功");
-					// $.ajax({
-					// 	url: "menu/datagrid",
-					// 	dataType: "json",
-					// 	data: getMenuData,
-					// 	type: "post"
-					// }).done((jsonData)=>{
-					// 	const menuData = jsonData["data"]["records"];
-					// 	const totalPage = jsonData["data"]["pageCount"];
+		// $.ajax({
+		// 	type:"post",
+		// 	url:"menu/update",
+		// 	dataType: 'json',
+		// 	data: menuInfo,
+		// 	success:function(res){
+		// 		if(res.status == "1"){
+		// 			console.log("修改菜单成功");
+		// 			// $.ajax({
+		// 			// 	url: "menu/datagrid",
+		// 			// 	dataType: "json",
+		// 			// 	data: getMenuData,
+		// 			// 	type: "post"
+		// 			// }).done((jsonData)=>{
+		// 			// 	const menuData = jsonData["data"]["records"];
+		// 			// 	const totalPage = jsonData["data"]["pageCount"];
 
-					// 	const menu = {menuData: menuData,totalPage:totalPage};
+		// 			// 	const menu = {menuData: menuData,totalPage:totalPage};
 
-					// 	this.props.actions.menuAll(menu);
-					// }).fail((err)=>{
+		// 			// 	this.props.actions.menuAll(menu);
+		// 			// }).fail((err)=>{
 
-					// });
-				}else{
-					console.log("修改菜单失败"+res.msg);
-					return false;
-				}
-			}
-		});
-		console.log(5);
+		// 			// });
+		// 		}else{
+		// 			console.log("修改菜单失败"+res.msg);
+		// 			return false;
+		// 		}
+		// 	}
+		// });
+
 
 		console.log(menuInfo);
 		return true;
@@ -80,42 +81,24 @@ function menuUpdate(){
 	});
 }
 
-function menuUpdateInit(e){
+function menuUpdateInit(){
 	// $(document).ready(){
-	var id = e.getAttribute("data-value");
-	var menuId = {key:''};
-	menuId["key"] = id;
-	
-	// console.log(menu);
-	 console.log(id);
-	// console.log(name);
-	$.ajax({
-		type:"post",
-		url:"menu/get",
-		dataType: 'json',
-		data: menuId,
-		}).done((jsonData)=>{
-			var menu = jsonData["data"];
-			var name = menu["name"];
-			var iconId = menu["iconId"];
-			var level = menu["level"];
-			var type = menu["type"];
-			var rank = menu["rank"];
-			var url = menu["url"];
-			var parentId;
+			// var menu = jsonData["data"];
+			var name = "test";
+			var iconId = "test";
+			var level = "test";
+			var type = "test";
+			var rank = "test";
+			var url = "test";
+			var parentId = "test";
 			console.log("update:"+name);
-			if(menu["parentId"] == null){
-				parentId = "";
-			}else{
-				parentId = menu["parentId"];
-			}
 			//console.log("parentId:"+menu["parentId"]);
 			var html = "<form role=\"form\" id=\"menuUpdateForm\">"+
 					"<div class=\"form-group\">"+
 					    "<label for=\"name\">菜单名称</label>"+
 					    "<input type=\"text\" class=\"form-control\" id=\"menuName\""+ 
 					     "value=\""+name+"\">"+
-					     "<span id=\"menuId\" value=\""+id+"\">"+
+					     "<span id=\"menuId\" value=\"\">"+
 					     "</span>"+
 					"</div>"+
 					"<div class=\"form-group\">"+
@@ -156,9 +139,9 @@ function menuUpdateInit(e){
 			           "</button>"+
 		        	"</div>"+
 				"</form>";
-			var body = document.getElementById("menuUpdateBody");
+			var body = document.getElementById("modal_body");
 			body.innerHTML = html;
-	});		// }
+		// }
 }
 
 
