@@ -1,32 +1,31 @@
 package com.web.mappers;
 
-import com.web.core.mapper.BaseMapper;
 import com.web.entity.UserRole;
-import com.web.example.RoleUserExample;
+import com.web.example.UserRoleExample;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-/**
- * 
-* @ClassName: UserRoleMapper 
-* @Description: 
-* @author 童云鹏 
-* @date 2016年7月11日 下午2:10:02
- */
-public interface UserRoleMapper extends BaseMapper<UserRole>{
+public interface UserRoleMapper {
+    int countByExample(UserRoleExample example);
 
+    int deleteByExample(UserRoleExample example);
 
+    int deleteByPrimaryKey(String id);
 
-	public int countByExample(RoleUserExample example);
+    int insert(UserRole record);
 
-	public List<UserRole> selectByExample(RoleUserExample example);
+    int insertSelective(UserRole record);
 
-	public int saveList(List<UserRole> list);
+    List<UserRole> selectByExample(UserRoleExample example);
 
-	public int deleteByUserId(String userId);
+    UserRole selectByPrimaryKey(String id);
 
-	public List<UserRole> selectByUserId(String userId);
+    int updateByExampleSelective(@Param("record") UserRole record, @Param("example") UserRoleExample example);
 
-	public List<UserRole> selectByRoleId(String roleId);
+    int updateByExample(@Param("record") UserRole record, @Param("example") UserRoleExample example);
 
+    int updateByPrimaryKeySelective(UserRole record);
+
+    int updateByPrimaryKey(UserRole record);
 }

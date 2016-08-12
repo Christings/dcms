@@ -2,202 +2,259 @@ package com.web.action;
 
 import com.alibaba.fastjson.JSON;
 import com.web.core.action.BaseController;
-import com.web.core.util.page.Page;
+import com.web.entity.OperLog;
 import com.web.entity.UserRole;
-import com.web.service.RoleUserService;
+import com.web.service.UserRoleService;
 import com.web.util.AllResult;
-import com.web.util.StringUtil;
 import com.web.util.UUIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by think on 2016/7/16.
+ * 用户角色关系 访问接口
+ *
+ * @author 杜延雷
+ * @date 2016-08-12
  */
 @Controller
-@RequestMapping("/userRole")
+@RequestMapping("/user/role")
 public class UserRoleController extends BaseController {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRoleController.class);
 
     @Autowired
-    private RoleUserService roleUserService;
+    private UserRoleService userRoleService;
 
     /**
-     * 单个关联用户与角色
-     * @param userRole
-     * @param request
-     * @return
+     * 单个添加用户角色
      */
-    @RequestMapping(value = "/addUserRole" ,method= RequestMethod.POST)
+    @RequestMapping(value = "/add", method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
-    public Object addUserRole(@RequestBody UserRole userRole, HttpServletRequest request){
+    public Object add(UserRole userRole, HttpServletRequest request) {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("request param: [userRole: {}]", JSON.toJSONString(userRole));
         }
-        if(userRole.getRoleid()==null|| StringUtil.isEmpty(userRole.getRoleid())){
-            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:角色ID不能为空");
-        }else if (userRole.getUserid()==null|| StringUtil.isEmpty(userRole.getUserid())){
-            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:用户ID不能为空");
+
+        // TODO 需要添加判断
+        if (StringUtils.isEmpty(userRole.getRoleId())) {
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
+        }else if(StringUtils.isEmpty(userRole.getUserId())){
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
         }
+
         try {
             userRole.setId(UUIDGenerator.generatorRandomUUID());
-           int result=roleUserService.save(userRole);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("save result: {}", result);
+            int result = userRoleService.save(userRole);
+
+            if(result > 0){
+                operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.userRole,
+                        JSON.toJSONString(userRole));
             }
-            return AllResult.okJSON(userRole);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("save userRole result: {}", result);
+            }
+
+            return AllResult.ok();
         } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error("save User fail:", e.getMessage());
-            return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,用户关联角色失败");
+            LOGGER.error("save userRole object error. : {}", JSON.toJSONString(userRole), e);
         }
 
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加角色-用户关系失败");
     }
 
+    /**
+     * 根据角色批量保存用户
+     *
+     * @param {roleId,userIds,request}
+     * @return
+     */
+    @RequestMapping(value = "/batchUsers", method = RequestMethod.POST)
+    @ResponseBody
+    public Object batchUsers(String roleId,String userIds, HttpServletRequest request) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("request param: [roleId: {},userIds:{}]",roleId,userIds );
+        }
+
+        // TODO 需要添加判断
+        if (StringUtils.isEmpty(roleId)) {
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
+        }else if(StringUtils.isEmpty(userIds)){
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
+        }
+
+        String [] userIdArr = userIds.split(",");
+        if(userIdArr.length<=0){
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID传递有误,格式[用户ID1,用户ID2,...]");
+        }
+
+        try {
+            userRoleService.batchRoleUser(roleId,userIdArr);
+
+            operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.userRole,
+                    "角色ID："+roleId+",用户IDs:["+userIdArr+"]");
+
+            return AllResult.ok();
+        } catch (Exception e) {
+            LOGGER.error("batchUsers save object error. : {}", e);
+        }
+
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,根据角色ID批量保存用户失败");
+    }
 
     /**
-     * 批量关联用户与角色
-     * @param userId
-     * @param roleIds
+     * 根据用户批量保存角色
+     *
+     * @param {userId,roleIds,request}
+     * @return
+     */
+    @RequestMapping(value = "/batchRoles", method = RequestMethod.POST)
+    @ResponseBody
+    public Object batchRoles(String userId,String roleIds, HttpServletRequest request) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("request param: [userId: {},roleIds:{}]",userId,roleIds );
+        }
+
+        // TODO 需要添加判断
+        if (StringUtils.isEmpty(userId)) {
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
+        }else if(StringUtils.isEmpty(roleIds)){
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
+        }
+
+        String [] reloIdArr = roleIds.split(",");
+        if(reloIdArr.length<=0){
+            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID传递有误,格式[角色ID1,角色ID2,...]");
+        }
+
+        try {
+            userRoleService.batchUserRole(userId,reloIdArr);
+
+            operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.userRole,
+                    "用户ID："+userId+",角色IDs:["+reloIdArr+"]");
+
+            return AllResult.okJSON("保存成功");
+        } catch (Exception e) {
+            LOGGER.error("batchRoles save object error. : {}", e);
+        }
+
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,根据角色ID批量保存用户失败");
+    }
+
+    /**
+     * 根据角色Id 获取所有角色用户关系数据
+     *
      * @param request
      * @return
      */
-    @RequestMapping(value = "/addUserRoleList" ,method= RequestMethod.POST)
+    @RequestMapping(value = "/getRoleId", method = RequestMethod.POST)
     @ResponseBody
-    public Object addUserRoleList(@RequestParam(value = "userId") String userId, @RequestParam(value = "roleIds") String  roleIds, HttpServletRequest request){
-        List<UserRole> userRoleList=new ArrayList<UserRole>();
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("request param: roleIds: {}]",roleIds);
-        }
-        if(StringUtil.isEmpty(userId)){
-            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:用户ID不能为空");
-        }
-        try{
-        if(StringUtil.isEmpty(roleIds)){
-            int result=roleUserService.deleteByUserId(userRoleList.get(0).getUserid());
+    public Object getRoleId(String key,HttpServletRequest request) {
+        try {
+            if(StringUtils.isEmpty(key)){
+                return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
+            }
+
+            List<UserRole> userRoleList = userRoleService.getRoleUser(key);
+
+            if(null == userRoleList || userRoleList.size() == 0){
+                return AllResult.build(1, "未查询到相关数据");
+            }
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("userRoleList result: {}", JSON.toJSONString(userRoleList));
+            }
+
+            // 增加日志
+            operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.userRole,null);
+
             return AllResult.okJSON(userRoleList);
-        }else{
-            String[] roles=roleIds.split(",");
-            for(String roleId:roles){
-                UserRole userRole=new UserRole();
-                userRole.setId(UUIDGenerator.generatorRandomUUID());
-                userRole.setUserid(userId);
-                userRole.setRoleid(roleId);
-                userRoleList.add(userRole);
+        } catch (Exception e) {
+            LOGGER.error("userRole object error. getUserRoleList ", e);
+            operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.userRole, null,
+                    OperLog.logLevelEnum.error);
+
+        }
+
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取角色用户时失败");
+    }
+
+    /**
+     * 根据用户Id 获取所有用户角色关系数据
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getUserId", method = RequestMethod.POST)
+    @ResponseBody
+    public Object getUserId(String key,HttpServletRequest request) {
+        try {
+            if(StringUtils.isEmpty(key)){
+                return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
             }
-            int result=roleUserService.saveList(userRoleList);
+
+            List<UserRole> userRoleList = userRoleService.getUserRole(key);
+
+            if(null == userRoleList || userRoleList.size() == 0){
+                return AllResult.build(1, "未查询到相关数据");
+            }
+
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("save result: {}", result);
+                LOGGER.debug("userRoleList result: {}", JSON.toJSONString(userRoleList));
             }
+
+            // 增加日志
+//            operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.userRole,null);
+
             return AllResult.okJSON(userRoleList);
-          }
         } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error("save User fail:", e.getMessage());
-            return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,用户关联角色失败");
+            LOGGER.error("userRole object error. getUserRoleList ", e);
+            operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.userRole, null,
+                    OperLog.logLevelEnum.error);
         }
+
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取用户角色时失败");
     }
 
     /**
-     * 根据用户ID查询相关角色
-     * @param pageNum
-     * @param pageSize
-     * @param userId
+     * 获取所有用户角色关系
+     *
      * @param request
      * @return
      */
-    @RequestMapping(value = "/getUserRoleListByuserId" ,method= RequestMethod.POST)
+    @RequestMapping(value = "/getAll", method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public Object getUserRoleListByuserId(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,@RequestParam(value = "userId") String userId, HttpServletRequest request) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("request param: [userRole: {}]",userId);
-        }
-
-            if (userId == null || StringUtil.isEmpty(userId)) {
-                return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:userId不能为空");
-            }
-
+    public Object getAll(HttpServletRequest request) {
         try {
-                Page<UserRole> page = roleUserService.getScrollDataByUserId(pageNum,pageSize,userId);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("save result: {}", page);
+            List<UserRole> userRoleList = userRoleService.getAll();
+
+            if(null == userRoleList || userRoleList.size() == 0){
+                return AllResult.build(1, "未查询到相关数据");
             }
-            return AllResult.okJSON(page);
-        } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error("save User fail:", e.getMessage());
-            return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,用户关联角色失败");
-        }
-    }
 
-    /**
-     * 根据角色ID分页查询相关用户
-     * @param pageNum
-     * @param pageSize
-     * @param roleId
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/getUserRoleListByroleId" ,method= RequestMethod.POST)
-    @ResponseBody
-    public Object getUserRoleListByroleId(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,@RequestParam(value = "roleId") String roleId, HttpServletRequest request) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("request param: [userRole: {}]",roleId);
-        }
-
-        if (roleId == null || StringUtil.isEmpty(roleId)) {
-            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:roleId不能为空");
-        }
-
-        try {
-            Page<UserRole> page = roleUserService.getScrollDataByRoleId(pageNum,pageSize,roleId);
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("save result: {}", page);
+                LOGGER.debug("userRoleList result: {}", JSON.toJSONString(userRoleList));
             }
-            return AllResult.okJSON(page);
+
+            // 增加日志
+//            operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.userRole,null);
+
+            return AllResult.okJSON(userRoleList);
         } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error("save User fail:", e.getMessage());
-            return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,根据角色分页查询失败");
+            LOGGER.error("userRole object error. getAll ", e);
+            operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.userRole, null,
+                    OperLog.logLevelEnum.error);
         }
+
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取所有角色用户失败");
     }
-
-    /**
-     * 根据ID删除用户角色关联关系
-     * @param userId
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/deleteByuserId" ,method= RequestMethod.POST)
-    @ResponseBody
-    public Object deleteByuserId(@RequestParam(value = "userId") String  userId, HttpServletRequest request){
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("request param: [userId: {}]",userId);
-        }
-        if(StringUtil.isEmpty(userId)){
-            return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常:userId不能为空");
-        }
-        try {
-           int result=roleUserService.deleteByUserId(userId);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("save result: {}", result);
-            }
-            return AllResult.okJSON(userId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error("save User fail:", e.getMessage());
-            return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,根据用户删除失败");
-        }
-    }
-
-
 }

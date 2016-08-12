@@ -140,6 +140,7 @@ public class RoleServiceImpl implements RoleSerivce {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.SUPPORTS,readOnly = true)
 	public Role getByExample(RoleExample example) {
 		List<Role> roles = roleMapper.selectByExample(example);
 		if(roles.size()==0){

@@ -1,64 +1,48 @@
 package com.web.entity;
 
-import com.web.core.entity.BaseEntity;
 /**
- * 用户与角色关联实体类
-* @ClassName: UserRole 
-* @Description: TODO
-* @author 童云鹏 
-* @date 2016年7月11日 下午1:59:04
+ *用户角色对应关系表
+ *
+ * @author 杜延雷
+ * @date 2016-08-11
  */
 public class UserRole {
+    /**
+     * 主键 ID
+     */
+    private String id;
 
-	private String id;
-	private String userid;//用户ID
-	private String roleid;//角色ID
-	private String UserName;
-	private String realName;
-	private String roleName;
+    /**
+     * 角色ID
+     */
+    private String roleId;
 
-	public String getId() {
-		return id;
-	}
+    /**
+     * 用户ID
+     */
+    private String userId;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getUserid() {
-		return userid;
-	}
-	public void setUserid(String userid) {
-		this.userid = userid;
-	}
-	public String getRoleid() {
-		return roleid;
-	}
-	public void setRoleid(String roleid) {
-		this.roleid = roleid;
-	}
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
+    }
 
-	public String getUserName() {
-		return UserName;
-	}
+    public String getRoleId() {
+        return roleId;
+    }
 
-	public void setUserName(String userName) {
-		UserName = userName;
-	}
+    public void setRoleId(String roleId) {
+        this.roleId = roleId == null ? null : roleId.trim();
+    }
 
-	public String getRealName() {
-		return realName;
-	}
+    public String getUserId() {
+        return userId;
+    }
 
-	public void setRealName(String realName) {
-		this.realName = realName;
-	}
-
-	public String getRoleName() {
-		return roleName;
-	}
-
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
+    }
 }

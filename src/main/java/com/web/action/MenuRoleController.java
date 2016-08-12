@@ -45,7 +45,7 @@ public class MenuRoleController extends BaseController {
 	@ResponseBody
 	public Object add(MenuRole menuRole, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(menuRole));
+			LOGGER.info("request param: [menuRole: {}]", JSON.toJSONString(menuRole));
 		}
 
 		// TODO 需要添加判断
@@ -217,7 +217,7 @@ public class MenuRoleController extends BaseController {
 			}
 
 			// 增加日志
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
 
 			return AllResult.okJSON(menuRoleList);
 		} catch (Exception e) {
@@ -250,7 +250,7 @@ public class MenuRoleController extends BaseController {
 			}
 
 			// 增加日志
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
 
 			return AllResult.okJSON(menuRoleList);
 		} catch (Exception e) {

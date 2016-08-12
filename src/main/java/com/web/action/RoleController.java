@@ -24,6 +24,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * 角色接口
+ *
+ * @author 杜延雷
+ * @date 2016-08-10
+ */
 @Controller
 @RequestMapping("/role")
 public class RoleController extends BaseController{
