@@ -67,7 +67,7 @@
   <sql id="Base_Column_List" >
     id, role_id, user_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.entity.UserRoleExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.UserRoleExample" >
     select
     <if test="distinct" >
       distinct
@@ -91,7 +91,7 @@
     delete from t_s_role_user
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.web.entity.UserRoleExample" >
+  <delete id="deleteByExample" parameterType="com.web.example.UserRoleExample" >
     delete from t_s_role_user
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -128,7 +128,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.web.entity.UserRoleExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.web.example.UserRoleExample" resultType="java.lang.Integer" >
     select count(*) from t_s_role_user
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
