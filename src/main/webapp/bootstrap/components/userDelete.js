@@ -31,20 +31,37 @@ function userDeleteInit(e){
 function userDelete(e){
 	var id = e.getAttribute("data-id");
 	console.log("delete:"+id);
-	var userInfo = {id:''};
-	userInfo["id"] = id;
+	var userInfo = {id:''};// 
+	userInfo['id'] = id;
 	$.ajax({
 		type:"post",
-		url:"menu/delete",
+		url: "user/delete",
 		dataType: 'json',
+		// data: userInfo,
+		// contentType: "application/json",
 		data: userInfo,
-		success:function(res){
+		success: function(res){
 			if(res.status == "1"){
-				console.log("删除用户成功");
+				console.log("删除用户成功" + res.data);
 			}else{
-				console.log("删除用户失败"+res.msg);
+				console.log("删除用户失败" + res.msg);
 			}
 		}
 	});
+	// var userInfo = {id:''};
+	// userInfo["id"] = id;
+	// $.ajax({
+	// 	type:"post",
+	// 	url:"menu/delete",
+	// 	dataType: 'json',
+	// 	data: userInfo,
+	// 	success:function(res){
+	// 		if(res.status == "1"){
+	// 			console.log("删除用户成功");
+	// 		}else{
+	// 			console.log("删除用户失败"+res.msg);
+	// 		}
+	// 	}
+	// });
 }
 

@@ -6,6 +6,9 @@
 // roleDelete();
 batchUsers();
 batchRoles();
+roleGetAll();
+roleGet();
+
 function roleAdd(){
 	console.log("roleAdd");
 	var rolecode = "test_role_3";
@@ -136,7 +139,7 @@ function roleDataGrid(){
 
 function batchUsers(){
 	var roleId = "fe5775aff4714aec8ba32cf8c6282844";
-	var userIds = "d459018a5f33417581187de4b511d0c7";
+	var userIds = "d459018a5f33417581187de4b511d0c7,6ad6653632a04947b090e094db2ae347";
 	console.log("batchUsers");
 	var batchUserData = {roleId: roleId,userIds: userIds};
 	$.ajax({
