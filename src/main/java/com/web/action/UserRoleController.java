@@ -147,7 +147,7 @@ public class UserRoleController extends BaseController {
             LOGGER.error("batchRoles save object error. : {}", e);
         }
 
-        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,根据角色ID批量保存用户失败");
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,根据用户ID批量保存角色失败");
     }
 
     /**
