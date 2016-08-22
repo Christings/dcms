@@ -18,7 +18,7 @@ function loadMenuBody(){
 		}).done((jsonData)=>{
 			menuTree = jsonData["data"]["records"];
 			pageCount = jsonData["data"]["pageCount"];
-			
+	
 			elements = parseTreeJson(menuTree);
 			for(var i=0,len=elements.length;i<len;i++){
 				htm_ele+=elements[i];
@@ -40,9 +40,9 @@ function loadMenuBody(){
 			pagination();
 			ulContent += "<li onclick=\"pagePlus()\"><a>&raquo;</a></li></ul>";
 			console.log(htm_final_ele);
-			var index = document.getElementById("menubody");
+			var index = document.getElementById("menuBody");
 			index.innerHTML = htm_final_ele;
-			var index2 = document.getElementById("pagination");
+			var index2 = document.getElementById("menuPagination");
 			index2.innerHTML = ulContent;
 			
 		}).fail((err)=>{

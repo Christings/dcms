@@ -14,50 +14,52 @@
 	<div  class="panel panel-default" style="position:fixed;top:0;width:100%;background-color:#fff;">
 		<div class="panel-heading" style="padding:0">
 			<ul class="nav nav-pills" style="margin: 0;padding:0">
-				<li role="presentation" class="active" data-toggle="modal" data-target="#menuadd">
-					<a href="">菜单录入</a>
+				<li role="presentation" class="active" data-toggle="modal" data-target="#useradd">
+					<a href="">用户录入</a>
 				</li>
 			</ul>
 		</div>
 	</div>
 		<!-- <ul class="nav nav-pills">
-			<li role="presentation" class="active" data-toggle="modal" data-target="#menuadd"><a href="">菜单录入</a></li>
+			<li role="presentation" class="active" data-toggle="modal" data-target="#useradd"><a href="">菜单录入</a></li>
 		</ul> -->
 	
 	<table  class="table table-bordered table-hover" style="margin-top:43px;">
 		<thead>
 			<tr>
 				<th></th>
-				<th>菜单名称</th>
-				<th>图标</th>
-				<th>菜单类型</th>
-				<th>菜单地址</th>
-				<th>菜单等级</th>
-				<th>菜单顺序</th>
+				<th>登录号</th>
+				<th>用户名称</th>
+				<th>性别</th>
+				<th>身份证</th>
+				<th>手机号</th>
+				<th>邮箱</th>
+				<th>电话</th>
+				<th>状态</th>
 				<th>操作</th>
 			</tr>
 		</thead>
-		<tbody id="menuBody">
+		<tbody id="userBody">
 		</tbody>
 	</table>
 
 	<div style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
 		<label>每页显示
-			<select id="selectPageSize" onchange="selectPageSize()">
+			<select id="userSelectPage" onchange="userSelectPage()">
 				<option value = '2'>2</option>
 				<option value = '5'>5</option>
 				<option selected = "selected" value = '10'>10</option>
 				<option value = '15'>15</option>
 			</select>行
 		</label>
-		<label id="menuPagination" style="margin:0;padding:0">
+		<label id="userPagination" style="margin:0;padding:0">
 			
 		</label>
 	</div>
 	
 	<!-- 模态框（Modal） -->
 
-	<div class="modal fade" id="menuadd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="useradd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -70,47 +72,57 @@
 		        </div>
 
 		        <div class="modal-body">
-		            <form role="form" id="menuAddForm">
+		            <form role="form" id="userAddForm">
 						<div class="form-group">
-						  <label for="name">菜单名称</label>
-						  <input type="text" class="form-control" id="menuName" 
+						  <label for="name">登陆账号</label>
+						  <input type="text" class="form-control" id="userName" 
 						     placeholder="请输入名称">
 						</div>
 						<div class="form-group">
-						  <label for="name">菜单图标</label>
-						  <input type="text" class="form-control" id="menuIcon" 
+						  <label for="name">用户名称</label>
+						  <input type="text" class="form-control" id="realName" 
 						     placeholder="请输入图标">
 						</div>
 						<div class="form-group">
-						  <label for="name">菜单类型</label>
-						  <input type="text" class="form-control" id="menuType" 
-						     placeholder="请输入类型">
+						  <label for="name">用户密码</label>
+						  <input type="text" class="form-control" id="password" 
+						     placeholder="请输入密码">
 						</div>
 						<div class="form-group">
-						  <label for="name">菜单地址</label>
-						  <input type="text" class="form-control" id="menuUrl" 
+						  <label for="name">身份证</label>
+						  <input type="text" class="form-control" id="identificationNo" 
 						     placeholder="请输入">
 						</div>
 						<div class="form-group">
-						  <label for="name">父菜单Id</label>
-						  <input type="text" class="form-control" id="menuParentId" 
-						     placeholder="请输入">
+						  <label for="name">手机号</label>
+						  <input type="text" class="form-control" id="phone" 
+						     placeholder="请输入手机号">
 						</div>
 						<div class="form-group">
-						  <label for="name">菜单等级</label>
-						  <input type="text" class="form-control" id="menuLevel" 
-						     placeholder="请输入名称">
+						  <label for="name">邮箱</label>
+						  <input type="text" class="form-control" id="email" 
+						     placeholder="请输入邮箱">
 						</div>
 						<div class="form-group">
-						  <label for="name">菜单顺序</label>
-						  <input type="text" class="form-control" id="menuRank" 
-						     placeholder="请输入名称">
+						  <label for="name">电话</label>
+						  <input type="text" class="form-control" id="mobile" 
+						     placeholder="请输入电话">
+						</div>
+						<div class="form-group">
+						  <label for="name">性别</label>
+						  <input type="text" class="form-control" id="sex" 
+						     placeholder="请输入性别">
+						</div>
+						<div class="form-group">
+						  <label for="name">状态</label>
+						  <input type="text" class="form-control" id="status" 
+						     placeholder="是否启用">
 						</div>
 						<div class="modal-footer">
 				            <button type="button" class="btn btn-default" 
 				               data-dismiss="modal">关闭
 				            </button>
-				            <button type="submit" onclick="menuAdd()" class="btn btn-primary">
+				            <button type="submit" onclick="userAdd()" class="btn btn-primary">
 				               确认添加
 				            </button>
 			        	</div>
@@ -121,7 +133,7 @@
 		            <button type="button" class="btn btn-default" 
 		               data-dismiss="modal">关闭
 		            </button>
-		            <button type="submit" onclick="menuAdd()" class="btn btn-primary">
+		            <button type="submit" onclick="userAdd()" class="btn btn-primary">
 		               确认添加
 		            </button>
 		        </div>
@@ -130,7 +142,7 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="menuupdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="userupdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -138,17 +150,17 @@
 	                  &times;
 		            </button>
 		            <h4 class="modal-title" id="myModalLabel">
-		                菜单编辑
+		                用户编辑
 		            </h4>
 		        </div>
-	        <div class="modal-body" id="menuUpdateBody">
+	        <div class="modal-body" id="userUpdateBody">
 	            
 	        </div>
 		        <!-- <div class="modal-footer">
 		            <button type="button" class="btn btn-default" 
 		               data-dismiss="modal">关闭
 		            </button>
-		            <button type="submit" onclick="menuUpdate" class="btn btn-primary">
+		            <button type="submit" onclick="userUpdate" class="btn btn-primary">
 		               提交更改
 		            </button>
 		        </div> -->
@@ -156,7 +168,7 @@
 		</div><!-- /.modal -->
 	</div>
 
-	<div class="modal fade" id="menudelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="userdelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -164,10 +176,10 @@
 	                  &times;
 		            </button>
 		            <h4 class="modal-title" id="myModalLabel">
-		                菜单删除
+		                用户删除
 		            </h4>
 		        </div>
-		        <div class="modal-body" id="menuDeleteBody">
+		        <div class="modal-body" id="userDeleteBody">
 		           
 		        </div>
 		        
@@ -175,10 +187,9 @@
 		</div><!-- /.modal -->
 	</div>
 
- 	<script src="./bootstrap/components/menuManage.js"></script>
- 	<script src="./bootstrap/components/selectPageSize.js"></script>
- 	<script src="./bootstrap/components/menuAdd.js"></script>
- 	<script src="./bootstrap/components/menuUpdate.js"></script>
- 	<script src="./bootstrap/components/menuDelete.js"></script>
+ 	<script src="./bootstrap/components/userSelectPage.js"></script>
+ 	<script src="./bootstrap/components/userAdd.js"></script>
+ 	<script src="./bootstrap/components/userUpdate.js"></script>
+ 	<script src="./bootstrap/components/userDelete.js"></script>
 </body>
 </html>

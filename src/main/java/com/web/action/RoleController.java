@@ -227,7 +227,11 @@ public class RoleController extends BaseController{
 		}
 
 		try {
-			Role role=roleService.getById(id);
+			Role role = roleService.getById(id);
+
+			if(null == role){
+				return AllResult.buildJSON(HttpStatus.NOT_FOUND.value(), "未查询到相关数据");
+			}
 
 			// 增加日志
 //			if(null != role){

@@ -78,7 +78,7 @@ function tablePerfom(num,size){
 		}
 		articleId();
 		console.log(htm_final_ele);
-		var index = document.getElementById("menubody");
+		var index = document.getElementById("menuBody");
 		index.innerHTML = htm_final_ele;
 	}).fail((err)=>{
 
