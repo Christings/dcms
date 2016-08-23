@@ -10,7 +10,7 @@ function roleAdd(){
 	$("#roleAddForm").submit(function(){
 		var roleCode = $("#roleCode").val();
 		var roleName = $("#roleName").val();
-		
+		console.log("roleAdd1");
 		if(roleCode == "" || roleName == "")
 		{
 			//$("#alert").text("请输入登陆名称");
@@ -18,8 +18,8 @@ function roleAdd(){
 		}
 
 		var roleInfo = { rolecode:'', rolename:''};
-		userInfo['rolecode'] = roleCode;
-		userInfo['roleName'] = roleName;
+		roleInfo['rolecode'] = roleCode;
+		roleInfo['rolename'] = roleName;
 		$.ajax({
 			type:"post",
 			url:"role/add",
