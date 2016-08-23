@@ -226,6 +226,6 @@ function parseTreeJson(treeNodes){
 			}
 		}
 	});
-	console.log(element);
+	// console.log(element);
 	return element;
 }

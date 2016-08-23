@@ -76,7 +76,8 @@ function roleDelete(){
 
 function roleGet(){
 	console.log("roleGet");
-	var id = "23721b903494367b513b7e41d91a1f8";
+	var id = "41389436ed88450bbd85ef9da72e637b";
+	// var id = "23721b903494367b513b7e41d91a1f8";
 	var roleInfo = {id: id};
 	$.ajax({
 		type:"post",

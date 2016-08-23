@@ -70,7 +70,7 @@ function parseTreeJson(treeNodes){
 
 		if(e["childMenu"] != null){
 			var index = e["id"];
-			console.log(e["name"]);
+			// console.log(e["name"]);
 			if(e["level"]!=1){
 				return(
 					"<li style=\"" + liStyle + "\" class=\"list-group-item\" >"+
@@ -128,7 +128,7 @@ function parseTreeJson(treeNodes){
 			}
 		}
 	});
-	console.log(element);
+	// console.log(element);
 	return element;
 }
 

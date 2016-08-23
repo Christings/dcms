@@ -8,6 +8,7 @@ function menuAdd(){
 	// var type = document.getElementById("menuType").value;
 	console.log("menuAdd");
 	$("#menuAddForm").submit(function(){
+		console.log("menuAdd1");
 		var name = $("#menuName").val();
 		var rank = $("#menuRank").val();
 		var level = $("#menuLevel").val();
