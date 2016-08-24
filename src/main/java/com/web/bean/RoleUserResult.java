@@ -18,9 +18,11 @@ public class RoleUserResult {
      */
     private Role role;
     /**
-     * 用户集合
+     * 用户集合(和角色建立关系的用户)
      */
     private Set<User> users = new LinkedHashSet<>();
+
+    private Set<UserResult>  records = new LinkedHashSet<>();
 
     public Role getRole() {
         return role;
@@ -40,5 +42,17 @@ public class RoleUserResult {
 
     public void add(User user){
         this.users.add(user);
+    }
+
+    public Set<UserResult> getRecords() {
+        return records;
+    }
+
+    public void setRecords(Set<UserResult> records) {
+        this.records = records;
+    }
+
+    public void add(UserResult userResult){
+        this.records.add(userResult);
     }
 }

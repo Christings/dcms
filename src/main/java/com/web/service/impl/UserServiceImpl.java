@@ -185,4 +185,17 @@ public class UserServiceImpl implements UserService {
 
 		return page;
 	}
+
+	@Override
+	@Transactional(propagation = Propagation.SUPPORTS,readOnly = true)
+	public List<User> getExample(UserExample example) {
+		// 查询数据
+		List<User> users = userMapper.selectByExample(example);
+
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("get user scroll object size: {}", users.size());
+		}
+
+		return users;
+	}
 }

@@ -3,10 +3,13 @@ package com.web.action;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.web.bean.RoleUserResult;
+import com.web.bean.UserResult;
 import com.web.bean.UserRoleResult;
 import com.web.core.action.BaseController;
 import com.web.entity.OperLog;
+import com.web.entity.User;
 import com.web.entity.UserRole;
+import com.web.example.UserExample;
 import com.web.service.RoleSerivce;
 import com.web.service.UserRoleService;
 import com.web.service.UserService;
@@ -15,6 +18,7 @@ import com.web.util.UUIDGenerator;
 import com.web.util.fastjson.FastjsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -204,7 +209,7 @@ public class UserRoleController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/getUsers", method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/getUsers", method = RequestMethod.POST)
     @ResponseBody
     public Object getUsers(String roleId,HttpServletRequest request) {
         try {
@@ -233,12 +238,76 @@ public class UserRoleController extends BaseController {
 
             //去除不需要的字段
             String jsonStr = JSON.toJSONString(roleUserResult,
-                    FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"),
+                    FastjsonUtils.newIgnorePropertyFilter("records","password","updateName","updateDate","createName","createDate"),
                     SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
             return AllResult.okJSON(JSON.parse(jsonStr));
         } catch (Exception e) {
             LOGGER.error("userRole object error. getUsers ", e);
+            operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.userRole, null,
+                    OperLog.logLevelEnum.error);
+
+        }
+
+        return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取角色下所有用户信息失败");
+    }
+
+    /**
+     * 根据角色Id 获取所有相关用户信息
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getUserAll", method = RequestMethod.POST)
+    @ResponseBody
+    public Object getUserAll(String roleId,HttpServletRequest request) {
+        try {
+            if(StringUtils.isEmpty(roleId)){
+                return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
+            }
+
+            List<UserRole> userRoleList = userRoleService.getRoleUser(roleId);
+
+            if(null == userRoleList || userRoleList.size() == 0){
+                return AllResult.build(1, "未查询到相关数据");
+            }
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("userRoleList result: {}", JSON.toJSONString(userRoleList));
+            }
+
+            //返回的结果集合
+            RoleUserResult roleUserResult = new RoleUserResult();
+            roleUserResult.setRole(roleSerivce.getById(userRoleList.get(0).getRoleId()));
+
+            //临时存放  userId集合
+            List<String> userIdList = new ArrayList<>();
+            for(UserRole userRole:userRoleList){
+                userIdList.add(userRole.getUserId());
+            }
+
+            //查询所有未删除用户
+            UserExample example = new UserExample();
+            UserExample.Criteria criteria = example.createCriteria();
+            criteria.andStatusNotEqualTo((short)2);
+            List<User> users = userService.getExample(example);
+            for(User user:users){
+                UserResult userResult = new UserResult();
+                BeanUtils.copyProperties(user,userResult);
+                if(userIdList.contains(user.getId())){
+                    userResult.setChecked(1);
+                }
+                roleUserResult.add(userResult);
+            }
+
+            //去除不需要的字段
+            String jsonStr = JSON.toJSONString(roleUserResult,
+                    FastjsonUtils.newIgnorePropertyFilter("users","password","updateName","updateDate","createName","createDate"),
+                    SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+
+            return AllResult.okJSON(JSON.parse(jsonStr));
+        } catch (Exception e) {
+            LOGGER.error("userRole object error. getUserAll ", e);
             operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.userRole, null,
                     OperLog.logLevelEnum.error);
 
@@ -290,7 +359,7 @@ public class UserRoleController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/getRoles", method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/getRoles", method = RequestMethod.POST)
     @ResponseBody
     public Object getRoles(String userId,HttpServletRequest request) {
         try {
@@ -319,7 +388,7 @@ public class UserRoleController extends BaseController {
 
             //去除不需要的字段
             String jsonStr = JSON.toJSONString(userRoleResult,
-                    FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"),
+                    FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
                     SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
             return AllResult.okJSON(JSON.parse(jsonStr));
