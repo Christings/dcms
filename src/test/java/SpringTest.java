@@ -1,16 +1,9 @@
 
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import com.alibaba.fastjson.JSON;
-import com.web.core.util.Page;
-import com.web.entity.User;
-import com.web.service.UserService;
 /**
  * 
 * @ClassName: SpringTest 
@@ -27,24 +20,24 @@ import com.web.service.UserService;
 @WebAppConfiguration
 public class SpringTest {
 
-	@Autowired
-	private UserService uservice;
-	@Autowired
-	private DataDictService ;
-	@Test
-	public void test1(){
-		Page<User> page=new Page<User>();
-		page.setPageNo(1);
-		page.setPageSize(10);
-		try {
-
-			uservice.getUserPage(page);
-			System.out.println(JSON.toJSONString(page));
-			System.out.println(JSON.toJSONString(uservice.getAllUsers()));
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		
-	}
+//	@Autowired
+//	private UserService uservice;
+//	@Autowired
+//	private DataDictService ;
+//	@Test
+//	public void test1(){
+//		Page<User> page=new Page<User>();
+//		page.setPageNo(1);
+//		page.setPageSize(10);
+//		try {
+//
+//			uservice.getUserPage(page);
+//			System.out.println(JSON.toJSONString(page));
+//			System.out.println(JSON.toJSONString(uservice.getAllUsers()));
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//			e.printStackTrace();
+//		}
+//
+//	}
 }

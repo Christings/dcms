@@ -77,7 +77,9 @@ public class UserController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(user,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"), SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+			String jsonStr = JSON.toJSONString(user,
+					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
+					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -121,7 +123,13 @@ public class UserController extends BaseController {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("update result: {}", result);
 			}
-			return AllResult.okJSON(user);
+
+			//去除不需要的字段
+			String jsonStr = JSON.toJSONString(user,
+					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
+					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error("update User fail:", e.getMessage());
@@ -220,7 +228,12 @@ public class UserController extends BaseController {
 				return AllResult.buildJSON(HttpStatus.NOT_FOUND.value(), "未找到用户数据");
 			}
 
-			return AllResult.okJSON(user);
+			//去除不需要的字段
+			String jsonStr = JSON.toJSONString(user,
+					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
+					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("get User fail:", e.getMessage());
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误, 用户删除失败");
@@ -247,7 +260,9 @@ public class UserController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(users, FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"),SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+			String jsonStr = JSON.toJSONString(users,
+					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
+					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			// 增加日志
 			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,JSON.toJSONString(users.size()));
@@ -305,7 +320,9 @@ public class UserController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(queryResult, FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"),SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+			String jsonStr = JSON.toJSONString(queryResult,
+					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
+					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,JSON.toJSONString(queryResult.getRecords().size()));
 
