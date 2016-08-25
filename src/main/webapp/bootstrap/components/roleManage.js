@@ -4,10 +4,10 @@
 // roleUpdate();
 // roleGet();
 // roleDelete();
-batchUsers();
-batchRoles();
-roleGetAll();
-roleGet();
+// batchUsers();
+// batchRoles();
+// roleGetAll();
+// roleGet();
 
 function roleAdd(){
 	console.log("roleAdd");
