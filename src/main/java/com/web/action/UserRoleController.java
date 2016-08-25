@@ -7,6 +7,7 @@ import com.web.bean.UserResult;
 import com.web.bean.UserRoleResult;
 import com.web.core.action.BaseController;
 import com.web.entity.OperLog;
+import com.web.entity.Role;
 import com.web.entity.User;
 import com.web.entity.UserRole;
 import com.web.example.UserExample;
@@ -266,21 +267,17 @@ public class UserRoleController extends BaseController {
                 return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
             }
 
-            List<UserRole> userRoleList = userRoleService.getRoleUser(roleId);
-
-            if(null == userRoleList || userRoleList.size() == 0){
-                return AllResult.build(1, "未查询到相关数据");
-            }
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("userRoleList result: {}", JSON.toJSONString(userRoleList));
+            Role role = roleSerivce.getById(roleId);
+            if(null == role){
+                return AllResult.buildJSON(HttpStatus.NOT_FOUND.value(), "未找到角色数据");
             }
 
             //返回的结果集合
             RoleUserResult roleUserResult = new RoleUserResult();
-            roleUserResult.setRole(roleSerivce.getById(userRoleList.get(0).getRoleId()));
+            roleUserResult.setRole(role);
 
-            //临时存放  userId集合
+            //查找关联数据
+            List<UserRole> userRoleList = userRoleService.getRoleUser(roleId);
             List<String> userIdList = new ArrayList<>();
             for(UserRole userRole:userRoleList){
                 userIdList.add(userRole.getUserId());
@@ -294,7 +291,7 @@ public class UserRoleController extends BaseController {
             for(User user:users){
                 UserResult userResult = new UserResult();
                 BeanUtils.copyProperties(user,userResult);
-                if(userIdList.contains(user.getId())){
+                if(userIdList.size()>0 && userIdList.contains(user.getId())){
                     userResult.setChecked(1);
                 }
                 roleUserResult.add(userResult);
