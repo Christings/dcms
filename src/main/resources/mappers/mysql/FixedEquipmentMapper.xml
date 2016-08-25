@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.mappers.FixedEquipmentMapper" >
+  <resultMap id="BaseResultMap" type="com.web.entity.FixedEquipment" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="equ_name" property="equName" jdbcType="VARCHAR" />
+    <result column="equ_type" property="equType" jdbcType="VARCHAR" />
+    <result column="equ_vendor" property="equVendor" jdbcType="VARCHAR" />
+    <result column="rso_path" property="rsoPath" jdbcType="VARCHAR" />
+    <result column="max_path" property="maxPath" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="status_msg" property="statusMsg" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_name" property="createName" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="update_name" property="updateName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, equ_name, equ_type, equ_vendor, rso_path, max_path, status, status_msg, create_date, 
+    create_name, update_date, update_name
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.FixedEquipmentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_b_fixed_equipment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_b_fixed_equipment
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_b_fixed_equipment
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.web.example.FixedEquipmentExample" >
+    delete from t_b_fixed_equipment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.web.entity.FixedEquipment" >
+    insert into t_b_fixed_equipment (id, equ_name, equ_type, 
+      equ_vendor, rso_path, max_path, 
+      status, status_msg, create_date, 
+      create_name, update_date, update_name
+      )
+    values (#{id,jdbcType=VARCHAR}, #{equName,jdbcType=VARCHAR}, #{equType,jdbcType=VARCHAR}, 
+      #{equVendor,jdbcType=VARCHAR}, #{rsoPath,jdbcType=VARCHAR}, #{maxPath,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{statusMsg,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{createName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{updateName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.web.entity.FixedEquipment" >
+    insert into t_b_fixed_equipment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="equName != null" >
+        equ_name,
+      </if>
+      <if test="equType != null" >
+        equ_type,
+      </if>
+      <if test="equVendor != null" >
+        equ_vendor,
+      </if>
+      <if test="rsoPath != null" >
+        rso_path,
+      </if>
+      <if test="maxPath != null" >
+        max_path,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="statusMsg != null" >
+        status_msg,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createName != null" >
+        create_name,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="updateName != null" >
+        update_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="equName != null" >
+        #{equName,jdbcType=VARCHAR},
+      </if>
+      <if test="equType != null" >
+        #{equType,jdbcType=VARCHAR},
+      </if>
+      <if test="equVendor != null" >
+        #{equVendor,jdbcType=VARCHAR},
+      </if>
+      <if test="rsoPath != null" >
+        #{rsoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="maxPath != null" >
+        #{maxPath,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="statusMsg != null" >
+        #{statusMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createName != null" >
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateName != null" >
+        #{updateName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.web.example.FixedEquipmentExample" resultType="java.lang.Integer" >
+    select count(*) from t_b_fixed_equipment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_b_fixed_equipment
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equName != null" >
+        equ_name = #{record.equName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equType != null" >
+        equ_type = #{record.equType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equVendor != null" >
+        equ_vendor = #{record.equVendor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rsoPath != null" >
+        rso_path = #{record.rsoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxPath != null" >
+        max_path = #{record.maxPath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.statusMsg != null" >
+        status_msg = #{record.statusMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createName != null" >
+        create_name = #{record.createName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateDate != null" >
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateName != null" >
+        update_name = #{record.updateName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_b_fixed_equipment
+    set id = #{record.id,jdbcType=VARCHAR},
+      equ_name = #{record.equName,jdbcType=VARCHAR},
+      equ_type = #{record.equType,jdbcType=VARCHAR},
+      equ_vendor = #{record.equVendor,jdbcType=VARCHAR},
+      rso_path = #{record.rsoPath,jdbcType=VARCHAR},
+      max_path = #{record.maxPath,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      status_msg = #{record.statusMsg,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      create_name = #{record.createName,jdbcType=VARCHAR},
+      update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      update_name = #{record.updateName,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.FixedEquipment" >
+    update t_b_fixed_equipment
+    <set >
+      <if test="equName != null" >
+        equ_name = #{equName,jdbcType=VARCHAR},
+      </if>
+      <if test="equType != null" >
+        equ_type = #{equType,jdbcType=VARCHAR},
+      </if>
+      <if test="equVendor != null" >
+        equ_vendor = #{equVendor,jdbcType=VARCHAR},
+      </if>
+      <if test="rsoPath != null" >
+        rso_path = #{rsoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="maxPath != null" >
+        max_path = #{maxPath,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="statusMsg != null" >
+        status_msg = #{statusMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createName != null" >
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateName != null" >
+        update_name = #{updateName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.web.entity.FixedEquipment" >
+    update t_b_fixed_equipment
+    set equ_name = #{equName,jdbcType=VARCHAR},
+      equ_type = #{equType,jdbcType=VARCHAR},
+      equ_vendor = #{equVendor,jdbcType=VARCHAR},
+      rso_path = #{rsoPath,jdbcType=VARCHAR},
+      max_path = #{maxPath,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      status_msg = #{statusMsg,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_name = #{createName,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      update_name = #{updateName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

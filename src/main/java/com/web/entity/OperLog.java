@@ -69,7 +69,7 @@ public class OperLog {
 	}
 
 	public enum actionSystemEnum {
-		user, role, menu, dataDic, login, logout, log, menuRole, userRole
+		user, role, menu, dataDic, login, logout, log, menuRole, userRole, fixedEquipment
 	}
 
 	public enum actionBusinessEnum {

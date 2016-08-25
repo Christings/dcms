@@ -222,7 +222,7 @@ public class UserController extends BaseController {
 
 			if(null != user){
 				// 增加日志
-				operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.user,
+				operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,
 						JSON.toJSONString(user,SerializerFeature.IgnoreNonFieldGetter));
 			}else{
 				return AllResult.buildJSON(HttpStatus.NOT_FOUND.value(), "未找到用户数据");
@@ -236,7 +236,7 @@ public class UserController extends BaseController {
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("get User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误, 用户删除失败");
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误, 获取用户信息失败");
 		}
 	}
 
@@ -265,7 +265,7 @@ public class UserController extends BaseController {
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			// 增加日志
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,JSON.toJSONString(users.size()));
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,JSON.toJSONString(users.size()));
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -324,7 +324,7 @@ public class UserController extends BaseController {
 					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,JSON.toJSONString(queryResult.getRecords().size()));
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,JSON.toJSONString(queryResult.getRecords().size()));
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 
