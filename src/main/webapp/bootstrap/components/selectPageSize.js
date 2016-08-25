@@ -42,9 +42,9 @@ function selectPageSize(){
 			pagination();
 			ulContent += "<li onclick=\"pagePlus()\"><a>&raquo;</a></li></ul>";
 			console.log(htm_final_ele);
-			var index = document.getElementById("menubody");
+			var index = document.getElementById("menuBody");
 			index.innerHTML = htm_final_ele;
-			var index2 = document.getElementById("pagination");
+			var index2 = document.getElementById("menuPagination");
 			index2.innerHTML = ulContent;
 		}).fail((err)=>{
 
