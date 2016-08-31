@@ -1,12 +1,12 @@
 body {
 	 padding-top:50px;
 }
-div .well{
-	background-color:black;
+.well div {
+	background-color: #8e909a;
 	height: 100%;
 }
 #menutree li{
-	background-color:#555;
+	background-color: #555;
 }
 #menutree li:hover:{
 	background-color:gray;
@@ -63,3 +63,4 @@ div .side-bar button{
 	left: 16%;
 	width: 83%;
 }
+
