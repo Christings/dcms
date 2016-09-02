@@ -102,16 +102,14 @@ public class UserController extends BaseController {
 		// TODO 需要添加判断
 		if(StringUtils.isEmpty(user.getId())|| "".equals(user.getId().trim())){
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户id不能为空");
-		}else if (StringUtils.isEmpty(user.getPassword())|| "".equals(user.getPassword().trim())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户密码不能为空");
-		} else if (StringUtils.isEmpty(user.getRealname())) {
+		}else if (StringUtils.isEmpty(user.getRealname())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "真实名不能为空");
 		} else if(null == user.getStatus()){
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "状态必须提供");
 		}
 
 		try {
-			user.setPassword(MD5.MD5Encode(user.getPassword()));
+			user.setPassword(null);
 			int result = userService.updateById(user);
 
 			if(result > 0){
