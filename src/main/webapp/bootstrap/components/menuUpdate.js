@@ -4,21 +4,21 @@ function menuUpdate(){
 			// var type = document.getElementById("menuType").value;
 	$("#menuUpdateForm").submit(function(){
 		console.log(2);
-		var id = $("#menuId").val();
+		var id = $("#menuId1").val();
 		console.log(id);
-		var name = $("#menuName").val();
+		var name = $("#menuName1").val();
 		console.log(name);
-		var rank = $("#menuRank").val();
+		var rank = $("#menuRank1").val();
 		console.log(rank);
-		var level = $("#menuLevel").val();
+		var level = $("#menuLevel1").val();
 		console.log(level);
-		var url = $("#menuUrl").val();
+		var url = $("#menuUrl1").val();
 		console.log(url);
-		var parentId = $("#menuParentId").val();
+		var parentId = $("#menuParentId1").val();
 		console.log(parentId);
-		var iconId = $("#menuIcon").val();
+		var iconId = $("#menuIcon1").val();
 		console.log(iconId);
-		var type = $("#menuType").val();
+		var type = $("#menuType1").val();
 		console.log(type);
 		if(name == "")
 		{
@@ -46,26 +46,11 @@ function menuUpdate(){
 		$.ajax({
 			type:"post",
 			url:"menu/update",
-			dataType: 'json',
+			dataType: "json",
 			data: menuInfo,
 			success:function(res){
 				if(res.status == "1"){
 					console.log("修改菜单成功");
-					// $.ajax({
-					// 	url: "menu/datagrid",
-					// 	dataType: "json",
-					// 	data: getMenuData,
-					// 	type: "post"
-					// }).done((jsonData)=>{
-					// 	const menuData = jsonData["data"]["records"];
-					// 	const totalPage = jsonData["data"]["pageCount"];
-
-					// 	const menu = {menuData: menuData,totalPage:totalPage};
-
-					// 	this.props.actions.menuAll(menu);
-					// }).fail((err)=>{
-
-					// });
 				}else{
 					console.log("修改菜单失败"+res.msg);
 					return false;
@@ -113,39 +98,38 @@ function menuUpdateInit(e){
 			var html = "<form role=\"form\" id=\"menuUpdateForm\">"+
 					"<div class=\"form-group\">"+
 					    "<label for=\"name\">菜单名称</label>"+
-					    "<input type=\"text\" class=\"form-control\" id=\"menuName\""+ 
+					    "<input type=\"text\" class=\"form-control\" id=\"menuName1\""+ 
 					     "value=\""+name+"\">"+
-					     "<span id=\"menuId\" value=\""+id+"\">"+
-					     "</span>"+
+					     "<input hidden=\"hidden\"  id=\"menuId1\" value=\""+id+"\">"+
 					"</div>"+
 					"<div class=\"form-group\">"+
 						"<label for=\"name\">菜单图标</label>"+
-						"<input type=\"text\" class=\"form-control\" id=\"menuIcon\""+
+						"<input type=\"text\" class=\"form-control\" id=\"menuIcon1\""+
 						"value=\""+iconId+"\">"+
 					"</div>"+
 					"<div class=\"form-group\">"+
 						"<label for=\"name\">菜单类型</label>"+
-						"<input type=\"text\" class=\"form-control\" id=\"menuType\""+
+						"<input type=\"text\" class=\"form-control\" id=\"menuType1\""+
 						"value=\""+type+"\">"+
 					"</div>"+
 					"<div class=\"form-group\">"+
 						"<label>菜单地址</label>"+
-						"<input type=\"text\" class=\"form-control\" id=\"menuUrl\""+
+						"<input type=\"text\" class=\"form-control\" id=\"menuUrl1\""+
 					    "value=\""+url+"\">"+
 					"</div>"+
 					"<div class=\"form-group\">"+
 						"<label>父菜单Id</label>"+
-						"<input type=\"text\" class=\"form-control\" id=\"menuParentId\""+
+						"<input type=\"text\" class=\"form-control\" id=\"menuParentId1\""+
 					     "value=\""+parentId+"\">"+
 					"</div>"+
 					"<div class=\"form-group\">"+
 						"<label>菜单等级</label>"+
-						"<input type=\"number\" class=\"form-control\" id=\"menuLevel\""+
+						"<input type=\"number\" class=\"form-control\" id=\"menuLevel1\""+
 					     "value=\""+level+"\">"+
 					"</div>"+
 					"<div class=\"form-group\">"+
 						"<label>菜单顺序</label>"+
-						"<input type=\"number\" class=\"form-control\" id=\"menuRank\""+
+						"<input type=\"number\" class=\"form-control\" id=\"menuRank1\""+
 					     "value=\""+rank+"\">"+
 					"</div>"+
 					"<div class=\"modal-footer\">"+

@@ -4,25 +4,25 @@ function userUpdate(){
 			// var type = document.getElementById("menuType").value;
 	$("#userUpdateForm").submit(function(){
 		console.log(2);
-		var id = $("#userId").val();
+		var id = $("#userId1").val();
 		console.log(id);
-		var userName = $("#userName").val();
+		var userName = $("#userName1").val();
 		console.log(userName);
-		var realName = $("#realName").val();
+		var realName = $("#realName1").val();
 		console.log(realName);
-		var password = $("#password").val();
+		var password = $("#password1").val();
 		console.log(password);
-		var identificationNo = $("#identificationNo").val();
+		var identificationNo = $("#identificationNo1").val();
 		console.log(identificationNo);
-		var phone = $("#phone").val();
+		var phone = $("#phone1").val();
 		console.log(phone);
-		var email = $("#email").val();
+		var email = $("#email1").val();
 		console.log(email);
-		var mobile = $("#mobile").val();
+		var mobile = $("#mobile1").val();
 		console.log(mobile);
-		var sex = $("#sex").val();
+		var sex = $("#sex1").val();
 		console.log(sex);
-		var status = $("#status").val();
+		var status = $("#status1").val();
 		console.log(status);
 		if(realName == "")
 		{
@@ -45,7 +45,7 @@ function userUpdate(){
 		$.ajax({
 			type:"post",
 			url:"user/update",
-			dataType: 'json',
+			dataType: "json",
 			data: userInfo,
 			success:function(res){
 				if(res.status == "1"){
@@ -89,44 +89,44 @@ function userUpdateInit(e){
 			var status = userInfo['status'];
 			//console.log("parentId:"+menu["parentId"]);
 			var html = "<form role=\"form\" id=\"userUpdateForm\">"+
-						"<div class=\"form-group\">"+
-						  "<label id=\"userId\" value=\""+ id +"\"for=\"name\"></label>"+
+						"<div hidden=\"hidden\" class=\"form-group\">"+
+						  "<input id=\"userId1\" value=\""+ id +"\"for=\"name\">"+
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">登陆账号</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"userName\" value=\""+userName+"\">"+
+						  "<input type=\"text\" class=\"form-control\" id=\"userName1\" value=\""+userName+"\">"+
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">用户名称</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"realName\" value=\""+realName+"\">"+
+						  "<input type=\"text\" class=\"form-control\" id=\"realName1\" value=\""+realName+"\">"+
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">用户密码</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"password\" value=\""+password+"\">"+
+						  "<input type=\"text\" class=\"form-control\" id=\"password1\" value=\""+password+"\">"+
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">身份证</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"identificationNo\" value=\""+identificationNo+"\">"+
+						  "<input type=\"text\" class=\"form-control\" id=\"identificationNo1\" value=\""+identificationNo+"\">"+
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">手机号</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"mobile\" value=\""+mobile+"\">"+
+						  "<input type=\"text\" class=\"form-control\" id=\"mobile1\" value=\""+mobile+"\">"+
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">邮箱</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"email\" value=\""+email+"\">"+
+						  "<input type=\"text\" class=\"form-control\" id=\"email1\" value=\""+email+"\">"+
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">电话</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"phone\" value=\""+phone+"\">"+
+						  "<input type=\"text\" class=\"form-control\" id=\"phone1\" value=\""+phone+"\">"+
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">性别</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"sex\" value=\""+sex+"\">"+
+						  "<input type=\"text\" class=\"form-control\" id=\"sex1\" value=\""+sex+"\">"+
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">状态</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"status\" value=\""+status+"\">"+
+						  "<input type=\"text\" class=\"form-control\" id=\"status1\" value=\""+status+"\">"+
 						"</div>"+
 						"<div class=\"modal-footer\">"+
 			           "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">关闭"+

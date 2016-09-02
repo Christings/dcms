@@ -37,7 +37,7 @@ function loadUserBody(){
 					"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\">编辑</label>|"+
 					"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\">删除</label>"+
 				"</td>"+
-			"<tr>";
+			"</tr>";
 			html_content += content;
 			num++;
 		}

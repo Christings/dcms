@@ -9,14 +9,17 @@ function roleUpdateInit(e){
 		type: "post"
 	}).done((jsonData)=>{
 		var roleInfo = jsonData["data"];
-		var content = "<form role=\"form\" id=\"roleAddForm\">"+
+		var content = "<form role=\"form\" id=\"roleUpdateForm\">"+
+						"<div class=\"form-group\" hidden=\"hidden\">"+
+							"<input type=\"text\" class=\"form-control\" value=\"" + id + "\"id=\"roleId1\" >"+
+						"</div>"+
 						"<div class=\"form-group\">"+
 							"<label for=\"name\">角色编码</label>"+
-							"<input type=\"text\" class=\"form-control\" value=\"" + roleInfo["rolecode"] + "\"id=\"roleCode\" >"+
+							"<input type=\"text\" class=\"form-control\" value=\"" + roleInfo["rolecode"] + "\"id=\"roleCode1\" >"+
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  	"<label for=\"name\">角色名称</label>"+
-						  	"<input type=\"text\" class=\"form-control\" value=\"" + roleInfo["rolename"] + "\" id=\"roleName\" >"+
+						  	"<input type=\"text\" class=\"form-control\" value=\"" + roleInfo["rolename"] + "\" id=\"roleName1\" >"+
 						"</div>"+
 						"<div class=\"modal-footer\">"+
 				           " <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">关闭"+
@@ -34,15 +37,17 @@ function roleUpdateInit(e){
 function roleUpdate(){
 	console.log("roleUpdate");
 	$("#roleUpdateForm").submit(function(){
-		var roleCode = $("#roleCode").val();
-		var roleName = $("#roleName").val();
+		var roleCode = $("#roleCode1").val();
+		var roleName = $("#roleName1").val();
+		var id = $("#roleId1").val();
 		console.log("roleAdd1");
 		if(roleCode == "" || roleName == "")
 		{
 			//$("#alert").text("请输入登陆名称");
 			return false;
 		}
-		var roleInfo = { rolecode:'', rolename:''};
+		var roleInfo = { id:'',rolecode:'', rolename:''};
+		roleInfo['id'] = id;
 		roleInfo['rolecode'] = roleCode;
 		roleInfo['rolename'] = roleName;
 		$.ajax({
