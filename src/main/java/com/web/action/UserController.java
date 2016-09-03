@@ -10,6 +10,7 @@ import com.web.example.UserExample;
 import com.web.util.AllResult;
 import com.web.util.MD5;
 import com.web.util.UUIDGenerator;
+import com.web.util.WebUtils;
 import com.web.util.fastjson.FastjsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import static com.web.util.AllResult.buildJSON;
 
 /**
  * 用户管理接口
@@ -47,20 +50,20 @@ public class UserController extends BaseController {
 		}
 		// TODO 需要添加判断
 		if (StringUtils.isEmpty(user.getUsername()) || "".equals(user.getUsername().trim())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "登录名不能为空");
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "登录名不能为空");
 		} else if (StringUtils.isEmpty(user.getPassword())|| "".equals(user.getPassword().trim())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户密码不能为空");
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "用户密码不能为空");
 		} else if (StringUtils.isEmpty(user.getRealname())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "真实名不能为空");
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "真实名不能为空");
 		} else if(null == user.getStatus()){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "状态输入有误,请检查");
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "状态输入有误,请检查");
 		}
 
 		UserExample example = new UserExample();
 		UserExample.Criteria criteria = example.createCriteria();
 		criteria.andUsernameEqualTo(user.getUsername());
 		if(userService.count(example)>0){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "登录名已经存在不可以重复");
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "登录名已经存在不可以重复");
 		}
 
 		try {
@@ -77,13 +80,15 @@ public class UserController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(user,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"), SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+			String jsonStr = JSON.toJSONString(user,
+					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
+					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error("save User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加用户失败");
+			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加用户失败");
 		}
 
 	}
@@ -99,17 +104,15 @@ public class UserController extends BaseController {
 		}
 		// TODO 需要添加判断
 		if(StringUtils.isEmpty(user.getId())|| "".equals(user.getId().trim())){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户id不能为空");
-		}else if (StringUtils.isEmpty(user.getPassword())|| "".equals(user.getPassword().trim())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户密码不能为空");
-		} else if (StringUtils.isEmpty(user.getRealname())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "真实名不能为空");
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "用户id不能为空");
+		}else if (StringUtils.isEmpty(user.getRealname())) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "真实名不能为空");
 		} else if(null == user.getStatus()){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "状态必须提供");
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "状态必须提供");
 		}
 
 		try {
-			user.setPassword(MD5.MD5Encode(user.getPassword()));
+			user.setPassword(null);
 			int result = userService.updateById(user);
 
 			if(result > 0){
@@ -121,11 +124,17 @@ public class UserController extends BaseController {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("update result: {}", result);
 			}
-			return AllResult.okJSON(user);
+
+			//去除不需要的字段
+			String jsonStr = JSON.toJSONString(user,
+					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
+					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error("update User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,修改失败");
+			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,修改失败");
 		}
 	}
 
@@ -140,9 +149,9 @@ public class UserController extends BaseController {
 		}
 		// TODO 需要添加判断
 		if (StringUtils.isEmpty(id)) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户id不能为空");
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "用户id不能为空");
 		}else if(null == status){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "状态必须填写");
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "状态必须填写");
 		}
 
 		try {
@@ -158,7 +167,7 @@ public class UserController extends BaseController {
 			return AllResult.build(1,"修改状态成功");
 		} catch (Exception e) {
 			LOGGER.error("status User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
+			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 		}
 	}
 
@@ -173,7 +182,7 @@ public class UserController extends BaseController {
 		}
 		// TODO 需要添加判断
 		if (StringUtils.isEmpty(id)) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户id不能为空");
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "用户id不能为空");
 		}
 
 		try {
@@ -191,7 +200,7 @@ public class UserController extends BaseController {
 			return AllResult.ok();
 		} catch (Exception e) {
 			LOGGER.error("delete User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误, 用户删除失败");
+			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误, 用户删除失败");
 		}
 	}
 
@@ -206,7 +215,7 @@ public class UserController extends BaseController {
 		}
 		// TODO 需要添加判断
 		if (StringUtils.isEmpty(id)) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户id不能为空");
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "用户id不能为空");
 		}
 
 		try {
@@ -214,16 +223,21 @@ public class UserController extends BaseController {
 
 			if(null != user){
 				// 增加日志
-				operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.user,
+				operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,
 						JSON.toJSONString(user,SerializerFeature.IgnoreNonFieldGetter));
 			}else{
-				return AllResult.buildJSON(HttpStatus.NOT_FOUND.value(), "未找到用户数据");
+				return buildJSON(HttpStatus.NOT_FOUND.value(), "未找到用户数据");
 			}
 
-			return AllResult.okJSON(user);
+			//去除不需要的字段
+			String jsonStr = JSON.toJSONString(user,
+					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
+					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("get User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误, 用户删除失败");
+			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误, 获取用户信息失败");
 		}
 	}
 
@@ -247,15 +261,17 @@ public class UserController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(users, FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"),SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+			String jsonStr = JSON.toJSONString(users,
+					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
+					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			// 增加日志
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,JSON.toJSONString(users.size()));
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,JSON.toJSONString(users.size()));
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("getAll User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取全部用户失败") ;
+			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取全部用户失败") ;
 		}
 	}
 
@@ -280,7 +296,7 @@ public class UserController extends BaseController {
 
 		// 校验参数
 		if (pageNum < 1 || pageSize < 1) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
 		}
 
 		try {
@@ -305,9 +321,11 @@ public class UserController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(queryResult, FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"),SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+			String jsonStr = JSON.toJSONString(queryResult,
+					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
+					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,JSON.toJSONString(queryResult.getRecords().size()));
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,JSON.toJSONString(queryResult.getRecords().size()));
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 
@@ -315,20 +333,20 @@ public class UserController extends BaseController {
 			LOGGER.error("get datagrid data error. page: {}, count: {}",pageNum, pageSize,  e);
 		}
 
-		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
+		return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 	}
 
 
 	/**
+	 * @Description: 修改用户密码(管理员修改时)
 	 *
-	 * @Description: 修改用户密码
-	 * @param id
+	 *  @param id
 	 * @param password
 	 * @param request
 	 * @author 杜延雷
 	 * @date 2016-08-10 00:04:52
 	 */
-	@RequestMapping(value = "modifyPassword", method = {RequestMethod.POST,RequestMethod.GET})
+	@RequestMapping(value = "modifyPassword", method = RequestMethod.POST)
 	@ResponseBody
 	public Object modifyPassword(@RequestParam(value = "id") String id,
 								 @RequestParam(value = "password") String password,
@@ -338,10 +356,10 @@ public class UserController extends BaseController {
 		}
 		try {
 			if (StringUtils.isEmpty(id)) {
-				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
 			}
 			if (StringUtils.isEmpty(password)) {
-				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "密码不能为空");
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "密码不能为空");
 			}
 			User user = new User();
 			user.setId(id);
@@ -349,17 +367,67 @@ public class UserController extends BaseController {
 
 			if (userService.updateById(user) > 0) {
 				// 增加日志
-				operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.user, JSON.toJSONString(user));
+				operLogService.addSystemLog(OperLog.operTypeEnum.update,
+						OperLog.actionSystemEnum.user, "管理员:"+JSON.toJSONString(WebUtils.getUser(request))+",修改用户密码："+JSON.toJSONString(user));
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("密码修改成功", JSON.toJSONString(user));
 				}
-				return AllResult.buildJSON(1,"密码修改成功");
+				return buildJSON(1,"密码修改成功");
 			} else {
-				return AllResult.buildJSON(HttpStatus.NOT_FOUND.value(), "密码更新失败,未查询到相关数据");
+				return buildJSON(HttpStatus.NOT_FOUND.value(), "密码修改失败,未查询到相关数据");
 			}
 		} catch (Exception e) {
 			LOGGER.error("modifyPassword User fail:", e.getMessage());
-			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,修改密码失败");
+			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,修改密码失败");
+		}
+	}
+
+	/**
+	 *
+	 * @Description: 修改用户密码
+	 * @param oldPassword
+	 * @param newPassword
+	 * @param request
+	 * @author 杜延雷
+	 * @date 2016-08-10 00:04:52
+	 */
+	@RequestMapping(value = "password", method = RequestMethod.POST)
+	@ResponseBody
+	public Object password(@RequestParam(value = "oldPassword",required = false)  String oldPassword,
+						   @RequestParam(value = "newPassword",required = false)String newPassword,
+						   HttpServletRequest request) {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("request param: [oldPassword: {},newPassword: {}]",oldPassword,newPassword);
+		}
+		try {
+			if (StringUtils.isEmpty(oldPassword)) {
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "原始密码不能为空");
+			}
+			if (StringUtils.isEmpty(newPassword)) {
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "新密码不能为空");
+			}
+			if(!MD5.MD5Encode(oldPassword).equals(WebUtils.getUser(request).getPassword())){
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "原始密码输入错误,修改失败");
+			}
+
+			User user = new User();
+			user.setId(WebUtils.getUser(request).getId());
+			user.setPassword(MD5.MD5Encode(newPassword));
+
+			if (userService.updateById(user) > 0) {
+				// 增加日志
+				operLogService.addSystemLog(OperLog.operTypeEnum.update,
+						OperLog.actionSystemEnum.user, JSON.toJSONString(user));
+				if (LOGGER.isInfoEnabled()) {
+					LOGGER.info("密码修改成功", JSON.toJSONString(user));
+				}
+				return buildJSON(1,"密码修改成功");
+			} else {
+				return buildJSON(HttpStatus.NOT_FOUND.value(), "密码修改失败,未查询到相关数据");
+			}
+		} catch (Exception e) {
+			LOGGER.error("modifyPassword User fail:", e.getMessage());
+			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,修改密码失败");
 		}
 	}
 }

@@ -39,7 +39,7 @@ function loadMenuBody(){
 			}
 			pagination();
 			ulContent += "<li onclick=\"pagePlus()\"><a>&raquo;</a></li></ul>";
-			console.log(htm_final_ele);
+			// console.log(htm_final_ele);
 			var index = document.getElementById("menuBody");
 			index.innerHTML = htm_final_ele;
 			var index2 = document.getElementById("menuPagination");
@@ -89,7 +89,7 @@ function parseTreeJson(treeNodes){
 
 		if(e["childMenu"] != null){
 			var index = e["id"];
-			console.log(e["name"]);
+			// console.log(e["name"]);
 			if(e["level"]!=1){
 				return(
 					"<tr class=\"collapse "+e["parentId"]+"\">"+
@@ -165,7 +165,7 @@ function parseTreeJson(treeNodes){
 			}
 		}
 	});
-	console.log(element);
+	// console.log(element);
 	return element;
 }
 

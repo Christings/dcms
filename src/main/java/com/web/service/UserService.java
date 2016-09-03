@@ -5,6 +5,8 @@ import com.web.core.util.page.Page;
 import com.web.entity.User;
 import com.web.example.UserExample;
 
+import java.util.List;
+
 public interface UserService extends IService<User,String> {
 
 	/**
@@ -28,4 +30,12 @@ public interface UserService extends IService<User,String> {
 	 * @return
 	 */
 	Page<User> getScrollData(int pageNum, int pageSize, UserExample example);
+
+	/**
+	 * 根据传递条件查询 用户集合
+	 *
+	 * @param example
+	 * @return
+     */
+	List<User> getExample(UserExample example) ;
 }

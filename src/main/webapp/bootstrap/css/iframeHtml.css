@@ -1,0 +1,49 @@
+.panel .panel-default {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	background-color: #fff;
+}
+
+.panel .panel-default .panel-heading{
+	padding: 0;
+}
+
+.panel-heading .nav .nav-pills{
+	margin: 0;
+	padding: 0;
+}
+
+.table .table-bordered .table-hover table{
+	max-height: 600px;
+	margin-top: 43px;
+}
+
+.foot div{
+	position:fixed;
+	bottom: 0;
+	width: 100%;
+	background-color:#fff;
+	margin: 0;
+	padding: 0;
+}
+
+#menuPagination{
+	margin: 0;
+	padding: 0;
+}
+
+#equipmentPagination{
+	margin: 0;
+	padding: 0;
+}
+
+#rolePagination{
+	margin: 0;
+	padding: 0;
+}
+
+#userPagination{
+	margin: 0;
+	padding: 0;
+}

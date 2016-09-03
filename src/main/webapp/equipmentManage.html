@@ -14,8 +14,8 @@
 	<div  class="panel panel-default" style="position:fixed;top:0;width:100%;background-color:#fff;">
 		<div class="panel-heading" style="padding:0">
 			<ul class="nav nav-pills" style="margin: 0;padding:0">
-				<li role="presentation" class="active" data-toggle="modal" data-target="#menuadd">
-					<a href="">菜单录入</a>
+				<li role="presentation" class="active" data-toggle="modal" data-target="#equipmentAdd">
+					<a href="">机柜录入</a>
 				</li>
 			</ul>
 		</div>
@@ -28,36 +28,44 @@
 		<thead>
 			<tr>
 				<th></th>
-				<th>菜单名称</th>
-				<th>图标</th>
-				<th>菜单类型</th>
-				<th>菜单地址</th>
-				<th>菜单等级</th>
-				<th>菜单顺序</th>
+				<th>机柜名称</th>
+				<th>类型</th>
+				<th>厂商</th>
+				<th>rso路径</th>
+				<th>max路径</th>
 				<th>操作</th>
 			</tr>
 		</thead>
-		<tbody id="menuBody">
+		<tbody id="equipmentBody">
 		</tbody>
 	</table>
 
 	<div class="foot" style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
 		<label>每页显示
-			<select id="selectPageSize" onchange="selectPageSize()">
+			<select id="equipmentSelectPage" onchange="equipmentSelectPage()">
 				<option value = '2'>2</option>
 				<option value = '5'>5</option>
 				<option selected = "selected" value = '10'>10</option>
 				<option value = '15'>15</option>
 			</select>行
 		</label>
-		<label id="menuPagination" style="margin:0;padding:0">
+		<label id="equipmentPagination" style="margin:0;padding:0">
 			
+		</label>
+		<label>
+			<select id="equipmentSelectType" onchange="equipmentSelectType()">
+				<option selected = "selected" value = '0'>机柜</option>
+				<option value = '1'>空调</option>
+				<option value = '2'>ups</option>
+				<option value = '3'>配电柜</option>
+				<option value = '4'>开关柜</option>
+			</select>
 		</label>
 	</div>
 	
 	<!-- 模态框（Modal） -->
 
-	<div class="modal fade" id="menuadd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="equipmentAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -65,72 +73,57 @@
 	                  &times;
 		            </button>
 		            <h4 class="modal-title" id="myModalLabel">
-		                菜单录入
+		                机柜录入
 		            </h4>
 		        </div>
 
 		        <div class="modal-body">
-		            <form role="form" id="menuAddForm">
+		            <form role="form" id="equipmentAddForm">
 						<div class="form-group">
-						  <label for="name">菜单名称</label>
-						  <input type="text" class="form-control" id="menuName" 
+						  <label for="name">机柜名称</label>
+						  <input type="text" class="form-control" id="equName" 
 						     placeholder="请输入名称">
 						</div>
 						<div class="form-group">
-						  <label for="name">菜单图标</label>
-						  <input type="text" class="form-control" id="menuIcon" 
-						     placeholder="请输入图标">
+						  	<label for="name">机柜类型</label>
+						 	<select id="equTypeOp">
+								<option value = '0'>机柜</option>
+								<option value = '1'>空调</option>
+								<option value = '2'>ups</option>
+								<option value = '3'>配电柜</option>
+								<option value = '4'>开关柜</option>
+							</select>
 						</div>
 						<div class="form-group">
-						  <label for="name">菜单类型</label>
-						  <input type="text" class="form-control" id="menuType" 
+						  <label for="name">厂商</label>
+						  <input type="text" class="form-control" id="equVendor" 
 						     placeholder="请输入类型">
 						</div>
 						<div class="form-group">
-						  <label for="name">菜单地址</label>
-						  <input type="text" class="form-control" id="menuUrl" 
+						  <label for="name">rso文件路径</label>
+						  <input type="text" class="form-control" id="rsoPath" 
 						     placeholder="请输入">
 						</div>
 						<div class="form-group">
-						  <label for="name">父菜单Id</label>
-						  <input type="text" class="form-control" id="menuParentId" 
+						  <label for="name">max文件路径</label>
+						  <input type="text" class="form-control" id="maxPath" 
 						     placeholder="请输入">
-						</div>
-						<div class="form-group">
-						  <label for="name">菜单等级</label>
-						  <input type="text" class="form-control" id="menuLevel" 
-						     placeholder="请输入名称">
-						</div>
-						<div class="form-group">
-						  <label for="name">菜单顺序</label>
-						  <input type="text" class="form-control" id="menuRank" 
-						     placeholder="请输入名称">
 						</div>
 						<div class="modal-footer">
 				            <button type="button" class="btn btn-default" 
 				               data-dismiss="modal">关闭
 				            </button>
-				            <button type="submit" onclick="menuAdd()" class="btn btn-primary">
+				            <button type="submit" onclick="equipmentAdd()" class="btn btn-primary">
 				               确认添加
 				            </button>
 			        	</div>
 					</form>
 				</div>
-	        <!-- </div>
-		        <div class="modal-footer">
-		            <button type="button" class="btn btn-default" 
-		               data-dismiss="modal">关闭
-		            </button>
-		            <button type="submit" onclick="menuAdd()" class="btn btn-primary">
-		               确认添加
-		            </button>
-		        </div>
-		    </div> --><!-- /.modal-content -->
 			</div><!-- /.modal -->
 		</div>
 	</div>
 
-	<div class="modal fade" id="menuupdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="equipmentUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -138,10 +131,10 @@
 	                  &times;
 		            </button>
 		            <h4 class="modal-title" id="myModalLabel">
-		                菜单编辑
+		                机柜编辑
 		            </h4>
 		        </div>
-	        <div class="modal-body" id="menuUpdateBody">
+	        <div class="modal-body" id="equipmentUpdateBody">
 	            
 	        </div>
 		        <!-- <div class="modal-footer">
@@ -156,7 +149,7 @@
 		</div><!-- /.modal -->
 	</div>
 
-	<div class="modal fade" id="menudelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="equipmentDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -164,10 +157,10 @@
 	                  &times;
 		            </button>
 		            <h4 class="modal-title" id="myModalLabel">
-		                菜单删除
+		                机柜删除
 		            </h4>
 		        </div>
-		        <div class="modal-body" id="menuDeleteBody">
+		        <div class="modal-body" id="equipmentDeleteBody">
 		           
 		        </div>
 		        
@@ -175,10 +168,10 @@
 		</div><!-- /.modal -->
 	</div>
 
- 	<script src="./bootstrap/components/menuManage.js"></script>
- 	<script src="./bootstrap/components/selectPageSize.js"></script>
- 	<script src="./bootstrap/components/menuAdd.js"></script>
- 	<script src="./bootstrap/components/menuUpdate.js"></script>
- 	<script src="./bootstrap/components/menuDelete.js"></script>
+ 	<script src="./bootstrap/components/equipmentSelectPage.js"></script>
+ 	<script src="./bootstrap/components/equipmentAdd.js"></script>
+ 	<script src="./bootstrap/components/equipmentUpdate.js"></script>
+ 	<script src="./bootstrap/components/equipmentDelete.js"></script>
+ 	
 </body>
 </html>
