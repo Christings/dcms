@@ -87,6 +87,30 @@ function userUpdateInit(e){
 			var mobile = userInfo['mobile'];
 			var sex = userInfo['sex'];
 			var status = userInfo['status'];
+			var sex_selected_0;
+			var sex_selected_1;
+			var status_selected_0;
+			var status_selected_1;
+			switch(sex){
+				case '0':
+					sex_selected_0 = "selected";
+					sex_selected_1 = "";
+					break;
+				case '1':
+					sex_selected_0 = "";
+					sex_selected_1 = "selected";
+					break;
+			}
+			switch(status){
+				case '0':
+					status_selected_0 = "selected";
+					status_selected_1 = "";
+					break;
+				case '1':
+					status_selected_0 = "";
+					status_selected_1 = "selected";
+					break;
+			}
 			//console.log("parentId:"+menu["parentId"]);
 			var html = "<form role=\"form\" id=\"userUpdateForm\">"+
 						"<div hidden=\"hidden\" class=\"form-group\">"+
@@ -122,11 +146,17 @@ function userUpdateInit(e){
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">性别</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"sex1\" value=\""+sex+"\">"+
+						  	"<select id=\"sex1\">"+
+								"<option selected=\""+sex_selected_0+"\"value = '0'>男</option>"+
+								"<option selected=\""+sex_selected_1+"\"value = '1'>女</option>"+
+							"</select>"+
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">状态</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"status1\" value=\""+status+"\">"+
+						  "<select id=\"status1\">"+
+								"<option selected=\""+status_selected_0+"\"value = '0'>未激活</option>"+
+								"<option selected=\""+status_selected_1+"\"value = '1'>激活</option>"+
+						  "</select>"+
 						"</div>"+
 						"<div class=\"modal-footer\">"+
 			           "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">关闭"+

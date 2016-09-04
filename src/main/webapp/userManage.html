@@ -67,7 +67,7 @@
 	                  &times;
 		            </button>
 		            <h4 class="modal-title" id="myModalLabel">
-		                菜单录入
+		                用户录入
 		            </h4>
 		        </div>
 
@@ -109,14 +109,18 @@
 						     placeholder="请输入电话">
 						</div>
 						<div class="form-group">
-						  <label for="name">性别</label>
-						  <input type="text" class="form-control" id="sex" 
-						     placeholder="请输入性别">
+						  	<label for="name">性别</label>
+						 	<select id="sex">
+								<option value = '0'>男</option>
+								<option value = '1'>女</option>
+							</select>
 						</div>
 						<div class="form-group">
 						  <label for="name">状态</label>
-						  <input type="text" class="form-control" id="status" 
-						     placeholder="是否启用">
+						  <select id="status">
+								<option value = '0'>未激活</option>
+								<option value = '1'>激活</option>
+						  </select>
 						</div>
 						<div class="modal-footer">
 				            <button type="button" class="btn btn-default" 

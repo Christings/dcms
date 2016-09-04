@@ -6,7 +6,15 @@
     <link rel="stylesheet" href="./bootstrap/css/style.css"> 
     <script src="./bootstrap/js/jquery.min.js"></script>
     <script src="./bootstrap/js/bootstrap.min.js"></script>
-
+    <script>
+    	document.onreadystatechange = subSomething;
+    	function subSomething(){
+    		if(document.readyState == "Completed"){
+    			console.log("页面加载完成");
+    			alert("页面加载完成");
+    		}
+    	}
+    </script>
 </head>
 <body>
 	<div class="top-bar">
@@ -102,9 +110,17 @@
 			<iframe name="b9d1a7409c1e4b80919094884cd9a78a" src="./equipmentManage.html" width="83%" height="80%" style="display:none" scrolling="true" frameborder="0"></iframe>
 		</div>
 	</div>
+	<div id="footer" class="container">
+		<nav class="navbar navbar-inverse navbar-fixed-bottom">
+			<div class="navbar-inner navbar-content-center">
+				<p class="text-muted credit">北京三源合众科技有限公司</p>
+			</div>
+		</nav>
+	</footer>
 		<script src="./bootstrap/components/usernameLoad.js"></script>
 		<script src="./bootstrap/components/menutreeLoad.js"></script>
 		<script src="./bootstrap/components/roleManage.js"></script>
 		<script src="./bootstrap/components/display.js"></script>
+
 </body>
 </html>

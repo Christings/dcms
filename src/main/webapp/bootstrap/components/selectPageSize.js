@@ -31,7 +31,7 @@ function selectPageSize(){
 				for(var i=0;i<=length;i++){
 					htm_final_ele += segments[i];
 				}
-			}
+			}s
 			articleId();
 			ulContent +=" <ul class=\"pagination\">"+"<li onclick=\"pageMinus()\"><a>&laquo;</a></li>";
 			var pagination = function(){

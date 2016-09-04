@@ -23,16 +23,34 @@ function loadUserBody(){
 		var e;
 		for(var i=0,len=userInfo.length;i<len;i++){
 			e = userInfo[i];
+			var sex;
+			var status;
+			switch(e["sex"]){
+				case '0':
+					sex = "男";
+					break;
+				case '1':
+					sex = "女";
+					break;
+			}
+			switch(e["status"]){
+				case '0':
+					status = "未激活";
+					break;
+				case '1':
+					status = "激活";
+					break;
+			}
 			content = "<tr>"+
 				"<td>"+num+"</td>"+
 				"<td>"+e["username"]+"</td>"+
 				"<td>"+e["realname"]+"</td>"+
-				"<td>"+e["sex"]+"</td>"+
+				"<td>"+sex+"</td>"+
 				"<td>"+e["identificationno"]+"</td>"+
 				"<td>"+e["phone"]+"</td>"+
 				"<td>"+e["email"]+"</td>"+
 				"<td>"+e["mobile"]+"</td>"+
-				"<td>"+e["status"]+"</td>"+
+				"<td>"+status+"</td>"+
 				"<td>"+
 					"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\">编辑</label>|"+
 					"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\">删除</label>"+
@@ -80,18 +98,34 @@ function userSelectPage(){
 			var e;
 			for(var i=0,len=userInfo.length;i<len;i++){
 				e = userInfo[i];
-				console.log("e:"+e);
-				console.log(e["username"]);
+				var sex;
+				var status;
+				switch(e["sex"]){
+					case '0':
+						sex = "男";
+						break;
+					case '1':
+						sex = "女";
+						break;
+				}
+				switch(e["status"]){
+					case '0':
+						status = "未激活";
+						break;
+					case '1':
+						status = "激活";
+						break;
+				}
 				content = "<tr>"+
 					"<td>"+num+"</td>"+
 					"<td>"+e["username"]+"</td>"+
 					"<td>"+e["realname"]+"</td>"+
-					"<td>"+e["sex"]+"</td>"+
+					"<td>"+sex+"</td>"+
 					"<td>"+e["identificationno"]+"</td>"+
 					"<td>"+e["phone"]+"</td>"+
 					"<td>"+e["email"]+"</td>"+
 					"<td>"+e["mobile"]+"</td>"+
-					"<td>"+e["status"]+"</td>"+
+					"<td>"+status+"</td>"+
 					"<td>"+
 						"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\">编辑</label>|"+
 						"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\">删除</label>"+
@@ -137,16 +171,34 @@ function tablePerfom(user_num,size){
 		var e;
 		for(var i=0,len=userInfo.length;i<len;i++){
 			e = userInfo[i];
+			var sex;
+			var status;
+			switch(e["sex"]){
+				case '0':
+					sex = "男";
+					break;
+				case '1':
+					sex = "女";
+					break;
+			}
+			switch(e["status"]){
+				case '0':
+					status = "未激活";
+					break;
+				case '1':
+					status = "激活";
+					break;
+			}
 			content = "<tr>"+
 				"<td>"+num+"</td>"+
 				"<td>"+e["username"]+"</td>"+
 				"<td>"+e["realname"]+"</td>"+
-				"<td>"+e["sex"]+"</td>"+
+				"<td>"+sex+"</td>"+
 				"<td>"+e["identificationno"]+"</td>"+
 				"<td>"+e["phone"]+"</td>"+
 				"<td>"+e["email"]+"</td>"+
 				"<td>"+e["mobile"]+"</td>"+
-				"<td>"+e["status"]+"</td>"+
+				"<td>"+status+"</td>"+
 				"<td>"+
 					"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\">编辑</label>|"+
 					"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\">删除</label>"+
