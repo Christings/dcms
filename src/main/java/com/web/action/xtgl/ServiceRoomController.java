@@ -1,4 +1,4 @@
-package com.web.action;
+package com.web.action.xtgl;
 
 import java.io.File;
 import java.util.Date;

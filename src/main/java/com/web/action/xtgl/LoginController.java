@@ -1,4 +1,4 @@
-package com.web.action;
+package com.web.action.xtgl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.web.core.action.BaseController;
