@@ -11,6 +11,7 @@ import com.web.example.MenuExample;
 import com.web.service.MenuService;
 import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
+import com.web.util.WebUtils;
 import com.web.util.fastjson.FastjsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -330,7 +331,7 @@ public class MenuController extends BaseController {
 			}
 
 			// 查询
-			List<MenuTree> menuTreeList = treeMenu(menuList);
+			List<MenuTree> menuTreeList = treeMenu(request,menuList);
 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
@@ -388,7 +389,7 @@ public class MenuController extends BaseController {
 			}
 
 			// 查询
-			List<MenuTree> menuTreeList = treeMenu(queryResult.getRecords());
+			List<MenuTree> menuTreeList = treeMenu(request,queryResult.getRecords());
 			Page<MenuTree> treePage = new Page<>();
 			BeanUtils.copyProperties(queryResult,treePage);
 			treePage.setRecords(menuTreeList);
@@ -413,7 +414,7 @@ public class MenuController extends BaseController {
 	/**
 	 * 查询所有菜单子子菜单
 	 */
-	private List<MenuTree> treeMenu(List<Menu> menus) {
+	private List<MenuTree> treeMenu(HttpServletRequest request,List<Menu> menus) {
 
 		if (null == menus) {
 			return null;
@@ -422,11 +423,14 @@ public class MenuController extends BaseController {
 		List<MenuTree> menuTrees = new ArrayList<MenuTree>(menus.size());
 
 		for (Menu menu : menus) {
+			if(!WebUtils.getMenuIds(request).contains(menu.getId())){
+				continue;
+			}
 			MenuTree menuTree = MenuTree.convert(menu);
 			List<Menu> menuList = menuService.getByParentId(menu.getId());
 
 			if (null != menuList && menuList.size() > 0) {
-				menuTree.setChildMenu(treeMenu(menuList));
+				menuTree.setChildMenu(treeMenu(request,menuList));
 			}
 			menuTrees.add(menuTree);
 		}
