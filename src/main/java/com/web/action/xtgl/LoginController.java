@@ -60,8 +60,8 @@ public class LoginController extends BaseController {
 	@ResponseBody
 	public Object login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
 //		System.out.println(request.getParameterMap());
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("params[username: {}, password: {}]"+ username +","+ password);
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("params[username: {}, password: {}]"+ username +","+ password);
 		}
 		if (StringUtil.isEmpty(username, password)) {
 			return AllResult.build(0, "用户名或密码不能为空");

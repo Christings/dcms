@@ -75,10 +75,6 @@ public class RoleController extends BaseController{
 			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.role,
 					JSON.toJSONString(role));
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("save result: {}", result);
-			}
-
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(role, FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
@@ -132,9 +128,6 @@ public class RoleController extends BaseController{
 						JSON.toJSONString(role));
 			}
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("update result: {}", result);
-			}
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(role, FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
@@ -154,9 +147,6 @@ public class RoleController extends BaseController{
 		try {
 			
 			List<Role> list=roleService.getAll();
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("getAll result: {}", list);
-			}
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(list, FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
@@ -192,10 +182,6 @@ public class RoleController extends BaseController{
 		try {
 			RoleExample example = new RoleExample();
 			Page<Role> queryResult = roleService.getScrollData(pageNum, pageSize, example);
-
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("queryResult record count: {}", queryResult.getRecords().size());
-			}
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult, FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
@@ -239,12 +225,9 @@ public class RoleController extends BaseController{
 //					JSON.toJSONString(role));
 //			}
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("get result: {}", role);
-			}
-
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(role, FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(role,
+					FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -277,9 +260,6 @@ public class RoleController extends BaseController{
 						"delete role id:"+id);
 			}
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("delete result: {}", result);
-			}
 			return AllResult.build(1,"角色删除成功");
 		} catch (Exception e) {
 			LOGGER.error("delete Role fail:", e.getMessage());
