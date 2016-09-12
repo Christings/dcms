@@ -100,4 +100,5 @@
 	<mvc:resources location="/" mapping="/**/*.jpg"/>
 	<mvc:resources location="/" mapping="/**/*.gif"/>
 	<mvc:resources location="/fonts/" mapping="/fonts/**/*.*"/>
+	<mvc:resources location="/img/" mapping="/img/**/*.*"/>
 </beans>
