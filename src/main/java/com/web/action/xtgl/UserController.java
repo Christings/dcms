@@ -112,7 +112,9 @@ public class UserController extends BaseController {
 		}
 
 		try {
+			//防止用户前端传入值更新数据
 			user.setPassword(null);
+			user.setUsername(null);
 			int result = userService.updateById(user);
 
 			if(result > 0){

@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="role_id" property="roleId" jdbcType="VARCHAR" />
     <result column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    <result column="operation_id" property="operationId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, role_id, menu_id
+    id, role_id, menu_id, operation_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.MenuRoleExample" >
     select
@@ -98,10 +99,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.web.entity.MenuRole" >
-    insert into t_s_role_menu (id, role_id, menu_id
-      )
-    values (#{id,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, #{menuId,jdbcType=VARCHAR}
-      )
+    insert into t_s_role_menu (id, role_id, menu_id, 
+      operation_id)
+    values (#{id,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, #{menuId,jdbcType=VARCHAR}, 
+      #{operationId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.web.entity.MenuRole" >
     insert into t_s_role_menu
@@ -115,6 +116,9 @@
       <if test="menuId != null" >
         menu_id,
       </if>
+      <if test="operationId != null" >
+        operation_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -125,6 +129,9 @@
       </if>
       <if test="menuId != null" >
         #{menuId,jdbcType=VARCHAR},
+      </if>
+      <if test="operationId != null" >
+        #{operationId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -146,6 +153,9 @@
       <if test="record.menuId != null" >
         menu_id = #{record.menuId,jdbcType=VARCHAR},
       </if>
+      <if test="record.operationId != null" >
+        operation_id = #{record.operationId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -155,7 +165,8 @@
     update t_s_role_menu
     set id = #{record.id,jdbcType=VARCHAR},
       role_id = #{record.roleId,jdbcType=VARCHAR},
-      menu_id = #{record.menuId,jdbcType=VARCHAR}
+      menu_id = #{record.menuId,jdbcType=VARCHAR},
+      operation_id = #{record.operationId,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -169,13 +180,17 @@
       <if test="menuId != null" >
         menu_id = #{menuId,jdbcType=VARCHAR},
       </if>
+      <if test="operationId != null" >
+        operation_id = #{operationId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.web.entity.MenuRole" >
     update t_s_role_menu
     set role_id = #{roleId,jdbcType=VARCHAR},
-      menu_id = #{menuId,jdbcType=VARCHAR}
+      menu_id = #{menuId,jdbcType=VARCHAR},
+      operation_id = #{operationId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
