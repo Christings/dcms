@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2016-07-09
  */
 @Controller
-@RequestMapping(value = "/dataDict")
+@RequestMapping("/dataDict")
 public class DataDictController extends BaseController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class);
