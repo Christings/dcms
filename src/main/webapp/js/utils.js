@@ -9,8 +9,10 @@ var _utils={
 			data: params,
 			async:true
 		}).then(function(data){
+			console.log("ajax");
 			dtd.resolve(data);
 		},function(error){
+			console.log(error);
 			dtd.reject(error);
 		});
 		return dtd.promise();

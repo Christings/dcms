@@ -28,12 +28,15 @@ function login(){
 	.then(function(data){
 		console.log(data);
 		if(data.status == "1"){
+			console.log("login");
 			DCMS.Busi.setUser(data.data);
 			return DCMS.Utils.Ajax("menu/tree");
 		}else{
+			console.log("wrong");
 			$("#uconfirm").text("用户名或密码错误");
 		}
 	},function(error){
+		console.log("login1");
 		//墨绿深蓝风
 		layer.alert('登陆失败', {
 			skin: 'layui-layer-molv' //样式类名
@@ -42,13 +45,18 @@ function login(){
 	})
 	.then(function(data){
 		console.log(data);
+		console.log("login2");
 		if(data.status=='1'){
 			var user=DCMS.Busi.getUser();
 			user.userMenus=data.data;
 			DCMS.Busi.setUser(user);
 		}
+		console.log("login3");
 		DCMS.Utils.gotoPage("./index_v0.html");
+		
 	},function(error){
+		console.log("login4");
 		DCMS.Utils.gotoPage("./index_v0.html");
+		
 	});
 }
