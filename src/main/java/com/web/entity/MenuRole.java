@@ -22,6 +22,11 @@ public class MenuRole {
      */
     private String menuId;
 
+    /**
+     * 菜单对应的页面（按钮等集合  逗号分割）
+     */
+    private String operationId;
+
     public String getId() {
         return id;
     }
@@ -44,5 +49,13 @@ public class MenuRole {
 
     public void setMenuId(String menuId) {
         this.menuId = menuId == null ? null : menuId.trim();
+    }
+
+    public String getOperationId() {
+        return operationId;
+    }
+
+    public void setOperationId(String operationId) {
+        this.operationId = operationId == null ? null : operationId.trim();
     }
 }

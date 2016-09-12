@@ -51,15 +51,23 @@ public class AuthInterceptor implements HandlerInterceptor {
 		String contextPath = request.getContextPath();
 		String url = requestUri.substring(contextPath.length());
 
-		if(!url.matches(RegExpUtil.resourceFile) && !excludeUrls.contains(url)){
-		/*	if(null == WebUtils.getUser(request)){
-				response.sendRedirect(request.getContextPath()+"/");
-				System.out.println("==" + requestUri);
-				return false;
-			}*/
+		//1.判断不需要过滤的URL
+		if(url.matches(RegExpUtil.resourceFile) || excludeUrls.contains(url)){
+			return true;
 		}
-		System.out.println(requestUri);
-		return true;
+		//2.判断用户是否登录
+		if(null == WebUtils.getUser(request)){
+			response.sendRedirect(request.getContextPath()+"/");
+			return false;
+		}
+		//3.判断用户是否有权限访问URL
+		if(WebUtils.getPrivilege(request).contains(requestUri) ||"admin".equals(WebUtils.getUser(request).getUsername())){
+			return true;
+		}
+		//TODO 需要添加跳转到无权限页面
+//		request.setAttribute("error", "对不起，权限不足无法执行该操作！");
+
+		return false;
 	}
 
 	/**

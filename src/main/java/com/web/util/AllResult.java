@@ -1,6 +1,8 @@
 package com.web.util;
 
+import com.alibaba.fastjson.JSONPObject;
 import com.alibaba.fastjson.annotation.JSONField;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * 自定义返回前端 格式数据
@@ -53,6 +55,36 @@ public class AllResult {
 	}
 
 	public AllResult() {
+	}
+
+	public static Object okJSONP(String callback) {
+		return okJSONP(callback, null) ;
+	}
+
+	public static Object okJSONP(String callback, Object data) {
+		AllResult result = new AllResult(data) ;
+		if (StringUtils.isEmpty(callback)) {
+			return result ;
+		} else {
+			JSONPObject jsonpObject = new JSONPObject(callback) ;
+			jsonpObject.addParameter(result);
+			return jsonpObject ;
+		}
+	}
+
+	public static Object buildJSONP(String callback, int status, String msg) {
+		return buildJSONP(callback, status, msg, null) ;
+	}
+
+	public static Object buildJSONP(String callback, int status, String msg, Object data) {
+		AllResult result = new AllResult(status, msg, data);
+		if (StringUtils.isEmpty(callback)) {
+			return result ;
+		} else {
+			JSONPObject jsonpObject = new JSONPObject(callback) ;
+			jsonpObject.addParameter(result);
+			return jsonpObject ;
+		}
 	}
 
 	public AllResult(int status, String msg, Object data) {
