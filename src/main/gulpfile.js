@@ -6,7 +6,7 @@ gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
             baseDir: "./webapp/",
-            index: "index.html"
+            index: "login.html"
         }
     });
     gulp.watch("./webapp/**.html").on('change', browserSync.reload);

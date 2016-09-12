@@ -5,6 +5,7 @@ initMenuTree();
 function initMenuTree(){
     var user=DCMS.Busi.getUser();
     var userMenus=user.userMenus;
+    console.log(user);
     if(userMenus){
         for(var i=0;i<userMenus.length;i++){
             var menu=userMenus[i];
@@ -12,9 +13,9 @@ function initMenuTree(){
             li.id=menu.id;
             var liHtml='';
             if(hasChildMenu(menu)){
-                liHtml+='<a href="#">';
+                liHtml+='<a href=\"#\">';
             }else{
-                liHtml+='<a href="'+menu.url+'">';
+                liHtml+='<a href=\"'+menu.url+'\">';
             }
             liHtml+='<i class="fa fa-home"></i>';
             liHtml+='<span class="nav-label">'+menu.name+'</span>';
@@ -27,7 +28,7 @@ function initMenuTree(){
                     for(var j=0;j<menu.childMenu.length;j++){
                         var child=menu.childMenu[j];
                         liHtml+='<li id="'+child.id+'">';
-                            liHtml+='<a class="J_menuItem" href="'+child.url+'">'+child.name+'</a>';
+                            liHtml+='<a class="J_menuItem" href=\"menuManage\">'+child.name+'</a>';
                         liHtml+='</li>';
                     }
                 liHtml+='</ul>';
@@ -45,3 +46,9 @@ function hasChildMenu(menu){
     }
     return false;
 }
+
+
+
+
+
+
