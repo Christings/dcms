@@ -1,0 +1,153 @@
+body {
+	 padding-top:50px;
+	 padding-bottom:50px;
+}
+
+#footer {
+	padding-bottom: 0;
+	position: fixed;
+	bottom: 0;
+	text-align: center;
+}
+
+#footer .navbar .navbar-inner .credit{
+	padding:10px auto;
+	color:white;
+}
+.well div {
+	background-color: #8e909a;
+}
+#menutree{
+	height:100%;
+}
+#menutree li{
+	background-color: #2f4050;
+	padding-left: 20px;
+	color:#6495ED;
+}
+#menutree li:hover{
+	background-color:#1ab394;
+	color:white;
+}
+#menutree li a{
+	color: white;
+}
+
+div .side-bar{
+	padding: 0;
+	height: 85%;
+	width:15%;
+	float:left;
+	overflow:scroll;
+}
+
+
+div .side-bar button{
+	padding: 0;
+}
+
+body.mini-sidebar .side-bar{
+	padding: 0;
+	height: 85%;
+
+	width: 3%;
+	text-align: center;
+	float:left;
+	overflow:scroll;
+}
+
+div #content{
+	width: 100%;
+}
+hr {
+	margin-top: 45px;
+	height:5px;
+	border:none;
+	border-top:3px solid #2f4050;
+}
+.fa-forward:before {
+    content: "\f04e";
+}
+
+div .footer{
+	margin-bottom: 0;
+}
+/*#content-main{
+	float: left;
+	width:85%;
+	height:400px;
+}*/
+body.mini-sidebar #content-main{
+	width:93%;
+	height:400px;
+	float:left;
+}
+#iframe-content{
+	/*position: absolute;*/
+	float: left;
+	width:85%;
+	height:400px;
+}
+
+body.mini-sidebar #iframe-content{
+	width:93%;
+	height:400px;
+	float:left;
+}
+#menu-navbar{
+	/*position: absolute;*/
+	top: 50px;
+/*	width: 85%;*/
+	/*float:left;*/
+}
+#menu-navbar li{
+	/*position: absolute;*/
+	/*top: 50px;*/
+/*	width: 85%;*/
+	float:left;
+}
+body.mini-sidebar #menu-navbar{
+	/*position: absolute;*/
+	top: 50px;
+	/*width: 93%;*/
+	float:left;
+}
+#sideButton{
+	margin-left: 20px;
+}
+.mini-sidebar #sideButton{
+	text-align: center;
+}
+
+.nav-header.collapsed > span.glyphicon-chevron-toggle:before {
+    content: "\e114";
+}
+
+.nav-header > span.glyphicon-chevron-toggle:before {
+    content: "\e113";
+}
+
+.table-header.collapsed > span.glyphicon-chevron-toggle:before {
+    content: "\e114";
+}
+
+.table-header > span.glyphicon-chevron-toggle:before {
+    content: "\e113";
+}
+
+.menuTableFoot{
+	position: relative;
+	bottom: 0;
+}
+#menubody{
+	position: relative;
+	overflow: scroll;
+}
+
+
+/*#menu-navbar {
+	position: absolute;
+	top: 50px;
+	width: 83%;
+}*/
+

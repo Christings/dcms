@@ -1,9 +1,25 @@
 body {
 	 padding-top:50px;
+	 padding-bottom:50px;
+}
+
+#footer {
+	padding-bottom: 0;
+	position: fixed;
+	bottom: 0;
+	text-align: center;
+}
+
+#footer .navbar .navbar-inner .credit{
+	padding:10px auto;
+	color:white;
 }
 .well div {
 	background-color: #8e909a;
-	height: 100%;
+	
+}
+#menutree{
+	height:100%;
 }
 #menutree li{
 	background-color: #555;

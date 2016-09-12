@@ -1,0 +1,264 @@
+package com.web.action.xtgl;
+
+import com.alibaba.fastjson.JSON;
+import com.web.core.action.BaseController;
+import com.web.entity.MenuRole;
+import com.web.entity.OperLog;
+import com.web.service.MenuRoleService;
+import com.web.util.AllResult;
+import com.web.util.UUIDGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+/**
+ * 菜单角色关系接口
+ *
+ * @author 杜延雷
+ * @date 2016-07-12
+ */
+@Controller
+@RequestMapping("/menu/role")
+public class MenuRoleController extends BaseController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MenuRoleController.class);
+
+	@Autowired
+	MenuRoleService menuRoleService;
+
+	/**
+	 * 添加菜单角色
+	 *
+	 * @param menuRole
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@ResponseBody
+	public Object add(MenuRole menuRole, HttpServletRequest request) {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("request param: [menuRole: {}]", JSON.toJSONString(menuRole));
+		}
+
+		// TODO 需要添加判断
+		if (StringUtils.isEmpty(menuRole.getRoleId())) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
+		}else if(StringUtils.isEmpty(menuRole.getMenuId())){
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单ID不能为空");
+		}
+
+		try {
+			menuRole.setId(UUIDGenerator.generatorRandomUUID());
+			int result = menuRoleService.save(menuRole);
+
+			if(result > 0){
+				operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menuRole,
+						JSON.toJSONString(menuRole));
+			}
+
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("save menuRole result: {}", result);
+			}
+
+			return AllResult.ok();
+		} catch (Exception e) {
+			LOGGER.error("save menuRole object error. : {}", JSON.toJSONString(menuRole), e);
+		}
+
+		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加角色-菜单关系失败");
+	}
+
+	/**
+	 * 根据角色批量保存菜单
+	 *
+	 * @param {roleId,menuIds,request}
+	 * @return
+	 */
+	@RequestMapping(value = "/batchMenus", method = RequestMethod.POST)
+	@ResponseBody
+	public Object batchMenus(String roleId,String menuIds, HttpServletRequest request) {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("request param: [roleId: {},menuIds:{}]",roleId,menuIds );
+		}
+
+		// TODO 需要添加判断
+		if (StringUtils.isEmpty(roleId)) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
+		}else if(StringUtils.isEmpty(menuIds)){
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单ID不能为空");
+		}
+
+		String [] menuIdArr = menuIds.split(",");
+		if(menuIdArr.length<=0){
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单ID传递有误,格式[菜单ID1,菜单ID2,...]");
+		}
+
+		try {
+			menuRoleService.batchRoleMenu(roleId,menuIdArr);
+
+			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menuRole,
+					"角色ID："+roleId+",菜单IDs:["+menuIdArr+"]");
+
+			return AllResult.ok();
+		} catch (Exception e) {
+			LOGGER.error("batchMenus save object error. : {}", e);
+		}
+
+		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,根据角色ID批量保存菜单失败");
+	}
+
+	/**
+	 * 根据菜单批量保存角色
+	 *
+	 * @param {menuId,roleIds,request}
+	 * @return
+	 */
+	@RequestMapping(value = "/batchRoles", method = RequestMethod.POST)
+	@ResponseBody
+	public Object batchRoles(String menuId,String roleIds, HttpServletRequest request) {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("request param: [menuId: {},roleIds:{}]",menuId,roleIds );
+		}
+
+		// TODO 需要添加判断
+		if (StringUtils.isEmpty(menuId)) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单ID不能为空");
+		}else if(StringUtils.isEmpty(roleIds)){
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
+		}
+
+		String [] reloIdArr = roleIds.split(",");
+		if(reloIdArr.length<=0){
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID传递有误,格式[角色ID1,角色ID2,...]");
+		}
+
+		try {
+			menuRoleService.batchMenuRole(menuId,reloIdArr);
+
+			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menuRole,
+					"菜单ID："+menuId+",角色IDs:["+reloIdArr+"]");
+
+			return AllResult.okJSON("保存成功");
+		} catch (Exception e) {
+			LOGGER.error("batchRoles save object error. : {}", e);
+		}
+
+		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,根据角色ID批量保存菜单失败");
+	}
+
+	/**
+	 * 根据角色Id 获取所有角色菜单关系数据
+	 *
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getRoleId", method = RequestMethod.POST)
+	@ResponseBody
+	public Object getRoleId(String key,HttpServletRequest request) {
+		try {
+			if(StringUtils.isEmpty(key)){
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
+			}
+
+			List<MenuRole> menuRoleList = menuRoleService.getRoleMenu(key);
+
+			if(null == menuRoleList || menuRoleList.size() == 0){
+				return AllResult.build(1, "未查询到相关数据");
+			}
+
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("menuRoleList result: {}", JSON.toJSONString(menuRoleList));
+			}
+
+			// 增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
+
+			return AllResult.okJSON(menuRoleList);
+		} catch (Exception e) {
+			LOGGER.error("menuRole object error. getMenuRoleList ", e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole, null,
+					OperLog.logLevelEnum.error);
+
+		}
+
+		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取角色菜单时失败");
+	}
+
+	/**
+	 * 根据菜单Id 获取所有菜单角色关系数据
+	 *
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getMenuId", method = RequestMethod.POST)
+	@ResponseBody
+	public Object getMenuId(String key,HttpServletRequest request) {
+		try {
+			if(StringUtils.isEmpty(key)){
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单ID不能为空");
+			}
+
+			List<MenuRole> menuRoleList = menuRoleService.getMenuRole(key);
+
+			if(null == menuRoleList || menuRoleList.size() == 0){
+				return AllResult.build(1, "未查询到相关数据");
+			}
+
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("menuRoleList result: {}", JSON.toJSONString(menuRoleList));
+			}
+
+			// 增加日志
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
+
+			return AllResult.okJSON(menuRoleList);
+		} catch (Exception e) {
+			LOGGER.error("menuRole object error. getMenuRoleList ", e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole, null,
+					OperLog.logLevelEnum.error);
+		}
+
+		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取菜单角色时失败");
+	}
+
+	/**
+	 * 获取所有菜单角色关系
+	 *
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getAll", method = {RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Object getAll(HttpServletRequest request) {
+		try {
+			List<MenuRole> menuRoleList = menuRoleService.getAll();
+
+			if(null == menuRoleList || menuRoleList.size() == 0){
+				return AllResult.build(1, "未查询到相关数据");
+			}
+
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("menuRoleList result: {}", JSON.toJSONString(menuRoleList));
+			}
+
+			// 增加日志
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
+
+			return AllResult.okJSON(menuRoleList);
+		} catch (Exception e) {
+			LOGGER.error("menuRole object error. getAll ", e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole, null,
+					OperLog.logLevelEnum.error);
+		}
+
+		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取所有角色菜单失败");
+	}
+}

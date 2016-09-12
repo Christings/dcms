@@ -40,27 +40,34 @@
 		</tbody>
 	</table>
 
-	<div class="foot" style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
-		<label>每页显示
-			<select id="equipmentSelectPage" onchange="equipmentSelectPage()">
-				<option value = '2'>2</option>
-				<option value = '5'>5</option>
-				<option selected = "selected" value = '10'>10</option>
-				<option value = '15'>15</option>
-			</select>行
-		</label>
-		<label id="equipmentPagination" style="margin:0;padding:0">
-			
-		</label>
-		<label>
-			<select id="equipmentSelectType" onchange="equipmentSelectType()">
-				<option selected = "selected" value = '0'>机柜</option>
-				<option value = '1'>空调</option>
-				<option value = '2'>ups</option>
-				<option value = '3'>配电柜</option>
-				<option value = '4'>开关柜</option>
-			</select>
-		</label>
+	<div class="row" style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
+		<div class="col-sm-3">
+			<label>每页显示
+				<select id="equipmentSelectPage" onchange="equipmentSelectPage()">
+					<option value = '2'>2</option>
+					<option value = '5'>5</option>
+					<option selected = "selected" value = '10'>10</option>
+					<option value = '15'>15</option>
+				</select>行
+			</label>
+		</div>
+		<div class="col-sm-3">
+			<label>
+				<select id="equipmentSelectType" onchange="equipmentSelectType()">
+					<option selected = "selected" value = '0'>机柜</option>
+					<option value = '1'>空调</option>
+					<option value = '2'>ups</option>
+					<option value = '3'>配电柜</option>
+					<option value = '4'>开关柜</option>
+				</select>
+			</label>
+		</div>
+		<div class="col-sm-6" style="padding-right:0;vertical-align:middle">
+			<label id="equipmentPagination" style="margin:0;padding:0">
+				
+			</label>
+		</div>
+		
 	</div>
 	
 	<!-- 模态框（Modal） -->
