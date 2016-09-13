@@ -15,7 +15,7 @@ function initMenuTree(){
             if(hasChildMenu(menu)){
                 liHtml+='<a href=\"#\">';
             }else{
-                liHtml+='<a href=\"'+menu.url+'\">';
+                liHtml+='<a class="J_menuItem" href=\"'+menu.url+'\">';
             }
             liHtml+='<i class="fa fa-home"></i>';
             liHtml+='<span class="nav-label">'+menu.name+'</span>';
@@ -28,7 +28,7 @@ function initMenuTree(){
                     for(var j=0;j<menu.childMenu.length;j++){
                         var child=menu.childMenu[j];
                         liHtml+='<li id="'+child.id+'">';
-                            liHtml+='<a class="J_menuItem" href=\"menuManage\">'+child.name+'</a>';
+                            liHtml+='<a class="J_menuItem" href=\"'+child.url+'\">'+child.name+'</a>';
                         liHtml+='</li>';
                     }
                 liHtml+='</ul>';
