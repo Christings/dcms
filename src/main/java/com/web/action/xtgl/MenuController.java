@@ -74,9 +74,6 @@ public class MenuController extends BaseController {
 			// 增加日志
 			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menu,
 					JSON.toJSONString(menu));
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("save result: {}", result);
-			}
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"), SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
@@ -126,10 +123,6 @@ public class MenuController extends BaseController {
 						JSON.toJSONString(menu));
 			}
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("delete result: {}", result);
-			}
-
 			return AllResult.ok();
 		} catch (Exception e) {
 			LOGGER.error("delete menu object error. : {}", key, e);
@@ -150,8 +143,8 @@ public class MenuController extends BaseController {
 	@RequestMapping(value = "/update", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public Object update(Menu menu, HttpServletRequest request) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("params[menu: {}]", JSON.toJSONString(menu));
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("params[menu: {}]", JSON.toJSONString(menu));
 		}
 
 		// TODO 需要添加判断 后期处理
@@ -171,10 +164,6 @@ public class MenuController extends BaseController {
 				// 增加日志
 				operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.menu,
 						JSON.toJSONString(menu));
-			}
-
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("update result: {}, after update menu: {}", result, JSON.toJSONString(menu));
 			}
 
 			//去除不需要的字段
@@ -216,10 +205,6 @@ public class MenuController extends BaseController {
 
 			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu, "查询条件key:"+key);
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("menu result: {}", menu);
-			}
-
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 			return AllResult.okJSON(JSON.parse(jsonStr));
@@ -253,10 +238,6 @@ public class MenuController extends BaseController {
 				return AllResult.build(1, "未获取到菜单");
 			}
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
-			}
-
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
@@ -284,10 +265,6 @@ public class MenuController extends BaseController {
 	public Object getAll(HttpServletRequest request) {
 		try {
 			List<Menu> menuList = menuService.getAll();
-
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
-			}
 
 			if(null == menuList || menuList.size() == 0){
 				return AllResult.build(1, "未获取到菜单");
@@ -333,10 +310,6 @@ public class MenuController extends BaseController {
 			// 查询
 			List<MenuTree> menuTreeList = treeMenu(request,menuList);
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("menuList result: {}", JSON.toJSONString(menuList));
-			}
-
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuTreeList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
@@ -380,9 +353,6 @@ public class MenuController extends BaseController {
 			criteria.andParentIdIsNull();
 
 			Page<Menu> queryResult = menuService.getScrollData(pageNum, pageSize, example);
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("queryResult record count: {}", queryResult.getRecords().size());
-			}
 
 			if(null == queryResult.getRecords() || queryResult.getRecords().size() == 0){
 				return AllResult.build(1, "未获取到菜单");

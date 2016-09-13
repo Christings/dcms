@@ -76,10 +76,6 @@ public class UserRoleController extends BaseController {
                         JSON.toJSONString(userRole));
             }
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("save userRole result: {}", result);
-            }
-
             return AllResult.ok();
         } catch (Exception e) {
             LOGGER.error("save userRole object error. : {}", JSON.toJSONString(userRole), e);
@@ -186,10 +182,6 @@ public class UserRoleController extends BaseController {
                 return AllResult.build(1, "未查询到相关数据");
             }
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("userRoleList result: {}", JSON.toJSONString(userRoleList));
-            }
-
             // 增加日志
             operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.userRole,null);
 
@@ -222,10 +214,6 @@ public class UserRoleController extends BaseController {
 
             if(null == userRoleList || userRoleList.size() == 0){
                 return AllResult.build(1, "未查询到相关数据");
-            }
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("userRoleList result: {}", JSON.toJSONString(userRoleList));
             }
 
             RoleUserResult roleUserResult = new RoleUserResult();
@@ -333,10 +321,6 @@ public class UserRoleController extends BaseController {
                 return AllResult.build(1, "未查询到相关数据");
             }
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("userRoleList result: {}", JSON.toJSONString(userRoleList));
-            }
-
             // 增加日志
 //            operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.userRole,null);
 
@@ -368,10 +352,6 @@ public class UserRoleController extends BaseController {
 
             if(null == userRoleList || userRoleList.size() == 0){
                 return AllResult.build(1, "未查询到相关数据");
-            }
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("userRoleList result: {}", JSON.toJSONString(userRoleList));
             }
 
             UserRoleResult userRoleResult = new UserRoleResult();
@@ -412,10 +392,6 @@ public class UserRoleController extends BaseController {
 
             if(null == userRoleList || userRoleList.size() == 0){
                 return AllResult.build(1, "未查询到相关数据");
-            }
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("userRoleList result: {}", JSON.toJSONString(userRoleList));
             }
 
             // 增加日志

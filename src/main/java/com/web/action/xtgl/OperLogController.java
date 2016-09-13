@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/operLog")
 public class OperLogController extends BaseController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperLogController.class);
 
 	/**
 	 * 分页查询日志相关信息
@@ -57,9 +57,6 @@ public class OperLogController extends BaseController {
 			OperLogExample.Criteria criteria = operLogExample.createCriteria();
 
 			Page<OperLog> queryResult = operLogService.getPageData(page, count, operLogExample);
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("queryResult record count: {}", queryResult.getRecords().size());
-			}
 			return AllResult.okJSON(queryResult);
 		} catch (Exception e) {
 			LOGGER.error("get scroll data error. page: {}, count: {}", page, count, e);

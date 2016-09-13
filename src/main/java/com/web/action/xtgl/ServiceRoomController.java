@@ -1,11 +1,16 @@
 package com.web.action.xtgl;
 
-import java.io.File;
-import java.util.Date;
-import java.util.Iterator;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.alibaba.fastjson.JSON;
+import com.web.core.action.BaseController;
+import com.web.core.util.page.Page;
+import com.web.entity.OperLog;
+import com.web.entity.ServiceRoom;
+import com.web.example.ServiceRoomExample;
+import com.web.service.ServiceRoomService;
+import com.web.util.AllResult;
+import com.web.util.DateUtil;
+import com.web.util.StringUtil;
+import com.web.util.fastjson.FastjsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import com.alibaba.fastjson.JSON;
-import com.web.core.action.BaseController;
-import com.web.core.util.page.Page;
-import com.web.entity.OperLog;
-import com.web.entity.ServiceRoom;
-import com.web.example.ServiceRoomExample;
-import com.web.service.ServiceRoomService;
-import com.web.util.AllResult;
-import com.web.util.DateUtil;
-import com.web.util.StringUtil;
-import com.web.util.fastjson.FastjsonUtils;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.util.Date;
+import java.util.Iterator;
 
 /**
  * 机房管理控制器
@@ -40,10 +38,10 @@ import com.web.util.fastjson.FastjsonUtils;
 @Controller
 @RequestMapping("/serviceRoom")
 public class ServiceRoomController extends BaseController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceRoomController.class);
 
 	@Autowired
 	private ServiceRoomService serviceRoomService;
-	private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class);
 
 	/**
 	 * 新增机房
@@ -230,9 +228,7 @@ public class ServiceRoomController extends BaseController {
 			// 去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,
 					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateCreate", "createName", "createDate"));
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("queryResult record count: {}", queryResult.getRecords().size());
-			}
+
 			operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null);
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {

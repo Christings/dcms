@@ -27,7 +27,7 @@ import java.util.List;
  * 菜单-->操作接口
  *
  * @author 杜延雷
- * @date 2016-06-20
+ * @date 2016-09-12
  */
 @Controller
 @RequestMapping("/menu/operation")
@@ -59,19 +59,17 @@ public class MenuOperationController extends BaseController {
 		}
 
 		try {
+			//添加数据
 			menuOperation.setId(UUIDGenerator.generatorRandomUUID());
-			int result = menuOperationService.save(menuOperation);
+			menuOperationService.save(menuOperation);
 
 			// 增加日志
 //			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menu,
 //					JSON.toJSONString(menuOperation));
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("save result: {}", result);
-			}
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuOperation,
-					FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"),
+					FastjsonUtils.newIgnorePropertyFilter("iconId","updateName","updateDate","createName","createDate"),
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
@@ -99,7 +97,7 @@ public class MenuOperationController extends BaseController {
 		try {
 			MenuOperation menuOperation = menuOperationService.getById(id);
 			if(null == menuOperation){
-				return AllResult.build(1, "操作不存在");
+				return AllResult.build(1, "未找到相关操作信息");
 			}
 
 			int result = menuOperationService.deleteById(id);
@@ -108,10 +106,6 @@ public class MenuOperationController extends BaseController {
 				// 增加日志
 				operLogService.addSystemLog(OperLog.operTypeEnum.delete, OperLog.actionSystemEnum.menuOperation,
 						JSON.toJSONString(menuOperation));
-			}
-
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("delete result: {}", result);
 			}
 
 			return AllResult.ok();
@@ -130,8 +124,8 @@ public class MenuOperationController extends BaseController {
 	@RequestMapping(value = "/update", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public Object update(MenuOperation menuOperation, HttpServletRequest request) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("params[menuOperation: {}]", JSON.toJSONString(menuOperation));
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("params[menuOperation: {}]", JSON.toJSONString(menuOperation));
 		}
 
 		// TODO 需要添加判断 后期处理
@@ -154,13 +148,9 @@ public class MenuOperationController extends BaseController {
 						JSON.toJSONString(menuOperation));
 			}
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("update result: {}, after update menuOperation: {}", result, JSON.toJSONString(menuOperation));
-			}
-
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuOperation,
-					FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"),
+					FastjsonUtils.newIgnorePropertyFilter("iconId","updateName","updateDate","createName","createDate"),
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
@@ -195,13 +185,9 @@ public class MenuOperationController extends BaseController {
 
 			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuOperation, "查询条件key:"+id);
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("menu result: {}", menuOperation);
-			}
-
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuOperation,
-					FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"),
+					FastjsonUtils.newIgnorePropertyFilter("iconId","updateName","updateDate","createName","createDate"),
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -225,17 +211,13 @@ public class MenuOperationController extends BaseController {
 			}
 			List<MenuOperation> menuOperations = menuOperationService.getByMenuId(menuId);
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("menuOperations result: {}", JSON.toJSONString(menuOperations));
-			}
-
 			if(null == menuOperations || menuOperations.size() == 0){
 				return AllResult.okJSON(menuOperations);
 			}
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuOperations,
-					FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"),
+					FastjsonUtils.newIgnorePropertyFilter("iconId","updateName","updateDate","createName","createDate"),
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			// 增加日志
