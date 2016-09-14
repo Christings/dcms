@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>dcms</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
+    <link href="./css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="./css/style2.css" rel="stylesheet">
+    <link href="./css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="./css/animate.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>基本 <small>分类，查找</small></h5>
+
+                        <div class="ibox-tools">
+                        	<a class="add-menu">
+                        		<i class="fa fa-plus-square-o" data-toggle="modal" data-target="#useradd"></i>
+                        	</a>
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="table_data_tables.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="table_data_tables.html#">选项1</a>
+                                </li>
+                                <li><a href="table_data_tables.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th>登录号</th>
+									<th>用户名称</th>
+									<th>性别</th>
+									<th>身份证</th>
+									<th>手机号</th>
+									<th>邮箱</th>
+									<th>电话</th>
+									<th>状态</th>
+									<th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userBody">
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                   <th>登录号</th>
+									<th>用户名称</th>
+									<th>性别</th>
+									<th>身份证</th>
+									<th>手机号</th>
+									<th>邮箱</th>
+									<th>电话</th>
+									<th>状态</th>
+									<th>操作</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<div class="foot" style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
+		<label>每页显示
+			<select id="userSelectPage" onchange="userSelectPage()">
+				<option value = '2'>2</option>
+				<option value = '5'>5</option>
+				<option selected = "selected" value = '10'>10</option>
+				<option value = '15'>15</option>
+			</select>行
+		</label>
+		<label id="userPagination" style="margin:0;padding:0">
+			
+		</label>
+	</div>
+	
+	<!-- 模态框（Modal） -->
+
+	<div class="modal fade" id="useradd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	        <div class="modal-content">
+		        <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                  &times;
+		            </button>
+		            <h4 class="modal-title" id="myModalLabel">
+		                用户录入
+		            </h4>
+		        </div>
+
+		        <div class="modal-body">
+		            <form role="form" id="userAddForm">
+						<div class="form-group">
+						  <label for="name">登陆账号</label>
+						  <input type="text" class="form-control" id="userName" 
+						     placeholder="请输入名称">
+						</div>
+						<div class="form-group">
+						  <label for="name">用户名称</label>
+						  <input type="text" class="form-control" id="realName" 
+						     placeholder="请输入图标">
+						</div>
+						<div class="form-group">
+						  <label for="name">用户密码</label>
+						  <input type="text" class="form-control" id="password" 
+						     placeholder="请输入密码">
+						</div>
+						<div class="form-group">
+						  <label for="name">身份证</label>
+						  <input type="text" class="form-control" id="identificationNo" 
+						     placeholder="请输入">
+						</div>
+						<div class="form-group">
+						  <label for="name">手机号</label>
+						  <input type="text" class="form-control" id="phone" 
+						     placeholder="请输入手机号">
+						</div>
+						<div class="form-group">
+						  <label for="name">邮箱</label>
+						  <input type="text" class="form-control" id="email" 
+						     placeholder="请输入邮箱">
+						</div>
+						<div class="form-group">
+						  <label for="name">电话</label>
+						  <input type="text" class="form-control" id="mobile" 
+						     placeholder="请输入电话">
+						</div>
+						<div class="form-group">
+						  	<label for="name">性别</label>
+						 	<select id="sex">
+								<option value = '0'>男</option>
+								<option value = '1'>女</option>
+							</select>
+						</div>
+						<div class="form-group">
+						  <label for="name">状态</label>
+						  <select id="status">
+								<option value = '0'>未激活</option>
+								<option value = '1'>激活</option>
+						  </select>
+						</div>
+						<div class="modal-footer">
+				            <button type="button" class="btn btn-default" 
+				               data-dismiss="modal">关闭
+				            </button>
+				            <button type="submit" onclick="userAdd()" class="btn btn-primary">
+				               确认添加
+				            </button>
+			        	</div>
+					</form>
+				</div>
+	        <!-- </div>
+		        <div class="modal-footer">
+		            <button type="button" class="btn btn-default" 
+		               data-dismiss="modal">关闭
+		            </button>
+		            <button type="submit" onclick="userAdd()" class="btn btn-primary">
+		               确认添加
+		            </button>
+		        </div>
+		    </div> --><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div>
+	</div>
+
+	<div class="modal fade" id="userupdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	        <div class="modal-content">
+		        <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                  &times;
+		            </button>
+		            <h4 class="modal-title" id="myModalLabel">
+		                用户编辑
+		            </h4>
+		        </div>
+	        <div class="modal-body" id="userUpdateBody">
+	            
+	        </div>
+		        <!-- <div class="modal-footer">
+		            <button type="button" class="btn btn-default" 
+		               data-dismiss="modal">关闭
+		            </button>
+		            <button type="submit" onclick="userUpdate" class="btn btn-primary">
+		               提交更改
+		            </button>
+		        </div> -->
+		    </div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+
+	<div class="modal fade" id="userdelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	        <div class="modal-content">
+		        <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                  &times;
+		            </button>
+		            <h4 class="modal-title" id="myModalLabel">
+		                用户删除
+		            </h4>
+		        </div>
+		        <div class="modal-body" id="userDeleteBody">
+		           
+		        </div>    
+		    </div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+	<script src="./3rd-libs/jquery/jquery-2.1.4.min.js"></script>
+    <script src="./3rd-libs/bootstrap/js/bootstrap.min.js"></script>
+	<script src="./3rd-libs/jquery/table/jquery.jeditable.js"></script>
+
+    <!-- Data Tables -->
+	    <script src="./3rd-libs/jquery/table/jquery.dataTables.js"></script>
+	    <script src="./3rd-libs/bootstrap/js/dataTables.bootstrap.js"></script>
+
+    <!-- 自定义js -->
+    <script src="./js/content.js"></script>
+ 	<script src="./js/manage-user/userSelectPage.js"></script>
+ 	<script src="./js/manage-user/userAdd.js"></script>
+ 	<script src="./js/manage-user/userUpdate.js"></script>
+ 	<script src="./js/manage-user/userDelete.js"></script>
+ 	
+</body>
+</html>

@@ -83,10 +83,6 @@ public class FixedEquipmentController extends BaseController {
 					OperLog.actionSystemEnum.fixedEquipment,
 					JSON.toJSONString(fixedEquipment));
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("save result: {}", result);
-			}
-
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(fixedEquipment,
 					FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"),
@@ -147,10 +143,6 @@ public class FixedEquipmentController extends BaseController {
 				operLogService.addSystemLog(OperLog.operTypeEnum.update,
 						OperLog.actionSystemEnum.fixedEquipment,
 						JSON.toJSONString(fixedEquipment,SerializerFeature.IgnoreNonFieldGetter));
-			}
-
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("update result: {}", result);
 			}
 
 			//去除不需要的字段
@@ -250,10 +242,6 @@ public class FixedEquipmentController extends BaseController {
 		try {
 			List<FixedEquipment> fixedEquipments = fixedEquipmentService.getAll();
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("fixedEquipments result: {}", JSON.toJSONString(fixedEquipments));
-			}
-
 			if(null == fixedEquipments || fixedEquipments.size() == 0){
 				return AllResult.buildJSON(1, "未获取到数据");
 			}
@@ -308,11 +296,6 @@ public class FixedEquipmentController extends BaseController {
 			}
 
 			Page<FixedEquipment> queryResult = fixedEquipmentService.getScrollData(pageNum, pageSize, example);
-
-
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("queryResult record count: {}", queryResult.getRecords().size());
-			}
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,

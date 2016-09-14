@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/dataDict")
 public class DataDictController extends BaseController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataDictController.class);
 	@Autowired
 	private DataDictService dataDictService;
 
@@ -241,9 +241,7 @@ public class DataDictController extends BaseController {
 			// 去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,
 					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateCreate", "createName", "createDate"));
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("queryResult record count: {}", queryResult.getRecords().size());
-			}
+
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("get dataDict data error. page: {}, count: {}", page, e);

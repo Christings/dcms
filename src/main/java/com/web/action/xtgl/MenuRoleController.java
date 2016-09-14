@@ -64,10 +64,6 @@ public class MenuRoleController extends BaseController {
 						JSON.toJSONString(menuRole));
 			}
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("save menuRole result: {}", result);
-			}
-
 			return AllResult.ok();
 		} catch (Exception e) {
 			LOGGER.error("save menuRole object error. : {}", JSON.toJSONString(menuRole), e);
@@ -174,10 +170,6 @@ public class MenuRoleController extends BaseController {
 				return AllResult.build(1, "未查询到相关数据");
 			}
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("menuRoleList result: {}", JSON.toJSONString(menuRoleList));
-			}
-
 			// 增加日志
 			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
 
@@ -212,10 +204,6 @@ public class MenuRoleController extends BaseController {
 				return AllResult.build(1, "未查询到相关数据");
 			}
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("menuRoleList result: {}", JSON.toJSONString(menuRoleList));
-			}
-
 			// 增加日志
 //			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
 
@@ -243,10 +231,6 @@ public class MenuRoleController extends BaseController {
 
 			if(null == menuRoleList || menuRoleList.size() == 0){
 				return AllResult.build(1, "未查询到相关数据");
-			}
-
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("menuRoleList result: {}", JSON.toJSONString(menuRoleList));
 			}
 
 			// 增加日志

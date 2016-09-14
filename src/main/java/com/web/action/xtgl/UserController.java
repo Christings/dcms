@@ -75,10 +75,6 @@ public class UserController extends BaseController {
 			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.user,
 					JSON.toJSONString(user));
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("save result: {}", result);
-			}
-
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(user,
 					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
@@ -121,10 +117,6 @@ public class UserController extends BaseController {
 				// 增加日志
 				operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.user,
 						JSON.toJSONString(user,SerializerFeature.IgnoreNonFieldGetter));
-			}
-
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("update result: {}", result);
 			}
 
 			//去除不需要的字段
@@ -254,10 +246,6 @@ public class UserController extends BaseController {
 		try {
 			List<User> users = userService.getAll();
 
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("users result: {}", JSON.toJSONString(users));
-			}
-
 			if(null == users || users.size() == 0){
 				return AllResult.build(1, "未获取到菜单");
 			}
@@ -317,11 +305,6 @@ public class UserController extends BaseController {
 
 			Page<User> queryResult = userService.getScrollData(pageNum, pageSize, example);
 
-
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("queryResult record count: {}", queryResult.getRecords().size());
-			}
-
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,
 					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
@@ -371,9 +354,7 @@ public class UserController extends BaseController {
 				// 增加日志
 				operLogService.addSystemLog(OperLog.operTypeEnum.update,
 						OperLog.actionSystemEnum.user, "管理员:"+JSON.toJSONString(WebUtils.getUser(request))+",修改用户密码："+JSON.toJSONString(user));
-				if (LOGGER.isInfoEnabled()) {
-					LOGGER.info("密码修改成功", JSON.toJSONString(user));
-				}
+
 				return buildJSON(1,"密码修改成功");
 			} else {
 				return buildJSON(HttpStatus.NOT_FOUND.value(), "密码修改失败,未查询到相关数据");
@@ -420,9 +401,6 @@ public class UserController extends BaseController {
 				// 增加日志
 				operLogService.addSystemLog(OperLog.operTypeEnum.update,
 						OperLog.actionSystemEnum.user, JSON.toJSONString(user));
-				if (LOGGER.isInfoEnabled()) {
-					LOGGER.info("密码修改成功", JSON.toJSONString(user));
-				}
 				return buildJSON(1,"密码修改成功");
 			} else {
 				return buildJSON(HttpStatus.NOT_FOUND.value(), "密码修改失败,未查询到相关数据");

@@ -48,6 +48,13 @@ h5 {
 a:focus {
     outline: none;
 }
+/*以下两段后加*/
+a.navbar-minimalize{
+    margin-left: 85px;
+}
+body.mini-navbar a.navbar-minimalize{
+    margin-left: 12px;
+}
 
 .nav > li > a {
     color: #a7b1c2;
@@ -3721,7 +3728,7 @@ nav.page-tabs .page-tabs-content {
 }
 
 #content-main {
-    height: calc(100% - 140px);
+    height: calc(100% - 90px);
     overflow: hidden;
 }
 
