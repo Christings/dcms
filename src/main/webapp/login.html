@@ -12,47 +12,67 @@
 		<![endif]-->
 		<link rel="shortcut icon" href="./img/favicon.ico">
 		<link rel="stylesheet" href="3rd-libs/bootstrap/css/bootstrap.min.css" />
+		<link href="./css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
 	</head>
-	<body >
+	<body style="width:100%;height:100%;">
 		<div>
-			<div style="margin:20px; textAlign:left;">
+			<div style="margin:1.5%; position:absolute; textAlign:left;">
 				<img src="img/logo.png" />
 			</div>
-			<div style="height:500px; background-image:url(img/bg.png);background-size: auto;">
-				<div style="margin-top: 7.5%;min-width: 400" class="well col-sm-offset-8 col-sm-3">
+			<div id="bg" style="width:100%;height:100%;min-height:650px;background-image:url(img/bg.png);background-size:contain;background-repeat:no-repeat;">
+				<div style="position:absolute;margin-top:13%;margin-left:73%;width:304px;height:300px;min-width: 300;opacity: 0.5;" class="well">
+				</div>
+				<div class="well" style="position:absolute;margin-top:13.5%;margin-left:73.5%;width:290px;min-width: 300;opacity: 2;z-index: 1;">
 					<form method="POST" class="form-horizontal" id="form" role="form">
+						<div style="margin:0;text-align: center;">			
+							管理员登录
+						</div>
+						<hr style="height:1px;border:none;border-top:1px solid #555555;" />
 						<div class="form-group">
-							<div class="col-sm-offset-1 col-sm-10">
-								<input type="text" class="form-control" id="username" value="admin" placeholder="用户名">
+							<div style="margin:0;position:relative;" class="col-sm-12">
+								<input style="display:inline"type="text" class="form-control" id="username" value="admin" placeholder="用户名"><i style="position:absolute;margin-top:10px;right:25px;z-index:5;"class="fa fa-user"></i>
 								<span id="uconfirm"></span>
 							</div>
 						</div>
 						<div class="form-group">
-							<div class="col-sm-offset-1 col-sm-10">
-								<input type="password" class="form-control" id="password" value="admin" placeholder="密码">
+							<div style="margin:0;position:relative;" class="col-sm-12">
+								<input style="display:inline"type="password" class="form-control" id="password" value="admin" placeholder="密码"><i style="position:absolute;margin-top:10px;right:25px;z-index:5;" class="fa fa-lock"></i>
 								<span id="pconfirm"></span>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-offset-1 col-sm-10">
+							<label style="margin:0" class="col-sm-12">
 								<input type="checkbox">记住密码</input>
-								<a href="" class="col-sm-offset-4">忘记密码？</a>
+								<a href="" class="col-sm-offset-5">忘记密码？</a>
 							</label>
 						</div>
 						<div class="form-group">
-							<div class="col-sm-offset-1 col-sm-10">
+							<div style="margin:0" class="col-sm-12">
 								<input id="loginBtn" class="col-sm-12" type="button" class="btn btn-default" value="登录">
 								<span id="loading"></span>
 							</div>
 						</div>
 					</form>
 				</div>
+				<div style="position: absolute;margin-top:43%;margin-left: 45%;">
+				北京三元合众科技有限公司
+				</div>
 			</div>
-			<div style="position: fixed;margin-left: 45%;">
-				<label style="">北京三元合众科技有限公司</label>
-			</div>
+			
 		</div>
+		
 		<script src="3rd-libs/jquery/jquery-2.1.4.min.js" type="text/javascript" charset="UTF-8"></script>
+		<script type="text/javascript">
+			setRemSize();
+			window.addEventListener("resize",setRemSize,false);
+			function setRemSize(){
+				var containerH=$(window).height();
+				var containerW=$(window).width();
+				console.log("H:"+containerH+"W:"+containerW);
+				$("#bg").css({"width":containerW});
+				$("#bg").css({"height":containerH});
+			}
+		</script>
 		<script src="3rd-libs/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="./3rd-libs/layer/layer.min.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" src="js/config.js" ></script>
