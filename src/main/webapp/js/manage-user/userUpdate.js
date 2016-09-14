@@ -92,21 +92,21 @@ function userUpdateInit(e){
 			var status_selected_0;
 			var status_selected_1;
 			switch(sex){
-				case '0':
+				case 0:
 					sex_selected_0 = "selected";
 					sex_selected_1 = "";
 					break;
-				case '1':
+				case 1:
 					sex_selected_0 = "";
 					sex_selected_1 = "selected";
 					break;
 			}
 			switch(status){
-				case '0':
+				case 0:
 					status_selected_0 = "selected";
 					status_selected_1 = "";
 					break;
-				case '1':
+				case 1:
 					status_selected_0 = "";
 					status_selected_1 = "selected";
 					break;

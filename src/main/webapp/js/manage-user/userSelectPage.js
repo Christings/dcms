@@ -26,18 +26,18 @@ function loadUserBody(){
 			var sex;
 			var status;
 			switch(e["sex"]){
-				case '0':
+				case 0:
 					sex = "男";
 					break;
-				case '1':
+				case 1:
 					sex = "女";
 					break;
 			}
 			switch(e["status"]){
-				case '0':
+				case 0:
 					status = "未激活";
 					break;
-				case '1':
+				case 1:
 					status = "激活";
 					break;
 			}
@@ -100,18 +100,18 @@ function userSelectPage(){
 				var sex;
 				var status;
 				switch(e["sex"]){
-					case '0':
+					case 0:
 						sex = "男";
 						break;
-					case '1':
+					case 1:
 						sex = "女";
 						break;
 				}
 				switch(e["status"]){
-					case '0':
+					case 0:
 						status = "未激活";
 						break;
-					case '1':
+					case 1:
 						status = "激活";
 						break;
 				}
@@ -172,18 +172,18 @@ function tablePerfom(user_num,size){
 			var sex;
 			var status;
 			switch(e["sex"]){
-				case '0':
+				case 0:
 					sex = "男";
 					break;
-				case '1':
+				case 1:
 					sex = "女";
 					break;
 			}
 			switch(e["status"]){
-				case '0':
+				case 0:
 					status = "未激活";
 					break;
-				case '1':
+				case 1:
 					status = "激活";
 					break;
 			}
