@@ -10,20 +10,45 @@
 		<!--[if lt IE 9]>
 		<meta http-equiv="refresh" content="0;ie.html" />
 		<![endif]-->
-		 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
-		<link rel="shortcut icon" href="./img/favicon.ico">
-		<link rel="stylesheet" href="3rd-libs/bootstrap/css/bootstrap.min.css" />
-		<link href="./css/font-awesome.min.css" rel="stylesheet">
+		<link rel="shortcut icon" href="./img/favicon.ico"/>
+		<link rel="stylesheet" href="3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" />
+		<link rel="stylesheet" href="./css/font-awesome.min.css?v=4.4.0" />
+		<style type="text/css">
+			/*@media only screen and (min-width: 100px) and (max-width: 640px) {
+		        #bg div{
+		            width: 100px;
+		            height: 100px;
+		        }
+		    }
+		    @media only screen and (min-width: 641px) and (max-width: 789px) {
+		        #bg div{
+		            width: 200px;
+		            height: 200px;
+		        }
+		    }
+		    @media only screen and (min-width: 790px) and (max-width: 1280px) {
+		        #bg div{
+		            width: 1280px;
+		            height: 740px;
+		        }
+		    }
+		    @media only screen and (min-width: 1281px) and (max-width: 1920px) {
+		        #bg div{
+		            width: 1920px;
+		            height: 890px;
+		        }
+		    }*/
+		</style>
 	</head>
 	<body style="width:100%;height:100%;">
 		<div>
-			<div style="margin:1.5%; position:absolute; textAlign:left;">
+			<div style="margin:1.5%; position:absolute; ">
 				<img src="img/logo.png" />
 			</div>
-			<div id="bg" style="width:100%;height:100%;min-height:650px;background-image:url(img/bg.png);background-size:contain;background-repeat:no-repeat;">
-				<div style="position:absolute;margin-top:13%;margin-left:73%;width:304px;height:300px;min-width: 300;opacity: 0.5;" class="well">
+			<div id="bg" style="height:100%;min-height:650px;min-width:1270px;background-image:url(img/bg.png);background-size:contain;background-repeat:no-repeat;">
+				<div id="opacity1" style="position:absolute;margin-top:13%;margin-left:73%;width:304px;height:300px;min-width: 300;opacity: 0.5;" class="well">
 				</div>
-				<div class="well" style="position:absolute;margin-top:13.5%;margin-left:73.5%;width:290px;min-width: 300;opacity: 2;z-index: 1;">
+				<div id="opacity2" class="well" style="position:absolute;margin-top:13.5%;margin-left:73.5%;width:290px;min-width: 300;opacity: 2;z-index: 1;">
 					<form method="POST" class="form-horizontal" id="form" role="form">
 						<div style="margin:0;text-align: center;">			
 							管理员登录
@@ -49,14 +74,14 @@
 						</div>
 						<div class="form-group">
 							<div style="margin:0" class="col-sm-12">
-								<input id="loginBtn" class="col-sm-12" type="button" class="btn btn-default" value="登录">
+								<input id="loginBtn" class="col-sm-12 btn btn-primary" type="button" value="登录">
 								<span id="loading"></span>
 							</div>
 						</div>
 					</form>
 				</div>
 				<div style="position: absolute;margin-top:43%;margin-left: 45%;">
-				北京三元合众科技有限公司
+				北京三源合众科技有限公司
 				</div>
 			</div>
 			
@@ -69,12 +94,42 @@
 			function setRemSize(){
 				var containerH=$(window).height();
 				var containerW=$(window).width();
-				console.log("H:"+containerH+"W:"+containerW);
-				$("#bg").css({"width":containerW});
-				$("#bg").css({"height":containerH});
+				// var opacityMarTop1=containerH*13%;
+				// var opacityMarLeft1=containerW*73%;
+				// var opacityMarTop2=containerH*13.5%;
+				// var opacityMarLeft2=containerW*73.5%;
+				
+				if((containerH >= 650) && (containerW >= 1270)){
+					$("#bg").css({"width":containerW});
+					$("#bg").css({"height":containerH});
+
+					var h=$("#bg").height();
+					var w=$("#bg").width();
+					var h1 = w*89/192;
+					var w1 = h*192/89;
+					if(h<h1)
+					{
+						w = w1;
+					}else{
+						h = h1;
+					}
+					// var h = containerH;
+					// var w = containerW;
+					var opacityMarTop1=h*26/100;
+					var opacityMarLeft1=w*73/100;
+					var opacityMarTop2=h*27/100;
+					var opacityMarLeft2=w*73.5/100;
+					$("#opacity1").css({"margin-top":opacityMarTop1,"margin-left":opacityMarLeft1});
+					$("#opacity2").css({"margin-top":opacityMarTop2,"margin-left":opacityMarLeft2});
+					console.log("top1:"+opacityMarTop1+"left1:"+opacityMarLeft1);
+					console.log("top2:"+opacityMarTop2+"left2:"+opacityMarLeft2);
+					console.log("H:"+h+"W:"+w);
+				}
+				// $("#opacity1").css({"margin-top":opacityMarTop1;"margin-left":opacityMarLeft1});
+				// $("#opacity2").css({"margin-top":opacityMarTop2;"margin-left":opacityMarLeft2});
 			}
 		</script>
-		<script src="3rd-libs/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./3rd-libs/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="./3rd-libs/layer/layer.min.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" src="js/config.js" ></script>
 		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>

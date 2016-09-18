@@ -55,6 +55,14 @@ a.navbar-minimalize{
 body.mini-navbar a.navbar-minimalize{
     margin-left: 12px;
 }
+/*后加*/
+.foot > label.number-page{
+    margin-right: 20px;
+}
+.foot > label.foot-pagination{
+    float: right;
+    margin-right:50px;
+}
 
 .nav > li > a {
     color: #a7b1c2;
