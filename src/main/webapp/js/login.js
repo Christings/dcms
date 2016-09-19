@@ -1,12 +1,10 @@
 $(document).ready(function(){
 	var user=DCMS.Busi.getUser();
 	// if(user){
-    //
 	// }else{
 		$("#loginBtn").click(login);
 	// }
 });
-
 function login(){
 	var username=$("#username").val();
 	var password=$("#password").val();
@@ -42,8 +40,7 @@ function login(){
 			skin: 'layui-layer-molv' //样式类名
 			,closeBtn: 0
 		});
-	})
-	.then(function(data){
+	}).then(function(data){
 		console.log(data);
 		console.log("login2");
 		if(data.status=='1'){
