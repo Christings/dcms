@@ -99,8 +99,7 @@ public class LoginController extends BaseController {
 	@RequestMapping(value = "/loginOut")
 	@ResponseBody
 	public Object loginOut(HttpServletRequest request, HttpServletResponse response) {
-		WebUtils.removePrivilege(request); //删除Session权限
-		WebUtils.removeUser(request);//删除SessionUser
+		WebUtils.removeAll(request); //退出时删除用户Session信息
 		return AllResult.build(1, "退出登录成功");
 	}
 
