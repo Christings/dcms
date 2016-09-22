@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.web.core.dao.IMongoDao;
 
@@ -17,7 +19,9 @@ import com.web.core.dao.IMongoDao;
  * @author 田军兴
  * @date 2016/9/18.
  */
-public class MongoDao<T, E> implements IMongoDao {
+@Repository("mongoDao")
+@Transactional
+public class MongoDao<T> implements IMongoDao<T> {
 
 	/**
 	 * 初始化Log4j的一个实例
