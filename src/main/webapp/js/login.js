@@ -49,11 +49,16 @@ function login(){
 			DCMS.Busi.setUser(user);
 		}
 		console.log("login3");
-		DCMS.Utils.gotoPage("./index_v0.html");
+		DCMS.Utils.gotoPage("./index.html");
 		
 	},function(error){
 		console.log("login4");
-		DCMS.Utils.gotoPage("./index_v0.html");
+		console.log("login1");
+		//墨绿深蓝风
+		layer.alert('登陆失败', {
+			skin: 'layui-layer-molv' //样式类名
+			,closeBtn: 0
+		});
 		
 	});
 }
