@@ -70,7 +70,17 @@ function menuUpdateInit(e){
 	var id = e.getAttribute("data-value");
 	var menuId = {key:''};
 	menuId["key"] = id;
-	
+	var selected_0 = "";
+	var selected_1 = "";
+	var selected_2 = "";
+	var selected_3 = "";
+	var selected_4 = "";
+	var selected_5 = "";
+	var selected_6 = "";
+	var selected_7 = "";
+	var selected_8 = "";
+	var selected_9 = "";
+	var selected_10 = "";
 	// console.log(menu);
 	 console.log(id);
 	// console.log(name);
@@ -83,6 +93,41 @@ function menuUpdateInit(e){
 			var menu = jsonData["data"];
 			var name = menu["name"];
 			var iconId = menu["iconId"];
+			switch(iconId){
+				case 'fa fa-archive':
+					selected_0 = "selected";
+					break;
+				case 'fa fa-bars':
+					selected_1 = "selected";
+					break;
+				case 'fa fa-book':
+					selected_2 = "selected";
+					break;
+				case 'fa fa-calendar-plus-o':
+					selected_3 = "selected";
+					break;
+				case 'fa fa-desktop':
+					selected_4 = "selected";
+					break;
+				case 'fa fa-folder':
+					selected_5 = "selected";
+					break;
+				case 'fa fa-home':
+					selected_6 = "selected";
+					break;
+				case 'fa fa-tasks':
+					selected_7 = "selected";
+					break;
+				case 'fa fa-user':
+					selected_8 = "selected";
+					break;
+				case 'fa fa-users':
+					selected_9 = "selected";
+					break;
+				case 'fa fa-text-width':
+					selected_10 = "selected";
+					break;
+			}
 			var level = menu["level"];
 			var type = menu["type"];
 			var rank = menu["rank"];
@@ -104,8 +149,19 @@ function menuUpdateInit(e){
 					"</div>"+
 					"<div class=\"form-group\">"+
 						"<label for=\"name\">菜单图标</label>"+
-						"<input type=\"text\" class=\"form-control\" id=\"menuIcon1\""+
-						"value=\""+iconId+"\">"+
+						"<select id=\"menuIcon1\">"+
+					  		"<option value = 'fa fa-archive' selected=\""+selected_0+"\"><i class=\"fa fa-archive\"></i></option>"+
+							"<option value = 'fa fa-bars' selected=\""+selected_1+"\"><i class=\"fa fa-bars\"></i></option>"+
+							"<option value = 'fa fa-book' selected=\""+selected_2+"\"><i class=\"fa fa-book\"></i></option>"+
+							"<option value = 'fa fa-calendar-plus-o' selected=\""+selected_3+"\"><i class=\"fa fa-calendar-plus\"></i></option>"+
+							"<option value = 'fa fa-desktop' selected=\""+selected_4+"\"><i class=\"fa fa-desktop\"></i></option>"+
+							"<option value = 'fa fa-folder' selected=\""+selected_5+"\"><i class=\"fa fa-folder\"></i></option>"+
+							"<option value = 'fa fa-home' selected=\""+selected_6+"\"><i class=\"fa fa-home\"></i></option>"+
+							"<option value = 'fa fa-tasks' selected=\""+selected_7+"\"><i class=\"fa fa-tasks\"></i></option>"+
+							"<option value = 'fa fa-user' selected=\""+selected_8+"\"><i class=\"fa fa-user\"></i></option>"+
+							"<option value = 'fa fa-users' selected=\""+selected_9+"\"><i class=\"fa fa-users\"></i></option>"+
+							"<option value = 'fa fa-text-width' selected=\""+selected_10+"\"><i class=\"fa fa-text-width\"></i></option>"+	
+					  "	</select>"+
 					"</div>"+
 					"<div class=\"form-group\">"+
 						"<label for=\"name\">菜单类型</label>"+

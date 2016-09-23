@@ -124,7 +124,6 @@ function parseTreeJson(treeNodes){
 					childElement[temp]
 				);
 			}
-			
 		}
 		else{
 			if(e["level"]!=1){
