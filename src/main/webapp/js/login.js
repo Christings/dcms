@@ -1,10 +1,10 @@
-$(document).ready(function(){
-	var user=DCMS.Busi.getUser();
-	// if(user){
-	// }else{
-		$("#loginBtn").click(login);
-	// }
-});
+// $(document).ready(function(){
+// 	var user=DCMS.Busi.getUser();
+// 	// if(user){
+// 	// }else{
+// 		$("#loginBtn").click(login);
+// 	// }
+// });
 function login(){
 	var username=$("#username").val();
 	var password=$("#password").val();

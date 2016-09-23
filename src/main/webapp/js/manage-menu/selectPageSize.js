@@ -168,7 +168,6 @@ function parseTreeJson(treeNodes){
 					"</tr>"+
 					childElement[temp]
 				);
-
 			}else{
 				return(
 					"<tr>"+

@@ -10,10 +10,34 @@
 		<!--[if lt IE 9]>
 		<meta http-equiv="refresh" content="0;ie.html" />
 		<![endif]-->
-		<link rel="shortcut icon" href="./img/favicon.ico"/>
-		<link rel="stylesheet" href="3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" />
-		<link rel="stylesheet" href="./css/font-awesome.min.css?v=4.4.0" />
+		<link rel="shortcut icon" href="./img/favicon.ico">
+		<link rel="stylesheet" href="3rd-libs/bootstrap/css/bootstrap.min.css" />
+		<link href="./css/font-awesome.min.css" rel="stylesheet">
 		<style type="text/css">
+			.code
+		    {
+		    	border-radius: 2px;
+				font-family: Arial;
+				font-style: italic;
+				color: Black;
+				border: 0;
+				padding: 2px 3px;
+				letter-spacing: 3px;
+				font-weight: bolder;
+				display:inline;
+		    }
+		    .unchanged
+		    {
+		    	font-family: Arial;
+				font-style: italic;
+				letter-spacing: 3px;
+				font-weight: bolder;
+				padding: 2px 3px;
+		    	border-radius: 2px;
+				border: 5px;
+				border-color: Black;
+				background: #fff;
+		    }
 			/*@media only screen and (min-width: 100px) and (max-width: 640px) {
 		        #bg div{
 		            width: 100px;
@@ -46,9 +70,9 @@
 				<img src="img/logo.png" />
 			</div>
 			<div id="bg" style="height:100%;min-height:650px;min-width:1270px;background-image:url(img/bg.png);background-size:contain;background-repeat:no-repeat;">
-				<div id="opacity1" style="position:absolute;margin-top:13%;margin-left:73%;width:304px;height:300px;min-width: 300;opacity: 0.5;" class="well">
+				<div id="opacity1" style="position:absolute;margin-top:12%;margin-left:73%;width:304px;height:335px;min-width: 300;opacity: 0.5;" class="well">
 				</div>
-				<div id="opacity2" class="well" style="position:absolute;margin-top:13.5%;margin-left:73.5%;width:290px;min-width: 300;opacity: 2;z-index: 1;">
+				<div id="opacity2" class="well" style="position:absolute;margin-top:12.5%;margin-left:73.5%;width:290px;min-width: 300;opacity: 2;z-index: 1;">
 					<form method="POST" class="form-horizontal" id="form" role="form">
 						<div style="margin:0;text-align: center;">			
 							管理员登录
@@ -64,6 +88,12 @@
 							<div style="margin:0;position:relative;" class="col-sm-12">
 								<input style="display:inline"type="password" class="form-control" id="password" value="admin" placeholder="密码"><i style="position:absolute;margin-top:10px;right:25px;z-index:5;" class="fa fa-lock"></i>
 								<span id="pconfirm"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<div style="margin:0;position:relative;" class="col-sm-12">
+								<input type="text" class="code col-sm-3" id ="input1" />
+								<input type="text " placeholder="点击获取验证码" onclick="createCode()" readonly="readonly" id="checkCode" class="unchanged col-md-offset-1 col-sm-7"/>
 							</div>
 						</div>
 						<div class="form-group">
@@ -134,5 +164,6 @@
 		<script type="text/javascript" src="js/config.js" ></script>
 		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/login.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/checkCode.js" type="text/javascript" charset="utf-8"></script>
 	</body>
 </html>

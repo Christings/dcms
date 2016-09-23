@@ -17,7 +17,7 @@ function initMenuTree(){
             }else{
                 liHtml+='<a class="J_menuItem" href=\"'+menu.url+'\">';
             }
-            liHtml+='<i class="fa fa-home"></i>';
+            liHtml+='<i class=\"'+menu.iconId+'\"></i>';
             liHtml+='<span class="nav-label">'+menu.name+'</span>';
             if(hasChildMenu(menu)){
                 liHtml+='<span class="fa arrow"></span>';
