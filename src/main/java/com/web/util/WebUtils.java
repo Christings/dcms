@@ -105,4 +105,13 @@ public class WebUtils {
     public static void removeMenuIds(HttpServletRequest request){
         request.getSession().removeAttribute(SESSION_KEY_MENU_IDS);
     }
+
+    /**
+     * 删除当前登录用户所有session信息
+     */
+    public static void removeAll(HttpServletRequest request){
+        removePrivilege(request);
+        removeMenuIds(request);
+        removeUser(request);
+    }
 }
