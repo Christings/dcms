@@ -1,10 +1,10 @@
-$(document).ready(function(){
-	var user=DCMS.Busi.getUser();
-	// if(user){
-	// }else{
-		$("#loginBtn").click(login);
-	// }
-});
+// $(document).ready(function(){
+// 	var user=DCMS.Busi.getUser();
+// 	// if(user){
+// 	// }else{
+// 		$("#loginBtn").click(login);
+// 	// }
+// });
 function login(){
 	var username=$("#username").val();
 	var password=$("#password").val();
@@ -49,11 +49,11 @@ function login(){
 			DCMS.Busi.setUser(user);
 		}
 		console.log("login3");
-		DCMS.Utils.gotoPage("./index_v0.html");
+		DCMS.Utils.gotoPage("./index.html");
 		
 	},function(error){
 		console.log("login4");
-		DCMS.Utils.gotoPage("./index_v0.html");
+		DCMS.Utils.gotoPage("./index.html");
 		
 	});
 }
