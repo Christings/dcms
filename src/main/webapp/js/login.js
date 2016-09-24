@@ -22,16 +22,24 @@ function login(){
 	userInformation['username'] = username;
 	userInformation['password'] = password;
 	var loader=layer.load(0);
-	DCMS.Utils.Ajax("main/login",userInformation)
+	DCMSUtils.Ajax.doPost("main/login",userInformation)
 	.then(function(data){
 		console.log(data);
+		layer.close(loader);
 		if(data.status == "1"){
 			console.log("login");
-			DCMS.Busi.setUser(data.data);
-			return DCMS.Utils.Ajax("menu/tree");
+			DCMSBusi.USER.set(data.data);
+			loader=layer.load(0);
+			return DCMSUtils.Ajax.doPost("menu/tree");
 		}else{
 			console.log("wrong");
-			$("#uconfirm").text("用户名或密码错误");
+			$("#uconfirm").text(data.msg);
+			//墨绿深蓝风
+			layer.alert(data.msg, {
+				skin: 'layui-layer-molv' //样式类名
+				,closeBtn: 0
+			});
+			return;
 		}
 	},function(error){
 		console.log("login1");
@@ -45,16 +53,16 @@ function login(){
 	}).then(function(data){
 		console.log(data);
 		console.log("login2");
-		if(data.status=='1'){
-			var user=DCMS.Busi.getUser();
-			user.userMenus=data.data;
-			DCMS.Busi.setUser(user);
+		if(data){
+			if(data.status=='1'){
+				var user=DCMSBusi.USER.get();
+				user.userMenus=data.data;
+				DCMSBusi.USER.set(user);
+			}
+			console.log("login3");
+			DCMSUtils.NAV.gotoPage("./index.html");
 		}
-		console.log("login3");
-		DCMS.Utils.gotoPage("./index.html");
 	},function(error){
-		console.log("login4");
-		console.log("login1");
 		if(error){
 			//墨绿深蓝风
 			layer.alert('登陆失败', {

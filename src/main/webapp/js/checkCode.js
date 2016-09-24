@@ -22,6 +22,7 @@ function createCode() {
     }
 }
 $(document).ready(function () {
+    createCode();
     $("#loginBtn").click(function () {
         var inputCode = document.getElementById("input1").value;
         if (inputCode.length <= 0) {

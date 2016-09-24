@@ -1,9 +1,9 @@
 /**
  * Created by Charles on 2016/9/10.
  */
-initMenuTree();
+
 function initMenuTree(){
-    var user=DCMS.Busi.getUser();
+    var user=DCMSBusi.USER.get();
     var userMenus=user.userMenus;
     console.log(user);
     if(userMenus){
@@ -33,7 +33,6 @@ function initMenuTree(){
                     }
                 liHtml+='</ul>';
             }
-
             li.innerHTML=liHtml;
             $("#side-menu").append(li);
         }
