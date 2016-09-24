@@ -22,11 +22,11 @@ var _utils={
 		window.location.href=pageUrl;
 	},
 	//设置Storage
-	setStorage:function(name,value){
-		window.localStorage.setItem(name,JSON.stringify(value));
+	setSessionStorage:function(name,value){
+		window.sessionStorage.setItem(name,JSON.stringify(value));
 	},
-	getStorage:function(name){
-		var val=window.localStorage.getItem(name);
+	getSessionStorage:function(name){
+		var val=window.sessionStorage.getItem(name);
 		if(val){
 			try{
 				val=JSON.parse(val);
@@ -36,21 +36,21 @@ var _utils={
 		}
 		return val;
 	},
-	removeStorage:function(name){
-		window.localStorage.removeItem(name);
+	removeSessionStorage:function(name){
+		window.sessionStorage.removeItem(name);
 	},
 	//清空，慎用
-	clearStorage:function(){
-		window.localStorage.clear();
+	clearSessionStorage:function(){
+		window.sessionStorage.clear();
 	}
 };
 //业务相关,和工具类没关系
 var _busi={
 	setUser:function(user){
-		_utils.setStorage("_USER_INFO_",user);
+		_utils.setSessionStorage("_USER_INFO_",user);
 	},
 	getUser:function(){
-		return _utils.getStorage("_USER_INFO_");
+		return _utils.getSessionStorage("_USER_INFO_");
 	}
 };
 
