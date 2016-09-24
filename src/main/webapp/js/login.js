@@ -21,7 +21,7 @@ function login(){
 	}
 	userInformation['username'] = username;
 	userInformation['password'] = password;
-	layer.load(0);
+	var loader=layer.load(0);
 	DCMS.Utils.Ajax("main/login",userInformation)
 	.then(function(data){
 		console.log(data);
@@ -35,11 +35,13 @@ function login(){
 		}
 	},function(error){
 		console.log("login1");
+		layer.close(loader);
 		//墨绿深蓝风
 		layer.alert('登陆失败', {
 			skin: 'layui-layer-molv' //样式类名
 			,closeBtn: 0
 		});
+		return;
 	}).then(function(data){
 		console.log(data);
 		console.log("login2");
@@ -50,15 +52,15 @@ function login(){
 		}
 		console.log("login3");
 		DCMS.Utils.gotoPage("./index.html");
-		
 	},function(error){
 		console.log("login4");
 		console.log("login1");
-		//墨绿深蓝风
-		layer.alert('登陆失败', {
-			skin: 'layui-layer-molv' //样式类名
-			,closeBtn: 0
-		});
-		
+		if(error){
+			//墨绿深蓝风
+			layer.alert('登陆失败', {
+				skin: 'layui-layer-molv' //样式类名
+				,closeBtn: 0
+			});
+		}
 	});
 }
