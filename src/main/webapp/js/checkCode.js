@@ -10,7 +10,7 @@ function createCode() {
         return rnd;
     }
  
-    var num = RndNum(2);
+    var num = RndNum(1);
     var num2 = RndNum(2);
  
     code = num + " + " + num2 + " = ？";

@@ -133,6 +133,22 @@ body.mini-sidebar #menu-navbar{
 .table-header > span.glyphicon-chevron-toggle:before {
     content: "\e113";
 }
+ul.navbar-right > li :visited{
+	background-color: #0099cb;
+}
+ul.navbar-right .dropdown-menu :hover{
+	background-color: #fff;
+}
+ul.navbar-right > li :hover{
+	background-color: #1ab394;
+}
+ul.navbar-right > li :active{
+	background-color: #1ab394;
+}
+.navbar .nav > li:hover .dropdown-menu{
+	display:block;
+	background-color: #1ab394;
+}
 
 .menuTableFoot{
 	position: relative;
