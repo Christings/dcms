@@ -1,3 +1,4 @@
+
 //工具类
 var DCMSUtils={
 	//Ajax相关
@@ -94,6 +95,9 @@ var DCMSBusi={
 		}
 	}
 };
+
+
+document.write('<script charset="utf-8"  src="'+DCMSUtils.URL.getContentPath()+'/js/config.js"><\/script>');
 
 
 

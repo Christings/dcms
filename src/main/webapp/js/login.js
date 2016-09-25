@@ -21,34 +21,24 @@ function login(){
 	}
 	userInformation['username'] = username;
 	userInformation['password'] = password;
-	var loader=layer.load(0);
+	DCMSUtils.Modal.showLoading("拼命登录中....");
 	DCMSUtils.Ajax.doPost("main/login",userInformation)
 	.then(function(data){
 		console.log(data);
-		layer.close(loader);
+		DCMSUtils.Modal.hideLoading();
 		if(data.status == "1"){
 			console.log("login");
 			DCMSBusi.USER.set(data.data);
-			loader=layer.load(0);
+			DCMSUtils.Modal.showLoading();
 			return DCMSUtils.Ajax.doPost("menu/tree");
 		}else{
 			console.log("wrong");
 			$("#uconfirm").text(data.msg);
-			//墨绿深蓝风
-			layer.alert(data.msg, {
-				skin: 'layui-layer-molv' //样式类名
-				,closeBtn: 0
-			});
+			DCMSUtils.Modal.alert(data.msg,'温馨提示');
 			return;
 		}
 	},function(error){
-		console.log("login1");
-		layer.close(loader);
-		//墨绿深蓝风
-		layer.alert('登陆失败', {
-			skin: 'layui-layer-molv' //样式类名
-			,closeBtn: 0
-		});
+		DCMSUtils.Modal.alert('登录失败','温馨提示');
 		return;
 	}).then(function(data){
 		console.log(data);
@@ -64,11 +54,7 @@ function login(){
 		}
 	},function(error){
 		if(error){
-			//墨绿深蓝风
-			layer.alert('登陆失败', {
-				skin: 'layui-layer-molv' //样式类名
-				,closeBtn: 0
-			});
+			DCMSUtils.Modal.alert('登录失败','温馨提示');
 		}
 	});
 }

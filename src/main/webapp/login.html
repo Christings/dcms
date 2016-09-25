@@ -13,6 +13,8 @@
 		<link rel="shortcut icon" href="./img/favicon.ico">
 		<link rel="stylesheet" href="3rd-libs/bootstrap/css/bootstrap.min.css" />
 		<link href="./css/font-awesome.css" rel="stylesheet">
+		<link href="./3rd-libs/jquery-weui/lib/weui.css" rel="stylesheet">
+		<link href="./3rd-libs/jquery-weui/css/jquery-weui.css" rel="stylesheet">
 		<style type="text/css">
 			.code
 		    {
@@ -38,30 +40,6 @@
 				border-color: Black;
 				background: #fff;
 		    }
-			/*@media only screen and (min-width: 100px) and (max-width: 640px) {
-		        #bg div{
-		            width: 100px;
-		            height: 100px;
-		        }
-		    }
-		    @media only screen and (min-width: 641px) and (max-width: 789px) {
-		        #bg div{
-		            width: 200px;
-		            height: 200px;
-		        }
-		    }
-		    @media only screen and (min-width: 790px) and (max-width: 1280px) {
-		        #bg div{
-		            width: 1280px;
-		            height: 740px;
-		        }
-		    }
-		    @media only screen and (min-width: 1281px) and (max-width: 1920px) {
-		        #bg div{
-		            width: 1920px;
-		            height: 890px;
-		        }
-		    }*/
 		</style>
 	</head>
 	<body style="width:100%;height:100%;">
@@ -124,11 +102,7 @@
 			function setRemSize(){
 				var containerH=$(window).height();
 				var containerW=$(window).width();
-				// var opacityMarTop1=containerH*13%;
-				// var opacityMarLeft1=containerW*73%;
-				// var opacityMarTop2=containerH*13.5%;
-				// var opacityMarLeft2=containerW*73.5%;
-				
+
 				if((containerH >= 650) && (containerW >= 1270)){
 					$("#bg").css({"width":containerW});
 					$("#bg").css({"height":containerH});
@@ -143,8 +117,6 @@
 					}else{
 						h = h1;
 					}
-					// var h = containerH;
-					// var w = containerW;
 					var opacityMarTop1=h*26/100;
 					var opacityMarLeft1=w*73/100;
 					var opacityMarTop2=h*27/100;
@@ -155,13 +127,10 @@
 					console.log("top2:"+opacityMarTop2+"left2:"+opacityMarLeft2);
 					console.log("H:"+h+"W:"+w);
 				}
-				// $("#opacity1").css({"margin-top":opacityMarTop1;"margin-left":opacityMarLeft1});
-				// $("#opacity2").css({"margin-top":opacityMarTop2;"margin-left":opacityMarLeft2});
 			}
 		</script>
 		<script src="./3rd-libs/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
-		<script src="./3rd-libs/layer/layer.min.js" type="text/javascript" charset="utf-8"></script>
-		<script type="text/javascript" src="js/config.js" ></script>
+		<script src="./3rd-libs/jquery-weui/js/jquery-weui.min.js"></script>
 		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/login.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/checkCode.js" type="text/javascript" charset="utf-8"></script>
