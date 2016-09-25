@@ -191,7 +191,7 @@ function parseTreeJson(treeNodes){
 			if(e["level"]!=1){
 				return(
 					"<tr class=\"collapse "+e["parentId"]+"\">"+
-						"<td><a style=\""+ left +"\" href=\"."+e["id"]+"\">"+e["name"]+"</a></td>"+
+						"<td><i style=\""+ left +"\">"+e["name"]+"</i></td>"+
 						"<td>"+e["iconId"]+"</td>"+
 						"<td>"+e["type"]+"</td>"+
 						"<td>"+e["id"]+"</td>"+
@@ -206,7 +206,7 @@ function parseTreeJson(treeNodes){
 			}else{
 				return(
 					"<tr>"+
-						"<td><a style=\""+ left +"\" href=\"."+e["id"]+"\">"+e["name"]+"</a></td>"+
+						"<td><i style=\""+ left +"\">"+e["name"]+"</i></td>"+
 						"<td>"+e["iconId"]+"</td>"+
 						"<td>"+e["type"]+"</td>"+
 						"<td>"+e["id"]+"</td>"+
