@@ -60,14 +60,26 @@ var DCMSUtils={
 	},
 	//模态框相关
 	Modal:{
-		alert:function(msg,callback){
-
+		alert:function(msg,title,onOk){
+			$.alert(msg,title,onOk);
 		},
-		toast:function(msg){
-
+		/**
+		 *
+		 * @param msg
+		 * @param style：默认是success，还有cancel，forbidden
+		 * @param callback
+		 */
+		toast:function(msg,style,callback){
+			$.toast(msg,style,callback);
 		},
-		confirm:function(msg,confirm,cancel){
-
+		confirm:function(msg,title,onOk,onCancel){
+			$.confirm(msg,title,onOk,onCancel);
+		},
+		showLoading:function(msg){
+			$.showLoading(msg);
+		},
+		hideLoading:function(){
+			$.hideLoading();
 		}
 	}
 };

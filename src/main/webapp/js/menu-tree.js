@@ -5,7 +5,6 @@
 function initMenuTree(){
     var user=DCMSBusi.USER.get();
     var userMenus=user.userMenus;
-    console.log(user);
     if(userMenus){
         for(var i=0;i<userMenus.length;i++){
             var menu=userMenus[i];
