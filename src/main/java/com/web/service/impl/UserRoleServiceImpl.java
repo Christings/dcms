@@ -102,6 +102,22 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
+    public int delete( UserRoleExample example) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("delete condition example by id: {}", example);
+        }
+
+        // 删除记录数
+        int result = userRoleMapper.deleteByExample(example) ;
+
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("delete condition object by id result: {}", result);
+        }
+
+        return result;
+    }
+
+    @Override
     @Transactional(propagation = Propagation.SUPPORTS,readOnly = true)
     public UserRole getById(String key) {
         if (LOGGER.isInfoEnabled()) {

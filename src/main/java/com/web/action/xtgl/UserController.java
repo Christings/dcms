@@ -6,7 +6,9 @@ import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
 import com.web.entity.User;
+import com.web.example.RoleExample;
 import com.web.example.UserExample;
+import com.web.service.RoleSerivce;
 import com.web.util.AllResult;
 import com.web.util.MD5;
 import com.web.util.UUIDGenerator;
@@ -14,6 +16,7 @@ import com.web.util.WebUtils;
 import com.web.util.fastjson.FastjsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.web.util.AllResult.buildJSON;
@@ -38,12 +42,15 @@ import static com.web.util.AllResult.buildJSON;
 public class UserController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
+	@Autowired
+	RoleSerivce roleSerivce;
+
 	/**
 	 * 添加用户
 	 */
 	@RequestMapping(value = "/add", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
-	public Object addUser(User user, HttpServletRequest request) {
+	public Object addUser(User user,String roleIds, HttpServletRequest request) {
 
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [user: {}]", JSON.toJSONString(user));
@@ -57,6 +64,8 @@ public class UserController extends BaseController {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), "真实名不能为空");
 		} else if(null == user.getStatus()){
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), "状态输入有误,请检查");
+		} else if(StringUtils.isEmpty(roleIds)){
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "用户所属角色必须提供");
 		}
 
 		UserExample example = new UserExample();
@@ -67,9 +76,22 @@ public class UserController extends BaseController {
 		}
 
 		try {
+			//1.设置用户相关信息
 			user.setId(UUIDGenerator.generatorRandomUUID());
 			user.setPassword(MD5.MD5Encode(user.getPassword()));
-			int result = userService.save(user);
+
+			//2.判断用户角色传递是否正确
+			String[] ids = roleIds.split(",");
+			RoleExample example1 = new RoleExample();
+			RoleExample.Criteria criteria1 = example1.createCriteria();
+			criteria1.andIdIn(Arrays.asList(ids));
+
+			if(ids.length != roleSerivce.count(example1)){
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "角色参数传递有误");
+			}
+
+			//3.保存用户、用户角色关系
+			userService.saveUserAndRoleRelation(user,ids);
 
 			// 增加日志
 			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.user,
@@ -94,7 +116,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = "/update", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
-	public Object update(User user, HttpServletRequest request) {
+	public Object update(User user, String roleIds, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [user: {}]", JSON.toJSONString(user));
 		}
@@ -105,21 +127,33 @@ public class UserController extends BaseController {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), "真实名不能为空");
 		} else if(null == user.getStatus()){
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), "状态必须提供");
+		} else if(StringUtils.isEmpty(roleIds)){
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "用户所属角色必须提供");
 		}
 
 		try {
-			//防止用户前端传入值更新数据
+			//1.防止用户前端传入值更新数据
 			user.setPassword(null);
 			user.setUsername(null);
-			int result = userService.updateById(user);
 
-			if(result > 0){
-				// 增加日志
-				operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.user,
-						JSON.toJSONString(user,SerializerFeature.IgnoreNonFieldGetter));
+			//2.判断用户角色传递是否正确
+			String[] ids = roleIds.split(",");
+			RoleExample example1 = new RoleExample();
+			RoleExample.Criteria criteria1 = example1.createCriteria();
+			criteria1.andIdIn(Arrays.asList(ids));
+
+			if(ids.length != roleSerivce.count(example1)){
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "角色参数传递有误");
 			}
 
-			//去除不需要的字段
+			//3.更新用户信息
+			userService.updateUserAndRoleRelation(user,ids);
+
+			//4.增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.user,
+					JSON.toJSONString(user,SerializerFeature.IgnoreNonFieldGetter));
+
+			//5.去除不需要的字段（返回前端数据）
 			String jsonStr = JSON.toJSONString(user,
 					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);

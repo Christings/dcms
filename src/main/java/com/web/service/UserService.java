@@ -10,6 +10,16 @@ import java.util.List;
 public interface UserService extends IService<User,String> {
 
 	/**
+	 * 保存用户及用户角色关系
+	 */
+	void saveUserAndRoleRelation(User user, String[] roleIds);
+
+	/**
+	 * 修改用户及用户角色关系
+	 */
+	void updateUserAndRoleRelation(User user, String[] roleIds);
+
+	/**
 	 * 根据查询条件获取查询数量
      */
 	int count(UserExample example);
