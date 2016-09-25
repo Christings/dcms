@@ -1,62 +1,103 @@
-//工具类
-var _utils={
-	Ajax:function(url,params){
-		var dtd=$.Deferred();
-		$.ajax({
-			type:"post",
-			url:DCMSConfig.API_SERVER+url,
-			dataType: 'json',
-			data: params,
-			async:true
-		}).then(function(data){
-			console.log("ajax");
-			dtd.resolve(data);
-		},function(error){
-			console.log(error);
-			dtd.reject(error);
-		});
-		return dtd.promise();
-	},
-	//页面跳转
-	gotoPage:function(pageUrl){
-		window.location.href=pageUrl;
-	},
-	//设置Storage
-	setStorage:function(name,value){
-		window.localStorage.setItem(name,JSON.stringify(value));
-	},
-	getStorage:function(name){
-		var val=window.localStorage.getItem(name);
-		if(val){
-			try{
-				val=JSON.parse(val);
-			}catch (e){
 
-			}
+//工具类
+var DCMSUtils={
+	//Ajax相关
+	Ajax:{
+		doPost:function(url,params){
+			var dtd=$.Deferred();
+			$.ajax({
+				type:"post",
+				url:DCMSConfig.API_SERVER+url,
+				dataType: 'json',
+				data: params,
+				async:true
+			}).then(function(data){
+				console.log("ajax");
+				dtd.resolve(data);
+			},function(error){
+				console.log(error);
+				dtd.reject(error);
+			});
+			return dtd.promise();
 		}
-		return val;
 	},
-	removeStorage:function(name){
-		window.localStorage.removeItem(name);
+	//URL操作相关
+	URL:{
+		getContentPath:function(){
+			var pathName = window.location.pathname;
+			var appIndex = pathName.substr(1).indexOf("/");
+			var app = pathName.substr(0, appIndex + 1);
+			return window.location.origin+app;
+		}
 	},
-	//清空，慎用
-	clearStorage:function(){
-		window.localStorage.clear();
+	//导航相关
+	NAV:{
+		//页面跳转
+		gotoPage:function(pageUrl){
+			window.location.href=pageUrl;
+		},
+	},
+	SessionStorage:{
+		set:function(name,value){
+			window.sessionStorage.setItem(name,JSON.stringify(value));
+		},
+		get:function(name){
+			var val=window.sessionStorage.getItem(name);
+			if(val){
+				try{
+					val=JSON.parse(val);
+				}catch (e){
+
+				}
+			}
+			return val;
+		},
+		remove:function(name){
+			window.sessionStorage.removeItem(name);
+		},
+		clear:function(){
+			window.sessionStorage.clear();
+		}
+	},
+	//模态框相关
+	Modal:{
+		alert:function(msg,title,onOk){
+			$.alert(msg,title,onOk);
+		},
+		/**
+		 *
+		 * @param msg
+		 * @param style：默认是success，还有cancel，forbidden
+		 * @param callback
+		 */
+		toast:function(msg,style,callback){
+			$.toast(msg,style,callback);
+		},
+		confirm:function(msg,title,onOk,onCancel){
+			$.confirm(msg,title,onOk,onCancel);
+		},
+		showLoading:function(msg){
+			$.showLoading(msg);
+		},
+		hideLoading:function(){
+			$.hideLoading();
+		}
 	}
 };
 //业务相关,和工具类没关系
-var _busi={
-	setUser:function(user){
-		_utils.setStorage("_USER_INFO_",user);
-	},
-	getUser:function(){
-		return _utils.getStorage("_USER_INFO_");
+var DCMSBusi={
+	USER:{
+		set:function(user){
+			DCMSUtils.SessionStorage.set("_USER_INFO_",user);
+		},
+		get:function(){
+			return DCMSUtils.SessionStorage.get("_USER_INFO_");
+		}
 	}
 };
 
-var DCMS={
-	Utils:_utils,
-	Busi:_busi
-};
+
+document.write('<script charset="utf-8"  src="'+DCMSUtils.URL.getContentPath()+'/js/config.js"><\/script>');
+
 
 

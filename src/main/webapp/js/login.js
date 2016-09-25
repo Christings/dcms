@@ -21,46 +21,40 @@ function login(){
 	}
 	userInformation['username'] = username;
 	userInformation['password'] = password;
-	var loader=layer.load(0);
-	DCMS.Utils.Ajax("main/login",userInformation)
+	DCMSUtils.Modal.showLoading("拼命登录中....");
+	DCMSUtils.Ajax.doPost("main/login",userInformation)
 	.then(function(data){
 		console.log(data);
+		DCMSUtils.Modal.hideLoading();
 		if(data.status == "1"){
 			console.log("login");
-			DCMS.Busi.setUser(data.data);
-			return DCMS.Utils.Ajax("menu/tree");
+			DCMSBusi.USER.set(data.data);
+			DCMSUtils.Modal.showLoading();
+			return DCMSUtils.Ajax.doPost("menu/tree");
 		}else{
 			console.log("wrong");
-			$("#uconfirm").text("用户名或密码错误");
+			$("#uconfirm").text(data.msg);
+			DCMSUtils.Modal.alert(data.msg,'温馨提示');
+			return;
 		}
 	},function(error){
-		console.log("login1");
-		layer.close(loader);
-		//墨绿深蓝风
-		layer.alert('登陆失败', {
-			skin: 'layui-layer-molv' //样式类名
-			,closeBtn: 0
-		});
+		DCMSUtils.Modal.alert('登录失败','温馨提示');
 		return;
 	}).then(function(data){
 		console.log(data);
 		console.log("login2");
-		if(data.status=='1'){
-			var user=DCMS.Busi.getUser();
-			user.userMenus=data.data;
-			DCMS.Busi.setUser(user);
+		if(data){
+			if(data.status=='1'){
+				var user=DCMSBusi.USER.get();
+				user.userMenus=data.data;
+				DCMSBusi.USER.set(user);
+			}
+			console.log("login3");
+			DCMSUtils.NAV.gotoPage("./index.html");
 		}
-		console.log("login3");
-		DCMS.Utils.gotoPage("./index.html");
 	},function(error){
-		console.log("login4");
-		console.log("login1");
 		if(error){
-			//墨绿深蓝风
-			layer.alert('登陆失败', {
-				skin: 'layui-layer-molv' //样式类名
-				,closeBtn: 0
-			});
+			DCMSUtils.Modal.alert('登录失败','温馨提示');
 		}
 	});
 }
