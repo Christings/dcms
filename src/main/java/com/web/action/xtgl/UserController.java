@@ -316,8 +316,8 @@ public class UserController extends BaseController {
 				.addGroup(GroupBuilder.build(userForm.getPageSize()).notNull().minValue(1), "每页记录数量最少1条")
 
 				//非必输条件验证
-				.addGroup(GroupBuilder.buildOr(userForm.getStatusQuery()).isNull().valueIn((short)0,(short)1),"查询状态传值有误")
-				.addGroup(GroupBuilder.buildOr(userForm.getSexQuery()).isNull().valueIn((short)0,(short)1),"查询性别传值有误")
+				.addGroup(GroupBuilder.buildOr(userForm.getStatus()).isNull().valueIn((short)0,(short)1),"查询状态传值有误")
+				.addGroup(GroupBuilder.buildOr(userForm.getSex()).isNull().valueIn((short)0,(short)1),"查询性别传值有误")
 				.validate();
 
 		if (!StringUtils.isEmpty(errorTip)) {
@@ -335,13 +335,13 @@ public class UserController extends BaseController {
 			if(!StringUtils.isEmpty(userForm.getRealname())){
 				criteria.andRealnameLike("%"+userForm.getRealname().trim()+"%");
 			}
-			if(null != userForm.getStatusQuery()){
-				criteria.andStatusEqualTo(userForm.getStatusQuery());
+			if(null != userForm.getStatus()){
+				criteria.andStatusEqualTo(userForm.getStatus());
 			}else{
 				criteria.andStatusNotEqualTo((short)2);
 			}
-			if(null != userForm.getSexQuery()){
-				criteria.andSexEqualTo(userForm.getSexQuery());
+			if(null != userForm.getSex()){
+				criteria.andSexEqualTo(userForm.getSex());
 			}
 
 			//设置排序条件

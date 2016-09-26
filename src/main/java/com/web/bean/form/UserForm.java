@@ -58,16 +58,6 @@ public class UserForm extends CommonForm {
     private String remark;
 
     /**
-     * 查询条件（状态）
-     */
-    private Short statusQuery;
-
-    /**
-     * 查询条件（性别）
-     */
-    private Short sexQuery;
-
-    /**
      * 排序条件（登录名）
      */
     private String usernameSort;
@@ -165,22 +155,6 @@ public class UserForm extends CommonForm {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public Short getStatusQuery() {
-        return statusQuery;
-    }
-
-    public void setStatusQuery(Short statusQuery) {
-        this.statusQuery = statusQuery;
-    }
-
-    public Short getSexQuery() {
-        return sexQuery;
-    }
-
-    public void setSexQuery(Short sexQuery) {
-        this.sexQuery = sexQuery;
     }
 
     public String getUsernameSort() {
