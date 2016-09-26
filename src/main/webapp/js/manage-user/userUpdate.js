@@ -42,21 +42,30 @@ function userUpdate(){
 		userInfo['mobile'] = mobile;
 		userInfo['sex'] = sex;
 		userInfo['status'] = status;
-		$.ajax({
-			type:"post",
-			url:"user/update",
-			dataType: "json",
-			data: userInfo,
-			success:function(res){
-				if(res.status == "1"){
-					console.log("更新用户"+userName+"成功");
-					alert("更新用户"+userName+"成功");
-				}else{
-					console.log("更新用户"+userName+"失败"+res.msg);
-					alert("更新用户"+userName+"失败");
-				}
+		DCMSUtils.Ajax.doPost("user/update",userInfo).done((res)=>{
+			if(res.status == "1"){
+				console.log("更新用户"+userName+"成功");
+				alert("更新用户"+userName+"成功");
+			}else{
+				console.log("更新用户"+userName+"失败"+res.msg);
+				alert("更新用户"+userName+"失败");
 			}
 		});
+		// $.ajax({
+		// 	type:"post",
+		// 	url:"user/update",
+		// 	dataType: "json",
+		// 	data: userInfo,
+		// 	success:function(res){
+		// 		if(res.status == "1"){
+		// 			console.log("更新用户"+userName+"成功");
+		// 			alert("更新用户"+userName+"成功");
+		// 		}else{
+		// 			console.log("更新用户"+userName+"失败"+res.msg);
+		// 			alert("更新用户"+userName+"失败");
+		// 		}
+		// 	}
+		// });
 		return true;
 		// });
 	});
@@ -71,12 +80,13 @@ function userUpdateInit(e){
 	// console.log(menu);
 	 console.log(id);
 	// console.log(name);
-	$.ajax({
-		type:"post",
-		url:"user/get",
-		dataType: 'json',
-		data: userId,
-		}).done((jsonData)=>{
+	// $.ajax({
+	// 	type:"post",
+	// 	url:"user/get",
+	// 	dataType: 'json',
+	// 	data: userId,
+	// 	})
+	DCMSUtils.Ajax.doPost("user/get",userId).done((jsonData)=>{
 			var userInfo = jsonData["data"];
 			var userName = userInfo['username'];
 			var realName = userInfo['realname'];
@@ -101,6 +111,7 @@ function userUpdateInit(e){
 					sex_selected_1 = "selected";
 					break;
 			}
+			console.log("sex:"+sex+"selected0:"+sex_selected_0+"selected1:"+sex_selected_1);
 			switch(status){
 				case 0:
 					status_selected_0 = "selected";
@@ -111,6 +122,7 @@ function userUpdateInit(e){
 					status_selected_1 = "selected";
 					break;
 			}
+			
 			//console.log("parentId:"+menu["parentId"]);
 			var html = "<form role=\"form\" id=\"userUpdateForm\">"+
 						"<div hidden=\"hidden\" class=\"form-group\">"+
@@ -147,15 +159,15 @@ function userUpdateInit(e){
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">性别</label>"+
 						  	"<select id=\"sex1\">"+
-								"<option selected=\""+sex_selected_0+"\"value = '0'>男</option>"+
-								"<option selected=\""+sex_selected_1+"\"value = '1'>女</option>"+
+								"<option "+sex_selected_0+" value = '0'>男</option>"+
+								"<option "+sex_selected_1+" value = '1'>女</option>"+
 							"</select>"+
 						"</div>"+
 						"<div class=\"form-group\">"+
 						  "<label for=\"name\">状态</label>"+
 						  "<select id=\"status1\">"+
-								"<option selected=\""+status_selected_0+"\"value = '0'>未激活</option>"+
-								"<option selected=\""+status_selected_1+"\"value = '1'>激活</option>"+
+								"<option "+status_selected_0+" value = '0'>未激活</option>"+
+								"<option "+status_selected_1+" value = '1'>激活</option>"+
 						  "</select>"+
 						"</div>"+
 						"<div class=\"modal-footer\">"+

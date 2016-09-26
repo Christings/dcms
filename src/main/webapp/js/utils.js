@@ -2,7 +2,7 @@ function getContentPath(){
 	var pathName = window.location.pathname;
 	var appIndex = pathName.substr(1).indexOf("/");
 	var app = pathName.substr(0, appIndex + 1);
-	return window.location.origin+app;
+	return window.location.origin+app+"/";
 }
 //工具类
 var DCMSUtils={

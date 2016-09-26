@@ -4,12 +4,13 @@ function userDeleteInit(e){
 		var userId={id:""};
 		userId["id"]=id;
 		console.log("delete:"+id);
-		$.ajax({
-			type:"post",
-			url:"user/get",
-			dataType: 'json',
-			data: userId,
-		}).done((jsonData)=>{
+		// $.ajax({
+		// 	type:"post",
+		// 	url:"user/get",
+		// 	dataType: 'json',
+		// 	data: userId,
+		// })
+		DCMSUtils.Ajax.doPost("user/get",userId).done((jsonData)=>{
 			var userInfo = jsonData["data"];
 			var userName = userInfo["username"];
 			console.log("delete:"+userName);
@@ -33,21 +34,28 @@ function userDelete(e){
 	console.log("delete:"+id);
 	var userInfo = {id:''};// 
 	userInfo['id'] = id;
-	$.ajax({
-		type:"post",
-		url: "user/delete",
-		dataType: 'json',
-		// data: userInfo,
-		// contentType: "application/json",
-		data: userInfo,
-		success: function(res){
-			if(res.status == "1"){
-				console.log("删除用户成功" + res.data);
-			}else{
-				console.log("删除用户失败" + res.msg);
-			}
+	DCMSUtils.Ajax.doPost("user/delete",userInfo).done((res)=>{
+		if(res.status == "1"){
+			console.log("删除用户成功" + res.data);
+		}else{
+			console.log("删除用户失败" + res.msg);
 		}
 	});
+	// $.ajax({
+	// 	type:"post",
+	// 	url: "user/delete",
+	// 	dataType: 'json',
+	// 	// data: userInfo,
+	// 	// contentType: "application/json",
+	// 	data: userInfo,
+	// 	success: function(res){
+	// 		if(res.status == "1"){
+	// 			console.log("删除用户成功" + res.data);
+	// 		}else{
+	// 			console.log("删除用户失败" + res.msg);
+	// 		}
+	// 	}
+	// });
 	// var userInfo = {id:''};
 	// userInfo["id"] = id;
 	// $.ajax({

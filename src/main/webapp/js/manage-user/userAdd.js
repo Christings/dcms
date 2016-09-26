@@ -33,20 +33,29 @@ function userAdd(){
 		userInfo['mobile'] = mobile;
 		userInfo['sex'] = sex;
 		userInfo['status'] = status;
-		$.ajax({
-			type:"post",
-			url:"user/add",
-			dataType: 'json',
-			data: userInfo,
-			success:function(res){
-				if(res.status == "1"){
+		DCMSUtils.Ajax.doPost("user/add",getMenuData).done((res)=>{
+			if(res.status == "1"){
 					console.log("添加用户"+userName+"成功");
 					alert("添加用户"+userName+"成功");
 				}else{
 					console.log("添加用户"+userName+"失败"+res.msg);
 					alert("添加用户"+userName+"失败");
 				}
-			}
 		});
+		// $.ajax({
+		// 	type:"post",
+		// 	url:"user/add",
+		// 	dataType: 'json',
+		// 	data: userInfo,
+		// 	success:function(res){
+		// 		if(res.status == "1"){
+		// 			console.log("添加用户"+userName+"成功");
+		// 			alert("添加用户"+userName+"成功");
+		// 		}else{
+		// 			console.log("添加用户"+userName+"失败"+res.msg);
+		// 			alert("添加用户"+userName+"失败");
+		// 		}
+		// 	}
+		// });
 	});
 }
