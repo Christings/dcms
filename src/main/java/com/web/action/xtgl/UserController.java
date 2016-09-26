@@ -3,13 +3,16 @@ package com.web.action.xtgl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.web.bean.form.UserForm;
+import com.web.bean.result.UserResult;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
 import com.web.entity.User;
+import com.web.entity.UserRole;
 import com.web.example.RoleExample;
 import com.web.example.UserExample;
 import com.web.service.RoleSerivce;
+import com.web.service.UserRoleService;
 import com.web.util.AllResult;
 import com.web.util.MD5;
 import com.web.util.UUIDGenerator;
@@ -19,6 +22,7 @@ import com.web.util.validation.GroupBuilder;
 import com.web.util.validation.ValidationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -46,7 +50,9 @@ public class UserController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
-	RoleSerivce roleSerivce;
+	RoleSerivce roleSerivce; //角色Service
+	@Autowired
+	UserRoleService userRoleService; //菜单角色关系Service
 
 	/**
 	 * 添加用户
@@ -241,12 +247,14 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "/get", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
 	public Object getById(String id, HttpServletRequest request) {
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [id: {}]", id);
-		}
-		// TODO 需要添加判断
-		if (StringUtils.isEmpty(id)) {
-			return buildJSON(HttpStatus.BAD_REQUEST.value(), "用户id不能为空");
+		//1.验证参数
+		String errorTip = ValidationHelper.build()
+				//必输条件验证
+				.addGroup(GroupBuilder.build(id).notEmpty().maxLength(32), "用户ID必须提供且长度最大为32位")
+				.validate();
+
+		if (!StringUtils.isEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
 		try {
@@ -257,15 +265,18 @@ public class UserController extends BaseController {
 				operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,
 						JSON.toJSONString(user,SerializerFeature.IgnoreNonFieldGetter));
 			}else{
-				return buildJSON(HttpStatus.NOT_FOUND.value(), "未找到用户数据");
+				return buildJSON(0, "未找到用户数据");
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(user,
-					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
-					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+			UserResult result = new UserResult();
+			BeanUtils.copyProperties(user,result);
+			List<UserRole> userRoles = userRoleService.getUserRole(user.getId());
+			for(UserRole userRole:userRoles){
+				result.addRoleIds(userRole.getRoleId());
+			}
 
-			return AllResult.okJSON(JSON.parse(jsonStr));
+			return AllResult.okJSON(result);
 		} catch (Exception e) {
 			LOGGER.error("get User fail:", e.getMessage());
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误, 获取用户信息失败");

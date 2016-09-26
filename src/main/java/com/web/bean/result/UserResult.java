@@ -1,5 +1,8 @@
 package com.web.bean.result;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -65,7 +68,7 @@ public class UserResult {
     /**
      * 角色ID集合
      */
-    private Set<String> roleIds;
+    private Set<String> roleIds = new HashSet<>();
 
     public String getId() {
         return id;
@@ -161,5 +164,11 @@ public class UserResult {
 
     public void setRoleIds(Set<String> roleIds) {
         this.roleIds = roleIds;
+    }
+
+    public void addRoleIds(String roleId){
+        if(StringUtils.isNotEmpty(roleId)){
+            this.roleIds.add(roleId);
+        }
     }
 }
