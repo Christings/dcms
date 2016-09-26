@@ -2,12 +2,13 @@
 function roleUpdateInit(e){
 	var id = e.getAttribute("data-value");
 	var roleGetData = {id:id};
-	$.ajax({
-		url:"role/get",
-		dataType:"json",
-		data: roleGetData,
-		type: "post"
-	}).done((jsonData)=>{
+	// $.ajax({
+	// 	url:"role/get",
+	// 	dataType:"json",
+	// 	data: roleGetData,
+	// 	type: "post"
+	// })
+	DCMSUtils.Ajax.doPost("role/datagrid",getGetData).done((jsonData)=>{
 		var roleInfo = jsonData["data"];
 		var content = "<form role=\"form\" id=\"roleUpdateForm\">"+
 						"<div class=\"form-group\" hidden=\"hidden\">"+
@@ -50,21 +51,30 @@ function roleUpdate(){
 		roleInfo['id'] = id;
 		roleInfo['rolecode'] = roleCode;
 		roleInfo['rolename'] = roleName;
-		$.ajax({
-			type:"post",
-			url:"role/update",
-			dataType: 'json',
-			data: roleInfo,
-			success:function(res){
-				if(res.status == "1"){
-					console.log("编辑用户"+roleName+"成功");
-					alert("编辑用户"+roleName+"成功");
-				}else{
-					console.log("编辑用户"+roleName+"失败"+res.msg);
-					alert("编辑用户"+roleName+"失败");
-				}
+		DCMSUtils.Ajax.doPost("role/update",roleInfo).done((res)=>{
+			if(res.status == "1"){
+				console.log("编辑用户"+roleName+"成功");
+				alert("编辑用户"+roleName+"成功");
+			}else{
+				console.log("编辑用户"+roleName+"失败"+res.msg);
+				alert("编辑用户"+roleName+"失败");
 			}
 		});
+		// $.ajax({
+		// 	type:"post",
+		// 	url:"role/update",
+		// 	dataType: 'json',
+		// 	data: roleInfo,
+		// 	success:function(res){
+		// 		if(res.status == "1"){
+		// 			console.log("编辑用户"+roleName+"成功");
+		// 			alert("编辑用户"+roleName+"成功");
+		// 		}else{
+		// 			console.log("编辑用户"+roleName+"失败"+res.msg);
+		// 			alert("编辑用户"+roleName+"失败");
+		// 		}
+		// 	}
+		// });
 	});
 
 }

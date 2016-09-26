@@ -4,12 +4,13 @@ function roleDeleteInit(e){
 	var roleId={id:""};
 	roleId["id"]=id;
 	console.log("delete:"+id);
-	$.ajax({
-		type:"post",
-		url:"role/get",
-		dataType: 'json',
-		data: roleId,
-	}).done((jsonData)=>{
+	// $.ajax({
+	// 	type:"post",
+	// 	url:"role/get",
+	// 	dataType: 'json',
+	// 	data: roleId,
+	// })
+	DCMSUtils.Ajax.doPost("role/get",roleId).done((jsonData)=>{
 		var roleInfo = jsonData["data"];
 		var roleName = roleInfo["rolename"];
 		console.log("delete:"+roleName);
@@ -33,20 +34,27 @@ function roleDelete(e){
 	console.log("delete:"+id);
 	var roleInfo = {id:''};// 
 	roleInfo['id'] = id;
-	$.ajax({
-		type:"post",
-		url: "role/delete",
-		dataType: 'json',
-		// data: userInfo,
-		// contentType: "application/json",
-		data: roleInfo,
-		success: function(res){
-			if(res.status == "1"){
-				console.log("删除角色成功" + res.data);
-			}else{
-				console.log("删除角色失败" + res.msg);
-			}
+	DCMSUtils.Ajax.doPost("role/delete",roleInfo).done((res)=>{
+		if(res.status == "1"){
+			console.log("删除角色成功" + res.data);
+		}else{
+			console.log("删除角色失败" + res.msg);
 		}
 	});
+	// $.ajax({
+	// 	type:"post",
+	// 	url: "role/delete",
+	// 	dataType: 'json',
+	// 	// data: userInfo,
+	// 	// contentType: "application/json",
+	// 	data: roleInfo,
+	// 	success: function(res){
+	// 		if(res.status == "1"){
+	// 			console.log("删除角色成功" + res.data);
+	// 		}else{
+	// 			console.log("删除角色失败" + res.msg);
+	// 		}
+	// 	}
+	// });
 }
 

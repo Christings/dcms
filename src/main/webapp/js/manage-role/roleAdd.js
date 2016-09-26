@@ -16,24 +16,32 @@ function roleAdd(){
 			//$("#alert").text("请输入登陆名称");
 			return false;
 		}
-
 		var roleInfo = { rolecode:'', rolename:''};
 		roleInfo['rolecode'] = roleCode;
 		roleInfo['rolename'] = roleName;
-		$.ajax({
-			type:"post",
-			url:"role/add",
-			dataType: 'json',
-			data: roleInfo,
-			success:function(res){
-				if(res.status == "1"){
-					console.log("添加用户"+roleName+"成功");
-					alert("添加用户"+roleName+"成功");
-				}else{
-					console.log("添加用户"+roleName+"失败"+res.msg);
-					alert("添加用户"+roleName+"失败");
-				}
+		DCMSUtils.Ajax.doPost("role/add",roleInfo).done((res)=>{
+			if(res.status == "1"){
+				console.log("添加用户"+roleName+"成功");
+				alert("添加用户"+roleName+"成功");
+			}else{
+				console.log("添加用户"+roleName+"失败"+res.msg);
+				alert("添加用户"+roleName+"失败");
 			}
 		});
+		// $.ajax({
+		// 	type:"post",
+		// 	url:"role/add",
+		// 	dataType: 'json',
+		// 	data: roleInfo,
+		// 	success:function(res){
+		// 		if(res.status == "1"){
+		// 			console.log("添加用户"+roleName+"成功");
+		// 			alert("添加用户"+roleName+"成功");
+		// 		}else{
+		// 			console.log("添加用户"+roleName+"失败"+res.msg);
+		// 			alert("添加用户"+roleName+"失败");
+		// 		}
+		// 	}
+		// });
 	});
 }

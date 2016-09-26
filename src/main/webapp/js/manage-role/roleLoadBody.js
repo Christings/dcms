@@ -8,12 +8,13 @@ function loadRoleBody(){
 	var content = "";
 	console.log("roleLoad");
 	var getRoleData = {pageNum: pageNum,pageSize: pageSize};
-	$.ajax({
-		url:"role/datagrid",
-		dataType:"json",
-		data: getRoleData,
-		type: "post"
-	}).done((jsonData)=>{
+	// $.ajax({
+	// 	url:"role/datagrid",
+	// 	dataType:"json",
+	// 	data: getRoleData,
+	// 	type: "post"
+	// })
+	DCMSUtils.Ajax.doPost("role/datagrid",getRoleData).done((jsonData)=>{
 		// var count = jsonData["data"]["count"];
 		var roleInfo = jsonData["data"]["records"];
 	    role_pageCount = jsonData["data"]["pageCount"];
@@ -60,14 +61,15 @@ function roleSelectPage(){
 		var size = $("#roleSelectPage option:selected").val();
 		console.log("size:"+size);
 		var getMenuData = {pageNum: 1, pageSize: size};
-		$.ajax({
-			// url: "menu/tree",
-			url: "role/datagrid",
-			dataType: "json",
-			//data: "",
-			data: getMenuData,
-			type: "post"
-		}).done((jsonData)=>{
+		// $.ajax({
+		// 	// url: "menu/tree",
+		// 	url: "role/datagrid",
+		// 	dataType: "json",
+		// 	//data: "",
+		// 	data: getMenuData,
+		// 	type: "post"
+		// })
+		DCMSUtils.Ajax.doPost("role/datagrid",getMenuData).done((jsonData)=>{
 			var roleInfo = jsonData["data"]["records"];
 			role_pageCount = jsonData["data"]["pageCount"];
 			var num = 1;
@@ -112,14 +114,15 @@ function roleSelectPage(){
 function tablePerfom(role_num,size){
 	var getMenuData = {pageNum: role_num, pageSize: size};
 	var html_content="";
-	$.ajax({
-		// url: "menu/tree",
-		url: "role/datagrid",
-		dataType: "json",
-		//data: "",
-		data: getMenuData,
-		type: "post"
-	}).done((jsonData)=>{
+	// $.ajax({
+	// 	// url: "menu/tree",
+	// 	url: "role/datagrid",
+	// 	dataType: "json",
+	// 	//data: "",
+	// 	data: getMenuData,
+	// 	type: "post"
+	// })
+	DCMSUtils.Ajax.doPost("role/datagrid",getMenuData).done((jsonData)=>{
 		var roleInfo = jsonData["data"]["records"];
 		role_pageCount = jsonData["data"]["pageCount"];
 		var num = 1;

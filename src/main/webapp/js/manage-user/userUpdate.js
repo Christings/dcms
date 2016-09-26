@@ -87,101 +87,127 @@ function userUpdateInit(e){
 	// 	data: userId,
 	// 	})
 	DCMSUtils.Ajax.doPost("user/get",userId).done((jsonData)=>{
-			var userInfo = jsonData["data"];
-			var userName = userInfo['username'];
-			var realName = userInfo['realname'];
-			var password = userInfo['password'];
-			var identificationNo = userInfo['identificationno'];
-			var phone = userInfo['phone'];
-			var email = userInfo['email'];
-			var mobile = userInfo['mobile'];
-			var sex = userInfo['sex'];
-			var status = userInfo['status'];
-			var sex_selected_0;
-			var sex_selected_1;
-			var status_selected_0;
-			var status_selected_1;
-			switch(sex){
-				case 0:
-					sex_selected_0 = "selected";
-					sex_selected_1 = "";
-					break;
-				case 1:
-					sex_selected_0 = "";
-					sex_selected_1 = "selected";
-					break;
+		var userInfo = jsonData["data"];
+		var userName = userInfo['username'];
+		var realName = userInfo['realname'];
+		var password = userInfo['password'];
+		var identificationNo = userInfo['identificationno'];
+		var phone = userInfo['phone'];
+		var email = userInfo['email'];
+		var mobile = userInfo['mobile'];
+		var sex = userInfo['sex'];
+		var status = userInfo['status'];
+		var rolesId = userInfo['rolesId'];
+		var sex_selected_0;
+		var sex_selected_1;
+		var status_selected_0;
+		var status_selected_1;
+		switch(sex){
+			case 0:
+				sex_selected_0 = "selected";
+				sex_selected_1 = "";break;
+			case 1:
+				sex_selected_0 = "";
+				sex_selected_1 = "selected";break;
+		}
+		console.log("sex:"+sex+"selected0:"+sex_selected_0+"selected1:"+sex_selected_1);
+		switch(status){
+			case 0:
+				status_selected_0 = "selected";
+				status_selected_1 = "";
+				break;
+			case 1:
+				status_selected_0 = "";
+				status_selected_1 = "selected";
+				break;
+		}var da = "";
+		DCMSUtils.Ajax.doPost("role/getAll",da).done((jsonData)=>{
+			var roles = jsonData["data"];
+			var content = "";
+			var e;
+			console.log(rolesId);
+			for(var i=0,len=roles.length;i<len;i++){
+				e = roles[i];
+				var check = "";
+				for(var i=0,len=rolesId.length;i<len;i++){
+					if(rolesId[i] === e["id"]){
+						check = "checked";
+						break;
+					}
+				}
+				content += "<input type=\"checkbox\" "+check+" value=\""+e["id"]+"\">"+e["rolename"];
 			}
-			console.log("sex:"+sex+"selected0:"+sex_selected_0+"selected1:"+sex_selected_1);
-			switch(status){
-				case 0:
-					status_selected_0 = "selected";
-					status_selected_1 = "";
-					break;
-				case 1:
-					status_selected_0 = "";
-					status_selected_1 = "selected";
-					break;
-			}
-			
-			//console.log("parentId:"+menu["parentId"]);
 			var html = "<form role=\"form\" id=\"userUpdateForm\">"+
-						"<div hidden=\"hidden\" class=\"form-group\">"+
-						  "<input id=\"userId1\" value=\""+ id +"\"for=\"name\">"+
-						"</div>"+
-						"<div class=\"form-group\">"+
-						  "<label for=\"name\">登陆账号</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"userName1\" value=\""+userName+"\">"+
-						"</div>"+
-						"<div class=\"form-group\">"+
-						  "<label for=\"name\">用户名称</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"realName1\" value=\""+realName+"\">"+
-						"</div>"+
-						"<div class=\"form-group\">"+
-						  "<label for=\"name\">用户密码</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"password1\" value=\""+password+"\">"+
-						"</div>"+
-						"<div class=\"form-group\">"+
-						  "<label for=\"name\">身份证</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"identificationNo1\" value=\""+identificationNo+"\">"+
-						"</div>"+
-						"<div class=\"form-group\">"+
-						  "<label for=\"name\">手机号</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"mobile1\" value=\""+mobile+"\">"+
-						"</div>"+
-						"<div class=\"form-group\">"+
-						  "<label for=\"name\">邮箱</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"email1\" value=\""+email+"\">"+
-						"</div>"+
-						"<div class=\"form-group\">"+
-						  "<label for=\"name\">电话</label>"+
-						  "<input type=\"text\" class=\"form-control\" id=\"phone1\" value=\""+phone+"\">"+
-						"</div>"+
-						"<div class=\"form-group\">"+
-						  "<label for=\"name\">性别</label>"+
-						  	"<select id=\"sex1\">"+
-								"<option "+sex_selected_0+" value = '0'>男</option>"+
-								"<option "+sex_selected_1+" value = '1'>女</option>"+
-							"</select>"+
-						"</div>"+
-						"<div class=\"form-group\">"+
-						  "<label for=\"name\">状态</label>"+
-						  "<select id=\"status1\">"+
-								"<option "+status_selected_0+" value = '0'>未激活</option>"+
-								"<option "+status_selected_1+" value = '1'>激活</option>"+
-						  "</select>"+
-						"</div>"+
-						"<div class=\"modal-footer\">"+
-			           "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">关闭"+
-			            "</button>"+
-			            "<button type=\"submit\" onclick=\"userUpdate()\" class=\"btn btn-primary\">"+
-			            "提交修改"+
-			           "</button>"+
-		        	"</div>"+
-				"</form>";
+					"<div hidden=\"hidden\" class=\"form-group\">"+
+					  "<input id=\"userId1\" value=\""+ id +"\"for=\"name\">"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">登陆账号</label>"+
+					  "<input type=\"text\" class=\"form-control\" id=\"userName1\" value=\""+userName+"\">"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">用户名称</label>"+
+					  "<input type=\"text\" class=\"form-control\" id=\"realName1\" value=\""+realName+"\">"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">用户角色</label>"+
+					  "<div id=\"rolesContent1\""+content+"</div>"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">用户密码</label>"+
+					  "<input type=\"text\" class=\"form-control\" id=\"password1\" value=\""+password+"\">"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">身份证</label>"+
+					  "<input type=\"text\" class=\"form-control\" id=\"identificationNo1\" value=\""+identificationNo+"\">"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">手机号</label>"+
+					  "<input type=\"text\" class=\"form-control\" id=\"mobile1\" value=\""+mobile+"\">"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">邮箱</label>"+
+					  "<input type=\"text\" class=\"form-control\" id=\"email1\" value=\""+email+"\">"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">电话</label>"+
+					  "<input type=\"text\" class=\"form-control\" id=\"phone1\" value=\""+phone+"\">"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">性别</label>"+
+					  	"<select id=\"sex1\">"+
+							"<option "+sex_selected_0+" value = '0'>男</option>"+
+							"<option "+sex_selected_1+" value = '1'>女</option>"+
+						"</select>"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">状态</label>"+
+					  "<select id=\"status1\">"+
+							"<option "+status_selected_0+" value = '0'>未激活</option>"+
+							"<option "+status_selected_1+" value = '1'>激活</option>"+
+					  "</select>"+
+					"</div>"+
+					"<div class=\"modal-footer\">"+
+		           "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">关闭"+
+		            "</button>"+
+		            "<button type=\"submit\" onclick=\"userUpdate()\" class=\"btn btn-primary\">"+
+		            "提交修改"+
+		           "</button>"+
+	        	"</div>"+
+			"</form>";
 			var body = document.getElementById("userUpdateBody");
 			body.innerHTML = html;
+		});
 	});		// }
 }
 
+function contains(obj,arr){
+	for(var i=0,len=arr.length;i<len;i++){
+		if(arr[i] === obj){
+			return true;
+		}
+	}
+	return false;
+}
 
 

@@ -45,6 +45,7 @@ function loadUserBody(){
 			content = "<tr>"+
 				"<td>"+e["username"]+"</td>"+
 				"<td>"+e["realname"]+"</td>"+
+				"<td></td>"+
 				"<td>"+sex+"</td>"+
 				"<td>"+e["identificationno"]+"</td>"+
 				"<td>"+e["phone"]+"</td>"+
@@ -120,6 +121,7 @@ function userSelectPage(){
 				content = "<tr>"+
 					"<td>"+e["username"]+"</td>"+
 					"<td>"+e["realname"]+"</td>"+
+					"<td></td>"+
 					"<td>"+sex+"</td>"+
 					"<td>"+e["identificationno"]+"</td>"+
 					"<td>"+e["phone"]+"</td>"+
@@ -193,6 +195,7 @@ function tablePerfom(user_num,size){
 			content = "<tr>"+
 				"<td>"+e["username"]+"</td>"+
 				"<td>"+e["realname"]+"</td>"+
+				"<td></td>"+
 				"<td>"+sex+"</td>"+
 				"<td>"+e["identificationno"]+"</td>"+
 				"<td>"+e["phone"]+"</td>"+

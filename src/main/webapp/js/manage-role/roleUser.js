@@ -1,13 +1,16 @@
+
+
 function roleUserInit(e){
 	var id = e.getAttribute("data-value");
 
 	var roleId = {roleId: id};
-	$.ajax({
-		type:"post",
-		url:"user/role/getUserAll",
-		dataType:'json',
-		data: roleId
-	}).done((jsonData)=>{
+	// $.ajax({
+	// 	type:"post",
+	// 	url:"user/role/getUserAll",
+	// 	dataType:'json',
+	// 	data: roleId
+	// })
+	DCMSUtils.Ajax.doPost("user/role/getUserAll",roleId).done((jsonData)=>{
 		var data = jsonData["data"];
 		console.log(data);
 		var users = jsonData["data"]["records"];
@@ -84,12 +87,13 @@ function roleBatchUsers(e){
 		}
 		console.log("batchUsers");
 		var batchUserData = {roleId: roleId,userIds: userIds};
-		$.ajax({
-			url:"user/role/batchUsers",
-			dataType:"json",
-			data: batchUserData,
-			type: "post"
-		}).done((jsonData)=>{
+		// $.ajax({
+		// 	url:"user/role/batchUsers",
+		// 	dataType:"json",
+		// 	data: batchUserData,
+		// 	type: "post"
+		// })
+		DCMSUtils.Ajax.doPost("user/role/batchUsers",batchUserData).done((jsonData)=>{
 			console.log(jsonData["msg"]);
 		});
 	});	
