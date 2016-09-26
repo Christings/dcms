@@ -21,6 +21,8 @@ function login(){
 	}
 	userInformation['username'] = username;
 	userInformation['password'] = password;
+	$("#uconfirm").text("");
+	$("#pconfirm").text("");
 	DCMSUtils.Modal.showLoading("拼命登录中....");
 	DCMSUtils.Ajax.doPost("main/login",userInformation)
 	.then(function(data){
