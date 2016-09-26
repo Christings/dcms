@@ -10,10 +10,10 @@ function getContentPath(){
     return window.location.origin+app;
 }
 
-document.write('<link href='+getContentPath()+'"/3rd-libs/jquery-weui/lib/weui.css" rel = "stylesheet">');
-document.write('<link href='+getContentPath()+'"/3rd-libs/jquery-weui/css/jquery-weui.css" rel = "stylesheet">');
+document.write('<link href="'+getContentPath()+'/3rd-libs/jquery-weui/lib/weui.css" rel = "stylesheet">');
+document.write('<link href="'+getContentPath()+'/3rd-libs/jquery-weui/css/jquery-weui.css" rel = "stylesheet">');
 
-document.write('<script charset="utf-8"  src='+getContentPath()+'"/3rd-libs/jquery/jquery-2.1.4.min.js"><\/script>');
+document.write('<script charset="utf-8"  src="'+getContentPath()+'/3rd-libs/jquery/jquery-2.1.4.min.js"><\/script>');
 
-document.write('<script charset="utf-8"  src='+getContentPath()+'"/3rd-libs/jquery-weui/js/jquery-weui.min.js"><\/script>');
-document.write('<script charset="utf-8"  src='+getContentPath()+'"/3rd-libs/bootstrap/js/bootstrap.min.js"><\/script>');
+document.write('<script charset="utf-8"  src="'+getContentPath()+'/3rd-libs/jquery-weui/js/jquery-weui.min.js"><\/script>');
+document.write('<script charset="utf-8"  src="'+getContentPath()+'/3rd-libs/bootstrap/js/bootstrap.min.js"><\/script>');
