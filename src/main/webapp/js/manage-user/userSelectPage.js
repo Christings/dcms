@@ -10,12 +10,13 @@ function loadUserBody(){
 	var content = "";
 	console.log("userLoad");
 	var getUserData = {pageNum: pageNum,pageSize: pageSize,username: username,realname:realname};
-	$.ajax({
-		url:"user/datagrid",
-		dataType:"json",
-		data: getUserData,
-		type: "post"
-	}).done((jsonData)=>{
+	// $.ajax({
+	// 	url:"user/datagrid",
+	// 	dataType:"json",
+	// 	data: getUserData,
+	// 	type: "post"
+	// })
+	DCMSUtils.Ajax.doPost("user/datagrid",getUserData).done((jsonData)=>{
 		// var count = jsonData["data"]["count"];
 		var userInfo = jsonData["data"]["records"];
 	    user_pageCount = jsonData["data"]["pageCount"];
@@ -83,14 +84,15 @@ function userSelectPage(){
 		var size = $("#userSelectPage option:selected").val();
 		console.log("size:"+size);
 		var getMenuData = {pageNum: 1, pageSize: size};
-		$.ajax({
-			// url: "menu/tree",
-			url: "user/datagrid",
-			dataType: "json",
-			//data: "",
-			data: getMenuData,
-			type: "post"
-		}).done((jsonData)=>{
+		// $.ajax({
+		// 	// url: "menu/tree",
+		// 	url: "user/datagrid",
+		// 	dataType: "json",
+		// 	//data: "",
+		// 	data: getMenuData,
+		// 	type: "post"
+		// })
+		DCMSUtils.Ajax.doPost("user/datagrid",getMenuData).done((jsonData)=>{
 			var userInfo = jsonData["data"]["records"];
 			user_pageCount = jsonData["data"]["pageCount"];
 			var num = 1;
@@ -155,14 +157,15 @@ function userSelectPage(){
 function tablePerfom(user_num,size){
 	var getMenuData = {pageNum: user_num, pageSize: size};
 	var html_content="";
-	$.ajax({
-		// url: "menu/tree",
-		url: "user/datagrid",
-		dataType: "json",
-		//data: "",
-		data: getMenuData,
-		type: "post"
-	}).done((jsonData)=>{
+	// $.ajax({
+	// 	// url: "menu/tree",
+	// 	url: "user/datagrid",
+	// 	dataType: "json",
+	// 	//data: "",
+	// 	data: getMenuData,
+	// 	type: "post"
+	// })
+	DCMSUtils.Ajax.doPost("user/datagrid",getMenuData).done((jsonData)=>{
 		var userInfo = jsonData["data"]["records"];
 		user_pageCount = jsonData["data"]["pageCount"];
 		var num = 1;

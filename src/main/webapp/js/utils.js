@@ -27,6 +27,8 @@ var DCMSUtils={
 			var pathName = window.location.pathname;
 			var appIndex = pathName.substr(1).indexOf("/");
 			var app = pathName.substr(0, appIndex + 1);
+			var url = window.location.origin+app;
+			console.log(url);
 			return window.location.origin+app;
 		}
 	},
