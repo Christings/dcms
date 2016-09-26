@@ -5,7 +5,9 @@ import com.github.pagehelper.PageHelper;
 import com.web.core.util.page.Page;
 import com.web.entity.User;
 import com.web.example.UserExample;
+import com.web.example.UserRoleExample;
 import com.web.mappers.UserMapper;
+import com.web.service.UserRoleService;
 import com.web.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +31,9 @@ public class UserServiceImpl implements UserService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
-	UserMapper userMapper;
+	UserMapper userMapper; //用户Service
+	@Autowired
+	UserRoleService userRoleService; //用户角色Service
 
 	@Override
 	public int save(User entity) {
@@ -134,6 +138,27 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return users;
+	}
+
+	@Override
+	public void saveUserAndRoleRelation(User user, String[] roleIds) {
+		//1.保存用户
+		userMapper.insertSelective(user) ;
+		//2.保存用户和角色关系
+		userRoleService.batchUserRole(user.getId(),roleIds);
+	}
+
+	@Override
+	public void updateUserAndRoleRelation(User user, String[] roleIds) {
+		//1.修改用户信息
+		userMapper.updateByPrimaryKeySelective(user) ;
+		//2.删除原有的用户角色关系
+		UserRoleExample example = new UserRoleExample();
+		UserRoleExample.Criteria criteria = example.createCriteria();
+		criteria.andUserIdEqualTo(user.getId());
+		userRoleService.delete(example);
+		//3.保存现有的用户角色关系
+		userRoleService.batchUserRole(user.getId(),roleIds);
 	}
 
 	@Override

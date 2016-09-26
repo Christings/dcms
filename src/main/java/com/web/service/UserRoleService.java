@@ -1,6 +1,7 @@
 package com.web.service;
 
 import com.web.entity.UserRole;
+import com.web.example.UserRoleExample;
 
 import java.util.List;
 
@@ -11,6 +12,13 @@ import java.util.List;
  * @date 2016-08-11
  */
 public interface UserRoleService extends IService<UserRole,String> {
+
+    /**
+     * 根据条件删除
+     * @param example
+     * @return
+     */
+    int delete(UserRoleExample example);
     /**
      * 根据角色ID 查询角色与用户关系数据
      *

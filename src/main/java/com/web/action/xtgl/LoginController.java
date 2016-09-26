@@ -72,6 +72,12 @@ public class LoginController extends BaseController {
     			return AllResult.build(0, "该用户不存在!");
     	 	}
 
+			if (user.getStatus().intValue() == 1) {
+				return AllResult.build(0, "该用户已经被禁用!");
+			}else if (user.getStatus().intValue() != 0){
+				return AllResult.build(0, "该用户已经被删除!");
+			}
+
     		if(!MD5.MD5Encode(password).equals(user.getPassword())){
     			return AllResult.build(0, "密码输入错误!");
     		}
