@@ -198,7 +198,7 @@ public class UserServiceImpl implements UserService {
 	public Page<User> getScrollData(int pageNum, int pageSize, UserExample example) {
 		// 分页
 		PageHelper.startPage(pageNum, pageSize) ;
-		PageHelper.orderBy("create_date desc,id asc");
+//		PageHelper.orderBy("create_date desc,id asc");
 
 		// 查询数据
 		List<User> users = userMapper.selectByExample(example);

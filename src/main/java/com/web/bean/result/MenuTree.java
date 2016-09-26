@@ -1,4 +1,4 @@
-package com.web.bean;
+package com.web.bean.result;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.web.entity.Menu;

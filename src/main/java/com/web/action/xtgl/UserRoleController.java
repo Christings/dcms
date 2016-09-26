@@ -2,9 +2,9 @@ package com.web.action.xtgl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.web.bean.RoleUserResult;
-import com.web.bean.UserResult;
-import com.web.bean.UserRoleResult;
+import com.web.bean.result.RoleUserResult;
+import com.web.bean.result.UserResult;
+import com.web.bean.result.UserRoleResult;
 import com.web.core.action.BaseController;
 import com.web.entity.OperLog;
 import com.web.entity.Role;

@@ -2,6 +2,7 @@ package com.web.action.xtgl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.web.bean.form.UserForm;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
@@ -14,6 +15,8 @@ import com.web.util.MD5;
 import com.web.util.UUIDGenerator;
 import com.web.util.WebUtils;
 import com.web.util.fastjson.FastjsonUtils;
+import com.web.util.validation.GroupBuilder;
+import com.web.util.validation.ValidationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -301,43 +304,64 @@ public class UserController extends BaseController {
 
 	/**
 	 * 分页获取用户信息
-	 *
-	 * @param pageNum
-	 *            当前页
-	 * @param pageSize
-	 *            显示多少行
 	 */
 	@RequestMapping(value="/datagrid",method= {RequestMethod.POST, RequestMethod.GET})
 	@ResponseBody
-	public Object getDataGrid(@RequestParam(value = "pageNum") int pageNum,
-							  @RequestParam(value = "pageSize") int pageSize,
-							  @RequestParam(required = false,value = "username") String username,
-							  @RequestParam(required = false,value = "realname") String realname,
-							  HttpServletRequest request) {
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
-		}
+	public Object getDataGrid(UserForm userForm,HttpServletRequest request) {
 
-		// 校验参数
-		if (pageNum < 1 || pageSize < 1) {
-			return buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
+		//1.验证参数
+		String errorTip = ValidationHelper.build()
+				//必输条件验证
+				.addGroup(GroupBuilder.build(userForm.getPageNum()).notNull().minValue(1), "页码必须从1开始")
+				.addGroup(GroupBuilder.build(userForm.getPageSize()).notNull().minValue(1), "每页记录数量最少1条")
+
+				//非必输条件验证
+				.addGroup(GroupBuilder.buildOr(userForm.getStatusQuery()).isNull().valueIn((short)0,(short)1),"查询状态传值有误")
+				.addGroup(GroupBuilder.buildOr(userForm.getSexQuery()).isNull().valueIn((short)0,(short)1),"查询性别传值有误")
+				.validate();
+
+		if (!StringUtils.isEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
 		try {
 
 			UserExample example = new UserExample();
-			// 排序设置
 			UserExample.Criteria criteria = example.createCriteria();
 			// 条件设置
-			criteria.andStatusNotEqualTo((short)2);
-			if(!StringUtils.isEmpty(username)){
-				criteria.andUsernameLike("%"+username+"%");
+			if(!StringUtils.isEmpty(userForm.getUsername())){
+				criteria.andUsernameLike("%"+userForm.getUsername().trim()+"%");
 			}
-			if(!StringUtils.isEmpty(realname)){
-				criteria.andRealnameLike("%"+realname+"%");
+			if(!StringUtils.isEmpty(userForm.getRealname())){
+				criteria.andRealnameLike("%"+userForm.getRealname().trim()+"%");
+			}
+			if(null != userForm.getStatusQuery()){
+				criteria.andStatusEqualTo(userForm.getStatusQuery());
+			}else{
+				criteria.andStatusNotEqualTo((short)2);
+			}
+			if(null != userForm.getSexQuery()){
+				criteria.andSexEqualTo(userForm.getSexQuery());
 			}
 
-			Page<User> queryResult = userService.getScrollData(pageNum, pageSize, example);
+			//设置排序条件
+			StringBuffer orderBy = new StringBuffer("");
+			if(!StringUtils.isEmpty(userForm.getUsernameSort())){
+				orderBy.append("username "+("asc".equalsIgnoreCase(userForm.getUsernameSort())?"asc":"desc")+",");
+			}
+			if(!StringUtils.isEmpty(userForm.getRealnameSort())){
+				orderBy.append("realname "+("asc".equalsIgnoreCase(userForm.getRealnameSort())?"asc":"desc")+",");
+			}
+			if(!StringUtils.isEmpty(userForm.getIdCardSort())){
+				orderBy.append("identificationNo "+("asc".equalsIgnoreCase(userForm.getIdCardSort())?"asc":"desc")+",");
+			}
+			if(!StringUtils.isEmpty(userForm.getEmailSort())){
+				orderBy.append("email "+("asc".equalsIgnoreCase(userForm.getEmailSort())?"asc":"desc")+",");
+			}
+			orderBy.append("create_date desc,id asc");
+			example.setOrderByClause(orderBy.toString());
+
+			Page<User> queryResult = userService.getScrollData(userForm.getPageNum(), userForm.getPageSize(), example);
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,
@@ -349,7 +373,7 @@ public class UserController extends BaseController {
 			return AllResult.okJSON(JSON.parse(jsonStr));
 
 		} catch (Exception e) {
-			LOGGER.error("get datagrid data error. page: {}, count: {}",pageNum, pageSize,  e);
+			LOGGER.error("get datagrid data error. page: {}, count: {}",userForm.getPageNum(), userForm.getPageSize(),  e);
 		}
 
 		return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");

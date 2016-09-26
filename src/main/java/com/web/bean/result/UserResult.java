@@ -1,4 +1,6 @@
-package com.web.bean;
+package com.web.bean.result;
+
+import java.util.Set;
 
 /**
  * 用户(用来返回前端的类)
@@ -59,6 +61,11 @@ public class UserResult {
      * 是否选中
      */
     private int checked;
+
+    /**
+     * 角色ID集合
+     */
+    private Set<String> roleIds;
 
     public String getId() {
         return id;
@@ -146,5 +153,13 @@ public class UserResult {
 
     public void setChecked(int checked) {
         this.checked = checked;
+    }
+
+    public Set<String> getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(Set<String> roleIds) {
+        this.roleIds = roleIds;
     }
 }
