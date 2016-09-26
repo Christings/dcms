@@ -1,4 +1,8 @@
 function pageInit(){
     initMenuTree();
-    DCMSUtils.Modal.alert("您好","");
+}
+
+function loginOut(){
+    DCMSUtils.SessionStorage.clear();
+    window.location.href="./login.html";
 }

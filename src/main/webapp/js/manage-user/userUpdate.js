@@ -97,7 +97,8 @@ function userUpdateInit(e){
 		var mobile = userInfo['mobile'];
 		var sex = userInfo['sex'];
 		var status = userInfo['status'];
-		var rolesId = userInfo['rolesId'];
+		var rolesId = userInfo['rolesId']?userInfo['rolesId']:[];
+		console.log(rolesId);
 		var sex_selected_0;
 		var sex_selected_1;
 		var status_selected_0;
