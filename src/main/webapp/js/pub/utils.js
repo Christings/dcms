@@ -104,7 +104,4 @@ var DCMSBusi={
 };
 
 
-document.write('<script charset="utf-8"  src="'+DCMSUtils.URL.getContentPath()+'/js/config.js"><\/script>');
-
-
 

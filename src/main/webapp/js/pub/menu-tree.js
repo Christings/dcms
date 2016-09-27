@@ -36,6 +36,21 @@ function initMenuTree(){
             $("#side-menu").append(li);
         }
     }
+
+    // MetsiMenu
+    $('#side-menu').metisMenu();
+
+    // 打开右侧边栏
+    $('.right-sidebar-toggle').click(function () {
+        $('#right-sidebar').toggleClass('sidebar-open');
+    });
+
+    // 右侧边栏使用slimscroll
+    $('.sidebar-container').slimScroll({
+        height: '100%',
+        railOpacity: 0.4,
+        wheelStep: 10
+    });
 }
 
 function hasChildMenu(menu){

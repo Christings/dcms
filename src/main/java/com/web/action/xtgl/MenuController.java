@@ -2,7 +2,7 @@ package com.web.action.xtgl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.web.bean.MenuTree;
+import com.web.bean.result.MenuTree;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.Menu;

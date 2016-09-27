@@ -2,20 +2,27 @@ package com.web.action.xtgl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.web.bean.form.UserForm;
+import com.web.bean.result.UserResult;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
 import com.web.entity.User;
+import com.web.entity.UserRole;
 import com.web.example.RoleExample;
 import com.web.example.UserExample;
 import com.web.service.RoleSerivce;
+import com.web.service.UserRoleService;
 import com.web.util.AllResult;
 import com.web.util.MD5;
 import com.web.util.UUIDGenerator;
 import com.web.util.WebUtils;
 import com.web.util.fastjson.FastjsonUtils;
+import com.web.util.validation.GroupBuilder;
+import com.web.util.validation.ValidationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -43,7 +50,9 @@ public class UserController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
-	RoleSerivce roleSerivce;
+	RoleSerivce roleSerivce; //角色Service
+	@Autowired
+	UserRoleService userRoleService; //菜单角色关系Service
 
 	/**
 	 * 添加用户
@@ -238,12 +247,14 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "/get", method = {RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
 	public Object getById(String id, HttpServletRequest request) {
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [id: {}]", id);
-		}
-		// TODO 需要添加判断
-		if (StringUtils.isEmpty(id)) {
-			return buildJSON(HttpStatus.BAD_REQUEST.value(), "用户id不能为空");
+		//1.验证参数
+		String errorTip = ValidationHelper.build()
+				//必输条件验证
+				.addGroup(GroupBuilder.build(id).notEmpty().maxLength(32), "用户ID必须提供且长度最大为32位")
+				.validate();
+
+		if (!StringUtils.isEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
 		try {
@@ -254,15 +265,18 @@ public class UserController extends BaseController {
 				operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.user,
 						JSON.toJSONString(user,SerializerFeature.IgnoreNonFieldGetter));
 			}else{
-				return buildJSON(HttpStatus.NOT_FOUND.value(), "未找到用户数据");
+				return buildJSON(0, "未找到用户数据");
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(user,
-					FastjsonUtils.newIgnorePropertyFilter("password","updateName","updateDate","createName","createDate"),
-					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+			UserResult result = new UserResult();
+			BeanUtils.copyProperties(user,result);
+			List<UserRole> userRoles = userRoleService.getUserRole(user.getId());
+			for(UserRole userRole:userRoles){
+				result.addRoleIds(userRole.getRoleId());
+			}
 
-			return AllResult.okJSON(JSON.parse(jsonStr));
+			return AllResult.okJSON(result);
 		} catch (Exception e) {
 			LOGGER.error("get User fail:", e.getMessage());
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误, 获取用户信息失败");
@@ -301,43 +315,64 @@ public class UserController extends BaseController {
 
 	/**
 	 * 分页获取用户信息
-	 *
-	 * @param pageNum
-	 *            当前页
-	 * @param pageSize
-	 *            显示多少行
 	 */
 	@RequestMapping(value="/datagrid",method= {RequestMethod.POST, RequestMethod.GET})
 	@ResponseBody
-	public Object getDataGrid(@RequestParam(value = "pageNum") int pageNum,
-							  @RequestParam(value = "pageSize") int pageSize,
-							  @RequestParam(required = false,value = "username") String username,
-							  @RequestParam(required = false,value = "realname") String realname,
-							  HttpServletRequest request) {
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
-		}
+	public Object getDataGrid(UserForm userForm,HttpServletRequest request) {
 
-		// 校验参数
-		if (pageNum < 1 || pageSize < 1) {
-			return buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
+		//1.验证参数
+		String errorTip = ValidationHelper.build()
+				//必输条件验证
+				.addGroup(GroupBuilder.build(userForm.getPageNum()).notNull().minValue(1), "页码必须从1开始")
+				.addGroup(GroupBuilder.build(userForm.getPageSize()).notNull().minValue(1), "每页记录数量最少1条")
+
+				//非必输条件验证
+				.addGroup(GroupBuilder.buildOr(userForm.getStatus()).isNull().valueIn((short)0,(short)1),"查询状态传值有误")
+				.addGroup(GroupBuilder.buildOr(userForm.getSex()).isNull().valueIn((short)0,(short)1),"查询性别传值有误")
+				.validate();
+
+		if (!StringUtils.isEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
 		try {
 
 			UserExample example = new UserExample();
-			// 排序设置
 			UserExample.Criteria criteria = example.createCriteria();
 			// 条件设置
-			criteria.andStatusNotEqualTo((short)2);
-			if(!StringUtils.isEmpty(username)){
-				criteria.andUsernameLike("%"+username+"%");
+			if(!StringUtils.isEmpty(userForm.getUsername())){
+				criteria.andUsernameLike("%"+userForm.getUsername().trim()+"%");
 			}
-			if(!StringUtils.isEmpty(realname)){
-				criteria.andRealnameLike("%"+realname+"%");
+			if(!StringUtils.isEmpty(userForm.getRealname())){
+				criteria.andRealnameLike("%"+userForm.getRealname().trim()+"%");
+			}
+			if(null != userForm.getStatus()){
+				criteria.andStatusEqualTo(userForm.getStatus());
+			}else{
+				criteria.andStatusNotEqualTo((short)2);
+			}
+			if(null != userForm.getSex()){
+				criteria.andSexEqualTo(userForm.getSex());
 			}
 
-			Page<User> queryResult = userService.getScrollData(pageNum, pageSize, example);
+			//设置排序条件
+			StringBuffer orderBy = new StringBuffer("");
+			if(!StringUtils.isEmpty(userForm.getUsernameSort())){
+				orderBy.append("username "+("asc".equalsIgnoreCase(userForm.getUsernameSort())?"asc":"desc")+",");
+			}
+			if(!StringUtils.isEmpty(userForm.getRealnameSort())){
+				orderBy.append("realname "+("asc".equalsIgnoreCase(userForm.getRealnameSort())?"asc":"desc")+",");
+			}
+			if(!StringUtils.isEmpty(userForm.getIdCardSort())){
+				orderBy.append("identificationNo "+("asc".equalsIgnoreCase(userForm.getIdCardSort())?"asc":"desc")+",");
+			}
+			if(!StringUtils.isEmpty(userForm.getEmailSort())){
+				orderBy.append("email "+("asc".equalsIgnoreCase(userForm.getEmailSort())?"asc":"desc")+",");
+			}
+			orderBy.append("create_date desc,id asc");
+			example.setOrderByClause(orderBy.toString());
+
+			Page<User> queryResult = userService.getScrollData(userForm.getPageNum(), userForm.getPageSize(), example);
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,
@@ -349,7 +384,7 @@ public class UserController extends BaseController {
 			return AllResult.okJSON(JSON.parse(jsonStr));
 
 		} catch (Exception e) {
-			LOGGER.error("get datagrid data error. page: {}, count: {}",pageNum, pageSize,  e);
+			LOGGER.error("get datagrid data error. page: {}, count: {}",userForm.getPageNum(), userForm.getPageSize(),  e);
 		}
 
 		return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");

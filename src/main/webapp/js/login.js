@@ -21,6 +21,8 @@ function login(){
 	}
 	userInformation['username'] = username;
 	userInformation['password'] = password;
+	$("#uconfirm").text("");
+	$("#pconfirm").text("");
 	DCMSUtils.Modal.showLoading("拼命登录中....");
 	DCMSUtils.Ajax.doPost("main/login",userInformation)
 	.then(function(data){
@@ -34,27 +36,27 @@ function login(){
 		}else{
 			console.log("wrong");
 			$("#uconfirm").text(data.msg);
-			DCMSUtils.Modal.alert(data.msg,'温馨提示');
 			return;
 		}
 	},function(error){
-		DCMSUtils.Modal.alert('登录失败','温馨提示');
+		DCMSUtils.Modal.hideLoading();
+		$("#uconfirm").text('登陆失败');
 		return;
 	}).then(function(data){
 		console.log(data);
-		console.log("login2");
 		if(data){
 			if(data.status=='1'){
 				var user=DCMSBusi.USER.get();
 				user.userMenus=data.data;
 				DCMSBusi.USER.set(user);
+				DCMSUtils.NAV.gotoPage("./index.html");
+			}else{
+				DCMSUtils.Modal.hideLoading();
+				$("#uconfirm").text('登陆失败');
 			}
-			console.log("login3");
-			DCMSUtils.NAV.gotoPage("./index.html");
 		}
 	},function(error){
-		if(error){
-			DCMSUtils.Modal.alert('登录失败','温馨提示');
-		}
+		DCMSUtils.Modal.hideLoading();
+		$("#uconfirm").text('登陆失败');
 	});
 }
