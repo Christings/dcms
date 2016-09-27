@@ -5,6 +5,7 @@ import com.web.example.MenuExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MenuMapper {
     int countByExample(MenuExample example);
@@ -18,6 +19,11 @@ public interface MenuMapper {
     int insertSelective(Menu record);
 
     List<Menu> selectByExample(MenuExample example);
+
+    /**
+     * 自定义查询返回树形菜单
+     */
+    List<Menu> selectByTree(Map<String,String> params);
 
     Menu selectByPrimaryKey(String id);
 

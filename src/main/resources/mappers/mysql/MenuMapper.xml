@@ -320,4 +320,43 @@
       CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+
+  <!--自定义 相关操作-->
+
+  <!--根据条件返回树形菜单TreeMenu  begin-->
+  <resultMap id="TreeMenuMap" type="com.web.entity.Menu" extends="BaseResultMap">
+    <association property="childMenu" column="ID" javaType="java.util.ArrayList" select="selectByChildMenu" />
+  </resultMap>
+  <sql id="Tree_Column_List" >
+    m.ID ID, m.LEVEL LEVEL, m.NAME NAME, m.RANK RANK, m.URL URL, m.PARENT_ID PARENT_ID, m.ICON_ID ICON_ID, m.TYPE TYPE,
+    m.UPDATE_NAME UPDATE_NAME, m.UPDATE_DATE UPDATE_DATE, m.CREATE_NAME CREATE_NAME, m.CREATE_DATE CREATE_DATE
+  </sql>
+  <select id="selectByChildMenu" resultMap="TreeMenuMap" parameterType="java.lang.String" >
+    select distinct
+    <include refid="Base_Column_List" />
+    from t_s_menu
+    where  PARENT_ID= #{ID,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByTree" resultMap="TreeMenuMap" parameterType="java.util.Map" >
+    select distinct
+    <include refid="Tree_Column_List" />
+    from t_s_menu m
+    LEFT JOIN t_s_role_menu rm ON m.id = rm.menu_id
+    LEFT JOIN t_s_role r ON rm.role_id=r.ID
+    LEFT JOIN t_s_role_user ru ON ru.role_id=r.ID
+    LEFT JOIN t_s_user u ON ru.user_id=u.id
+    <trim prefix="WHERE ("  suffix=")" prefixOverrides="AND |OR ">
+      <if test="username != 'admin'" >
+        u.username = #{username,jdbcType=VARCHAR}
+      </if>
+      <if test="id != null">
+        AND m.ID = #{id,jdbcType=VARCHAR}
+      </if>
+      <if test="parentId != null">
+        AND m.PARENT_ID IS NULL
+      </if>
+    </trim>
+    order by m.rank asc
+  </select>
+  <!--根据条件返回树形菜单TreeMenu  end-->
 </mapper>

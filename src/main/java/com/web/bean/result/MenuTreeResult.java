@@ -1,10 +1,10 @@
 package com.web.bean.result;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.web.entity.Menu;
 import org.springframework.beans.BeanUtils;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -13,7 +13,7 @@ import java.util.List;
  * @author 杜延雷
  * @date 2016-06-29
  */
-public class MenuTree {
+public class MenuTreeResult {
 	private String id;
 
 	private Short level;
@@ -30,32 +30,39 @@ public class MenuTree {
 
 	private Short type;
 
-	private String updateName;
-
-	@JSONField(format = "yyyy-MM-dd")
-	private Date updateDate;
-
-	private String createName;
-
-	@JSONField(format = "yyyy-MM-dd")
-	private Date createDate;
-
-	private List<MenuTree> childMenu;
+	private List<MenuTreeResult> childMenu;
 
 	/**
 	 * 将菜单转换成菜单树 返回到前端结果集
 	 *
-	 * @param menu
-	 *            菜单
-	 * @return 菜单结果集
+	 * @return 菜单结果
 	 */
-	public static MenuTree convert(Menu menu) {
+	public static MenuTreeResult convert(Menu menu) {
 		if (null == menu) {
 			return null;
 		}
 
-		MenuTree result = new MenuTree();
+		MenuTreeResult result = new MenuTreeResult();
 		BeanUtils.copyProperties(menu, result);
+
+		return result;
+	}
+
+	/**
+	 * 将菜单转换成菜单树 返回到前端结果集
+	 *
+	 * @param menus
+	 * @return 菜单结果集
+	 */
+	public static List<MenuTreeResult> convert(Collection<Menu> menus) {
+		if (null == menus || menus.size()==0) {
+			return null;
+		}
+
+		List<MenuTreeResult> result = new ArrayList<>();
+		for(Menu menu:menus){
+			result.add(MenuTreeResult.convert(menu));
+		}
 
 		return result;
 	}
@@ -124,43 +131,11 @@ public class MenuTree {
 		this.type = type;
 	}
 
-	public List<MenuTree> getChildMenu() {
+	public List<MenuTreeResult> getChildMenu() {
 		return childMenu;
 	}
 
-	public void setChildMenu(List<MenuTree> childMenu) {
+	public void setChildMenu(List<MenuTreeResult> childMenu) {
 		this.childMenu = childMenu;
-	}
-
-	public String getUpdateName() {
-		return updateName;
-	}
-
-	public void setUpdateName(String updateName) {
-		this.updateName = updateName;
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public String getCreateName() {
-		return createName;
-	}
-
-	public void setCreateName(String createName) {
-		this.createName = createName;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
 	}
 }

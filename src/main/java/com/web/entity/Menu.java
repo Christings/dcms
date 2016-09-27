@@ -2,6 +2,8 @@ package com.web.entity;
 
 import com.web.core.entity.BaseEntity;
 
+import java.util.List;
+
 /**
  * 菜单实体
  *
@@ -43,6 +45,11 @@ public class Menu extends BaseEntity {
 	 * 菜单类型
 	 */
 	private Short type;
+
+	/**
+	 * 子菜单集合
+     */
+	private List<Menu> childMenu;
 
 	public Short getLevel() {
 		return level;
@@ -98,5 +105,13 @@ public class Menu extends BaseEntity {
 
 	public void setType(Short type) {
 		this.type = type;
+	}
+
+	public List<Menu> getChildMenu() {
+		return childMenu;
+	}
+
+	public void setChildMenu(List<Menu> childMenu) {
+		this.childMenu = childMenu;
 	}
 }

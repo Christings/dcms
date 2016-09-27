@@ -2,7 +2,7 @@ package com.web.action.xtgl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.web.bean.result.MenuTree;
+import com.web.bean.result.MenuTreeResult;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.Menu;
@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单接口
@@ -301,22 +303,20 @@ public class MenuController extends BaseController {
 
 		try {
 			// 根据条件查询某一级菜单（空时查询一级菜单；不等与空时查询该菜单下的所有子菜单）
-			List<Menu> menuList = menuService.getByParentId(key);
-
-			if(null == menuList || menuList.size() == 0){
-				return AllResult.build(1, "未获取到菜单");
+			Map<String,String> params = new LinkedHashMap<String,String>();
+			params.put("username", WebUtils.getUser(request).getUsername());
+			if(StringUtils.isEmpty(key)){
+				params.put("parentId"," is null ");
+			}else{
+				params.put("id",key);
 			}
 
-			// 查询
-			List<MenuTree> menuTreeList = treeMenu(request,menuList);
-
-			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(menuTreeList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
+			List<Menu> menus = menuService.getTree(params);
 
 			// 增加日志
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr);
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr);
 
-			return AllResult.okJSON(JSON.parse(jsonStr));
+			return AllResult.okJSON(MenuTreeResult.convert(menus));
 		} catch (Exception e) {
 			LOGGER.error("menus object error. id:{}", key, e);
 			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu, null,
@@ -358,9 +358,8 @@ public class MenuController extends BaseController {
 				return AllResult.build(1, "未获取到菜单");
 			}
 
-			// 查询
-			List<MenuTree> menuTreeList = treeMenu(request,queryResult.getRecords());
-			Page<MenuTree> treePage = new Page<>();
+			List<MenuTreeResult> menuTreeList = treeMenu(request,queryResult.getRecords());
+			Page<MenuTreeResult> treePage = new Page<>();
 			BeanUtils.copyProperties(queryResult,treePage);
 			treePage.setRecords(menuTreeList);
 
@@ -382,21 +381,20 @@ public class MenuController extends BaseController {
 	}
 
 	/**
-	 * 查询所有菜单子子菜单
+	 * 查询所有菜单子子菜单 TODO... 后面优化
 	 */
-	private List<MenuTree> treeMenu(HttpServletRequest request,List<Menu> menus) {
-
+	private List<MenuTreeResult> treeMenu(HttpServletRequest request,List<Menu> menus) {
 		if (null == menus) {
 			return null;
 		}
 
-		List<MenuTree> menuTrees = new ArrayList<MenuTree>(menus.size());
+		List<MenuTreeResult> menuTrees = new ArrayList<MenuTreeResult>(menus.size());
 
 		for (Menu menu : menus) {
 			if(!WebUtils.getMenuIds(request).contains(menu.getId())){
 				continue;
 			}
-			MenuTree menuTree = MenuTree.convert(menu);
+			MenuTreeResult menuTree = MenuTreeResult.convert(menu);
 			List<Menu> menuList = menuService.getByParentId(menu.getId());
 
 			if (null != menuList && menuList.size() > 0) {

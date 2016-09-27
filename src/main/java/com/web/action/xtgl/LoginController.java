@@ -147,6 +147,11 @@ public class LoginController extends BaseController {
 		super.writerResponse(obj.toString(), response);
 	}
 
+	/**
+	 * 设置用户Session信息
+	 * @param request
+	 * @param user
+     */
 	private void setUserSession(HttpServletRequest request,User user){
 		Set<String> privileges = new LinkedHashSet<>();
 		Set<String> menuIds = new LinkedHashSet<>();
