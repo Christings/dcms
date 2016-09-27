@@ -1,10 +1,17 @@
-// $(document).ready(function(){
+$(document).ready(function(){
 // 	var user=DCMS.Busi.getUser();
 // 	// if(user){
 // 	// }else{
 // 		$("#loginBtn").click(login);
 // 	// }
-// });
+	document.onkeydown=function(event) {
+		e = event ? event : (window.event ? window.event : null);
+		if (e.keyCode == 13) {
+			login();
+		}
+	}
+});
+
 function login(){
 	var username=$("#username").val();
 	var password=$("#password").val();
