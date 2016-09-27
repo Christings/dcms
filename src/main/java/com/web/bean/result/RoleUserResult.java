@@ -1,4 +1,4 @@
-package com.web.bean;
+package com.web.bean.result;
 
 import com.web.entity.Role;
 import com.web.entity.User;
