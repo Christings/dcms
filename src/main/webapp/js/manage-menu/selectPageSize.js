@@ -11,14 +11,7 @@ function selectPageSize(){
 		var size = $("#selectPageSize option:selected").val();
 		console.log("size:"+size);
 		var getMenuData = {pageNum: 1, pageSize: size};
-		$.ajax({
-			// url: "menu/tree",
-			url: "menu/datagrid",
-			dataType: "json",
-			//data: "",
-			data: getMenuData,
-			type: "post"
-		}).done((jsonData)=>{
+		DCMSUtils.Ajax.doPost("menu/datagrid",getMenuData).done((jsonData)=>{
 			menuTree = jsonData["data"]["records"];
 			pageCount = jsonData["data"]["pageCount"];
 			elements = parseTreeJson(menuTree);

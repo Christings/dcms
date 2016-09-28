@@ -8,14 +8,7 @@ function loadMenuBody(){
 		var htm_final_ele="";
 		var ulContent="";//分页
 		var getMenuData = {pageNum: 1, pageSize: 10};
-		$.ajax({
-			// url: "menu/tree",
-			url: "menu/datagrid",
-			dataType: "json",
-			//data: "",
-			data: getMenuData,
-			type: "post"
-		}).done((jsonData)=>{
+		DCMSUtils.Ajax.doPost("menu/datagrid",getMenuData).done((jsonData)=>{
 			menuTree = jsonData["data"]["records"];
 			pageCount = jsonData["data"]["pageCount"];
 	
@@ -163,6 +156,7 @@ function parseTreeJson(treeNodes){
 	// console.log(element);
 	return element;
 }
-
-loadMenuBody();
+function pageInit(){
+	loadMenuBody();
+}
 
