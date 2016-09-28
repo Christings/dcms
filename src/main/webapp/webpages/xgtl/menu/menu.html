@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>3S DCIM数据中心基础设施可视化管理平台</title>
+
+    <meta name="keywords" content="3S DCIM数据中心基础设施可视化管理平台">
+    <meta name="description" content="3S DCIM数据中心基础设施可视化管理平台">
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css" rel = "stylesheet">
+    <link href="../../../css/font-awesome.css" rel = "stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/lib/weui.css" rel = "stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/css/jquery-weui.css" rel = "stylesheet">
+    <link rel="stylesheet" href="../../../3rd-libs/treegrid/css/jquery.treegrid.css">
+    <link href="../../../css/style.css" rel = "stylesheet">
+    <link href="../../../css/style2.css" rel = "stylesheet">
+
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="">
+                            <a onclick="fnAddMenu();" href="javascript:void(0);" class="btn btn-primary ">添加菜单</a>
+                        </div>
+                        <table class="table tree table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th>菜单名称</th>
+                                    <th>图标</th>
+                                    <th>菜单类型</th>
+                                    <th>菜单地址</th>
+                                    <th>菜单级别</th>
+                                    <th>菜单顺序</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="menuTreeBody">
+
+                            </tbody>
+                        </table>
+                        <div class="fixed-table-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../3rd-libs/jquery-weui/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../../../3rd-libs/treegrid/js/jquery.treegrid.min.js"></script>
+    <script type="text/javascript" src="../../../3rd-libs/treegrid/js/jquery.treegrid.bootstrap3.js"></script>
+    <script type="text/javascript" src="../../../js/pub/utils.js"></script>
+    <script type="text/javascript" src="../../../js/pub/content.js"></script>
+    <script type="text/javascript" src="../../../js/pub/common.js"></script>
+    <script type="text/javascript" src="../../../js/xgtl/menu/menuManager.js"></script>
+
+</body>
+</html>

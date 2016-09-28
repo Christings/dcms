@@ -6,7 +6,7 @@ function createCode() {
     function RndNum(n) {
         var rnd = "";
         for (var i = 0; i < n; i++)
-            rnd += Math.floor(Math.random() * 10);
+            rnd += Math.floor(Math.random() * 5);
         return rnd;
     }
  
