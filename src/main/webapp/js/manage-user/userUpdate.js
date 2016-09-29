@@ -10,8 +10,8 @@ function userUpdate(){
 		console.log(userName);
 		var realName = $("#realName1").val();
 		console.log(realName);
-		var password = $("#password1").val();
-		console.log(password);
+		// var password = $("#password1").val();
+		// console.log(password);
 		var identificationNo = $("#identificationNo1").val();
 		console.log(identificationNo);
 		var phone = $("#phone1").val();
@@ -31,11 +31,11 @@ function userUpdate(){
 		}
 		console.log(3);
 		// console.log(name);
-		var userInfo = {id:'',realname:'',password:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:''};
+		var userInfo = {id:'',realname:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:''};
 		userInfo['id'] = id;
 		userInfo['username'] = userName;
 		userInfo['realname'] = realName;
-		userInfo['password'] = password;
+		//userInfo['password'] = password;
 		userInfo['identificationno'] = identificationNo;
 		userInfo['phone'] = phone;
 		userInfo['email'] = email;
@@ -97,8 +97,8 @@ function userUpdateInit(e){
 		var mobile = userInfo['mobile'];
 		var sex = userInfo['sex'];
 		var status = userInfo['status'];
-		var rolesId = userInfo['rolesId']?userInfo['rolesId']:[];
-		console.log(rolesId);
+		var roleIds = userInfo['roleIds']?userInfo['roleIds']:[];
+		console.log(roleIds);
 		var sex_selected_0;
 		var sex_selected_1;
 		var status_selected_0;
@@ -126,18 +126,33 @@ function userUpdateInit(e){
 			var roles = jsonData["data"];
 			var content = "";
 			var e;
-			console.log(rolesId);
 			for(var i=0,len=roles.length;i<len;i++){
 				e = roles[i];
 				var check = "";
-				for(var i=0,len=rolesId.length;i<len;i++){
-					if(rolesId[i] === e["id"]){
+				for(var j=0,len1=roleIds.length;j<len1;j++){
+					if(roleIds[j] == e["id"]){
 						check = "checked";
 						break;
 					}
 				}
 				content += "<input type=\"checkbox\" "+check+" value=\""+e["id"]+"\">"+e["rolename"];
 			}
+			// for(var i=0,len=roles.length;i<len;i++){
+			// 	e = roles[i];
+			// 	var check = "";
+			// 	for(var i=0,len=roleIds.length;i<len;i++){
+			// 		if(roleIds[i] === e["id"]){
+			// 			check = "checked";
+			// 			break;
+			// 		}
+			// 	}
+			// 	content += "<input type=\"checkbox\" "+check+" value=\""+e["id"]+"\">"+e["rolename"];
+			// }
+
+			// "<div class=\"form-group\">"+
+			// 		  "<label for=\"name\">用户密码</label>"+
+			// 		  "<input type=\"text\" class=\"form-control\" id=\"password1\" value=\""+password+"\">"+
+			// 		"</div>"+
 			var html = "<form role=\"form\" id=\"userUpdateForm\">"+
 					"<div hidden=\"hidden\" class=\"form-group\">"+
 					  "<input id=\"userId1\" value=\""+ id +"\"for=\"name\">"+
@@ -152,11 +167,7 @@ function userUpdateInit(e){
 					"</div>"+
 					"<div class=\"form-group\">"+
 					  "<label for=\"name\">用户角色</label>"+
-					  "<div id=\"rolesContent1\""+content+"</div>"+
-					"</div>"+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">用户密码</label>"+
-					  "<input type=\"text\" class=\"form-control\" id=\"password1\" value=\""+password+"\">"+
+					  "<div id=\"rolesContent1\">"+content+"</div>"+
 					"</div>"+
 					"<div class=\"form-group\">"+
 					  "<label for=\"name\">身份证</label>"+
