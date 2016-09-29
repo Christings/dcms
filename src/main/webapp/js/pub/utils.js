@@ -9,6 +9,7 @@ var DCMSUtils={
 	//Ajax相关
 	Ajax:{
 		doPost:function(url,params){
+			console.log(params);
 			var dtd=$.Deferred();
 			$.ajax({
 				type:"post",
@@ -31,9 +32,7 @@ var DCMSUtils={
 		getContentPath:function(){
 			var pathName = window.location.pathname;
 			var appIndex = pathName.substr(1).indexOf("/");
-			var app = pathName.substr(0, appIndex + 1);
-			var url = window.location.origin+app;
-			console.log(url);
+			var app = pathName.substr(0, appIndex + 1)+"/";
 			return window.location.origin+app;
 		}
 	},

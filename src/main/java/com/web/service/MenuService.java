@@ -5,6 +5,7 @@ import com.web.entity.Menu;
 import com.web.example.MenuExample;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单 逻辑接口
@@ -28,4 +29,11 @@ public interface MenuService extends IService<Menu, String> {
      * @return
      */
     Page<Menu> getScrollData(int pageNum, int pageSize, MenuExample example);
+
+    /**
+     * 根据条件返回 菜单树集合
+     * @param params
+     * @return
+     */
+    List<Menu> getTree(Map<String,String> params);
 }

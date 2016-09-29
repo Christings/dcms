@@ -5,7 +5,7 @@
 $(document).ready(function () {
     var user=DCMSBusi.USER.get();
     if(!user){
-        window.location.href=DCMSUtils.URL.getContentPath()+"/login.html";
+        window.location.href=DCMSUtils.URL.getContentPath()+"login.html";
     }else {
         pageInit();
     }

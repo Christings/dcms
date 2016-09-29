@@ -64,6 +64,7 @@ public class UserController extends BaseController {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [user: {}]", JSON.toJSONString(user));
 		}
+
 		// TODO 需要添加判断
 		if (StringUtils.isEmpty(user.getUsername()) || "".equals(user.getUsername().trim())) {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), "登录名不能为空");

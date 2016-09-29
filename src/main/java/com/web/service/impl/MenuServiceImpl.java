@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单 逻辑接口 实现类
@@ -183,5 +184,19 @@ public class MenuServiceImpl implements MenuService {
         List<Menu> menuList = menuMapper.selectByExample(example);
 
         return menuList;
+    }
+
+    /**
+     * 根据用户登录返回
+     */
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS,readOnly = true)
+    public List<Menu> getTree(Map<String,String> params) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("find menu by : params{}", params.toString());
+        }
+        // 查询数据
+        List<Menu> menus = menuMapper.selectByTree(params);
+        return menus;
     }
 }
