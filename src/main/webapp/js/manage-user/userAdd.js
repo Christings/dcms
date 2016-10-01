@@ -60,12 +60,12 @@ function userAdd(){
 		userInfo['status'] = status;
 		DCMSUtils.Ajax.doPost("user/add",userInfo).done((res)=>{
 			if(res.status == "1"){
-					console.log("添加用户"+userName+"成功");
-					alert("添加用户"+userName+"成功");
-				}else{
-					console.log("添加用户"+userName+"失败"+res.msg);
-					alert("添加用户"+userName+"失败");
-				}
+				console.log("添加用户"+userName+"成功");
+				alert("添加用户"+userName+"成功");
+			}else{
+				console.log("添加用户"+userName+"失败"+res.msg);
+				alert("添加用户"+userName+"失败");
+			}
 		});
 		// $.ajax({
 		// 	type:"post",

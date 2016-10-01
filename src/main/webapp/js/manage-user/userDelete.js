@@ -31,9 +31,10 @@ function userDeleteInit(e){
 
 function userDelete(e){
 	var id = e.getAttribute("data-id");
-	console.log("delete:"+id);
+	
 	var userInfo = {id:''};// 
 	userInfo['id'] = id;
+	console.log("delete:"+userInfo['id']);
 	DCMSUtils.Ajax.doPost("user/delete",userInfo).done((res)=>{
 		if(res.status == "1"){
 			console.log("删除用户成功" + res.data);

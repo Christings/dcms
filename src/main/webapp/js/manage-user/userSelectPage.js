@@ -32,10 +32,10 @@ function loadUserBody(){
 			}
 			switch(e["status"]){
 				case 0:
-					status = "否";
+					status = "是";
 					break;
 				case 1:
-					status = "是";
+					status = "否";
 					break;
 			}
 			content = "<tr>"+
@@ -49,8 +49,12 @@ function loadUserBody(){
 				"<td>"+e["mobile"]+"</td>"+
 				"<td>"+status+"</td>"+
 				"<td>"+
-					"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\">编辑</label>|"+
-					"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\">删除</label>"+
+					"<i style='margin:3px;cursor:pointer' class='fa fa-pencil' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\"></i>"+
+					"<i style='margin:3px;cursor:pointer' class='fa fa-key' role=\"presentation\" data-toggle=\"modal\" data-target=\"#usereditpassword\" data-value=\""+e["id"]+"\" onclick=\"userPasswordInit(this)\"></i>"+
+					"<i style='margin:3px;cursor:pointer' class='fa fa-minus' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\"></i>"+
+					
+					// "<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\">编辑</label>|"+
+					// "<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\">删除</label>"+
 				"</td>"+
 			"</tr>";
 			html_content += content;

@@ -16,6 +16,7 @@ function login(){
 	var username=$("#username").val();
 	var password=$("#password").val();
 	var userInformation = { username: '', password: ''};
+	console.log(userInformation);
 	if(username == ""){
 		$("#uconfirm").text("请输入登录用户名");
 		$("#username").focus();

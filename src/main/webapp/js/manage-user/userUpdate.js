@@ -1,76 +1,3 @@
-function userUpdate(){
-	console.log(1);
-		// $("#form").submit(function(){
-			// var type = document.getElementById("menuType").value;
-	$("#userUpdateForm").submit(function(){
-		console.log(2);
-		var id = $("#userId1").val();
-		console.log(id);
-		var userName = $("#userName1").val();
-		console.log(userName);
-		var realName = $("#realName1").val();
-		console.log(realName);
-		// var password = $("#password1").val();
-		// console.log(password);
-		var identificationNo = $("#identificationNo1").val();
-		console.log(identificationNo);
-		var phone = $("#phone1").val();
-		console.log(phone);
-		var email = $("#email1").val();
-		console.log(email);
-		var mobile = $("#mobile1").val();
-		console.log(mobile);
-		var sex = $("#sex1").val();
-		console.log(sex);
-		var status = $("#status1").val();
-		console.log(status);
-		if(realName == "")
-		{
-			$("#alertName").text("请输入真实名称");
-			return false;
-		}
-		console.log(3);
-		// console.log(name);
-		var userInfo = {id:'',realname:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:''};
-		userInfo['id'] = id;
-		userInfo['username'] = userName;
-		userInfo['realname'] = realName;
-		//userInfo['password'] = password;
-		userInfo['identificationno'] = identificationNo;
-		userInfo['phone'] = phone;
-		userInfo['email'] = email;
-		userInfo['mobile'] = mobile;
-		userInfo['sex'] = sex;
-		userInfo['status'] = status;
-		DCMSUtils.Ajax.doPost("user/update",userInfo).done((res)=>{
-			if(res.status == "1"){
-				console.log("更新用户"+userName+"成功");
-				alert("更新用户"+userName+"成功");
-			}else{
-				console.log("更新用户"+userName+"失败"+res.msg);
-				alert("更新用户"+userName+"失败");
-			}
-		});
-		// $.ajax({
-		// 	type:"post",
-		// 	url:"user/update",
-		// 	dataType: "json",
-		// 	data: userInfo,
-		// 	success:function(res){
-		// 		if(res.status == "1"){
-		// 			console.log("更新用户"+userName+"成功");
-		// 			alert("更新用户"+userName+"成功");
-		// 		}else{
-		// 			console.log("更新用户"+userName+"失败"+res.msg);
-		// 			alert("更新用户"+userName+"失败");
-		// 		}
-		// 	}
-		// });
-		return true;
-		// });
-	});
-}
-
 function userUpdateInit(e){
 	// $(document).ready(){
 	var id = e.getAttribute("data-value");
@@ -137,22 +64,6 @@ function userUpdateInit(e){
 				}
 				content += "<input type=\"checkbox\" "+check+" value=\""+e["id"]+"\">"+e["rolename"];
 			}
-			// for(var i=0,len=roles.length;i<len;i++){
-			// 	e = roles[i];
-			// 	var check = "";
-			// 	for(var i=0,len=roleIds.length;i<len;i++){
-			// 		if(roleIds[i] === e["id"]){
-			// 			check = "checked";
-			// 			break;
-			// 		}
-			// 	}
-			// 	content += "<input type=\"checkbox\" "+check+" value=\""+e["id"]+"\">"+e["rolename"];
-			// }
-
-			// "<div class=\"form-group\">"+
-			// 		  "<label for=\"name\">用户密码</label>"+
-			// 		  "<input type=\"text\" class=\"form-control\" id=\"password1\" value=\""+password+"\">"+
-			// 		"</div>"+
 			var html = "<form role=\"form\" id=\"userUpdateForm\">"+
 					"<div hidden=\"hidden\" class=\"form-group\">"+
 					  "<input id=\"userId1\" value=\""+ id +"\"for=\"name\">"+
@@ -195,8 +106,8 @@ function userUpdateInit(e){
 					"<div class=\"form-group\">"+
 					  "<label for=\"name\">状态</label>"+
 					  "<select id=\"status1\">"+
-							"<option "+status_selected_0+" value = '0'>未激活</option>"+
-							"<option "+status_selected_1+" value = '1'>激活</option>"+
+							"<option "+status_selected_1+" value = '1'>未激活</option>"+
+							"<option "+status_selected_0+" value = '0'>激活</option>"+
 					  "</select>"+
 					"</div>"+
 					"<div class=\"modal-footer\">"+
@@ -212,6 +123,122 @@ function userUpdateInit(e){
 		});
 	});		// }
 }
+
+function userPasswordInit(e){
+	var id = e.getAttribute("data-value");
+	var userId = {id:''};
+	userId["id"] = id;
+	DCMSUtils.Ajax.doPost("user/get",userId).done((jsonData)=>{
+		var userInfo = jsonData["data"];
+		var realName = userInfo['realname'];
+		var html = '<form role="form" id="userEditPasswordForm">'+
+			'<div hidden="hidden" class="form-group">'+
+			  '<input  id="userId1" value="'+ id +'" for="name">'+
+			'</div>'+
+			'<label>用户：'+realName+'</label>'+
+			'<div class="form-group">'+
+		  		'<label for="name">输入新密码</label>'+
+		  		'<input type="password" class="form-control" id="password1">'+
+			'</div>'+
+			'<div class="form-group">'+
+		  		'<label for="name">再次输入新密码</label>'+
+		  		'<input type="password" class="form-control" id="password2">'+
+			'</div>'+
+			'<div class="modal-footer">'+
+	            '<button type="button" class="btn btn-default" data-dismiss="modal">关闭'+
+	            '</button>'+
+	           ' <button type="submit" onclick="userEditPassword()" class="btn btn-primary">'+
+	              ' 确认修改'+
+	            '</button>'+    	
+	        '</div>'+  
+		'</form>';
+		var index = document.getElementById('userEditPasswordBody');
+		index.innerHTML = html;
+	});
+}
+
+function userUpdate(){
+	console.log(1);
+		// $("#form").submit(function(){
+			// var type = document.getElementById("menuType").value;
+	$("#userUpdateForm").submit(function(){
+		console.log(2);
+		var roles = document.getElementsByTagName("input");
+		var roleIds = "";
+		for(var i=0,len=roles.length;i<len;i++){
+			var role = roles[i];
+			if(role.checked == true){
+				console.log(role.value);
+				roleIds += role.value + ",";
+			}
+		}
+		var id = $("#userId1").val();
+		var userName = $("#userName1").val();
+		var realName = $("#realName1").val();
+		var identificationNo = $("#identificationNo1").val();
+		var phone = $("#phone1").val();
+		var email = $("#email1").val();
+		var mobile = $("#mobile1").val();
+		var sex = $("#sex1").val();
+		var status = $("#status1").val();
+		if(realName == "")
+		{
+			$("#alertName").text("请输入真实名称");
+			return false;
+		}
+		var userInfo = {id:'',realname:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:'',roleIds:''};
+		userInfo['id'] = id;
+		userInfo['username'] = userName;
+		userInfo['realname'] = realName;
+		//userInfo['password'] = password;
+		userInfo['identificationno'] = identificationNo;
+		userInfo['phone'] = phone;
+		userInfo['email'] = email;
+		userInfo['mobile'] = mobile;
+		userInfo['sex'] = sex;
+		userInfo['status'] = status;
+		userInfo['roleIds'] = roleIds;
+		DCMSUtils.Ajax.doPost("user/update",userInfo).done((res)=>{
+			if(res.status == "1"){
+				console.log("更新用户"+userName+"成功");
+				alert("更新用户"+userName+"成功");
+			}else{
+				console.log("更新用户"+userName+"失败"+res.msg);
+				alert("更新用户"+userName+"失败");
+			}
+		});
+		return true;
+	});
+}
+
+function userEditPassword(){
+	$("#userEditPasswordForm").submit(function(){
+		var id = $("#userId1").val();
+		var password1 = $("#password1").val();
+		var password2 = $("#password2").val();
+
+		if(password1 != password2){
+			alert("两次输入的密码不一致！");
+			return false;
+		}
+		var userInfo;
+		userInfo['id'] = id;
+		userInfo['password'] = password1;
+		DCMSUtils.Ajax.doPost("user/modifyPassword",userInfo).done((res)=>{
+			if(res.status == "1"){
+				console.log("更改用户"+userName+"的密码成功");
+				alert("更改用户"+userName+"的密码成功");
+				return true;
+			}else{
+				console.log("更改用户"+userName+"的密码失败"+res.msg);
+				alert("更改用户"+userName+"的密码失败");
+				return false;
+			}
+		});
+		
+	});
+}
+
 
 // function contains(obj,arr){
 // 	for(var i=0,len=arr.length;i<len;i++){
