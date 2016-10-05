@@ -9,7 +9,6 @@ var DCMSUtils={
 	//Ajax相关
 	Ajax:{
 		doPost:function(url,params){
-			console.log(params);
 			var dtd=$.Deferred();
 			$.ajax({
 				type:"post",
@@ -18,10 +17,8 @@ var DCMSUtils={
 				data: params,
 				async:true
 			}).then(function(data){
-				console.log("ajax");
 				dtd.resolve(data);
 			},function(error){
-				console.log(error);
 				dtd.reject(error);
 			});
 			return dtd.promise();
