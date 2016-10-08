@@ -16,19 +16,26 @@ function equipmentUpdate(){
 			return false;
 		}
 		var equipmentData = {id:id,equName:equName,equType:equType,equVendor:equVendor,rsoPath:rsoPath,maxPath:maxPath};
-		$.ajax({
-			url:"fixed/equipment/update",
-			dataType:"json",
-			data:equipmentData,
-			type:"post",
-			success: function(res){
-				if(res.status == "1"){
-					console.log("修改机柜"+res.data.equName+"成功");
-				}else{
-					console.log("修改机柜失败"+res.msg);
-				}
+		DCMSUtils.Ajax.doPost("fixed/equipment/update",equipmentData).done((jsonData)=>{
+			if(jsonData["status"] == "1"){
+				console.log("更新机柜"+res.data.equName+"成功"+res.data.id);
+			}else{
+				console.log("更新机柜失败"+res.msg);
 			}
 		});
+		// $.ajax({
+		// 	url:"fixed/equipment/update",
+		// 	dataType:"json",
+		// 	data:equipmentData,
+		// 	type:"post",
+		// 	success: function(res){
+		// 		if(res.status == "1"){
+		// 			console.log("修改机柜"+res.data.equName+"成功");
+		// 		}else{
+		// 			console.log("修改机柜失败"+res.msg);
+		// 		}
+		// 	}
+		// });
 	});
 }
 
@@ -41,12 +48,13 @@ function equipmentUpdateInit(e){
 	// console.log(menu);
 	 console.log(id);
 	// console.log(name);
-	$.ajax({
-		type:"post",
-		url:"fixed/equipment/get",
-		dataType: 'json',
-		data: equId,
-		}).done((jsonData)=>{
+	// $.ajax({
+	// 	type:"post",
+	// 	url:"fixed/equipment/get",
+	// 	dataType: 'json',
+	// 	data: equId,
+	// 	})
+	DCMSUtils.Ajax.doPost("fixed/equipment/get",equId).done((jsonData)=>{
 			var equInfo = jsonData["data"];
 			var equId = equInfo["id"];
 			var equName = equInfo["equName"];

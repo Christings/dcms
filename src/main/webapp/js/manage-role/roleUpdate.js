@@ -8,7 +8,7 @@ function roleUpdateInit(e){
 	// 	data: roleGetData,
 	// 	type: "post"
 	// })
-	DCMSUtils.Ajax.doPost("role/datagrid",getGetData).done((jsonData)=>{
+	DCMSUtils.Ajax.doPost("role/get",roleGetData).done((jsonData)=>{
 		var roleInfo = jsonData["data"];
 		var content = "<form role=\"form\" id=\"roleUpdateForm\">"+
 						"<div class=\"form-group\" hidden=\"hidden\">"+

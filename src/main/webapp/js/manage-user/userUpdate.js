@@ -184,7 +184,7 @@ function userUpdate(){
 		var status = $("#status1").val();
 		if(realName == "")
 		{
-			$("#alertName").text("请输入真实姓名");
+			$("#alertName").text("请输入真实姓名国臣");
 			return false;
 		}
 		var userInfo = {id:'',realname:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:'',roleIds:''};

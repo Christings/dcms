@@ -1,19 +1,26 @@
 function equipmentDelete(e){
 	var id = e.getAttribute("data-id");
 	var equipmentData = {id: id};
-	$.ajax({
-		url: "fixed/equipment/delete",
-		dataType: "json",
-		data: equipmentData,
-		type:"post",
-		success: function(res){
-			if(res.status == "1"){
-				console.log("修改机柜成功");
-			}else{
-				console.log("修改机柜失败"+res.msg);
-			}
+	DCMSUtils.Ajax.doPost("fixed/equipment/delete",equipmentData).done((jsonData)=>{
+		if(jsonData["status"] == "1"){
+			console.log("添加机柜"+res.data.equName+"成功"+res.data.id);
+		}else{
+			console.log("添加机柜失败"+res.msg);
 		}
 	});
+	// $.ajax({
+	// 	url: "fixed/equipment/delete",
+	// 	dataType: "json",
+	// 	data: equipmentData,
+	// 	type:"post",
+	// 	success: function(res){
+	// 		if(res.status == "1"){
+	// 			console.log("修改机柜成功");
+	// 		}else{
+	// 			console.log("修改机柜失败"+res.msg);
+	// 		}
+	// 	}
+	// });
 }
 
 function equipmentDeleteInit(e){
@@ -22,12 +29,14 @@ function equipmentDeleteInit(e){
 		var equId={id:""};
 		equId["id"]=id;
 		console.log("delete:"+id);
-		$.ajax({
-			type:"post",
-			url:"fixed/equipment/get",
-			dataType: 'json',
-			data: equId,
-		}).done((jsonData)=>{
+
+		// $.ajax({
+		// 	type:"post",
+		// 	url:"fixed/equipment/get",
+		// 	dataType: 'json',
+		// 	data: equId,
+		// })
+		DCMSUtils.Ajax.doPost("fixed/equipment/get",equId).done((jsonData)=>{
 			var equInfo = jsonData["data"];
 			var equName = equInfo["equName"];
 			console.log("delete:"+equName);

@@ -20,19 +20,26 @@ function equipmentAdd(){
 			return false;
 		}
 		var equipmentData = {equName:equName,equType:equType,equVendor:equVendor,rsoPath:rsoPath,maxPath:maxPath};
-		$.ajax({
-			url:"fixed/equipment/add",
-			dataType:"json",
-			data: equipmentData,
-			type:"post",
-			success:function(res){
-				console.log("good");
-				if(res.status == "1"){
-					console.log("添加机柜"+res.data.equName+"成功"+res.data.id);
-				}else{
-					console.log("添加机柜失败"+res.msg);
-				}
+		DCMSUtils.Ajax.doPost("fixed/equipment/add",equipmentData).done((jsonData)=>{
+			if(jsonData["status"] == "1"){
+				console.log("添加机柜"+res.data.equName+"成功"+res.data.id);
+			}else{
+				console.log("添加机柜失败"+res.msg);
 			}
 		});
+		// $.ajax({
+		// 	url:"fixed/equipment/add",
+		// 	dataType:"json",
+		// 	data: equipmentData,
+		// 	type:"post",
+		// 	success:function(res){
+		// 		console.log("good");
+				// if(res.status == "1"){
+				// 	console.log("添加机柜"+res.data.equName+"成功"+res.data.id);
+				// }else{
+				// 	console.log("添加机柜失败"+res.msg);
+				// }
+		// 	}
+		// });
 	});
 }

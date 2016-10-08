@@ -53,9 +53,9 @@ function loadUserBody(){
 				"<td>"+e["mobile"]+"</td>"+
 				"<td>"+status+"</td>"+
 				"<td>"+
-					"<i style='margin:3px;cursor:pointer' class='fa fa-pencil' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\"></i>"+
-					"<i style='margin:3px;cursor:pointer' class='fa fa-key' role=\"presentation\" data-toggle=\"modal\" data-target=\"#usereditpassword\" data-value=\""+e["id"]+"\" onclick=\"userPasswordInit(this)\"></i>"+
-					"<i style='margin:3px;cursor:pointer' class='fa fa-trash' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\"></i>"+
+					"<i style='margin:3px;cursor:pointer' title='编辑' class='fa fa-pencil' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\"></i>"+
+					"<i style='margin:3px;cursor:pointer' title='修改密码' class='fa fa-key' role=\"presentation\" data-toggle=\"modal\" data-target=\"#usereditpassword\" data-value=\""+e["id"]+"\" onclick=\"userPasswordInit(this)\"></i>"+
+					"<i style='margin:3px;cursor:pointer' title='删除' class='fa fa-trash' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\"></i>"+
 					
 					// "<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\">编辑</label>|"+
 					// "<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\">删除</label>"+

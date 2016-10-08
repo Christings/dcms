@@ -39,12 +39,14 @@
                             </a>
                         </div>
                     </div>
+                    
                     <div class="ibox-content">
-
+                    	<div class="" id="upTable">
+	                        <a data-toggle="modal" style="cursor:pointer" data-target="#roleadd" href="javascript:void(0);" class="btn btn-primary ">添加角色</a>
+	                    </div>
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                                 <tr>
-                                	
                                     <th>角色编码</th>
                                     <th>角色名称</th>
                                     <th>操作</th>
@@ -54,21 +56,19 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                		
                                    <th>角色编码</th>
                                    <th>角色名称</th>
                                    <th>操作</th>
                                 </tr>
                             </tfoot>
                         </table>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-	<div class="foot" style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
+	<!-- <div class="foot" style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
 		<label class="number-page">每页显示
 			<select id="roleSelectPage" onchange="roleSelectPage()">
 				<option value = '2'>2</option>
@@ -80,7 +80,7 @@
 		<label class="foot-pagination" id="rolePagination" style="margin:0;padding:0">
 			
 		</label>
-	</div>
+	</div> -->
 
 	<!-- 模态框（Modal） -->
 
@@ -206,16 +206,19 @@
 	<script src="../../../3rd-libs/jquery/table/jquery.jeditable.js"></script>
 
     <!-- Data Tables -->
-	    <script src="../../../3rd-libs/jquery/table/jquery.dataTables.js"></script>
-	    <script src="../../../3rd-libs/bootstrap/js/dataTables.bootstrap.js"></script>
+    <script src="../../../3rd-libs/jquery/table/jquery.dataTables.1.10.12.js"></script>
+	<script src="../../../3rd-libs/bootstrap/js/dataTables.bootstrap.js"></script>
 	<!-- /.modal -->
+    <script src="../../../js/pub/content.js"></script>
 	<script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../../js/manage-role/roleLoadBody.js"></script>
+	<script src="../../../js/manage-role/roleAdd.js"></script>
 	<script src="../../../js/manage-role/roleUpdate.js"></script>
 	<script src="../../../js/manage-role/roleDelete.js"></script>
 	<script src="../../../js/manage-role/roleUser.js"></script>
 	<script src="../../../js/manage-role/roleMenu.js"></script>
-	<script src="../../../js/manage-role/roleLoadBody.js"></script>
-	<script src="../../../js/manage-role/roleAdd.js"></script>
+	
+	
 	
 </body>
 </html>
