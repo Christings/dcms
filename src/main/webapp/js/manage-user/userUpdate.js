@@ -126,6 +126,7 @@ function userUpdateInit(e){
 
 function userPasswordInit(e){
 	var id = e.getAttribute("data-value");
+	console.log("密码更新id："+id);
 	var userId = {id:''};
 	userId["id"] = id;
 	DCMSUtils.Ajax.doPost("user/get",userId).done((jsonData)=>{
@@ -133,7 +134,7 @@ function userPasswordInit(e){
 		var realName = userInfo['realname'];
 		var html = '<form role="form" id="userEditPasswordForm">'+
 			'<div hidden="hidden" class="form-group">'+
-			  '<input  id="userId1" value="'+ id +'" for="name">'+
+			  '<input  id="userId2" value="'+ id +'" for="name">'+
 			'</div>'+
 			'<label>用户：'+realName+'</label>'+
 			'<div class="form-group">'+
@@ -183,7 +184,7 @@ function userUpdate(){
 		var status = $("#status1").val();
 		if(realName == "")
 		{
-			$("#alertName").text("请输入真实名称");
+			$("#alertName").text("请输入真实姓名");
 			return false;
 		}
 		var userInfo = {id:'',realname:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:'',roleIds:''};
@@ -213,7 +214,8 @@ function userUpdate(){
 
 function userEditPassword(){
 	$("#userEditPasswordForm").submit(function(){
-		var id = $("#userId1").val();
+		var id = $("#userId2").val();
+		console.log("userId2的value"+id);
 		var password1 = $("#password1").val();
 		var password2 = $("#password2").val();
 
@@ -221,7 +223,7 @@ function userEditPassword(){
 			alert("两次输入的密码不一致！");
 			return false;
 		}
-		var userInfo;
+		var userInfo = {id:'',password:''};
 		userInfo['id'] = id;
 		userInfo['password'] = password1;
 		DCMSUtils.Ajax.doPost("user/modifyPassword",userInfo).done((res)=>{
