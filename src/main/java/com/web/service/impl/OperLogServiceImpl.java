@@ -1,10 +1,12 @@
 package com.web.service.impl;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.web.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +53,7 @@ public class OperLogServiceImpl implements OperLogService {
 			}
 			operLog.setOperUserId(user.getId());
 			operLog.setOperUserName(user.getUsername());
-			operLog.setOperDate(new Date());
+			operLog.setOperDate(new Timestamp(DateUtil.getMillis(new Date())));
 			operLog.setLogLevel(getLogLevel(OperLog.logLevelEnum.success));// 默认成功
 			operLog.setLogType(0);
 			return operLogMapper.insert(operLog);
@@ -78,7 +80,7 @@ public class OperLogServiceImpl implements OperLogService {
 			operLog.setOperType(operProp);
 			operLog.setOperUserId(user.getId());
 			operLog.setOperUserName(user.getUsername());
-			operLog.setOperDate(new Date());
+			operLog.setOperDate(new Timestamp(DateUtil.getMillis(new Date())));
 			operLog.setLogLevel(getLogLevel(logLevel));// 默认成功
 			operLog.setLogType(0);
 			return operLogMapper.insert(operLog);
@@ -106,7 +108,7 @@ public class OperLogServiceImpl implements OperLogService {
 			operLog.setOperType(operProp);
 			operLog.setOperUserId(user.getId());
 			operLog.setOperUserName(user.getUsername());
-			operLog.setOperDate(new Date());
+			operLog.setOperDate(new Timestamp(DateUtil.getMillis(new Date())));
 			operLog.setLogLevel(getLogLevel(OperLog.logLevelEnum.success));// 默认成功
 			operLog.setLogType(1);
 			return operLogMapper.insert(operLog);
@@ -134,7 +136,7 @@ public class OperLogServiceImpl implements OperLogService {
 			operLog.setOperType(operProp);
 			operLog.setOperUserId(user.getId());
 			operLog.setOperUserName(user.getUsername());
-			operLog.setOperDate(new Date());
+			operLog.setOperDate(new Timestamp(DateUtil.getMillis(new Date())));
 			operLog.setLogLevel(getLogLevel(logLevel));
 			operLog.setLogType(1);
 			return operLogMapper.insert(operLog);

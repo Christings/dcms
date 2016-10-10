@@ -1,6 +1,6 @@
 package com.web.entity;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * 业务日志实体类
@@ -48,7 +48,7 @@ public class OperLog {
 
 	/**
 	 */
-	private Date operDate;
+	private Timestamp operDate;
 
 	/**
 	 * 备注
@@ -140,11 +140,11 @@ public class OperLog {
 		this.operUserName = operUserName;
 	}
 
-	public Date getOperDate() {
+	public Timestamp getOperDate() {
 		return operDate;
 	}
 
-	public void setOperDate(Date operDate) {
+	public void setOperDate(Timestamp operDate) {
 		this.operDate = operDate;
 	}
 
