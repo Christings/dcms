@@ -906,6 +906,16 @@ public class OperLogExample {
 			addCriterion("comments not between", value1, value2, "comments");
 			return (OperLogExample.Criteria) this;
 		}
+
+		public OperLogExample.Criteria andLogTypeEqualTo(Integer value) {
+			addCriterion("log_type =", value, "logType");
+			return (OperLogExample.Criteria) this;
+		}
+
+		public OperLogExample.Criteria andLogTypeNotEqualTo(Integer value) {
+			addCriterion("log_type <>", value, "logType");
+			return (OperLogExample.Criteria) this;
+		}
 	}
 
 	/**
