@@ -116,26 +116,78 @@ $('.close-option-setting').click(function () {
  * 更改菜单级别
  * @param obj
  */
-$("#mLevel").change(function(){
-    var level=this.value;
+function changeLevel(obj) {
+    var level=obj.value;
     console.log(level);
     if(level=='1'){
         $(".menuPDiv").css('display','none');
+        $("#menuPId").val('');
+        $("#menuPName").text('');
     }else{
         $(".menuPDiv").css('display','block');
     }
-});
+}
 
+/**
+ * 选择父菜单
+ */
+var jsTreeIndex=0;
 $("#selectParentBtn").click(function(){
     DCMSUtils.Modal.showLoading();
     DCMSUtils.Ajax.doPost('menu/tree').then(function(data){
-        DCMSUtils.Modal.hideLoading();
-
+        if(data.status=='1'){
+            var treeData=transDataToJsTree(data.data,jsTreeIndex);
+            console.log(treeData);
+            $('#menuJsTree').jstree({
+                'core': {
+                    'check_callback': true,
+                     'data':treeData
+                }
+            });
+            DCMSUtils.Modal.hideLoading();
+            $("#menuModal").modal('hide');
+            $("#menuTreeModal").modal('show');
+        }else{
+            DCMSUtils.Modal.toast('加载菜单树异常','forbidden');
+        }
     },function(error){
         DCMSUtils.Modal.hideLoading();
         DCMSUtils.Modal.toast('加载菜单树异常','forbidden');
     });
 });
+
+$("#confirmParentMenuBtn").click(function(){
+    var selected=$("#menuJsTree").jstree(true).get_selected();
+
+    if(selected.length==0){
+        DCMSUtils.Modal.alert('请选择父级菜单','');
+        return ;
+    }
+    var pMenu=DCMSUtils.SessionStorage.get("MENU_TREE_MAP")[selected[0]];
+    $("#menuPId").val(pMenu.id);
+    $("#menuPName").text(pMenu.name);
+    $("#menuLevel").text(pMenu.rank+1);
+    $("#menuTreeModal").modal('hide');
+    $("#menuModal").modal('show');
+});
+/**
+ * 转换数据适配js tree
+ * @param menuList
+ * @param container
+ * @param pindex
+ */
+function transDataToJsTree(menuList,jsIndex){
+    for(var i=0;i<menuList.length;i++){
+        var menu=menuList[i];
+        menu.text=menu.name
+        menu.icon=menu.iconId;
+        if(menu.childMenu && menu.childMenu.length>0){
+            menu.state={'opened': true};
+            menu.children=transDataToJsTree(menu.childMenu,jsIndex);
+        }
+    }
+    return menuList;
+}
 
 /**
  * 选择图标
@@ -153,6 +205,7 @@ $("#selectIconBtn").click(function () {
         content: DCMSUtils.URL.getContentPath()+'webpages/pub/iconSelect.html'
     });
 });
+
 /**
  * 选择图标回调
  * @param iconClass
@@ -163,34 +216,52 @@ function getIcon(iconClass){
 }
 
 /**
- * 新增或者更新菜单
+ * 新增或者更新菜单 模态框
  * @param menuId 新增时为父菜单，更新时为当前菜单
  * @param type 操作类型 new:新增，update:更新
  */
 function menuNewUpdate(menuId,type){
     if(type=='new'){
-        $(".modal-title").text('新增菜单');
+        $("#menuModalTitle").text('新增菜单');
         if(menuId){
             var pMenu=DCMSUtils.SessionStorage.get("MENU_TREE_MAP")[menuId];
             $(".menuPDiv").css('display','block');
-            $("#menuLevel").val('N');
+            $("#menuLevel").val(pMenu.level+1);
+            $("#mLevel").val('N');
             $("#menuPName").text(pMenu.name);
             $("#menuPId").val(pMenu.id);
         }
         $("#menuModal").modal();
     }else if(type=='update'){
-        $(".modal-title").text('编辑菜单');
+        $("#menuModalTitle").text('编辑菜单');
         var menu=DCMSUtils.SessionStorage.get("MENU_TREE_MAP")[menuId];
         $("#menuId").val(menuId);
         $("#menuName").val(menu.name);
         $("#menuIcon").attr('class',menu.iconId?menu.iconId:'glyphicon glyphicon-th-list');
         $("#menuType").val(menu.type);
-        $("#menuLevel").val(menu.level==1?menu.level:'N');
+        $("#menuLevel").val(menu.level);
+
+
         $("#menuUrl").val(menu.url);
         $("#menuRank").val(menu.rank);
+
+        var lv=menu.level==1?menu.level:'N';
+        $("#mLevel").val(lv);
+        menu.value=lv;
+        changeLevel(menu);
+        var pMenu=DCMSUtils.SessionStorage.get("MENU_TREE_MAP")[menu.parentId];
+        if(pMenu){
+            $("#menuPId").val(pMenu.id);
+            $("#menuPName").text(pMenu.name);
+        }
         $("#menuModal").modal();
     }
 }
+
+/**
+ * 新增、更新模态框校验
+ * @type {string}
+ */
 var icon = "<i class='fa fa-times-circle'></i> ";
 $("#menuNewUpdateForm").validate({
     rules:{
