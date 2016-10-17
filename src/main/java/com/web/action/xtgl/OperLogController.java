@@ -1,20 +1,22 @@
 package com.web.action.xtgl;
 
-import com.web.core.action.BaseController;
-import com.web.core.util.page.Page;
-import com.web.entity.OperLog;
-import com.web.example.OperLogExample;
-import com.web.util.AllResult;
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
+import com.web.bean.form.OperLogForm;
+import com.web.core.action.BaseController;
+import com.web.core.util.page.Page;
+import com.web.entity.OperLog;
+import com.web.example.OperLogExample;
+import com.web.util.AllResult;
+import com.web.util.StringUtil;
 
 /**
  * 业务日志控制器
@@ -30,36 +32,53 @@ public class OperLogController extends BaseController {
 
 	/**
 	 * 分页查询日志相关信息
-	 *
-	 * @param page
-	 *            当前页
-	 * @param count
-	 *            显示多少行
 	 */
 	@RequestMapping(value = "/scroll", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
-	public Object getScroll(@RequestParam(value = "page") int page, @RequestParam(value = "count") int count,
-			HttpServletRequest request) {
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [page: {}, count: {}]", page, count);
-		}
-
-		// 校验参数
-		if (page < 1 || count < 1) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
-		}
-
+	public Object getScroll(HttpServletRequest request, OperLogForm operLogForm) {
 		try {
-
 			OperLogExample operLogExample = new OperLogExample();
-			// 排序设置
-			// example.setOrderByClause("UPDATE_DATETIME DESC");
 			OperLogExample.Criteria criteria = operLogExample.createCriteria();
-
-			Page<OperLog> queryResult = operLogService.getPageData(page, count, operLogExample);
+			if (StringUtil.isNotEmpty(operLogForm.getDeviceName())) {
+				criteria.andDeviceNameLike("%" + operLogForm.getDeviceName() + "%");
+			}
+			if (null != operLogForm.getBeginOperDate() && null != operLogForm.getEndOperDate()) {
+				criteria.andOperDateBetween(operLogForm.getBeginOperDate(), operLogForm.getEndOperDate());
+			} else {
+				if (null != operLogForm.getBeginOperDate()) {
+					criteria.andOperDateGreaterThanOrEqualTo(operLogForm.getBeginOperDate());
+				}
+				if (null != operLogForm.getEndOperDate()) {
+					criteria.andOperDateLessThanOrEqualTo(operLogForm.getEndOperDate());
+				}
+			}
+			if (StringUtil.isNotEmpty(operLogForm.getOperType())) {
+				criteria.andOperTypeEqualTo(operLogForm.getOperType());
+			}
+			if (null != operLogForm.getLogLevel()) {
+				criteria.andLogLevelEqualTo(operLogForm.getLogLevel());
+			}
+			if (StringUtil.isNotEmpty(operLogForm.getActionType())) {
+				criteria.andActionTypeEqualTo(operLogForm.getActionType());
+			}
+			if (StringUtil.isNotEmpty(operLogForm.getOperUserName())) {
+				criteria.andOperUserNameLike("%" + operLogForm.getOperUserName() + "%");
+			}
+			if (StringUtil.isNotEmpty(operLogForm.getComments())) {
+				criteria.andOperUserNameLike("%" + operLogForm.getComments() + "%");
+			}
+			if (null != operLogForm.getLogType()) {
+				criteria.andLogTypeEqualTo(operLogForm.getLogType());
+			}
+			if (StringUtil.isNotEmpty(operLogForm.getOperDateSort())) {
+				operLogExample.setOrderByClause(
+						"identificationNo " + ("asc".equalsIgnoreCase(operLogForm.getOperDateSort()) ? "asc" : "desc"));
+			}
+			Page<OperLog> queryResult = operLogService.getPageData(operLogForm.getPageNum(), operLogForm.getPageSize(),
+					operLogExample);
 			return AllResult.okJSON(queryResult);
 		} catch (Exception e) {
-			LOGGER.error("get scroll data error. page: {}, count: {}", page, count, e);
+			LOGGER.error("get scroll data error. page: {}, count: {}", operLogForm.getPageNum(), operLogForm.getPageSize(), e);
 		}
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 	}
