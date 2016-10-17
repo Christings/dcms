@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>dcms</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
+    <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../../../css/style2.css" rel="stylesheet">
+    <link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="../../../css/animate.css" rel="stylesheet">
+    <link href="../../../css/easyui.css">
+	<link href="../../../css/icon.css">
+	<link href="../../../css/demo.css">
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>基本 <small>分类，查找</small></h5>
+
+                        <div class="ibox-tools">
+                        	<a class="add-menu">
+                        		<i class="fa fa-plus-square-o" data-toggle="modal" data-target="#organizationAdd" onclick="roleGetAll()"></i>
+                        	</a>
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="table_data_tables.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-organization">
+                                <li><a href="table_data_tables.html#">选项1</a>
+                                </li>
+                                <li><a href="table_data_tables.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="ibox-content">
+                    	<div class="" id="upTable">
+                            <a data-toggle="modal" style="cursor:pointer" data-target="#organizationAdd" onclick="roleGetAll()" href="javascript:void(0);" class="btn btn-primary ">添加机构</a>
+                        </div>
+                        <table class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                                <tr>
+									<th>组织机构名称</th>
+									<th>组织机构描述</th>
+									<th>机构编码</th>
+									<th>机构类型</th>
+									<th>操作</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>组织机构名称</th>
+									<th>组织机构描述</th>
+									<th>机构编码</th>
+									<th>机构类型</th>
+									<th>操作</th>
+                                </tr>
+                            </tfoot>
+                            <tbody id="organizationBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<!-- <div class="foot" style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
+		<label class="number-page">每页显示
+			<select id="organizationSelectPage" onchange="organizationSelectPage()">
+				<option value = '2'>2</option>
+				<option value = '5'>5</option>
+				<option selected = "selected" value = '10'>10</option>
+				<option value = '15'>15</option>
+			</select>行
+		</label>
+		<label class="foot-pagination" id="organizationPagination" style="margin:0;padding:0">
+			
+		</label>
+	</div> -->
+	
+	<!-- 模态框（Modal） -->
+
+	<div class="modal fade" id="organizationAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	        <div class="modal-content">
+		        <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                  &times;
+		            </button>
+		            <h4 class="modal-title" id="myModalLabel">
+		                机构录入
+		            </h4>
+		        </div>
+
+		        <div class="modal-body">
+		            <form role="form" id="organizationAddForm">
+						<div class="form-group">
+						  <label for="name">组织机构名称</label>
+						  <input type="text" class="form-control" id="organizationName" 
+						     placeholder="请输入组织机构名称">
+						</div>
+						<div class="form-group">
+						  <label for="name">组织机构描述</label>
+						  <input type="text" class="form-control" id="orgaDescription" 
+						     placeholder="请输入组织机构描述">
+						</div>
+						<div class="form-group">
+						  <label for="name">机构编码</label>
+						  <input type="text" class="form-control" id="orgaCode" 
+						     placeholder="请输入密码">
+						</div>
+						<div class="form-group">
+						  <label for="name">机构类型</label>
+						  <select id="orgaType">
+								<option value = '1'>公司</option>
+								<option value = '0'>内部组织</option>
+						  </select>
+						</div>
+						<div class="modal-footer">
+				            <button type="button" class="btn btn-default" 
+				               data-dismiss="modal">关闭
+				            </button>
+				            <button type="submit" onclick="organizationAdd()" class="btn btn-primary">
+				               确认添加
+				            </button>
+			        	</div>
+					</form>
+				</div>
+	        <!-- </div>
+		        <div class="modal-footer">
+		            <button type="button" class="btn btn-default" 
+		               data-dismiss="modal">关闭
+		            </button>
+		            <button type="submit" onclick="organizationAdd()" class="btn btn-primary">
+		               确认添加
+		            </button>
+		        </div>
+		    </div> --><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div>
+	</div>
+
+	<div class="modal fade" id="organizationupdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	        <div class="modal-content">
+		        <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                  &times;
+		            </button>
+		            <h4 class="modal-title" id="myModalLabel">
+		                组织机构编辑
+		            </h4>
+		        </div>
+		        <div class="modal-body" id="organizationUpdateBody">
+		            
+		        </div>
+		    </div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="organizationdelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	        <div class="modal-content">
+		        <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                  &times;
+		            </button>
+		            <h4 class="modal-title" id="myModalLabel">
+		                组织机构删除
+		            </h4>
+		        </div>
+		        <div class="modal-body" id="organizationDeleteBody">
+		           
+		        </div>    
+		    </div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+	
+	<script src="../../../css/jquery.min.js"></script>
+    <script src="../../../css/jquery.easyui.min.js"></script>
+    <script src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../../3rd-libs/jquery/table/jquery.jeditable.js"></script>
+
+    <!-- Data Tables -->
+    <script src="../../../3rd-libs/jquery/table/jquery.dataTables.1.10.12.js"></script>
+    <script src="../../../3rd-libs/bootstrap/js/dataTables.bootstrap.js"></script>
+
+    <!-- 自定义js -->
+    <script src="../../../js/pub/common.js"></script>
+    <script src="../../../js/pub/content.js"></script>
+    <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
+ 	<script src="../../../js/manage-organization/organizationManage.js"></script>
+ 	<script src="../../../js/manage-organization/organizationAdd.js"></script>
+ 	<script src="../../../js/manage-organization/organizationUpdate.js"></script>
+ 	<script src="../../../js/manage-organization/organizationDelete.js"></script>
+
+ 	
+</body>
+</html>

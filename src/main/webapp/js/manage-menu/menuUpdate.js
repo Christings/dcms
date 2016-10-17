@@ -43,19 +43,22 @@ function menuUpdate(){
 		menuInfo['type'] = type;
 		console.log(4);
 		// var getMenuData = {pageNum: 1, pageSize: 10};
-		$.ajax({
-			type:"post",
-			url:"menu/update",
-			dataType: "json",
-			data: menuInfo,
-			success:function(res){
-				if(res.status == "1"){
-					console.log("修改菜单成功");
-				}else{
-					console.log("修改菜单失败"+res.msg);
-					return false;
-				}
-			}
+		// $.ajax({
+		// 	type:"post",
+		// 	url:"menu/update",
+		// 	dataType: "json",
+		// 	data: menuInfo,
+		// 	success:function(res){
+		// 		if(res.status == "1"){
+		// 			console.log("修改菜单成功");
+		// 		}else{
+		// 			console.log("修改菜单失败"+res.msg);
+		// 			return false;
+		// 		}
+		// 	}
+		// });
+		DCMSUtils.Ajax.doPost('menu/update', menuInfo).done((jsonData)=>{
+
 		});
 		console.log(5);
 
@@ -84,12 +87,13 @@ function menuUpdateInit(e){
 	// console.log(menu);
 	 console.log(id);
 	// console.log(name);
-	$.ajax({
-		type:"post",
-		url:"menu/get",
-		dataType: 'json',
-		data: menuId,
-		}).done((jsonData)=>{
+	// $.ajax({
+	// 	type:"post",
+	// 	url:"menu/get",
+	// 	dataType: 'json',
+	// 	data: menuId,
+	// 	})
+	DCMSUtils.Ajax.doPost('menu/get', menuId).done((jsonData)=>{
 			var menu = jsonData["data"];
 			var name = menu["name"];
 			var iconId = menu["iconId"];
