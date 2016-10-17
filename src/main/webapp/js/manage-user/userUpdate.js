@@ -6,7 +6,13 @@ function userUpdateInit(e){
 	
 	// console.log(menu);
 	 console.log(id);
-	
+	// console.log(name);
+	// $.ajax({
+	// 	type:"post",
+	// 	url:"user/get",
+	// 	dataType: 'json',
+	// 	data: userId,
+	// 	})
 	DCMSUtils.Ajax.doPost("user/get",userId).done((jsonData)=>{
 		var userInfo = jsonData["data"];
 		var userName = userInfo['username'];
@@ -178,12 +184,12 @@ function userUpdate(){
 		var status = $("#status1").val();
 		if(realName == "")
 		{
-			$("#alertName").text("请输入真实姓名");
+			$("#alertName").text("请输入真实姓名国臣");
 			return false;
 		}
 		var userInfo = {id:'',realname:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:'',roleIds:''};
 		userInfo['id'] = id;
-		// userInfo['username'] = userName;
+		userInfo['username'] = userName;
 		userInfo['realname'] = realName;
 		//userInfo['password'] = password;
 		userInfo['identificationno'] = identificationNo;
@@ -193,10 +199,8 @@ function userUpdate(){
 		userInfo['sex'] = sex;
 		userInfo['status'] = status;
 		userInfo['roleIds'] = roleIds;
-		console.log('用户性别信息：'+userInfo['sex']);
-		console.log('用户id信息：'+userInfo['id']);
-		DCMSUtils.Ajax.doPost("user/update",userInfo).then(function (res){
-			if(res.status === 1){
+		DCMSUtils.Ajax.doPost("user/update",userInfo).done((res)=>{
+			if(res.status == "1"){
 				console.log("更新用户"+userName+"成功");
 				alert("更新用户"+userName+"成功");
 			}else{
@@ -233,17 +237,10 @@ function userEditPassword(){
 				return false;
 			}
 		});
+		
 	});
 }
 
 
-// function contains(obj,arr){
-// 	for(var i=0,len=arr.length;i<len;i++){
-// 		if(arr[i] === obj){
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }
 
 
