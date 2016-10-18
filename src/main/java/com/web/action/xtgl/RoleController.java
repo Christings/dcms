@@ -14,12 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -30,7 +26,7 @@ import java.util.List;
  * @author 杜延雷
  * @date 2016-08-10
  */
-@Controller
+@RestController
 @RequestMapping("/role")
 public class RoleController extends BaseController{
 	private static final Logger LOGGER = LoggerFactory.getLogger(RoleController.class);
@@ -42,7 +38,6 @@ public class RoleController extends BaseController{
 	 * 添加角色
 	 */
 	@RequestMapping(value="/add",method={RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object save(Role role, HttpServletRequest request){
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [role: {}]", JSON.toJSONString(role));
@@ -89,7 +84,6 @@ public class RoleController extends BaseController{
 	 *修改角色
 	 */
 	@RequestMapping(value="/update",method={RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object update(Role role, HttpServletRequest request){
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [role: {}]", JSON.toJSONString(role));
@@ -142,7 +136,6 @@ public class RoleController extends BaseController{
 	 * 获取所有角色
 	 */
 	@RequestMapping(value="/getAll",method={RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object getAll(HttpServletRequest request){
 		try {
 			
@@ -166,7 +159,6 @@ public class RoleController extends BaseController{
      * @return
      */
 	@RequestMapping(value="/datagrid",method= { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object datagrid(@RequestParam(value = "pageNum") int pageNum,
 						   @RequestParam(value = "pageSize") int pageSize,
 						   HttpServletRequest request) {
@@ -202,7 +194,6 @@ public class RoleController extends BaseController{
 	 * 根据ID查找角色
 	 */
 	@RequestMapping(value="/get",method={RequestMethod.GET,RequestMethod.POST})
-	@ResponseBody
 	public Object getById(String id, HttpServletRequest request){
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [id: {}]", JSON.toJSONString(id));
@@ -240,7 +231,6 @@ public class RoleController extends BaseController{
 	 * 删除角色
 	 */
 	@RequestMapping(value="/delete",method={RequestMethod.GET,RequestMethod.POST})
-	@ResponseBody
 	public Object deleteById(String id, HttpServletRequest request){
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [id: {}]", JSON.toJSONString(id));

@@ -15,12 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -31,7 +27,7 @@ import java.util.List;
  * @author 杜延雷
  * @date 2016-08-25
  */
-@Controller
+@RestController
 @RequestMapping("/fixed/equipment")
 public class FixedEquipmentController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FixedEquipmentController.class);
@@ -43,7 +39,6 @@ public class FixedEquipmentController extends BaseController {
 	 * 添加设备
 	 */
 	@RequestMapping(value = "/add", method = {RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object add(FixedEquipment fixedEquipment, HttpServletRequest request) {
 
 		if (LOGGER.isInfoEnabled()) {
@@ -101,7 +96,6 @@ public class FixedEquipmentController extends BaseController {
 	 * 修改设备
 	 */
 	@RequestMapping(value = "/update", method = {RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object update(FixedEquipment fixedEquipment, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [fixedEquipment: {}]", JSON.toJSONString(fixedEquipment));
@@ -162,7 +156,6 @@ public class FixedEquipmentController extends BaseController {
 	 * 删除设备
 	 */
 	@RequestMapping(value = "/delete", method = {RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object delete(String id, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [id: {}]", id);
@@ -197,7 +190,6 @@ public class FixedEquipmentController extends BaseController {
 	 * 获取设备信息
 	 */
 	@RequestMapping(value = "/get", method = {RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object getById(String id, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [id: {}]", id);
@@ -236,7 +228,6 @@ public class FixedEquipmentController extends BaseController {
 	 * 查询所有设备信息
 	 */
 	@RequestMapping(value="/getAll",method={RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object getAll(HttpServletRequest request){
 
 		try {
@@ -261,13 +252,10 @@ public class FixedEquipmentController extends BaseController {
 	/**
 	 * 分页获取设备信息
 	 *
-	 * @param pageNum
-	 *            当前页
-	 * @param pageSize
-	 *            显示多少行
+	 * @param pageNum 当前页
+	 * @param pageSize 显示多少行
 	 */
 	@RequestMapping(value="/datagrid",method= {RequestMethod.POST, RequestMethod.GET})
-	@ResponseBody
 	public Object getDataGrid(@RequestParam(value = "pageNum") int pageNum,
 							  @RequestParam(value = "pageSize") int pageSize,
 							  @RequestParam(value = "equType") String equType,

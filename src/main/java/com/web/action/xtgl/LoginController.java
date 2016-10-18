@@ -15,11 +15,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +32,7 @@ import java.util.Set;
  * @author qgl
  * 
  */
-@Controller
+@RestController
 @RequestMapping("/main")
 public class LoginController extends BaseController {
 	private Logger LOGGER = Logger.getLogger(LoginController.class);
@@ -57,7 +56,6 @@ public class LoginController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/login",method = RequestMethod.POST)
-	@ResponseBody
 	public Object login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
 //		System.out.println(request.getParameterMap());
 		if (LOGGER.isInfoEnabled()) {
@@ -103,7 +101,6 @@ public class LoginController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/loginOut")
-	@ResponseBody
 	public Object loginOut(HttpServletRequest request, HttpServletResponse response) {
 		WebUtils.removeAll(request); //退出时删除用户Session信息
 		return AllResult.build(1, "退出登录成功");
@@ -149,6 +146,7 @@ public class LoginController extends BaseController {
 
 	/**
 	 * 设置用户Session信息
+	 *
 	 * @param request
 	 * @param user
      */

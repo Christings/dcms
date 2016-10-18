@@ -18,12 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -37,7 +33,7 @@ import java.util.Map;
  * @author 杜延雷
  * @date 2016-06-20
  */
-@Controller
+@RestController
 @RequestMapping("/menu")
 public class MenuController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class);
@@ -53,7 +49,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/add", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object add(Menu menu, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(menu));
@@ -96,7 +91,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/delete", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object delete(String key, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", key);
@@ -143,7 +137,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/update", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object update(Menu menu, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("params[menu: {}]", JSON.toJSONString(menu));
@@ -188,7 +181,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/get", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object get(String key, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", key);
@@ -227,7 +219,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getParentId", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object getParentId(String key, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", key);
@@ -263,7 +254,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAll", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object getAll(HttpServletRequest request) {
 		try {
 			List<Menu> menuList = menuService.getAll();
@@ -295,7 +285,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/tree", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object getTree(String key, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", key);
@@ -329,13 +318,10 @@ public class MenuController extends BaseController {
 	/**
 	 * 分页获取菜单信息
 	 *
-	 * @param pageNum
-	 *            当前页
-	 * @param pageSize
-	 *            显示多少行
+	 * @param pageNum 当前页
+	 * @param pageSize 显示多少行
 	 */
 	@RequestMapping(value = "/datagrid", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object getScroll(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
 			HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {

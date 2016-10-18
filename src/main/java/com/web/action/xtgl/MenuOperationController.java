@@ -14,11 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.List;
  * @author 杜延雷
  * @date 2016-09-12
  */
-@Controller
+@RestController
 @RequestMapping("/menu/operation")
 public class MenuOperationController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MenuOperationController.class);
@@ -43,7 +42,6 @@ public class MenuOperationController extends BaseController {
 	 * 添加
 	 */
 	@RequestMapping(value = "/add", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object add(MenuOperation menuOperation, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menuOperation: {}]", JSON.toJSONString(menuOperation));
@@ -84,7 +82,6 @@ public class MenuOperationController extends BaseController {
 	 * 删除
 	 */
 	@RequestMapping(value = "/delete", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object delete(String id, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", id);
@@ -122,7 +119,6 @@ public class MenuOperationController extends BaseController {
 	 * 修改
 	 */
 	@RequestMapping(value = "/update", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object update(MenuOperation menuOperation, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("params[menuOperation: {}]", JSON.toJSONString(menuOperation));
@@ -166,7 +162,6 @@ public class MenuOperationController extends BaseController {
 	 * 详情
 	 */
 	@RequestMapping(value = "/get", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object get(String id, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", id);
@@ -203,7 +198,6 @@ public class MenuOperationController extends BaseController {
 	 * 菜单所有操作
 	 */
 	@RequestMapping(value = "/getMenuId", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object getMenuId(String menuId,HttpServletRequest request) {
 		try {
 			if (StringUtils.isEmpty(menuId)) {

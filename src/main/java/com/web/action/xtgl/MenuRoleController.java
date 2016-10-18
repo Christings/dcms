@@ -11,11 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.List;
  * @author 杜延雷
  * @date 2016-07-12
  */
-@Controller
+@RestController
 @RequestMapping("/menu/role")
 public class MenuRoleController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MenuRoleController.class);
@@ -42,7 +41,6 @@ public class MenuRoleController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	@ResponseBody
 	public Object add(MenuRole menuRole, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menuRole: {}]", JSON.toJSONString(menuRole));
@@ -79,7 +77,6 @@ public class MenuRoleController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/batchMenus", method = RequestMethod.POST)
-	@ResponseBody
 	public Object batchMenus(String roleId,String menuIds, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [roleId: {},menuIds:{}]",roleId,menuIds );
@@ -118,7 +115,6 @@ public class MenuRoleController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/batchRoles", method = RequestMethod.POST)
-	@ResponseBody
 	public Object batchRoles(String menuId,String roleIds, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menuId: {},roleIds:{}]",menuId,roleIds );
@@ -157,7 +153,6 @@ public class MenuRoleController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getRoleId", method = RequestMethod.POST)
-	@ResponseBody
 	public Object getRoleId(String key,HttpServletRequest request) {
 		try {
 			if(StringUtils.isEmpty(key)){
@@ -191,7 +186,6 @@ public class MenuRoleController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getMenuId", method = RequestMethod.POST)
-	@ResponseBody
 	public Object getMenuId(String key,HttpServletRequest request) {
 		try {
 			if(StringUtils.isEmpty(key)){
@@ -224,7 +218,6 @@ public class MenuRoleController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAll", method = {RequestMethod.GET,RequestMethod.POST})
-	@ResponseBody
 	public Object getAll(HttpServletRequest request) {
 		try {
 			List<MenuRole> menuRoleList = menuRoleService.getAll();
