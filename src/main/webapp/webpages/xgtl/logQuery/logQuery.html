@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>日志查询</title>
+
+    <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <!--<link href="../../../css/dataTables.bootstrap.css" rel="stylesheet">-->
+    <link href="../../../3rd-libs/datatables/datatables.bootstrap.css" rel="stylesheet">
+    <link href="../../../3rd-libs/datatables/datatables.css" rel="stylesheet">
+    <link href="../../../css/style2.css" rel="stylesheet">
+    <link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="../../../css/animate.css" rel="stylesheet">
+
+    <script src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
+    <script src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Data Tables -->
+    <script src="../../../3rd-libs/datatables/datatables.js"></script>
+    <script src="../../../3rd-libs/datatables/datatables.bootstrap.js"></script>
+    <script src="../../../3rd-libs/datatables/datatables-custom.js"></script>
+
+    <style>
+        .text-align-reverse {
+            text-align: right;
+        }
+
+        .text-align-reverse > div, .text-align-reverse > select {
+            margin-right: 6px;
+        }
+
+        .input-group-search {
+            display: inline-table;
+            width: 150px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="row table-top">
+                        <form action="">
+                            <div class="col-md-12 text-align-reverse">
+                                <div class="input-group-search">
+                                    <input name="deviceName" type="text" class="form-control" id="deviceName"
+                                           placeholder="设备名称">
+                                </div>
+                                <div class="input-group-search">
+                                    <input name="operUserName" type="text" class="form-control" id="operUserName"
+                                           placeholder="操作人姓名">
+                                </div>
+                                <div class="input-group-search">
+                                    <input name="operDate" type="text" class="form-control" id="operDate"
+                                           placeholder="操作日期">
+                                </div>
+                                <button class="btn btn-primary" type="button" id="logQueryBtn">查询</button>
+                            </div>
+                        </form>
+                    </div>
+                    <table id="logQuery-table" class="table table-striped table-bordered table-hover dataTables-example"
+                           style="width: 100%"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var tableObj = $('#logQuery-table');
+    var api;
+    $(document).ready(function () {
+
+        api = tableObj.DataTable({
+            "ajax": {
+                "url": "getLogInfo",
+                "type": "post",
+                "data": function (parms) {
+                    parms.deviceName = $('[name="deviceName"]').val();
+                    parms.operUserName = $('[name="operUserName"]').val();
+                    parms.operDate = $('[name="operDate"]').val();
+                },
+                "dataSrc": function (json) {
+                    return json.datas;
+                }
+            },
+            columns: [
+                {title: '设备名称', data: 'deviceName'},
+                {title: '操作类型', data: 'operType'},
+                {title: '日志级别', data: 'logLevel'},
+                {title: '日志操作的具体类别', data: 'actonType'},
+                {title: '操作的具体内容', data: 'operProp'},
+                {title: '操作人姓名', data: 'operUserName'},
+                {title: '操作日期', data: 'operDate'},
+                {title: '日志类型', data: 'logType'}
+            ]
+        });
+
+        //初始化表格
+        tableObj.on("draw.DT", datatablesMtr.freeTableHeight(tableObj));
+    });
+
+    //点击查询
+    $("#logQueryBtn").on("click", function () {
+        api.ajax.reload();
+    });
+
+</script>
+
+</body>
+</html>
