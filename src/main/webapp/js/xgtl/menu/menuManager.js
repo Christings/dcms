@@ -363,8 +363,154 @@ function menuSetting(menuId) {
     if($("#menuMainDiv").attr('class')=='col-sm-12'){
         var menu=DCMSUtils.SessionStorage.get("MENU_TREE_MAP")[menuId];
         $("#operationTitle").text('【'+menu.name+'】精细化权限控制');
-        optionSetting('show');
+        $("#operationModalTitle").html('【'+menu.name+'】精细化权限控制');
+        DCMSUtils.Modal.showLoading('获取操作列表');
+        DCMSUtils.Ajax.doPost('/menu/operation/getMenuId',{menuId:menuId}).then(function(data){
+            DCMSUtils.Modal.hideLoading();
+            console.log(data);
+            if(data.status==1){
+                DCMSUtils.SessionStorage.set(menuId+'_OPERATION_LIST',data.data);
+                for(var i=0;i<data.data.length;i++){
+                    var opt=data.data[i];
+                    var tr='<tr id="tr_'+opt.id+'">';
+                    tr+='<td>'+opt.name+'</td>';
+                    tr+='<td>'+opt.url+'</td>';
+                    tr+='<td>'+
+                        '<i class="glyphicon glyphicon-pencil" title="编辑"     onclick="updateOperation(\''+opt.id+'\')"></i>&nbsp;&nbsp;'+
+                        '<i class="glyphicon glyphicon-trash"  title="删除"     onclick="deleteOperation(\''+opt.id+'\')"></i>&nbsp;&nbsp;'
+                        +'</td>';
+                    tr+='</tr>';
+                    $("#operationBody").append(tr);
+                }
+                $("#operationMenuId").val(menuId);
+                optionSetting('show');
+            }else{
+                DCMSUtils.Modal.toast('获取操作列表出错','forbidden');
+            }
+        },function (error) {
+            DCMSUtils.Modal.hideLoading();
+            DCMSUtils.Modal.toast('获取操作列表出错','forbidden');
+        });
+
     }else{
         optionSetting('hide');
+    }
+}
+
+function addNewOperation(){
+    $("#menuOptionModal").modal('show');
+}
+/**
+ * 保存、修改精细操作
+ */
+$("#menuOperationForm").validate({
+    rules:{
+        operationName:{
+            required:true,
+            minlength:2,
+            maxlength:50
+        },
+        operationUrl:{
+            required:true,
+            maxlength:100
+        }
+    },
+    messages:{
+        operationName:icon + "请输入2-50个字符的操作名称",
+        operationUrl:icon+"请输入100字符以内的字符"
+    },
+    submitHandler:function(form){
+        var operationId=$("#operationId").val();
+        var ajaxUrl='menu/operation/add';
+        if(operationId){
+            ajaxUrl='menu/operation/update';
+        }
+        DCMSUtils.Modal.showLoading();
+        var optData={
+            menuId:$("#operationMenuId").val(),
+            id:operationId,
+            name:$("#operationName").val(),
+            url:$("#operationUrl").val()
+        }
+        DCMSUtils.Ajax.doPost(ajaxUrl,optData).then(function(data){
+            DCMSUtils.Modal.hideLoading();
+            if(data.status==1){
+                if(operationId){
+                    $("#tr_"+operationId).remove();
+                }
+                var opt=data.data;
+                var tr='<tr id="tr_'+opt.id+'">';
+                tr+='<td>'+opt.name+'</td>';
+                tr+='<td>'+opt.url+'</td>';
+                tr+='<td>'+
+                    '<i class="glyphicon glyphicon-pencil" title="编辑"     onclick="updateOperation(\''+opt.id+'\')"></i>&nbsp;&nbsp;'+
+                    '<i class="glyphicon glyphicon-trash"  title="删除"     onclick="deleteOperation(\''+opt.id+'\')"></i>&nbsp;&nbsp;'
+                    +'</td>';
+                tr+='</tr>';
+                $("#operationBody").append(tr);
+
+                document.getElementById("menuOperationForm").reset();
+                $("#menuOptionModal").modal('hide');
+            }else{
+                DCMSUtils.Modal.toast('保存精细控制出错','forbidden');
+            }
+        },function(error){
+            DCMSUtils.Modal.hideLoading();
+            DCMSUtils.Modal.toast('保存精细控制出错','forbidden');
+        });
+    }
+});
+
+/**
+ * 编辑精细控制
+ * @param optId
+ */
+function updateOperation(optId){
+    var menuId=$("#operationMenuId").val();
+    var opt;
+    var optList=DCMSUtils.SessionStorage.get(menuId+"_OPERATION_LIST");
+    if(optList){
+        for(var i=0;i<optList.length;i++){
+            var o=optList[i];
+            if(o.id==optId){
+                opt=o;
+                break;
+            }
+        }
+        $("#operationId").val(optId);
+        $("#operationName").val(opt.name);
+        $("#operationUrl").val(opt.url);
+        $("#menuOptionModal").modal('show');
+    }
+
+}
+
+function deleteOperation(optId) {
+    var menuId=$("#operationMenuId").val();
+    var opt;
+    var optList=DCMSUtils.SessionStorage.get(menuId+"_OPERATION_LIST");
+    if(optList){
+        for(var i=0;i<optList.length;i++){
+            var o=optList[i];
+            if(o.id==optId){
+                opt=o;
+                break;
+            }
+        }
+        DCMSUtils.Modal.confirm('确定删除操作['+opt.name+']吗？','',function () {
+            DCMSUtils.Modal.showLoading('删除中...');
+            DCMSUtils.Ajax.doPost('menu/operation/delete',{id:optId}).then(function(data){
+                DCMSUtils.Modal.hideLoading();
+                if(data.status=='1'){
+                    $("#tr_"+optId).remove();
+                    DCMSUtils.Modal.toast('删除成功','');
+                }else{
+                    DCMSUtils.Modal.toast('删除出错'+data.msg,'forbidden');
+                }
+            },function (error) {
+                DCMSUtils.Modal.hideLoading();
+                DCMSUtils.Modal.toast('删除出错','forbidden');
+            });
+        });
     }
 }

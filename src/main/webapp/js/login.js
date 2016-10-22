@@ -27,6 +27,14 @@ function login(){
 		$("#password").focus();
 		return false;
 	}
+	var inputCode = document.getElementById("input1").value;
+	if (inputCode.length <= 0) {
+		alert("请输入验证码！");
+	}else if (inputCode != code2) {
+		alert("验证码输入错误！");
+		createCode(); //刷新验证码
+	}
+
 	userInformation['username'] = username;
 	userInformation['password'] = password;
 	$("#uconfirm").text("");
