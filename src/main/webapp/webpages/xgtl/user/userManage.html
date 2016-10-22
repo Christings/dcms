@@ -9,9 +9,7 @@
     <link href="../../../css/style2.css" rel="stylesheet">
     <link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
     <link href="../../../css/animate.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../../../css/easyui.css">
-	<link rel="stylesheet" type="text/css" href="../../../css/icon.css">
-	<link rel="stylesheet" type="text/css" href="../../../css/demo.css">
+    <link rel="stylesheet" type="text/css" href="../../../3rd-libs/jstree/themes/default/style.min.css">
 </head>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
@@ -19,7 +17,7 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>用户管理</h5>
+                        <h5>用户管理1</h5>
 <!--
                         <div class="ibox-tools">
                         	<a class="add-menu">
@@ -135,7 +133,7 @@
 							<div id="rolesContent">
 							</div>
 						</div>
-						<!--<div class="form-group">
+						<!-- <div class="form-group">
 							<label for="name">选择组织机构</label>
 							<div style="margin:10px 0">
 								<input hidden="hidden"  type="checkbox" checked onchange="$('#tt').tree({cascadeCheck:$(this).is(':checked')})">
@@ -145,7 +143,11 @@
 								<ul id="tt" class="easyui-tree" data-options="animate:true,checkbox:true">
 								</ul>
 							</div>
-						</div>-->
+						</div> -->
+						<div class='form-group' >
+							<label for="name">选择组织机构</label>
+							<div id="orgTreeAdd"></div>
+						</div>
 						<div class="form-group">
 						  <label for="name">身份证</label>
 						  <input type="text" class="form-control" id="identificationNo" 
@@ -286,7 +288,7 @@
 	</div>
 
 	<script src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
-
+	<script src="../../../3rd-libs/jstree/jstree.min.js"></script>
     <script src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../../../3rd-libs/jquery/table/jquery.jeditable.js"></script>
 

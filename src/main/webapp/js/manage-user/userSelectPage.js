@@ -5,54 +5,32 @@ function pageInit(){
 	loadOrganizationTree();
 }
 function loadOrganizationTree(){
-	var st = '[{"id":1,'+
-			'"text":"北京三源合众科技有限公司",'+
-			'"children":[{'+
-				'"id":12,'+
-				'"text":"研发部",'+
-				'"state":"closed",'+
-				'"children":[{'+
-					'"id":111,'+
-					'"text":"研发一组"},{'+
-					'"id":112,'+
-					'"text":"研发二组"},{'+
-					'"id":113,'+
-					'"text":"研发三组"'+
-				'}]'+
-			'},{'+
-				'"id":11,'+
-				'"text":"测试部",'+
-				'"children":[{'+
-					'"id":121,'+
-					'"text":"测试一组"},{'+
-					'"id":122,'+
-					'"text":"测试二组",'+
-					'"attributes":{'+
-						'"p1":"Custom Attribute1",'+
-						'"p2":"Custom Attribute2"}'+
-				'},{'+
-					'"id":123,'+
-					'"text":"测试三组"'+
-				'},{'+
-					'"id":124,'+
-					'"text":"测试四组",'+
-					'"checked":true'+
-				'}]'+
-			'},{'+
-				'"id":13,'+
-				'"text":"销售部"'+
-			'},{'+
-				'"id":14,'+
-				'"text":"人力资源部"'+
-			'},{'+
-				'"id":15,'+
-				'"text":"指挥部"'+
-			'}]'+
-		'}]';
-		var myJson1 = eval(st);
-         $('#tt').tree({
-             data: myJson1
-         });
+
+	
+    $('#orgTreeAdd').jstree({
+		'plugins':['wholerow','checkbox'],
+		'core':{
+			'data':[
+				{
+					'text':'北京三源合众科技有限公司',
+					'children':[ 
+						{
+							'text':'研发部',
+							'children':[
+								{'text':'研发一组'},
+								{'text':'研发二组'},
+								{'text':'研发三组'}
+							]
+						},
+						{'text':'测试部'},
+						{'text':'销售部'},
+						{'text':'人力资源部'},
+						{'text':'指挥部'}
+					]
+				}
+			]
+		}
+	});
 }
 function loadUserBody(){
 	var pageNum = 1;

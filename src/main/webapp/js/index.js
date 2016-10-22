@@ -4,5 +4,5 @@ function pageInit(){
 
 function loginOut(){
     DCMSUtils.SessionStorage.clear();
-    window.location.href="./login.html";
+    window.location.href="./";
 }
