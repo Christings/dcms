@@ -22,11 +22,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ import java.util.List;
  * @author 杜延雷
  * @date 2016-08-12
  */
-@Controller
+@RestController
 @RequestMapping("/user/role")
 public class UserRoleController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRoleController.class);
@@ -54,7 +53,6 @@ public class UserRoleController extends BaseController {
      * 单个添加用户角色
      */
     @RequestMapping(value = "/add", method = {RequestMethod.POST,RequestMethod.GET})
-    @ResponseBody
     public Object add(UserRole userRole, HttpServletRequest request) {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("request param: [userRole: {}]", JSON.toJSONString(userRole));
@@ -91,7 +89,6 @@ public class UserRoleController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/batchUsers", method = RequestMethod.POST)
-    @ResponseBody
     public Object batchUsers(String roleId,String userIds, HttpServletRequest request) {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("request param: [roleId: {},userIds:{}]",roleId,userIds );
@@ -130,7 +127,6 @@ public class UserRoleController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/batchRoles", method = RequestMethod.POST)
-    @ResponseBody
     public Object batchRoles(String userId,String roleIds, HttpServletRequest request) {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("request param: [userId: {},roleIds:{}]",userId,roleIds );
@@ -169,7 +165,6 @@ public class UserRoleController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getRoleId", method = RequestMethod.POST)
-    @ResponseBody
     public Object getRoleId(String roleId,HttpServletRequest request) {
         try {
             if(StringUtils.isEmpty(roleId)){
@@ -203,7 +198,6 @@ public class UserRoleController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getUsers", method = RequestMethod.POST)
-    @ResponseBody
     public Object getUsers(String roleId,HttpServletRequest request) {
         try {
             if(StringUtils.isEmpty(roleId)){
@@ -248,7 +242,6 @@ public class UserRoleController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getUserAll", method = RequestMethod.POST)
-    @ResponseBody
     public Object getUserAll(String roleId,HttpServletRequest request) {
         try {
             if(StringUtils.isEmpty(roleId)){
@@ -308,7 +301,6 @@ public class UserRoleController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getUserId", method = RequestMethod.POST)
-    @ResponseBody
     public Object getUserId(String userId,HttpServletRequest request) {
         try {
             if(StringUtils.isEmpty(userId)){
@@ -341,7 +333,6 @@ public class UserRoleController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getRoles", method = RequestMethod.POST)
-    @ResponseBody
     public Object getRoles(String userId,HttpServletRequest request) {
         try {
             if(StringUtils.isEmpty(userId)){
@@ -385,7 +376,6 @@ public class UserRoleController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getAll", method = {RequestMethod.GET,RequestMethod.POST})
-    @ResponseBody
     public Object getAll(HttpServletRequest request) {
         try {
             List<UserRole> userRoleList = userRoleService.getAll();

@@ -15,11 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -35,7 +31,7 @@ import java.util.Iterator;
  * @author 田军兴
  * @date 2016-07-30
  */
-@Controller
+@RestController
 @RequestMapping("/serviceRoom")
 public class ServiceRoomController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceRoomController.class);
@@ -50,7 +46,6 @@ public class ServiceRoomController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	@ResponseBody
 	public Object save(ServiceRoom serviceRoom, HttpServletRequest request) {
 		try {
 			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
@@ -101,7 +96,6 @@ public class ServiceRoomController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	@ResponseBody
 	public Object update(ServiceRoom serviceRoom, HttpServletRequest request) {
 		try {
 			if (null == serviceRoom) {
@@ -136,7 +130,6 @@ public class ServiceRoomController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
-	@ResponseBody
 	public Object delete(ServiceRoom serviceRoom, HttpServletRequest request) {
 		try {
 			if (null == serviceRoom) {
@@ -174,7 +167,6 @@ public class ServiceRoomController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/selectById", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object selectById(ServiceRoom serviceRoom, HttpServletRequest request) {
 		try {
 			if (null == serviceRoom) {
@@ -209,7 +201,6 @@ public class ServiceRoomController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/getPage", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object getPageData(@RequestParam(value = "page") int page, @RequestParam(value = "count") int count,
 			HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {

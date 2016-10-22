@@ -25,12 +25,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -44,7 +40,7 @@ import static com.web.util.AllResult.buildJSON;
  * @author 杜延雷
  * @date 2016-08-09
  */
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -58,7 +54,6 @@ public class UserController extends BaseController {
 	 * 添加用户
 	 */
 	@RequestMapping(value = "/add", method = {RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object addUser(User user,String roleIds, HttpServletRequest request) {
 
 		if (LOGGER.isInfoEnabled()) {
@@ -125,7 +120,6 @@ public class UserController extends BaseController {
 	 * 修改用户
 	 */
 	@RequestMapping(value = "/update", method = {RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object update(User user, String roleIds, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [user: {}]", JSON.toJSONString(user));
@@ -180,7 +174,6 @@ public class UserController extends BaseController {
 	 * 修改用户状态
 	 */
 	@RequestMapping(value = "/status", method = {RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object status(String id,Short status, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [id: {}, status: {}]", id,status);
@@ -213,7 +206,6 @@ public class UserController extends BaseController {
 	 * 删除用户（不是真实删除） TODO 回头有需求在进行调整
 	 */
 	@RequestMapping(value = "/delete", method = {RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object delete(String id, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [id: {}]", id);
@@ -246,7 +238,6 @@ public class UserController extends BaseController {
 	 * 获取用户信息
 	 */
 	@RequestMapping(value = "/get", method = {RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object getById(String id, HttpServletRequest request) {
 		//1.验证参数
 		String errorTip = ValidationHelper.build()
@@ -289,7 +280,6 @@ public class UserController extends BaseController {
 	 * 查询所有用户
 	 */
 	@RequestMapping(value="/getAll",method={RequestMethod.POST,RequestMethod.GET})
-	@ResponseBody
 	public Object getAll(HttpServletRequest request){
 
 		try {
@@ -318,7 +308,6 @@ public class UserController extends BaseController {
 	 * 分页获取用户信息
 	 */
 	@RequestMapping(value="/datagrid",method= {RequestMethod.POST, RequestMethod.GET})
-	@ResponseBody
 	public Object getDataGrid(UserForm userForm,HttpServletRequest request) {
 
 		//1.验证参数
@@ -402,7 +391,6 @@ public class UserController extends BaseController {
 	 * @date 2016-08-10 00:04:52
 	 */
 	@RequestMapping(value = "modifyPassword", method = RequestMethod.POST)
-	@ResponseBody
 	public Object modifyPassword(@RequestParam(value = "id") String id,
 								 @RequestParam(value = "password") String password,
 								 HttpServletRequest request) {
@@ -445,7 +433,6 @@ public class UserController extends BaseController {
 	 * @date 2016-08-10 00:04:52
 	 */
 	@RequestMapping(value = "password", method = RequestMethod.POST)
-	@ResponseBody
 	public Object password(@RequestParam(value = "oldPassword",required = false)  String oldPassword,
 						   @RequestParam(value = "newPassword",required = false)String newPassword,
 						   HttpServletRequest request) {

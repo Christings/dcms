@@ -1,15 +1,5 @@
 package com.web.action.xtgl;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.web.bean.form.OperLogForm;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
@@ -17,6 +7,14 @@ import com.web.entity.OperLog;
 import com.web.example.OperLogExample;
 import com.web.util.AllResult;
 import com.web.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 业务日志控制器
@@ -24,17 +22,15 @@ import com.web.util.StringUtil;
  * @author 田军兴
  * @date 2016-06-29
  */
-@Controller
+@RestController
 @RequestMapping("/operLog")
 public class OperLogController extends BaseController {
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(OperLogController.class);
 
 	/**
 	 * 分页查询日志相关信息
 	 */
 	@RequestMapping(value = "/scroll", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object getScroll(HttpServletRequest request, OperLogForm operLogForm) {
 		try {
 			OperLogExample operLogExample = new OperLogExample();

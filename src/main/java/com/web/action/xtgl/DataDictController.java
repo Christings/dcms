@@ -14,11 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author 田军兴
  * @date 2016-07-09
  */
-@Controller
+@RestController
 @RequestMapping("/dataDict")
 public class DataDictController extends BaseController {
 
@@ -43,7 +39,6 @@ public class DataDictController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	@ResponseBody
 	public Object save(DataDict dataDict, HttpServletRequest request) {
 		try {
 			if (null == dataDict) {
@@ -79,7 +74,6 @@ public class DataDictController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	@ResponseBody
 	public Object update(DataDict dataDict, HttpServletRequest request) {
 		try {
 			if (null == dataDict) {
@@ -117,7 +111,6 @@ public class DataDictController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
-	@ResponseBody
 	public Object delete(DataDict dataDict, HttpServletRequest request) {
 		try {
 			if (null == dataDict) {
@@ -155,7 +148,6 @@ public class DataDictController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/selectById", method = {RequestMethod.GET,RequestMethod.POST})
-	@ResponseBody
 	public Object selectById(DataDict dataDict, HttpServletRequest request) {
 		try {
 			if (null == dataDict) {
@@ -187,7 +179,6 @@ public class DataDictController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/selectByGroup", method = {RequestMethod.GET,RequestMethod.POST})
-	@ResponseBody
 	public Object selectByGroup(DataDict dataDict, HttpServletRequest request) {
 		try {
 			if (null == dataDict) {
@@ -215,14 +206,11 @@ public class DataDictController extends BaseController {
 	/**
 	 * 分页查询词典数据
 	 *
-	 * @param page
-	 *            当前页
-	 * @param count
-	 *            每页条数
+	 * @param page 当前页
+	 * @param count 每页条数
 	 * @param request
 	 */
 	@RequestMapping(value = "/getPage", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object getPageData(@RequestParam(value = "page") int page, @RequestParam(value = "count") int count,
 			HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
@@ -249,5 +237,4 @@ public class DataDictController extends BaseController {
 		operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.dataDic, null, OperLog.logLevelEnum.error);
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 	}
-
 }
