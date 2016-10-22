@@ -48,21 +48,6 @@ h5 {
 a:focus {
     outline: none;
 }
-/*以下两段后加*/
-a.navbar-minimalize{
-    margin-left: 85px;
-}
-body.mini-navbar a.navbar-minimalize{
-    margin-left: 12px;
-}
-/*后加*/
-.foot > label.number-page{
-    margin-right: 20px;
-}
-.foot > label.foot-pagination{
-    float: right;
-    margin-right:50px;
-}
 
 .nav > li > a {
     color: #a7b1c2;
@@ -3530,11 +3515,11 @@ video {
 }
 
 .wrapper {
-    padding: 0 20px;
+    padding: 0 10px;
 }
 
 .wrapper-content {
-    padding: 20px;
+    padding: 10px;
 }
 
 #page-wrapper {
@@ -3736,7 +3721,7 @@ nav.page-tabs .page-tabs-content {
 }
 
 #content-main {
-    height: calc(100% - 90px);
+    height: calc(100% - 140px);
     overflow: hidden;
 }
 
@@ -7905,6 +7890,3 @@ body.skin-3 {
         font-size: 12px
     }
 }
-
-
-/*自定义*/
