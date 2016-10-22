@@ -14,7 +14,7 @@ function initMenuTree(){
             if(hasChildMenu(menu)){
                 liHtml+='<a href=\"#\">';
             }else{
-                liHtml+='<a class="J_menuItem" href=\"'+menu.url+'\">';
+                liHtml+='<a class="J_menuItem" onclick="clickAuth()" href=\"'+menu.url+'\">';
             }
             liHtml+='<i class=\"'+menu.iconId+'\"></i>';
             liHtml+='<span class="nav-label">'+menu.name+'</span>';
@@ -27,7 +27,7 @@ function initMenuTree(){
                     for(var j=0;j<menu.childMenu.length;j++){
                         var child=menu.childMenu[j];
                         liHtml+='<li id="'+child.id+'">';
-                            liHtml+='<a class="J_menuItem" href=\"'+child.url+'\">'+child.name+'</a>';
+                            liHtml+='<a onclick="clickAuth()" class="J_menuItem" href=\"'+child.url+'\">'+child.name+'</a>';
                         liHtml+='</li>';
                     }
                 liHtml+='</ul>';
@@ -60,6 +60,13 @@ function hasChildMenu(menu){
     return false;
 }
 
+function clickAuth(){
+    var user=DCMSBusi.USER.get();
+    if(!user){
+        // window.location.href=DCMSUtils.URL.getContentPath()+"login.html";
+        window.location.href='./';
+    }
+}
 
 
 
