@@ -21,6 +21,11 @@ public interface MenuMapper {
     List<Menu> selectByExample(MenuExample example);
 
     /**
+     * 自定义分页返回树结构
+     */
+    List<Menu> selectByExamplePage(MenuExample example);
+
+    /**
      * 自定义查询返回树形菜单
      */
     List<Menu> selectByTree(Map<String,String> params);
