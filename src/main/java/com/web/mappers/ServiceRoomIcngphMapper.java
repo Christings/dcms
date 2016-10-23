@@ -22,8 +22,6 @@ public interface ServiceRoomIcngphMapper {
 
     int deleteByPrimaryKey(String id);
 
-    int insert(ServiceRoomIcngph record);
-
     int insertSelective(ServiceRoomIcngph record);
 
     List<ServiceRoomIcngph> selectByExample(ServiceRoomIcngphExample example);

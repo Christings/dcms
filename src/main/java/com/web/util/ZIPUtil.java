@@ -8,9 +8,6 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import com.web.core.util.ContextHolderUtils;
-import com.web.entity.User;
-
 /**
  * 解压工具类
  *
@@ -22,10 +19,6 @@ public class ZIPUtil {
 		ZipFile zipFile = new ZipFile(file);
 		Enumeration entrys = zipFile.entries();
 		Map<String, File> map = new HashMap<String, File>();
-		User user = WebUtils.getUser(ContextHolderUtils.getRequest());
-		String tempPath = outPath + "/" + user.getId();// 临时文件夹
-		File tempFile = new File(tempPath);
-		tempFile.mkdir();
 		while (entrys.hasMoreElements()) {
 			ZipEntry entry = (ZipEntry) entrys.nextElement();
 			if (entry.isDirectory()) {
@@ -33,10 +26,9 @@ public class ZIPUtil {
 			}
 			InputStream inputStream = zipFile.getInputStream(entry);
 			File file1 = new File(outPath);
-			if (!file1.exists()) {
-				file1.mkdir();
-			}
-			String ext = file1.getName().substring(file1.getName().lastIndexOf(".") + 1, file1.getName().length());
+			//创建目录
+			ZIPUtil.mkDir(file1);
+			String ext = entry.getName().substring(entry.getName().lastIndexOf(".") + 1, entry.getName().length());
 			String newFileName = String.valueOf(DateUtil.getMillis(new Date())) + "." + ext;// 转存文件的新名称
 			String filePath = outPath + "/" + newFileName;
 			OutputStream outputStream = new FileOutputStream(filePath);
@@ -51,5 +43,18 @@ public class ZIPUtil {
 			map.put(entry.getName(), file1);
 		}
 		return map;
+	}
+
+	/**
+	 * 递归创建文件夹
+	 * @param file 文件夹全路径
+	 * */
+	public static void mkDir(File file){
+		if(file.getParentFile().exists()){
+			file.mkdir();
+		}else{
+			mkDir(file.getParentFile());
+			file.mkdir();
+		}
 	}
 }
