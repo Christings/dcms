@@ -13,7 +13,7 @@ import com.web.example.ServiceRoomExample;
 public interface ServiceRoomService extends IService<ServiceRoom, String> {
 
 	/**
-	 * 数据词典分页查询
+	 *机房管理分页查询
 	 *
 	 * @param example
 	 */
