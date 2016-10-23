@@ -344,10 +344,10 @@ public class MenuController extends BaseController {
 				return AllResult.build(1, "未获取到菜单");
 			}
 
-			List<MenuTreeResult> menuTreeList = treeMenu(request,queryResult.getRecords());
+//			List<MenuTreeResult> menuTreeList = treeMenu(request,queryResult.getRecords());
 			Page<MenuTreeResult> treePage = new Page<>();
 			BeanUtils.copyProperties(queryResult,treePage);
-			treePage.setRecords(menuTreeList);
+//			treePage.setRecords(menuTreeList);
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(treePage,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));

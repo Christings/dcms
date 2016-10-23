@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.web.mappers.MenuMapper" >
-  <resultMap id="BaseResultMap" type="com.web.entity.Menu" >
+<mapper namespace="com.web.mappers.DoMainMapper" >
+  <resultMap id="BaseResultMap" type="com.web.entity.DoMain" >
     <id column="ID" property="id" jdbcType="VARCHAR" />
-    <result column="LEVEL" property="level" jdbcType="SMALLINT" />
     <result column="NAME" property="name" jdbcType="VARCHAR" />
-    <result column="RANK" property="rank" jdbcType="SMALLINT" />
-    <result column="URL" property="url" jdbcType="VARCHAR" />
     <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
-    <result column="ICON_ID" property="iconId" jdbcType="VARCHAR" />
-    <result column="TYPE" property="type" jdbcType="SMALLINT" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="LEVEL" property="level" jdbcType="INTEGER" />
     <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR" />
     <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
@@ -74,16 +71,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ID, LEVEL, NAME, RANK, URL, PARENT_ID, ICON_ID, TYPE, UPDATE_NAME, UPDATE_DATE,
-    CREATE_NAME, CREATE_DATE
+    ID, NAME, PARENT_ID, DESCRIPTION, LEVEL, UPDATE_NAME, UPDATE_DATE, CREATE_NAME, CREATE_DATE
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.MenuExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.DoMainExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_s_menu
+    from t_s_domain
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -94,57 +90,46 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from t_s_menu
+    from t_s_domain
     where ID = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from t_s_menu
+    delete from t_s_domain
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.web.example.MenuExample" >
-    delete from t_s_menu
+  <delete id="deleteByExample" parameterType="com.web.example.DoMainExample" >
+    delete from t_s_domain
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.web.entity.Menu" >
-    insert into t_s_menu (ID, LEVEL, NAME, 
-      RANK, URL, PARENT_ID, 
-      ICON_ID, TYPE, UPDATE_NAME, 
+  <insert id="insert" parameterType="com.web.entity.DoMain" >
+    insert into t_s_domain (ID, NAME, PARENT_ID, 
+      DESCRIPTION, LEVEL, UPDATE_NAME, 
       UPDATE_DATE, CREATE_NAME, CREATE_DATE
       )
-    values (#{id,jdbcType=VARCHAR}, #{level,jdbcType=SMALLINT}, #{name,jdbcType=VARCHAR}, 
-      #{rank,jdbcType=SMALLINT}, #{url,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
-      #{iconId,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, #{updateName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, #{updateName,jdbcType=VARCHAR}, 
       #{updateDate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.web.entity.Menu" >
-    insert into t_s_menu
+  <insert id="insertSelective" parameterType="com.web.entity.DoMain" >
+    insert into t_s_domain
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         ID,
       </if>
-      <if test="level != null" >
-        LEVEL,
-      </if>
       <if test="name != null" >
         NAME,
-      </if>
-      <if test="rank != null" >
-        RANK,
-      </if>
-      <if test="url != null" >
-        URL,
       </if>
       <if test="parentId != null" >
         PARENT_ID,
       </if>
-      <if test="iconId != null" >
-        ICON_ID,
+      <if test="description != null" >
+        DESCRIPTION,
       </if>
-      <if test="type != null" >
-        TYPE,
+      <if test="level != null" >
+        LEVEL,
       </if>
       <if test="updateName != null" >
         UPDATE_NAME,
@@ -163,26 +148,17 @@
       <if test="id != null" >
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="level != null" >
-        #{level,jdbcType=SMALLINT},
-      </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="rank != null" >
-        #{rank,jdbcType=SMALLINT},
-      </if>
-      <if test="url != null" >
-        #{url,jdbcType=VARCHAR},
       </if>
       <if test="parentId != null" >
         #{parentId,jdbcType=VARCHAR},
       </if>
-      <if test="iconId != null" >
-        #{iconId,jdbcType=VARCHAR},
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
-        #{type,jdbcType=SMALLINT},
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
       </if>
       <if test="updateName != null" >
         #{updateName,jdbcType=VARCHAR},
@@ -198,38 +174,29 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.web.example.MenuExample" resultType="java.lang.Integer" >
-    select count(*) from t_s_menu
+  <select id="countByExample" parameterType="com.web.example.DoMainExample" resultType="java.lang.Integer" >
+    select count(*) from t_s_domain
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update t_s_menu
+    update t_s_domain
     <set >
       <if test="record.id != null" >
         ID = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.level != null" >
-        LEVEL = #{record.level,jdbcType=SMALLINT},
-      </if>
       <if test="record.name != null" >
         NAME = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.rank != null" >
-        RANK = #{record.rank,jdbcType=SMALLINT},
-      </if>
-      <if test="record.url != null" >
-        URL = #{record.url,jdbcType=VARCHAR},
       </if>
       <if test="record.parentId != null" >
         PARENT_ID = #{record.parentId,jdbcType=VARCHAR},
       </if>
-      <if test="record.iconId != null" >
-        ICON_ID = #{record.iconId,jdbcType=VARCHAR},
+      <if test="record.description != null" >
+        DESCRIPTION = #{record.description,jdbcType=VARCHAR},
       </if>
-      <if test="record.type != null" >
-        TYPE = #{record.type,jdbcType=SMALLINT},
+      <if test="record.level != null" >
+        LEVEL = #{record.level,jdbcType=INTEGER},
       </if>
       <if test="record.updateName != null" >
         UPDATE_NAME = #{record.updateName,jdbcType=VARCHAR},
@@ -249,15 +216,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update t_s_menu
+    update t_s_domain
     set ID = #{record.id,jdbcType=VARCHAR},
-      LEVEL = #{record.level,jdbcType=SMALLINT},
       NAME = #{record.name,jdbcType=VARCHAR},
-      RANK = #{record.rank,jdbcType=SMALLINT},
-      URL = #{record.url,jdbcType=VARCHAR},
       PARENT_ID = #{record.parentId,jdbcType=VARCHAR},
-      ICON_ID = #{record.iconId,jdbcType=VARCHAR},
-      TYPE = #{record.type,jdbcType=SMALLINT},
+      DESCRIPTION = #{record.description,jdbcType=VARCHAR},
+      LEVEL = #{record.level,jdbcType=INTEGER},
       UPDATE_NAME = #{record.updateName,jdbcType=VARCHAR},
       UPDATE_DATE = #{record.updateDate,jdbcType=TIMESTAMP},
       CREATE_NAME = #{record.createName,jdbcType=VARCHAR},
@@ -266,29 +230,20 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.Menu" >
-    update t_s_menu
+  <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.DoMain" >
+    update t_s_domain
     <set >
-      <if test="level != null" >
-        LEVEL = #{level,jdbcType=SMALLINT},
-      </if>
       <if test="name != null" >
         NAME = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="rank != null" >
-        RANK = #{rank,jdbcType=SMALLINT},
-      </if>
-      <if test="url != null" >
-        URL = #{url,jdbcType=VARCHAR},
       </if>
       <if test="parentId != null" >
         PARENT_ID = #{parentId,jdbcType=VARCHAR},
       </if>
-      <if test="iconId != null" >
-        ICON_ID = #{iconId,jdbcType=VARCHAR},
+      <if test="description != null" >
+        DESCRIPTION = #{description,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
-        TYPE = #{type,jdbcType=SMALLINT},
+      <if test="level != null" >
+        LEVEL = #{level,jdbcType=INTEGER},
       </if>
       <if test="updateName != null" >
         UPDATE_NAME = #{updateName,jdbcType=VARCHAR},
@@ -305,15 +260,12 @@
     </set>
     where ID = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.web.entity.Menu" >
-    update t_s_menu
-    set LEVEL = #{level,jdbcType=SMALLINT},
-      NAME = #{name,jdbcType=VARCHAR},
-      RANK = #{rank,jdbcType=SMALLINT},
-      URL = #{url,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.web.entity.DoMain" >
+    update t_s_domain
+    set NAME = #{name,jdbcType=VARCHAR},
       PARENT_ID = #{parentId,jdbcType=VARCHAR},
-      ICON_ID = #{iconId,jdbcType=VARCHAR},
-      TYPE = #{type,jdbcType=SMALLINT},
+      DESCRIPTION = #{description,jdbcType=VARCHAR},
+      LEVEL = #{level,jdbcType=INTEGER},
       UPDATE_NAME = #{updateName,jdbcType=VARCHAR},
       UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP},
       CREATE_NAME = #{createName,jdbcType=VARCHAR},
@@ -323,55 +275,31 @@
 
   <!--自定义 相关操作-->
 
-  <!--根据条件返回树形菜单TreeMenu  begin-->
-  <resultMap id="TreeMenuMap" type="com.web.entity.Menu" extends="BaseResultMap">
-    <association property="childMenu" column="ID" javaType="java.util.ArrayList" select="selectByChildMenu" />
+  <!--根据条件返回树形域TreeDoMain  begin-->
+  <resultMap id="TreeDoMainMap" type="com.web.entity.DoMain" extends="BaseResultMap">
+    <association property="childDoMain" column="ID" javaType="java.util.ArrayList" select="selectByChildDoMain" />
   </resultMap>
   <sql id="Tree_Column_List" >
-    m.ID ID, m.LEVEL LEVEL, m.NAME NAME, m.RANK RANK, m.URL URL, m.PARENT_ID PARENT_ID, m.ICON_ID ICON_ID, m.TYPE TYPE,
-    m.UPDATE_NAME UPDATE_NAME, m.UPDATE_DATE UPDATE_DATE, m.CREATE_NAME CREATE_NAME, m.CREATE_DATE CREATE_DATE
+    ID, NAME, PARENT_ID, DESCRIPTION, LEVEL, UPDATE_NAME, UPDATE_DATE, CREATE_NAME, CREATE_DATE
   </sql>
-  <select id="selectByChildMenu" resultMap="TreeMenuMap" parameterType="java.lang.String" >
+  <select id="selectByChildDoMain" resultMap="TreeDoMainMap" parameterType="java.lang.String" >
     select distinct
     <include refid="Base_Column_List" />
-    from t_s_menu
-    where  PARENT_ID= #{ID,jdbcType=VARCHAR}
+    from t_s_domain
+    where  PARENT_ID= #{id,jdbcType=VARCHAR}
   </select>
-  <select id="selectByTree" resultMap="TreeMenuMap" parameterType="java.util.Map" >
+  <select id="selectByTree" resultMap="TreeDoMainMap" parameterType="java.util.Map" >
     select distinct
     <include refid="Tree_Column_List" />
-    from t_s_menu m
-    LEFT JOIN t_s_role_menu rm ON m.id = rm.menu_id
-    LEFT JOIN t_s_role r ON rm.role_id=r.ID
-    LEFT JOIN t_s_role_user ru ON ru.role_id=r.ID
-    LEFT JOIN t_s_user u ON ru.user_id=u.id
+    from t_s_domain
     <trim prefix="WHERE ("  suffix=")" prefixOverrides="AND |OR ">
-      <if test="username != 'admin'" >
-        u.username = #{username,jdbcType=VARCHAR}
-      </if>
-      <if test="id != null">
-        AND m.ID = #{id,jdbcType=VARCHAR}
+      <if test="parentId == null">
+        AND LEVEL = 1
       </if>
       <if test="parentId != null">
-        AND m.PARENT_ID IS NULL
+        AND PARENT_ID= #{parentId,jdbcType=VARCHAR}
       </if>
     </trim>
-    order by m.rank asc
   </select>
-
-  <select id="selectByExamplePage" resultMap="TreeMenuMap" parameterType="com.web.example.MenuExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from t_s_menu
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <!--根据条件返回树形菜单TreeMenu  end-->
+  <!--根据条件返回树形域TreeDoMain  end-->
 </mapper>
