@@ -274,7 +274,6 @@ $("#menuNewUpdateForm").validate({
             range:[0,999999]
         },
         menuUrl:{
-            required:true,
             maxlength:100
         },
         menuRank:{
