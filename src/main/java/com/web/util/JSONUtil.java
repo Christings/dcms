@@ -1,5 +1,8 @@
 package com.web.util;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
@@ -51,5 +54,29 @@ public final class JSONUtil {
 	// json转换成list
 	public static <T> List<T> json2List(String json, Class beanClz) {
 		return JSONArray.parseArray(json, beanClz);
+	}
+
+	/**
+	 * 读取文件内容转换成字符串
+	 * */
+	public static String readJsonFile(String path) {
+		File file = new File(path);
+		if (!file.exists()) {
+			return null;
+		}
+		BufferedReader reader = null;
+		StringBuffer sb = new StringBuffer();
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String tempStr = reader.readLine();
+			while (tempStr != null) {
+				sb.append(tempStr);
+			}
+			reader.close();
+			return sb.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

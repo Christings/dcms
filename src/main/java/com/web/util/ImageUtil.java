@@ -73,7 +73,7 @@ public class ImageUtil {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("图片转存失败", e.getStackTrace());
+			logger.error("图片转存失败");
 		}
 		return names;
 	}

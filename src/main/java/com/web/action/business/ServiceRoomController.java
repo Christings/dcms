@@ -1,4 +1,4 @@
-package com.web.action.xtgl;
+package com.web.action.business;
 
 import com.alibaba.fastjson.JSON;
 import com.web.core.action.BaseController;
