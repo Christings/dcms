@@ -175,6 +175,15 @@ public class StringValidationGroup extends AbstractValidationGroup {
         return getSelf() ;
     }
 
+    /**
+     * 验证对象是否包含在集合中
+     * @return
+     */
+    public StringValidationGroup valueIn(String ... values){
+        validationList.add(new StringValueIn<String>(object,errorTip,values));
+        return getSelf() ;
+    }
+
     public StringValidationGroup getSelf() {
         return this ;
     }
