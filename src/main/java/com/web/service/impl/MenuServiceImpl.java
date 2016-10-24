@@ -152,7 +152,7 @@ public class MenuServiceImpl implements MenuService {
         PageHelper.orderBy("RANK");
 
         // 查询数据
-        List<Menu> menus = menuMapper.selectByExample(example);
+        List<Menu> menus = menuMapper.selectByExamplePage(example);
         Page<Menu> page = new Page<>(menus) ;
 
         if (LOGGER.isInfoEnabled()) {

@@ -12,12 +12,12 @@ public interface UserService extends IService<User,String> {
 	/**
 	 * 保存用户及用户角色关系
 	 */
-	void saveUserAndRoleRelation(User user, String[] roleIds);
+	void saveUser(User user, String[] roleIds, String[] domainIds);
 
 	/**
 	 * 修改用户及用户角色关系
 	 */
-	void updateUserAndRoleRelation(User user, String[] roleIds);
+	void updateUser(User user, String[] roleIds, String[] domainIds);
 
 	/**
 	 * 根据查询条件获取查询数量
