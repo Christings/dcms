@@ -32,9 +32,10 @@
             <div id="menuMainDiv" class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
-                        <div class="">
-                            <a onclick="menuNewUpdate('','new')" class="btn btn-primary ">新增菜单</a>
-                        </div>
+                        <button type="button" class="btn btn-primary" onclick="menuNewUpdate('','new')">
+                            <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>&nbsp;新增菜单
+                        </button>
+
                         <div style="width:100%;max-height: 450px;overflow-x: auto;overflow-y: auto;">
                             <table style="width:100%;min-width: 1000px;" class="table tree table-striped table-bordered table-hover dataTables-example">
                                 <thead>
@@ -48,11 +49,11 @@
                                     <th style="width:14%;min-width: 120px;">操作</th>
                                 </tr>
                                 </thead>
-
                                 <tbody id="menuTreeBody">
 
                                 </tbody>
                             </table>
+
                         </div>
                         <div class="row">
                             <div class="col-sm-6"></div>
