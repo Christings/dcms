@@ -5,6 +5,7 @@
     <title>dcms</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
     <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link rel="stylesheet" href="../../../3rd-libs/treegrid/css/jquery.treegrid.css">
     <link href="../../../css/dataTables.bootstrap.css" rel="stylesheet">
     <link href="../../../css/style2.css" rel="stylesheet">
     <link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
@@ -21,7 +22,7 @@
 
                         <div class="ibox-tools">
                         	<a class="add-menu">
-                        		<i class="fa fa-plus-square-o" data-toggle="modal" data-target="#organizationAdd" onclick="roleGetAll()"></i>
+                        		<i class="fa fa-plus-square-o" data-toggle="modal" data-target="#domainAdd" onclick="roleGetAll()"></i>
                         	</a>
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -29,7 +30,7 @@
                             <a class="dropdown-toggle" data-toggle="dropdown" href="table_data_tables.html#">
                                 <i class="fa fa-wrench"></i>
                             </a>
-                            <ul class="dropdown-menu dropdown-organization">
+                            <ul class="dropdown-menu dropdown-domain">
                                 <li><a href="table_data_tables.html#">选项1</a>
                                 </li>
                                 <li><a href="table_data_tables.html#">选项2</a>
@@ -43,15 +44,13 @@
 
                     <div class="ibox-content">
                     	<div class="" id="upTable">
-                            <a data-toggle="modal" style="cursor:pointer" data-target="#organizationAdd" onclick="" class="btn btn-primary ">添加机构</a>
+                            <a style="cursor:pointer" onclick="domainNewUpdate('','new')" class="btn btn-primary ">添加机构</a>
                         </div>
-                        <table class="table table-striped table-bordered table-hover dataTables-example">
+                        <table class="table tree table-striped table-bordered table-hover dataTables-example">
                             <thead>
                                 <tr>
 									<th>组织机构名称</th>
 									<th>组织机构描述</th>
-									<th>机构编码</th>
-									<th>机构类型</th>
 									<th>操作</th>
                                 </tr>
                             </thead>
@@ -59,14 +58,18 @@
                                 <tr>
                                     <th>组织机构名称</th>
 									<th>组织机构描述</th>
-									<th>机构编码</th>
-									<th>机构类型</th>
 									<th>操作</th>
                                 </tr>
                             </tfoot>
-                            <tbody id="organizationBody">
+                            <tbody id="domainTreeBody">
                             </tbody>
                         </table>
+                        <div class="row">
+                            <div class="col-sm-6"></div>
+                            <div class="col-sm-6" align="right">
+                                <url id="domainTreePage" class="pagination" style="padding-right:10px;"></url>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,69 +78,69 @@
 
 	<!-- <div class="foot" style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
 		<label class="number-page">每页显示
-			<select id="organizationSelectPage" onchange="organizationSelectPage()">
+			<select id="domainSelectPage" onchange="domainSelectPage()">
 				<option value = '2'>2</option>
 				<option value = '5'>5</option>
 				<option selected = "selected" value = '10'>10</option>
 				<option value = '15'>15</option>
 			</select>行
 		</label>
-		<label class="foot-pagination" id="organizationPagination" style="margin:0;padding:0">
+		<label class="foot-pagination" id="domainPagination" style="margin:0;padding:0">
 			
 		</label>
 	</div> -->
 	
 	<!-- 模态框（Modal） -->
 
-	<div class="modal fade" id="organizationAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="domainModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
 		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 	                  &times;
 		            </button>
-		            <h4 class="modal-title" id="myModalLabel">
+		            <h4 class="modal-title" id="domainModelTitle">
 		                机构录入
 		            </h4>
 		        </div>
 
 		        <div class="modal-body">
-		            <form role="form" id="organizationAddForm">
+		            <form role="form" id="domainNewUpdateForm">
 						<div class="form-group">
 						  <label for="name">组织机构名称</label>
-						  <input type="text" class="form-control" id="organizationName" 
+						  <input type="text" class="form-control" name="domainName" id="domainName" 
 						     placeholder="请输入组织机构名称">
 						</div>
 						<div class="form-group">
 						  <label for="name">组织机构描述</label>
-						  <input type="text" class="form-control" id="organizationDescript" 
+						  <input type="text" class="form-control" name="domainDescript" id="domainDescript" 
 						     placeholder="请输入组织机构描述">
 						</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label for="name">机构类型</label>
-							<select id="organizationType" onchange="changeLevel(this)">
+							<select id="domainType" onchange="changeLevel(this)">
 								<option selected value = '1'>公司</option>
 								<option value = '0'>内部组织</option>
 							</select>
-						</div>
-						<div class="form-group organizationPDiv" style="display:none;">
+						</div> -->
+						<div class="form-group domainPDiv" style="display:none;">
 							<label class='col-sm-3'>父组织机构：</label>
 							<div class='col-sm-8'>
-								<span id='organizationPName' style="width: 50%;"></span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectParentBtn" class="btn btn-primary btn-sm btn-outline">选择</a>
+								<span id='domainPName' name="domainPName" style="width: 50%;"></span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectParentBtn" class="btn btn-primary btn-sm btn-outline">选择</a>
 							</div>
 						</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 						  <label for="name">机构编码</label>
-						  <input type="text" class="form-control" id="organizationCode" 
+						  <input type="text" class="form-control" id="domainCode" 
 						     placeholder="请输入机构编码">
-						</div>
+						</div> -->
 
 
 						<div class="modal-footer">
 				            <button type="button" class="btn btn-default" 
 				               data-dismiss="modal">关闭
 				            </button>
-				            <button type="submit" onclick="organizationAdd()" class="btn btn-primary">
+				            <button type="submit" onclick="domainAdd()" class="btn btn-primary">
 				               确认添加
 				            </button>
 			        	</div>
@@ -148,7 +151,7 @@
 		            <button type="button" class="btn btn-default" 
 		               data-dismiss="modal">关闭
 		            </button>
-		            <button type="submit" onclick="organizationAdd()" class="btn btn-primary">
+		            <button type="submit" onclick="domainAdd()" class="btn btn-primary">
 		               确认添加
 		            </button>
 		        </div>
@@ -157,7 +160,7 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="organizationUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<!-- <div class="modal fade" id="domainUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -168,14 +171,14 @@
 		                组织机构编辑
 		            </h4>
 		        </div>
-		        <div class="modal-body" id="organizationUpdateBody">
+		        <div class="modal-body" id="domainUpdateBody">
 		            
 		        </div>
 		    </div>
 		</div>
-	</div>
+	</div> -->
 
-	<div class="modal fade" id="organizationDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<!-- <div class="modal fade" id="domainDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -186,34 +189,34 @@
 		                组织机构删除
 		            </h4>
 		        </div>
-		        <div class="modal-body" id="organizationDeleteBody">
+		        <div class="modal-body" id="domainDeleteBody">
 		           
 		        </div>    
-		    </div><!-- /.modal-content -->
-		</div><!-- /.modal -->
-	</div>
+		    </div>
+		</div>
+	</div> -->
 	
-	<div class="modal fade" id="organizationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="domainTreeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;
                     </button>
-                    <h4 class="modal-title" id="organizationTreeModal">
+                    <h4 class="modal-title" id="domainTreeModal">
                         选择父级组织机构
                     </h4>
                 </div>
-                <form class="form-horizontal m-t" id="organizationTreeForm">
+                <form class="form-horizontal m-t" id="domainTreeForm">
                     <div class="modal-body" style="max-height: 350px;overflow:scroll;overflow-x: auto;overflow-y: auto;">
-                        <div id="organizationJsTree">
+                        <div id="domainJsTree">
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default"
                                 data-dismiss="modal">关闭
                         </button>
-                        <button type="button" class="btn btn-primary" id="confirmParentOrganizationBtn">
+                        <button type="button" class="btn btn-primary" id="confirmParentdomainBtn">
                             确定
                         </button>
                     </div>
@@ -230,15 +233,17 @@
     <!-- Data Tables -->
     <script src="../../../3rd-libs/jquery/table/jquery.dataTables.1.10.12.js"></script>
     <script src="../../../3rd-libs/bootstrap/js/dataTables.bootstrap.js"></script>
-
+    <script type="text/javascript" src="../../../3rd-libs/treegrid/js/jquery.treegrid.min.js"></script>
+    <script type="text/javascript" src="../../../3rd-libs/treegrid/js/jquery.treegrid.bootstrap3.js"></script>
+    <script type="text/javascript" src="../../../3rd-libs/jqPaginator/jqPaginator.min.js"></script>
+    <script type="text/javascript" src="../../../3rd-libs/layer/layer.min.js"></script>
+    <script type="text/javascript" src="../../../3rd-libs/jquery-validation/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="../../../3rd-libs/jquery-validation/localization/messages_zh.min.js"></script>
     <!-- 自定义js -->
     <script src="../../../js/pub/common.js"></script>
     <script src="../../../js/pub/content.js"></script>
     <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
- 	<script src="../../../js/manage-organization/organizationManage.js"></script>
- 	<script src="../../../js/manage-organization/organizationAdd.js"></script>
- 	<script src="../../../js/manage-organization/organizationUpdate.js"></script>
- 	<script src="../../../js/manage-organization/organizationDelete.js"></script>
+ 	<script src="../../../js/manage-domain/domainManage.js"></script>
 
  	
 </body>
