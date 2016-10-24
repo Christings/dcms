@@ -1818,6 +1818,7 @@ a.list-group-item.active:focus {
 /* DATATABLES */
 
 table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc,
 table.dataTable thead .sorting_asc_disabled,
@@ -1826,6 +1827,7 @@ table.dataTable thead .sorting_desc_disabled {
 }
 
 table.dataTable thead .sorting_asc:after {
+    content: "\f0de";
     float: right;
     font-family: fontawesome;
 }
@@ -1845,6 +1847,65 @@ table.dataTable thead .sorting:after {
 
 .dataTables_wrapper {
     padding-bottom: 30px;
+}
+
+.footbar .dataTables_length {
+    margin: 10px 0 10px 10px;
+    float: right;
+    display: block !important;
+}
+.footbar .dataTables_length .input-xsmall {
+    width: 103px !important;
+    height: 32px;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+div.dataTables_wrapper div.dataTables_paginate {
+    height: 50px;
+    float: right !important;
+    display: block !important;
+}
+div.dataTables_wrapper div.dataTables_paginate .pagination-panel {
+    margin-top: 6.5px;
+}
+.paging_bootstrap_extended .pagination-panel-info {
+    font-size: 14px;
+    margin-right: 10px;
+}
+div.dataTables_wrapper div.dataTables_paginate .pagination-panel .pagination-panel-info,
+div.dataTables_wrapper div.dataTables_paginate .pagination-panel .pagination-panel-total {
+    margin-left: 0 !important;
+}
+div.dataTables_wrapper div.dataTables_paginate .pagination-panel a.btn {
+    background-color: #fff !important;
+    border-color: #e5e6e7 !important;
+    border-radius: 0 !important;
+    margin-bottom: 2px;
+    height: 32px;
+    color: #555;
+}
+div.dataTables_wrapper div.dataTables_paginate .pagination-panel a i.fa {
+    font-size: 20px;
+}
+div.dataTables_wrapper div.dataTables_paginate .pagination-panel .pagination-panel-input {
+    width: 45px !important;
+    display: inline-block;
+    height: 32px;
+    border-radius: 0;
+}
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+    border-bottom: 1px solid #e7e7e7;
+}
+.dataTables_wrapper .footbar {
+    width: 50%;
+    position: fixed;
+    bottom: 0px;
+    background: #ffffff;
+    margin-left: 0;
+    margin-right: 0;
+    border-top: 1px solid #e7ecf1;
+    padding-top: 12px;
+    height: 80px;
 }
 
 
@@ -3535,6 +3596,7 @@ video {
 
 .wrapper-content {
     padding: 20px;
+    height: 100%;
 }
 
 #page-wrapper {
