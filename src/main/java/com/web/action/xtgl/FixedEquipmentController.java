@@ -11,15 +11,21 @@ import com.web.service.FixedEquipmentService;
 import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
 import com.web.util.fastjson.FastjsonUtils;
+import com.web.util.validation.GroupBuilder;
+import com.web.util.validation.ValidationHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import static com.web.util.AllResult.buildJSON;
 
 /**
  * 机柜设备管理  前端访问接口
@@ -256,31 +262,34 @@ public class FixedEquipmentController extends BaseController {
 	 * @param pageSize 显示多少行
 	 */
 	@RequestMapping(value="/datagrid",method= {RequestMethod.POST, RequestMethod.GET})
-	public Object getDataGrid(@RequestParam(value = "pageNum") int pageNum,
-							  @RequestParam(value = "pageSize") int pageSize,
-							  @RequestParam(value = "equType") String equType,
-							  @RequestParam(required = false,value = "equName") String equName,
-							  HttpServletRequest request) {
+	public Object getDataGrid(int pageNum,int pageSize,String typeQuery,String nameQuery,String vendorQuery) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
 		}
 
-		// 校验参数
-		if (pageNum < 1 || pageSize < 1) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
-		}else if(StringUtils.isEmpty(equType)){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "类型不能为空");
+		//验证参数
+		String errorTip = ValidationHelper.build()
+				//必输条件验证
+				.addGroup(GroupBuilder.build(pageNum).notNull().minValue(1), "页码必须从1开始")
+				.addGroup(GroupBuilder.build(pageSize).notNull().minValue(1), "每页记录数量最少1条")
+				.validate();
+
+		if (org.apache.commons.lang3.StringUtils.isNotEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
 		try {
-
-			FixedEquipmentExample example = new FixedEquipmentExample();
-			// 排序设置
-			FixedEquipmentExample.Criteria criteria = example.createCriteria();
-			criteria.andEquTypeEqualTo(equType);
 			// 条件设置
-			if(!StringUtils.isEmpty(equName)){
-				criteria.andEquNameLike("%"+equName+"%");
+			FixedEquipmentExample example = new FixedEquipmentExample();
+			FixedEquipmentExample.Criteria criteria = example.createCriteria();
+			if(StringUtils.isNotEmpty(typeQuery)&&!"".equals(typeQuery.trim())){
+				criteria.andEquTypeEqualTo(typeQuery.trim());
+			}
+			if(StringUtils.isNotEmpty(nameQuery)&&!"".equals(nameQuery.trim())){
+				criteria.andEquNameLike("%"+nameQuery.trim()+"%");
+			}
+			if(StringUtils.isNotEmpty(vendorQuery)&&!"".equals(vendorQuery.trim())){
+				criteria.andEquVendorLike("%"+vendorQuery.trim()+"%");
 			}
 
 			Page<FixedEquipment> queryResult = fixedEquipmentService.getScrollData(pageNum, pageSize, example);

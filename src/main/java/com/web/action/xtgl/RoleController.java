@@ -10,15 +10,22 @@ import com.web.service.RoleSerivce;
 import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
 import com.web.util.fastjson.FastjsonUtils;
+import com.web.util.validation.GroupBuilder;
+import com.web.util.validation.ValidationHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import static com.web.util.AllResult.buildJSON;
 
 /**
  * 角色接口
@@ -35,18 +42,23 @@ public class RoleController extends BaseController{
 	private RoleSerivce roleService;
 
 	/**
-	 * 添加角色
+	 * 添加
 	 */
 	@RequestMapping(value="/add",method={RequestMethod.POST,RequestMethod.GET})
-	public Object save(Role role, HttpServletRequest request){
+	public Object save(Role role){
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [role: {}]", JSON.toJSONString(role));
 		}
-		//TODO 需要添加判断
-		if(StringUtils.isEmpty(role.getRolecode())){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色编码不能为空");
-		}else if(StringUtils.isEmpty(role.getRolename())){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色名称不能空");
+
+		//验证参数
+		String errorTip = ValidationHelper.build()
+				// 必输条件验证
+				.addGroup(GroupBuilder.build(role.getRolecode()).notEmpty().maxLength(20), "角色编码必须提供且最大长度20位")
+				.addGroup(GroupBuilder.build(role.getRolename()).notEmpty().maxLength(100), "角色名称必须提供且长度在100位")
+				.validate();
+
+		if (StringUtils.isNotEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
 		//角色名称不可以重复
@@ -60,7 +72,7 @@ public class RoleController extends BaseController{
 		example.or(criteria1);
 
 		if(roleService.count(example)>0){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色编码或角色名称已经存在，不可以重复");
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色编码或角色名称已经存在，不允许重复");
 		}
 		try {
 			role.setId(UUIDGenerator.generatorRandomUUID());
@@ -81,22 +93,29 @@ public class RoleController extends BaseController{
 	}
 
 	/**
-	 *修改角色
+	 *修改
 	 */
 	@RequestMapping(value="/update",method={RequestMethod.POST,RequestMethod.GET})
 	public Object update(Role role, HttpServletRequest request){
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [role: {}]", JSON.toJSONString(role));
 		}
-		//TODO 需要添加判断
-		if(StringUtils.isEmpty(role.getId())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色id不能为空");
-		}else if(StringUtils.isEmpty(role.getRolecode())){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色编码不能为空");
-		}else if(StringUtils.isEmpty(role.getRolename())){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色名称不能空");
+
+		//验证参数
+		String errorTip = ValidationHelper.build()
+				// 必输条件验证
+				.addGroup(GroupBuilder.build(role.getId()).notEmpty().maxLength(20), "角色ID必须提供且最大长度32位")
+				.addGroup(GroupBuilder.build(role.getRolecode()).notEmpty().maxLength(20), "角色编码必须提供且最大长度20位")
+				.addGroup(GroupBuilder.build(role.getRolename()).notEmpty().maxLength(100), "角色名称必须提供且长度在100位")
+				.validate();
+
+		if (StringUtils.isNotEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
+		if(null == roleService.getById(role.getId())){
+			return buildJSON(0, "未查找到该信息");
+		}
 
 		//角色名称不可以重复
 		RoleExample example = new RoleExample();
@@ -133,7 +152,7 @@ public class RoleController extends BaseController{
 	}
 	
 	/**
-	 * 获取所有角色
+	 * 获取所有
 	 */
 	@RequestMapping(value="/getAll",method={RequestMethod.POST,RequestMethod.GET})
 	public Object getAll(HttpServletRequest request){
@@ -153,26 +172,39 @@ public class RoleController extends BaseController{
 	
 	/**
 	 * 分页查询
+	 *
 	 * @param pageNum
 	 * @param pageSize
-	 * @param request
-     * @return
      */
 	@RequestMapping(value="/datagrid",method= { RequestMethod.GET, RequestMethod.POST })
 	public Object datagrid(@RequestParam(value = "pageNum") int pageNum,
 						   @RequestParam(value = "pageSize") int pageSize,
-						   HttpServletRequest request) {
+						   @RequestParam(value = "codeQuery",required = false)String codeQuery,
+						   @RequestParam(value = "nameQuery",required = false)String nameQuery) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
 		}
 
-		// 校验参数
-		if (pageNum < 1 || pageSize < 1) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
+		//1.验证参数
+		String errorTip = ValidationHelper.build()
+				//必输条件验证
+				.addGroup(GroupBuilder.build(pageNum).notNull().minValue(1), "页码必须从1开始")
+				.addGroup(GroupBuilder.build(pageSize).notNull().minValue(1), "每页记录数量最少1条")
+				.validate();
+
+		if (StringUtils.isNotEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
 		try {
 			RoleExample example = new RoleExample();
+			RoleExample.Criteria criteria = example.createCriteria();
+			if(StringUtils.isNotEmpty(codeQuery)&&!"".equals(codeQuery.trim())){
+				criteria.andRolecodeLike("%"+codeQuery.trim()+"%");
+			}
+			if(StringUtils.isNotEmpty(nameQuery)&&!"".equals(nameQuery.trim())){
+				criteria.andRolenameLike("%"+nameQuery.trim()+"%");
+			}
 			Page<Role> queryResult = roleService.getScrollData(pageNum, pageSize, example);
 
 			//去除不需要的字段
@@ -191,7 +223,7 @@ public class RoleController extends BaseController{
 
 
 	/**
-	 * 根据ID查找角色
+	 * 根据ID查找
 	 */
 	@RequestMapping(value="/get",method={RequestMethod.GET,RequestMethod.POST})
 	public Object getById(String id, HttpServletRequest request){
@@ -228,7 +260,7 @@ public class RoleController extends BaseController{
 	}
 
 	/**
-	 * 删除角色
+	 * 删除
 	 */
 	@RequestMapping(value="/delete",method={RequestMethod.GET,RequestMethod.POST})
 	public Object deleteById(String id, HttpServletRequest request){
