@@ -70,6 +70,11 @@ public class UserResult {
      */
     private Set<String> roleIds = new HashSet<>();
 
+    /**
+     * 组织结构ID
+     */
+    private Set<String> domainIds = new HashSet<>();
+
     public String getId() {
         return id;
     }
@@ -169,6 +174,20 @@ public class UserResult {
     public void addRoleIds(String roleId){
         if(StringUtils.isNotEmpty(roleId)){
             this.roleIds.add(roleId);
+        }
+    }
+
+    public Set<String> getDomainIds() {
+        return domainIds;
+    }
+
+    public void setDomainIds(Set<String> domainIds) {
+        this.domainIds = domainIds;
+    }
+
+    public void addDomainIds(String domainId){
+        if(StringUtils.isNotEmpty(domainId)){
+            this.domainIds.add(domainId);
         }
     }
 }

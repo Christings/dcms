@@ -33,7 +33,7 @@
             <property name="updateDate" value="update_date"/>
             <property name="createName" value="create_name"/>
             <property name="createDate" value="create_date"/>
-            <property name="ignoreTables" value="t_s_role_menu,t_s_oper_log,t_s_role_user"/><!--忽略的表    表1,表2,...-->
+            <property name="ignoreTables" value="t_s_role_menu,t_s_oper_log,t_s_role_user,t_s_user_domain"/><!--忽略的表    表1,表2,...-->
         </plugin>
         <!-- 配置分页插件 -->
         <plugin interceptor="com.github.pagehelper.PageHelper">

@@ -368,6 +368,12 @@
             <artifactId>spring-data-mongodb</artifactId>
             <version>1.9.2.RELEASE</version>
         </dependency>
+        <!--yml解析驱动包-->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.17</version>
+        </dependency>
     </dependencies>
 
     <build>

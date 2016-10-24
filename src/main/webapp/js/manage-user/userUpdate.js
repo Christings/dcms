@@ -80,6 +80,10 @@ function userUpdateInit(e){
 					  "<label for=\"name\">用户角色</label>"+
 					  "<div id=\"rolesContent1\">"+content+"</div>"+
 					"</div>"+
+					"<div class='form-group' >"+
+						'<label for="name">选择组织机构</label>'+
+						'<div id="orgTreeAdd1"></div>'+
+					'</div>'+
 					"<div class=\"form-group\">"+
 					  "<label for=\"name\">身份证</label>"+
 					  "<input type=\"text\" class=\"form-control\" id=\"identificationNo1\" value=\""+identificationNo+"\">"+
@@ -120,6 +124,8 @@ function userUpdateInit(e){
 			"</form>";
 			var body = document.getElementById("userUpdateBody");
 			body.innerHTML = html;
+
+			loadOrganizationTree1();
 		});
 	});		// }
 }
@@ -155,6 +161,7 @@ function userPasswordInit(e){
 		'</form>';
 		var index = document.getElementById('userEditPasswordBody');
 		index.innerHTML = html;
+
 	});
 }
 
@@ -241,14 +248,34 @@ function userEditPassword(){
 	});
 }
 
+function loadOrganizationTree1(){
 
-// function contains(obj,arr){
-// 	for(var i=0,len=arr.length;i<len;i++){
-// 		if(arr[i] === obj){
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }
+
+	$('#orgTreeAdd1').jstree({
+		'plugins':['wholerow','checkbox'],
+		'core':{
+			'data':[
+				{
+					'text':'北京三源合众科技有限公司',
+					'children':[
+						{
+							'text':'研发部',
+							'children':[
+								{'text':'研发一组'},
+								{'text':'研发二组'},
+								{'text':'研发三组'}
+							]
+						},
+						{'text':'测试部'},
+						{'text':'销售部'},
+						{'text':'人力资源部'},
+						{'text':'指挥部'}
+					]
+				}
+			]
+		}
+	});
+}
+
 
 

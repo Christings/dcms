@@ -1,6 +1,24 @@
-package com.web.action.xtgl;
+package com.web.action.business;
+
+import java.io.File;
+import java.util.Date;
+import java.util.Iterator;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.alibaba.fastjson.JSON;
+import com.web.bean.form.ServiceRoomForm;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
@@ -10,24 +28,8 @@ import com.web.service.ServiceRoomService;
 import com.web.util.AllResult;
 import com.web.util.DateUtil;
 import com.web.util.StringUtil;
+import com.web.util.ZIPUtil;
 import com.web.util.fastjson.FastjsonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.util.Date;
-import java.util.Iterator;
 
 /**
  * 机房管理控制器
@@ -35,7 +37,7 @@ import java.util.Iterator;
  * @author 田军兴
  * @date 2016-07-30
  */
-@Controller
+@RestController
 @RequestMapping("/serviceRoom")
 public class ServiceRoomController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceRoomController.class);
@@ -50,7 +52,6 @@ public class ServiceRoomController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	@ResponseBody
 	public Object save(ServiceRoom serviceRoom, HttpServletRequest request) {
 		try {
 			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
@@ -60,12 +61,15 @@ public class ServiceRoomController extends BaseController {
 				while (iterator.hasNext()) {
 					MultipartFile file = multipartHttpServletRequest.getFile(iterator.next());
 					if (null != file) {
-						String path = request.getSession().getServletContext().getRealPath("/upload");// 获取路径
+						String path = request.getSession().getServletContext().getRealPath("/");// 获取路径
 						String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length());// 获取后缀名
 						String fileName = String.valueOf(DateUtil.getMillis(new Date())) + "." + ext;// 新的文件名
-						File lFile = new File(path + "/" + fileName);
+						File lFile = new File(path + "/upload/serviceRoom");
+						// 创建文件夹
+						ZIPUtil.mkDir(lFile);
+						lFile = new File(path + "/upload/serviceRoom/" + fileName);
 						file.transferTo(lFile);// 转存到本地
-						serviceRoom.setImageUrl(fileName);
+						serviceRoom.setImageUrl("/upload/serviceRoom/" + fileName);
 					}
 				}
 			}
@@ -101,7 +105,6 @@ public class ServiceRoomController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	@ResponseBody
 	public Object update(ServiceRoom serviceRoom, HttpServletRequest request) {
 		try {
 			if (null == serviceRoom) {
@@ -109,6 +112,25 @@ public class ServiceRoomController extends BaseController {
 					LOGGER.info("request edit serviceRoom param: [serviceRoom: {null}]");
 				}
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "新增机房入参为空");
+			}
+			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+			if (multipartResolver.isMultipart(request)) {// 判断是否含有需要上传的文件
+				MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;// 转换成对象
+				Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
+				while (iterator.hasNext()) {
+					MultipartFile file = multipartHttpServletRequest.getFile(iterator.next());
+					if (null != file) {
+						String path = request.getSession().getServletContext().getRealPath("/");// 获取路径
+						String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length());// 获取后缀名
+						String fileName = String.valueOf(DateUtil.getMillis(new Date())) + "." + ext;// 新的文件名
+						File lFile = new File(path + "/upload/serviceRoom");
+						// 创建文件夹
+						ZIPUtil.mkDir(lFile);
+						lFile = new File(path + "/upload/serviceRoom/" + fileName);
+						file.transferTo(lFile);// 转存到本地
+						serviceRoom.setImageUrl("/upload/serviceRoom/" + fileName);
+					}
+				}
 			}
 			if (serviceRoomService.updateById(serviceRoom) > 0) {
 				// 增加日志
@@ -136,7 +158,6 @@ public class ServiceRoomController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
-	@ResponseBody
 	public Object delete(ServiceRoom serviceRoom, HttpServletRequest request) {
 		try {
 			if (null == serviceRoom) {
@@ -174,7 +195,6 @@ public class ServiceRoomController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/selectById", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object selectById(ServiceRoom serviceRoom, HttpServletRequest request) {
 		try {
 			if (null == serviceRoom) {
@@ -201,30 +221,31 @@ public class ServiceRoomController extends BaseController {
 
 	/**
 	 * 分页查询词典数据
-	 *
-	 * @param page
-	 *            当前页
-	 * @param count
-	 *            每页条数
+	 * 
+	 * @param form
 	 * @param request
 	 */
-	@RequestMapping(value = "/getPage", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
-	public Object getPageData(@RequestParam(value = "page") int page, @RequestParam(value = "count") int count,
-			HttpServletRequest request) {
+	@RequestMapping(value = "/datagrid", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object getPageData(ServiceRoomForm form, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [page: {}, count: {}]", page, count);
+			LOGGER.info("request param: [page: {}, count: {}]", form.getPageNum(), form.getPageSize());
 		}
 		// 校验参数
-		if (page < 1 || count < 1) {
+		if (form.getPageNum() < 1 || form.getPageSize() < 1) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
 		}
 		try {
 			ServiceRoomExample example = new ServiceRoomExample();
+			ServiceRoomExample.Criteria criteria = example.createCriteria();
+			if (StringUtil.isNotEmpty(form.getName())) {
+				criteria.andNameLike("%" + form.getName() + "%");
+			}
+			if (StringUtil.isNotEmpty(form.getPosition())) {
+				criteria.andPositionLike("%" + form.getPosition() + "%");
+			}
 			// 排序设置
 			example.setOrderByClause("SORT asc");
-			ServiceRoomExample.Criteria criteria = example.createCriteria();
-			Page<ServiceRoom> queryResult = serviceRoomService.getByPage(page, count, example);
+			Page<ServiceRoom> queryResult = serviceRoomService.getByPage(form.getPageNum(), form.getPageSize(), example);
 			// 去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,
 					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateCreate", "createName", "createDate"));
@@ -232,7 +253,7 @@ public class ServiceRoomController extends BaseController {
 			operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null);
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
-			LOGGER.error("get serviceRoom data error. page: {}, count: {}", page, e);
+			LOGGER.error("get serviceRoom data error. page: {}, count: {}", form.getPageNum(), e);
 		}
 		operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null,
 				OperLog.logLevelEnum.error);

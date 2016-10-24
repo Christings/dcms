@@ -1,6 +1,37 @@
-var user_num = 1;
-var user_pageCount = 1;
-loadUserBody();
+// var user_num = 1;
+// var user_pageCount = 1;
+function pageInit(){
+	loadUserBody();
+	loadOrganizationTree();
+}
+function loadOrganizationTree(){
+
+	
+    $('#orgTreeAdd').jstree({
+		'plugins':['wholerow','checkbox'],
+		'core':{
+			'data':[
+				{
+					'text':'北京三源合众科技有限公司',
+					'children':[ 
+						{
+							'text':'研发部',
+							'children':[
+								{'text':'研发一组'},
+								{'text':'研发二组'},
+								{'text':'研发三组'}
+							]
+						},
+						{'text':'测试部'},
+						{'text':'销售部'},
+						{'text':'人力资源部'},
+						{'text':'指挥部'}
+					]
+				}
+			]
+		}
+	});
+}
 function loadUserBody(){
 	var pageNum = 1;
 	var pageSize = 10;
@@ -98,19 +129,19 @@ function loadUserBody(){
             
         });
        
-            var A = $('#DataTables_Table_0_info').parent().parent();
-            $('#DataTables_Table_0_length').children().insertBefore(A);
-            $('#DataTables_Table_0_filter').parent().css('display','none');
-            
-            var title = $('.dataTables-example thead th').eq(0).text();
-            $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="0" placeholder="Search '+title+'" />' ).prependTo('#upTable');
-            title = $('.dataTables-example thead th').eq(1).text();
-            $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="1" placeholder="Search '+title+'" />' ).prependTo('#upTable');
-            title = $('.dataTables-example thead th').eq(3).text();
-            $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="3" placeholder="Search '+title+'" />' ).prependTo('#upTable');
-            title = $('.dataTables-example thead th').eq(8).text();
-            $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="8" placeholder="Search '+title+'" />' ).prependTo('#upTable');
-            $('<a onclick="" href="javascript:void(0);" style="float:right;margin-left:12px;" class="btn btn-primary ">查询</a>').prependTo('#upTable');
+        var A = $('#DataTables_Table_0_info').parent().parent();
+        $('#DataTables_Table_0_length').children().insertBefore(A);
+        $('#DataTables_Table_0_filter').parent().css('display','none');
+        
+        var title = $('.dataTables-example thead th').eq(0).text();
+        $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="0" placeholder="Search '+title+'" />' ).prependTo('#upTable');
+        title = $('.dataTables-example thead th').eq(1).text();
+        $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="1" placeholder="Search '+title+'" />' ).prependTo('#upTable');
+        title = $('.dataTables-example thead th').eq(3).text();
+        $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="3" placeholder="Search '+title+'" />' ).prependTo('#upTable');
+        title = $('.dataTables-example thead th').eq(8).text();
+        $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="8" placeholder="Search '+title+'" />' ).prependTo('#upTable');
+        $('<a onclick="" href="javascript:void(0);" style="float:right;margin-left:12px;" class="btn btn-primary ">查询</a>').prependTo('#upTable');
 
         var table = $('.dataTables-example').DataTable();
         $('input[data-id=\'0\']').on('keyup change',function(){

@@ -358,5 +358,20 @@
     </trim>
     order by m.rank asc
   </select>
+
+  <select id="selectByExamplePage" resultMap="TreeMenuMap" parameterType="com.web.example.MenuExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_s_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <!--根据条件返回树形菜单TreeMenu  end-->
 </mapper>

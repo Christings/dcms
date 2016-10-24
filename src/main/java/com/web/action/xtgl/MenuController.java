@@ -13,17 +13,18 @@ import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
 import com.web.util.WebUtils;
 import com.web.util.fastjson.FastjsonUtils;
+import com.web.util.validation.GroupBuilder;
+import com.web.util.validation.ValidationHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -31,13 +32,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.web.util.AllResult.buildJSON;
+
 /**
  * 菜单接口
  *
  * @author 杜延雷
  * @date 2016-06-20
  */
-@Controller
+@RestController
 @RequestMapping("/menu")
 public class MenuController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class);
@@ -53,7 +56,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/add", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object add(Menu menu, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(menu));
@@ -96,7 +98,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/delete", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object delete(String key, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", key);
@@ -143,7 +144,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/update", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object update(Menu menu, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("params[menu: {}]", JSON.toJSONString(menu));
@@ -188,7 +188,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/get", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object get(String key, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", key);
@@ -227,7 +226,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getParentId", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object getParentId(String key, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", key);
@@ -263,7 +261,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAll", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object getAll(HttpServletRequest request) {
 		try {
 			List<Menu> menuList = menuService.getAll();
@@ -295,7 +292,6 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/tree", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object getTree(String key, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", key);
@@ -329,22 +325,25 @@ public class MenuController extends BaseController {
 	/**
 	 * 分页获取菜单信息
 	 *
-	 * @param pageNum
-	 *            当前页
-	 * @param pageSize
-	 *            显示多少行
+	 * @param pageNum 当前页
+	 * @param pageSize 显示多少行
 	 */
 	@RequestMapping(value = "/datagrid", method = { RequestMethod.GET, RequestMethod.POST })
-	@ResponseBody
 	public Object getScroll(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
 			HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
 		}
 
-		// 校验参数
-		if (pageNum < 1 || pageSize < 1) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
+		//1.验证参数
+		String errorTip = ValidationHelper.build()
+				//必输条件验证
+				.addGroup(GroupBuilder.build(pageNum).notNull().minValue(1), "页码必须从1开始")
+				.addGroup(GroupBuilder.build(pageSize).notNull().minValue(1), "每页记录数量最少1条")
+				.validate();
+
+		if (StringUtils.isNotEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
 		try {
@@ -358,10 +357,10 @@ public class MenuController extends BaseController {
 				return AllResult.build(1, "未获取到菜单");
 			}
 
-			List<MenuTreeResult> menuTreeList = treeMenu(request,queryResult.getRecords());
+//			List<MenuTreeResult> menuTreeList = treeMenu(request,queryResult.getRecords());
 			Page<MenuTreeResult> treePage = new Page<>();
 			BeanUtils.copyProperties(queryResult,treePage);
-			treePage.setRecords(menuTreeList);
+//			treePage.setRecords(menuTreeList);
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(treePage,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));

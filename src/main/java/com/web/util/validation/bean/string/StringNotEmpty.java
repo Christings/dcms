@@ -16,6 +16,6 @@ public class StringNotEmpty extends AbstractValidation<String> {
 
     @Override
     public boolean validate() {
-        return !(object == null || object.length() == 0) ;
+        return !(object == null || object.length() == 0 || "".equals(object.trim())) ;
     }
 }
