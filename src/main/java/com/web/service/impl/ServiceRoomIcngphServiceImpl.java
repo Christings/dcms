@@ -38,7 +38,7 @@ public class ServiceRoomIcngphServiceImpl implements ServiceRoomIcngphService {
 
     @Override
     public int updateById(ServiceRoomIcngph entity) {
-        return mapper.updateByPrimaryKey(entity);
+        return mapper.updateByPrimaryKeySelective(entity);
     }
 
     @Override

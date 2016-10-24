@@ -51,7 +51,7 @@ public class ServiceRoomServiceImpl implements ServiceRoomService {
 
 	@Override
 	public int updateById(ServiceRoom entity) {
-		return serviceRoomMapper.updateByPrimaryKey(entity);
+		return serviceRoomMapper.updateByPrimaryKeySelective(entity);
 	}
 
 	@Override

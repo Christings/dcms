@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import com.web.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import com.web.entity.User;
 import com.web.example.OperLogExample;
 import com.web.mappers.OperLogMapper;
 import com.web.service.OperLogService;
+import com.web.util.DateUtil;
 import com.web.util.UUIDGenerator;
 import com.web.util.WebUtils;
 
@@ -77,7 +77,7 @@ public class OperLogServiceImpl implements OperLogService {
 				operLog.setOperProp(operProp);
 			}
 			operLog.setActionType(getActionSystem(operType, systemAction));
-			operLog.setOperType(operProp);
+			operLog.setOperType(getOperType(operType));
 			operLog.setOperUserId(user.getId());
 			operLog.setOperUserName(user.getUsername());
 			operLog.setOperDate(new Timestamp(DateUtil.getMillis(new Date())));
@@ -105,7 +105,7 @@ public class OperLogServiceImpl implements OperLogService {
 				operLog.setOperProp(operProp);
 			}
 			operLog.setActionType(getActionBusiness(operType, busiAction));
-			operLog.setOperType(operProp);
+			operLog.setOperType(getOperType(operType));
 			operLog.setOperUserId(user.getId());
 			operLog.setOperUserName(user.getUsername());
 			operLog.setOperDate(new Timestamp(DateUtil.getMillis(new Date())));
@@ -133,7 +133,7 @@ public class OperLogServiceImpl implements OperLogService {
 				operLog.setOperProp(operProp);
 			}
 			operLog.setActionType(getActionBusiness(operType, busiAction));
-			operLog.setOperType(operProp);
+			operLog.setOperType(getOperType(operType));
 			operLog.setOperUserId(user.getId());
 			operLog.setOperUserName(user.getUsername());
 			operLog.setOperDate(new Timestamp(DateUtil.getMillis(new Date())));
@@ -210,6 +210,10 @@ public class OperLogServiceImpl implements OperLogService {
 			return operType + "机柜属性";
 		case devicePro:
 			return operType + "设备属性";
+		case serviceRoomIcn:
+			return operType + "机房平面图";
+		case serviceRoom:
+			return operType + "机房";
 		}
 		return "";
 	}

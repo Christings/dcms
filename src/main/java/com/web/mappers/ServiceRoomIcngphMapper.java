@@ -34,6 +34,4 @@ public interface ServiceRoomIcngphMapper {
     int updateByExample(@Param("record") ServiceRoomIcngph record, @Param("example") ServiceRoomIcngphExample example);
 
     int updateByPrimaryKeySelective(ServiceRoomIcngph record);
-
-    int updateByPrimaryKey(ServiceRoomIcngph record);
 }

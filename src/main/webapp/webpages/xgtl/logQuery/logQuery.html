@@ -76,7 +76,7 @@
 
         api = tableObj.DataTable({
             "ajax": {
-                "url": "/operLog/scroll",
+                "url": "/webapp/operLog/datagrid",
                 "type": "post",
                 "data": function (parms) {
                     parms.deviceName = $('[name="deviceName"]').val();
@@ -84,7 +84,7 @@
                     parms.operDate = $('[name="operDate"]').val();
                 },
                 "dataSrc": function (json) {
-                    return json.data.lists;
+                    return json.datas;
                 }
             },
             columns: [
