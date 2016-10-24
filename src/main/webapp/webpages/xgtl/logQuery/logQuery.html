@@ -76,7 +76,7 @@
 
         api = tableObj.DataTable({
             "ajax": {
-                "url": "getLogInfo",
+                "url": "/operLog/scroll",
                 "type": "post",
                 "data": function (parms) {
                     parms.deviceName = $('[name="deviceName"]').val();
@@ -84,7 +84,7 @@
                     parms.operDate = $('[name="operDate"]').val();
                 },
                 "dataSrc": function (json) {
-                    return json.datas;
+                    return json.data.lists;
                 }
             },
             columns: [
