@@ -68,9 +68,11 @@ public final class JSONUtil {
 		StringBuffer sb = new StringBuffer();
 		try {
 			reader = new BufferedReader(new FileReader(file));
-			String tempStr = reader.readLine();
-			while (tempStr != null) {
+			String tempStr =null;
+			int line = 1;
+			while ((tempStr = reader.readLine()) != null) {
 				sb.append(tempStr);
+				line++;
 			}
 			reader.close();
 			return sb.toString();

@@ -353,7 +353,7 @@ public class ServiceRoomIcngphController extends BaseController {
 			ServiceRoomIcngph icngph = serviceRoomIcngphService.getById(form.getId());
 			operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.select,
 					OperLog.actionBusinessEnum.serviceRoomIcn, "");
-			return AllResult.okJSON(icngph);
+			return AllResult.okJSON(icngph.getImageRealPath());
 		} catch (Exception e) {
 			e.printStackTrace();
 			operLogService.addBusinessLog(form.getFileName(), OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoomIcn,
