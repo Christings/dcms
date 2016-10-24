@@ -61,17 +61,20 @@ public class ServiceRoomIcngphController extends BaseController {
 			LOGGER.info("request param: [ServiceRoomIcngph: {}]", JSON.toJSONString(icngph));
 		}
 		try {
-			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 			if (null == this.handleUploadFiles(icngph, request)) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "上传文件错误，请检查ZIP压缩文件");
 			}
-			//验证名称不能重复
-			ServiceRoomIcngphExample example = new ServiceRoomIcngphExample();
-			ServiceRoomIcngphExample.Criteria criteria = example.createCriteria();
-			criteria.andFloorNameEqualTo(icngph.getFloorName());
-			List<ServiceRoomIcngph> icngphs = serviceRoomIcngphService.getByExample(example);
-			if(icngphs.size() > 0){
-				return buildJSON(HttpStatus.BAD_REQUEST.value(), "楼层名称已存在，请重新输入");
+			// 验证名称不能重复
+			if (StringUtil.isNotEmpty(icngph.getFloorName())) {
+				ServiceRoomIcngphExample example = new ServiceRoomIcngphExample();
+				ServiceRoomIcngphExample.Criteria criteria = example.createCriteria();
+				criteria.andFloorNameEqualTo(icngph.getFloorName());
+				List<ServiceRoomIcngph> icngphs = serviceRoomIcngphService.getByExample(example);
+				if (icngphs.size() > 0) {
+					return buildJSON(HttpStatus.BAD_REQUEST.value(), "楼层名称已存在，请重新输入");
+				}
+			}else{
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "楼层名称不能为空");
 			}
 			icngph.setId(UUIDGenerator.generatorRandomUUID());
 			serviceRoomIcngphService.save(icngph);
@@ -184,6 +187,8 @@ public class ServiceRoomIcngphController extends BaseController {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [datagrid ServiceRoomIcngph: {}]", JSON.toJSONString(form));
 		}
+		String path = request.getSession().getServletContext().getRealPath("/");
+		System.out.println(path);
 		// 1.验证参数
 		String errorTip = ValidationHelper.build()
 				// 必输条件验证
@@ -348,7 +353,7 @@ public class ServiceRoomIcngphController extends BaseController {
 			ServiceRoomIcngph icngph = serviceRoomIcngphService.getById(form.getId());
 			operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.select,
 					OperLog.actionBusinessEnum.serviceRoomIcn, "");
-			return AllResult.okJSON(icngph);
+			return AllResult.okJSON(icngph.getImageRealPath());
 		} catch (Exception e) {
 			e.printStackTrace();
 			operLogService.addBusinessLog(form.getFileName(), OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoomIcn,
@@ -359,7 +364,7 @@ public class ServiceRoomIcngphController extends BaseController {
 
 	private ServiceRoomIcngph handleUploadFiles(ServiceRoomIcngph icngph, HttpServletRequest request) throws IOException {
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
-		if (multipartResolver.isMultipart(request)) {// 判断是否含有需要上传的文件
+		if (!multipartResolver.isMultipart(request)) {// 判断是否含有需要上传的文件
 			MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;// 转换成对象
 			Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
 			while (iterator.hasNext()) {
@@ -369,7 +374,7 @@ public class ServiceRoomIcngphController extends BaseController {
 					return null;
 				}
 				if (null != file) {
-					String path = request.getSession().getServletContext().getRealPath("/upload") + "serviceRoomIc/";// 获取路径
+					String path = request.getSession().getServletContext().getRealPath("/") + "upload/serviceRoomIc/";// 获取路径
 					File inFile = new File(path);
 					if (!inFile.exists()) {
 						inFile.mkdir();
@@ -386,12 +391,10 @@ public class ServiceRoomIcngphController extends BaseController {
 						if ("yml".equalsIgnoreCase(ext)) {
 							icngph.setYmlName(key);
 							icngph.setYmlRealPath(path + "/" + newFile.getName());
-						}
-						if ("json".equalsIgnoreCase(ext)) {
+						} else if ("json".equalsIgnoreCase(ext)) {
 							icngph.setJsonName(key);
 							icngph.setJsonRealPath(path + "/" + newFile.getName());
-						}
-						if ("png".equalsIgnoreCase(ext)) {
+						} else if ("png".equalsIgnoreCase(ext)) {
 							icngph.setImageName(key);
 							icngph.setImageRealPath(path + "/" + newFile.getName());
 						}

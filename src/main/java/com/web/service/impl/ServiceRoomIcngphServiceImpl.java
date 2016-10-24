@@ -33,7 +33,7 @@ public class ServiceRoomIcngphServiceImpl implements ServiceRoomIcngphService {
 
     @Override
     public int save(ServiceRoomIcngph entity) {
-        return mapper.insert(entity);
+        return mapper.insertSelective(entity);
     }
 
     @Override
