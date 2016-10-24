@@ -13,19 +13,26 @@ import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
 import com.web.util.WebUtils;
 import com.web.util.fastjson.FastjsonUtils;
+import com.web.util.validation.GroupBuilder;
+import com.web.util.validation.ValidationHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.web.util.AllResult.buildJSON;
 
 /**
  * 菜单接口
@@ -328,9 +335,15 @@ public class MenuController extends BaseController {
 			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
 		}
 
-		// 校验参数
-		if (pageNum < 1 || pageSize < 1) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
+		//1.验证参数
+		String errorTip = ValidationHelper.build()
+				//必输条件验证
+				.addGroup(GroupBuilder.build(pageNum).notNull().minValue(1), "页码必须从1开始")
+				.addGroup(GroupBuilder.build(pageSize).notNull().minValue(1), "每页记录数量最少1条")
+				.validate();
+
+		if (StringUtils.isNotEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
 		try {
