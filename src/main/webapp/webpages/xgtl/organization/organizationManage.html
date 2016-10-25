@@ -3,48 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>dcms</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
-    <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+	<link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css" rel = "stylesheet">
+    <link href="../../../css/font-awesome.css" rel = "stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/lib/weui.css" rel = "stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/css/jquery-weui.css" rel = "stylesheet">
     <link rel="stylesheet" href="../../../3rd-libs/treegrid/css/jquery.treegrid.css">
-    <link href="../../../css/dataTables.bootstrap.css" rel="stylesheet">
-    <link href="../../../css/style2.css" rel="stylesheet">
-    <link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-    <link href="../../../css/animate.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../../../3rd-libs/jstree/themes/default/style.min.css">
+    <link rel="stylesheet" href="../../../3rd-libs/jstree/themes/default/style.min.css">
+
+    <link href="../../../css/style.css" rel = "stylesheet">
+    <link href="../../../css/style2.css" rel = "stylesheet">
 </head>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>基本 <small>分类，查找</small></h5>
-
-                        <div class="ibox-tools">
-                        	<a class="add-menu">
-                        		<i class="fa fa-plus-square-o" data-toggle="modal" data-target="#domainAdd" onclick="roleGetAll()"></i>
-                        	</a>
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="table_data_tables.html#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-domain">
-                                <li><a href="table_data_tables.html#">选项1</a>
-                                </li>
-                                <li><a href="table_data_tables.html#">选项2</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
-                    </div>
-
                     <div class="ibox-content">
                     	<div class="" id="upTable">
-                            <a style="cursor:pointer" onclick="domainNewUpdate('','new')" class="btn btn-primary ">添加机构</a>
+                            <a style="cursor:pointer" onclick="domainNewUpdate('','new')" class="btn btn-primary ">添加机构1</a>
                         </div>
                         <table class="table tree table-striped table-bordered table-hover dataTables-example">
                             <thead>
@@ -92,7 +69,7 @@
 	
 	<!-- 模态框（Modal） -->
 
-	<div class="modal fade" id="domainModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="domainModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -203,7 +180,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;
                     </button>
-                    <h4 class="modal-title" id="domainTreeModal">
+                    <h4 class="modal-title" domainTreeModalTitle>
                         选择父级组织机构
                     </h4>
                 </div>
@@ -225,24 +202,20 @@
         </div>
     </div>
 
-	<script src="../../../css/jquery.min.js"></script>
-	<script src="../../../3rd-libs/jstree/jstree.min.js"></script>
-    <script src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../../../3rd-libs/jquery/table/jquery.jeditable.js"></script>
-
-    <!-- Data Tables -->
-    <script src="../../../3rd-libs/jquery/table/jquery.dataTables.1.10.12.js"></script>
-    <script src="../../../3rd-libs/bootstrap/js/dataTables.bootstrap.js"></script>
+    <script type="text/javascript" src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../3rd-libs/jquery-weui/js/jquery-weui.min.js"></script>
     <script type="text/javascript" src="../../../3rd-libs/treegrid/js/jquery.treegrid.min.js"></script>
     <script type="text/javascript" src="../../../3rd-libs/treegrid/js/jquery.treegrid.bootstrap3.js"></script>
     <script type="text/javascript" src="../../../3rd-libs/jqPaginator/jqPaginator.min.js"></script>
     <script type="text/javascript" src="../../../3rd-libs/layer/layer.min.js"></script>
     <script type="text/javascript" src="../../../3rd-libs/jquery-validation/jquery.validate.min.js"></script>
     <script type="text/javascript" src="../../../3rd-libs/jquery-validation/localization/messages_zh.min.js"></script>
-    <!-- 自定义js -->
-    <script src="../../../js/pub/common.js"></script>
-    <script src="../../../js/pub/content.js"></script>
-    <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../../../3rd-libs/jstree/jstree.min.js"></script>
+
+    <script type="text/javascript" src="../../../js/pub/utils.js"></script>
+    <script type="text/javascript" src="../../../js/pub/content.js"></script>
+    <script type="text/javascript" src="../../../js/pub/common.js"></script>
  	<script src="../../../js/manage-domain/domainManage.js"></script>
 
  	

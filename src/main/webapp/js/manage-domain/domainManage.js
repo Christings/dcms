@@ -15,14 +15,15 @@ function pageInit() {
 //初始化菜单
 function getDomainList(pageNum, pageSize) {
         console.log('pageNum:'+pageNum+";pageSize:"+pageSize);
+        var params =  {pageNum: pageNum, pageSize: pageSize};
         $("#domainTreeBody").empty();
-        DCMSUtils.Modal.showLoading('菜单加载中...');
-        DCMSUtils.Ajax.doPost('domain/datagrid', {pageNum: pageNum, pageSize: pageSize})
-            .then(function (data) {
+        DCMSUtils.Modal.showLoading('组织机构加载中...');
+        DCMSUtils.Ajax.doPost('domain/datagrid',params).then(function (data) {
                 DCMSUtils.Modal.hideLoading();
                 console.log(data);
                 if (data.status === 1) {
-                    initTreeGird($("#domainTreeBody"),data.data, 0);
+                    data = data.data;
+                    initTreeGird($("#domainTreeBody"),data.records, 0);
                     $(".tree").treegrid({
                         initialState:'collapsed'
                     });
@@ -64,7 +65,6 @@ function initTreeGird(container, domainTree, parentIndex) {
         trHtml += '<td>' + domain.name + '</td>';
         trHtml += '<td>' + domain.description + '</td>';
         trHtml += '<td>' +
-                        '<i class="glyphicon glyphicon-cog"    title="操作配置" onclick="domainSetting(\''+domain.id+'\')"></i>&nbsp;&nbsp;' +
                         '<i class="glyphicon glyphicon-plus"   title="新增"     onclick="domainNewUpdate(\''+domain.id+'\',\'new\')"></i>&nbsp;&nbsp;' +
                         '<i class="glyphicon glyphicon-pencil" title="编辑"     onclick="domainNewUpdate(\''+domain.id+'\',\'update\')"></i>&nbsp;&nbsp;'+
                         '<i class="glyphicon glyphicon-trash"  title="删除"     onclick="domainDelete(\''+domain.id+'\')"></i>&nbsp;&nbsp;' +
@@ -130,6 +130,7 @@ var jsTreeIndex=0;
 $("#selectParentBtn").click(function(){
     DCMSUtils.Modal.showLoading();
     DCMSUtils.Ajax.doPost('domain/tree').then(function(data){
+        DCMSUtils.Modal.hideLoading();
         if(data.status=='1'){
             var treeData=transDataToJsTree(data.data,jsTreeIndex);
             console.log(treeData);
@@ -218,7 +219,7 @@ function domainNewUpdate(domainId,type){
     if(type=='new'){
         $("#domainModalTitle").text('新增组织机构');
         if(domainId){
-            var pdomain=DCMSUtils.SessionStorage.get("Domain_TREE_MAP")[domainId];
+            var pDomain=DCMSUtils.SessionStorage.get("Domain_TREE_MAP")[domainId];
             $(".domainPDiv").css('display','block');
             $("#domainPName").text(pDomain.name);
             $("#domainPId").val(pDomain.id);
