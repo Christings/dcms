@@ -100,6 +100,10 @@
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
+    <delete id="deleteByPrimaryKey" parameterType="com.web.entity.ServiceRoom">
+        delete from t_s_service_room
+        where id = #{id,jdbcType=VARCHAR}
+    </delete>
     <insert id="insert" parameterType="com.web.entity.ServiceRoom">
         insert into t_s_service_room
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -30,9 +30,11 @@ public class OperLogController extends BaseController {
 	/**
 	 * 分页查询日志相关信息
 	 */
-	@RequestMapping(value = "/scroll", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/datagrid", method = { RequestMethod.GET, RequestMethod.POST })
 	public Object getScroll(HttpServletRequest request, OperLogForm operLogForm) {
 		try {
+			operLogForm.setPageNum(1);
+			operLogForm.setPageSize(10);
 			OperLogExample operLogExample = new OperLogExample();
 			OperLogExample.Criteria criteria = operLogExample.createCriteria();
 			if (StringUtil.isNotEmpty(operLogForm.getDeviceName())) {

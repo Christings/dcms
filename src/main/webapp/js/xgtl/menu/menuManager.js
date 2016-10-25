@@ -2,7 +2,7 @@
  * Created by Charles on 2016/9/26.
  */
 var globlePageNum = 1;//页码
-var globlePageSize = 10;//行数
+var globlePageSize = 2;//行数
 
 /**
  * 页面初始化
@@ -32,6 +32,11 @@ function getMenuList(pageNum, pageSize) {
                         totalPages: data.pageCount,
                         visiblePages: 5,
                         currentPage: pageNum,
+                        first:'<li class="first"><a href="javascript:;">首页</a></li>',
+                        last:'<li class="last"><a href="javascript:;">末页</a></li>',
+                        prev: '<li class="prev"><a href="javascript:;">上一页</a></li>',
+                        next: '<li class="next"><a href="javascript:;">下一页</a></li>',
+                        page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
                         onPageChange: function (num, type) {
                             if(type=='change'){
                                 //关闭精细化权限控制

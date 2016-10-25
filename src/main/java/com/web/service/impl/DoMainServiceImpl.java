@@ -153,7 +153,7 @@ public class DoMainServiceImpl implements DoMainService {
         PageHelper.orderBy("CREATE_DATE");
 
         // 查询数据
-        List<DoMain> doMains = doMainMapper.selectByExample(example);
+        List<DoMain> doMains = doMainMapper.selectByExamplePage(example);
         Page<DoMain> page = new Page<>(doMains) ;
 
         if (LOGGER.isInfoEnabled()) {

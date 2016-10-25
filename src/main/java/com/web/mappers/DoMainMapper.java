@@ -21,6 +21,11 @@ public interface DoMainMapper {
     List<DoMain> selectByExample(DoMainExample example);
 
     /**
+     * 自定义返回分页树形结构
+     */
+    List<DoMain> selectByExamplePage(DoMainExample example);
+
+    /**
      * 自定义查询返回树形域
      */
     List<DoMain> selectByTree(Map<String,String> params);

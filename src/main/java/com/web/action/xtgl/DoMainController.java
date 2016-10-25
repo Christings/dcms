@@ -327,7 +327,7 @@ public class DoMainController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(queryResult,FastjsonUtils.newIgnorePropertyFilter("childDoMain","level","updateName","updateDate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(queryResult,FastjsonUtils.newIgnorePropertyFilter("level","updateName","updateDate","createName","createDate"));
 
 			// 增加日志
 //			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.domain,jsonStr);

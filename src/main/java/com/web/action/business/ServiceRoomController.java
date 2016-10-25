@@ -1,8 +1,6 @@
 package com.web.action.business;
 
-import java.io.File;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,12 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.alibaba.fastjson.JSON;
 import com.web.bean.form.ServiceRoomForm;
+import com.web.bean.util.FileUtilBean;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
@@ -26,9 +23,8 @@ import com.web.entity.ServiceRoom;
 import com.web.example.ServiceRoomExample;
 import com.web.service.ServiceRoomService;
 import com.web.util.AllResult;
-import com.web.util.DateUtil;
+import com.web.util.FileUtil;
 import com.web.util.StringUtil;
-import com.web.util.ZIPUtil;
 import com.web.util.fastjson.FastjsonUtils;
 
 /**
@@ -52,32 +48,20 @@ public class ServiceRoomController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public Object save(ServiceRoom serviceRoom, HttpServletRequest request) {
+	public Object save(ServiceRoom serviceRoom, MultipartHttpServletRequest request) {
 		try {
-			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
-			if (multipartResolver.isMultipart(request)) {// 判断是否含有需要上传的文件
-				MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;// 转换成对象
-				Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
-				while (iterator.hasNext()) {
-					MultipartFile file = multipartHttpServletRequest.getFile(iterator.next());
-					if (null != file) {
-						String path = request.getSession().getServletContext().getRealPath("/");// 获取路径
-						String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length());// 获取后缀名
-						String fileName = String.valueOf(DateUtil.getMillis(new Date())) + "." + ext;// 新的文件名
-						File lFile = new File(path + "/upload/serviceRoom");
-						// 创建文件夹
-						ZIPUtil.mkDir(lFile);
-						lFile = new File(path + "/upload/serviceRoom/" + fileName);
-						file.transferTo(lFile);// 转存到本地
-						serviceRoom.setImageUrl("/upload/serviceRoom/" + fileName);
-					}
-				}
-			}
 			if (null == serviceRoom) {
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("request add serviceRoom param: [serviceRoom: {null}]");
 				}
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "新增机房入参为空");
+			}
+			if (StringUtil.isEmpty(serviceRoom.getId())) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "入参ID不能为空");
+			}
+			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoom", false);// 上传文件
+			if (files.size() > 0) {
+				serviceRoom.setImageUrl(files.get(0).getFileRealPath());
 			}
 			if (serviceRoomService.save(serviceRoom) > 0) {
 				// 增加日志
@@ -104,33 +88,21 @@ public class ServiceRoomController extends BaseController {
 	 * @param serviceRoom
 	 * @param request
 	 */
-	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	public Object update(ServiceRoom serviceRoom, HttpServletRequest request) {
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public Object update(ServiceRoom serviceRoom, MultipartHttpServletRequest request) {
 		try {
 			if (null == serviceRoom) {
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("request edit serviceRoom param: [serviceRoom: {null}]");
 				}
-				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "新增机房入参为空");
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "修改机房入参为空");
 			}
-			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
-			if (multipartResolver.isMultipart(request)) {// 判断是否含有需要上传的文件
-				MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;// 转换成对象
-				Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
-				while (iterator.hasNext()) {
-					MultipartFile file = multipartHttpServletRequest.getFile(iterator.next());
-					if (null != file) {
-						String path = request.getSession().getServletContext().getRealPath("/");// 获取路径
-						String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length());// 获取后缀名
-						String fileName = String.valueOf(DateUtil.getMillis(new Date())) + "." + ext;// 新的文件名
-						File lFile = new File(path + "/upload/serviceRoom");
-						// 创建文件夹
-						ZIPUtil.mkDir(lFile);
-						lFile = new File(path + "/upload/serviceRoom/" + fileName);
-						file.transferTo(lFile);// 转存到本地
-						serviceRoom.setImageUrl("/upload/serviceRoom/" + fileName);
-					}
-				}
+			if (StringUtil.isEmpty(serviceRoom.getId())) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "入参ID不能为空");
+			}
+			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoom", false);// 上传文件
+			if (files.size() > 0) {
+				serviceRoom.setImageUrl(files.get(0).getFileRealPath());
 			}
 			if (serviceRoomService.updateById(serviceRoom) > 0) {
 				// 增加日志
