@@ -345,8 +345,8 @@ public class FileUtil {
 		while (iterator.hasNext()) {
 			String fileName = iterator.next();
 			MultipartFile file = request.getFile(fileName);
-			String ext = FileUtil.getFilenameExtension(file.getOriginalFilename());
-			if (null != file) {
+			if (null != file && file.getSize() > 0) {
+				String ext = FileUtil.getFilenameExtension(file.getOriginalFilename());
 				String path = request.getSession().getServletContext().getRealPath("/") + targetPath;// 获取路径
 				File inFile = new File(path);
 				if (!inFile.exists()) {
@@ -369,6 +369,9 @@ public class FileUtil {
 						bean.setFileRealPath(targetPath + "/" + newFile.getName());
 						beans.add(bean);
 					}
+					if (inFile.exists()) {
+						inFile.delete();
+					}
 				} else {
 					FileUtilBean bean = new FileUtilBean();
 					bean.setFileName(file.getName());
@@ -376,9 +379,6 @@ public class FileUtil {
 					bean.setFileExt(ext);
 					bean.setFileRealPath(targetPath + "/" + newFileName);
 					beans.add(bean);
-				}
-				if (inFile.exists()) {
-					inFile.delete();
 				}
 			}
 		}

@@ -25,6 +25,7 @@ import com.web.service.ServiceRoomService;
 import com.web.util.AllResult;
 import com.web.util.FileUtil;
 import com.web.util.StringUtil;
+import com.web.util.UUIDGenerator;
 import com.web.util.fastjson.FastjsonUtils;
 
 /**
@@ -56,17 +57,15 @@ public class ServiceRoomController extends BaseController {
 				}
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "新增机房入参为空");
 			}
-			if (StringUtil.isEmpty(serviceRoom.getId())) {
-				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "入参ID不能为空");
-			}
 			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoom", false);// 上传文件
 			if (files.size() > 0) {
 				serviceRoom.setImageUrl(files.get(0).getFileRealPath());
 			}
+			serviceRoom.setId(UUIDGenerator.generatorRandomUUID());
 			if (serviceRoomService.save(serviceRoom) > 0) {
 				// 增加日志
-				operLogService.addBusinessLog("", OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
-						JSON.toJSONString(serviceRoom));
+				operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.insert,
+						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(serviceRoom));
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("机房新增成功", JSON.toJSONString(serviceRoom));
 				}
@@ -75,8 +74,9 @@ public class ServiceRoomController extends BaseController {
 				return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房新增失败:数据未能持久化");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			LOGGER.error("机房新增失败,后台报错", JSON.toJSONString(serviceRoom));
-			operLogService.addBusinessLog("", OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
+			operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
 					JSON.toJSONString(serviceRoom), OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房新增失败:后台报错");
 		}
@@ -106,8 +106,8 @@ public class ServiceRoomController extends BaseController {
 			}
 			if (serviceRoomService.updateById(serviceRoom) > 0) {
 				// 增加日志
-				operLogService.addBusinessLog("", OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom,
-						JSON.toJSONString(serviceRoom));
+				operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.update,
+						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(serviceRoom));
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("机房修改成功", JSON.toJSONString(serviceRoom));
 				}
@@ -117,8 +117,8 @@ public class ServiceRoomController extends BaseController {
 			}
 		} catch (Exception e) {
 			LOGGER.error("机房修改失败,后台报错", JSON.toJSONString(serviceRoom));
-			operLogService.addBusinessLog("", OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom, null,
-					OperLog.logLevelEnum.error);
+			operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom,
+					null, OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房修改失败:后台报错");
 		}
 	}
@@ -143,8 +143,8 @@ public class ServiceRoomController extends BaseController {
 			}
 			if (serviceRoomService.deleteById(serviceRoom.getId()) > 0) {
 				// 增加日志
-				operLogService.addBusinessLog("", OperLog.operTypeEnum.delete, OperLog.actionBusinessEnum.serviceRoom,
-						JSON.toJSONString(serviceRoom));
+				operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.delete,
+						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(serviceRoom));
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("机房删除成功", JSON.toJSONString(serviceRoom));
 				}
@@ -154,14 +154,14 @@ public class ServiceRoomController extends BaseController {
 			}
 		} catch (Exception e) {
 			LOGGER.error("机房删除失败,后台报错", JSON.toJSONString(serviceRoom));
-			operLogService.addBusinessLog("", OperLog.operTypeEnum.delete, OperLog.actionBusinessEnum.serviceRoom,
+			operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.delete, OperLog.actionBusinessEnum.serviceRoom,
 					JSON.toJSONString(serviceRoom), OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房删除失败:后台报错");
 		}
 	}
 
 	/**
-	 * 根据ID查询数据词典
+	 * 根据ID查询机房信息
 	 *
 	 * @param serviceRoom
 	 * @param request
@@ -216,7 +216,7 @@ public class ServiceRoomController extends BaseController {
 				criteria.andPositionLike("%" + form.getPosition() + "%");
 			}
 			// 排序设置
-			example.setOrderByClause("SORT asc");
+			example.setOrderByClause("name asc");
 			Page<ServiceRoom> queryResult = serviceRoomService.getByPage(form.getPageNum(), form.getPageSize(), example);
 			// 去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,

@@ -2,6 +2,7 @@ package com.web.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
 
@@ -21,19 +22,14 @@ public class YmlUtil {
 	 * @param url
 	 *            yml文件路径
 	 */
-	public static Map getYmlString(String url) {
+	public static Map getYmlString(String url) throws IOException {
 		Yaml yml = new Yaml();
 		if (StringUtil.isNotEmpty(url)) {
 			File file = new File(url);
 			Map map = null;
-			try {
-				String charset = FileUtil.getFileCharset(file);
-				InputStreamReader reader = new InputStreamReader(new FileInputStream(file), charset);
-				map = (Map) yml.load(reader);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+			String charset = FileUtil.getFileCharset(file);
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(file), charset);
+			map = (Map) yml.load(reader);
 			return map;
 		}
 		return null;
