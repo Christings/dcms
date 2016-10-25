@@ -384,4 +384,30 @@ public class FileUtil {
 		}
 		return beans;
 	}
+
+	/**
+	 * 获取文本文件编码级（txt/json/yml/xml）
+	 * 
+	 * @param file
+	 *            文件对象
+	 **/
+	public static String getFileCharset(File file) throws IOException {
+		BufferedInputStream bin = new BufferedInputStream(new FileInputStream(file));
+		int p = (bin.read() << 8) + bin.read();
+		String code = null;
+		switch (p) {
+		case 0xefbb:
+			code = "UTF-8";
+			break;
+		case 0xfffe:
+			code = "Unicode";
+			break;
+		case 0xfeff:
+			code = "UTF-16BE";
+			break;
+		default:
+			code = "GBK";
+		}
+		return code;
+	}
 }

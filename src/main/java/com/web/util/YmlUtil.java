@@ -2,6 +2,7 @@ package com.web.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
@@ -26,7 +27,9 @@ public class YmlUtil {
 			File file = new File(url);
 			Map map = null;
 			try {
-				map = (Map) yml.load(new FileInputStream(file));
+				String charset = FileUtil.getFileCharset(file);
+				InputStreamReader reader = new InputStreamReader(new FileInputStream(file), charset);
+				map = (Map) yml.load(reader);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
