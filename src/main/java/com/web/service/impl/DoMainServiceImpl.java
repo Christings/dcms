@@ -209,4 +209,10 @@ public class DoMainServiceImpl implements DoMainService {
         List<DoMain> doMains = doMainMapper.selectByTree(params);
         return doMains;
     }
+
+    @Override
+    public List<DoMain> getByUserId(Map<String, String> params) {
+        List<DoMain> doMains = doMainMapper.selectByUserId(params);
+        return doMains;
+    }
 }

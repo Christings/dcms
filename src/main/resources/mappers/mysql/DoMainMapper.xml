@@ -316,5 +316,18 @@
       order by ${orderByClause}
     </if>
   </select>
+
+  <!--根据用户ID返回域（组织结构）-->
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select distinct
+    d.ID ID, d.NAME NAME, d.PARENT_ID PARENT_ID, d.DESCRIPTION DESCRIPTION, d.LEVEL LEVEL, d.UPDATE_NAME UPDATE_NAME, d.UPDATE_DATE UPDATE_DATE, d.CREATE_NAME CREATE_NAME, d.CREATE_DATE CREATE_DATE
+    from t_s_domain d
+    LEFT JOIN t_s_user_domain ud ON ud.DOMAIN_ID=d.id
+    <trim prefix="WHERE (" suffix=")" prefixOverrides="AND |OR ">
+      <if test="id != null" >
+        ud.USER_ID = #{id,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </select>
   <!--根据条件返回树形域TreeDoMain  end-->
 </mapper>

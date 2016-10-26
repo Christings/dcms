@@ -1,7 +1,11 @@
 package com.web.bean.result;
 
-import org.apache.commons.lang3.StringUtils;
+import com.web.entity.DoMain;
+import com.web.entity.Role;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -68,12 +72,12 @@ public class UserResult {
     /**
      * 角色ID集合
      */
-    private Set<String> roleIds = new HashSet<>();
+    private Set<RoleResult> roles = new HashSet<>();
 
     /**
      * 组织结构ID
      */
-    private Set<String> domainIds = new HashSet<>();
+    private Set<DoMainResult> domains = new HashSet<>();
 
     public String getId() {
         return id;
@@ -163,31 +167,52 @@ public class UserResult {
         this.checked = checked;
     }
 
-    public Set<String> getRoleIds() {
-        return roleIds;
+
+    public Set<RoleResult> getRoles() {
+        return roles;
     }
 
-    public void setRoleIds(Set<String> roleIds) {
-        this.roleIds = roleIds;
+    public void setRoles(Set<RoleResult> roles) {
+        this.roles = roles;
     }
 
-    public void addRoleIds(String roleId){
-        if(StringUtils.isNotEmpty(roleId)){
-            this.roleIds.add(roleId);
+    public Set<DoMainResult> getDomains() {
+        return domains;
+    }
+
+    public void setDomains(Set<DoMainResult> domains) {
+        this.domains = domains;
+    }
+
+    public void addRole(Role role){
+        if(null != role){
+            RoleResult rr = new RoleResult();
+            BeanUtils.copyProperties(role, rr);
+            this.roles.add(rr);
         }
     }
 
-    public Set<String> getDomainIds() {
-        return domainIds;
+    public void addRoles(Collection<Role> collection){
+        if (!CollectionUtils.isEmpty(collection)) {
+            for (Role role : collection) {
+                this.addRole(role);
+            }
+        }
     }
 
-    public void setDomainIds(Set<String> domainIds) {
-        this.domainIds = domainIds;
+    public void addDomain(DoMain doMain){
+        if(null != doMain){
+            DoMainResult dmr = new DoMainResult();
+            BeanUtils.copyProperties(doMain, dmr);
+            this.domains.add(dmr);
+        }
     }
 
-    public void addDomainIds(String domainId){
-        if(StringUtils.isNotEmpty(domainId)){
-            this.domainIds.add(domainId);
+    public void addDomains(Collection<DoMain> collection){
+        if (!CollectionUtils.isEmpty(collection)) {
+            for (DoMain doMain : collection) {
+                this.addDomain(doMain);
+            }
         }
     }
 }

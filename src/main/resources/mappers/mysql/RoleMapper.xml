@@ -240,4 +240,17 @@
       create_date = #{createDate,jdbcType=TIMESTAMP}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+
+  <!--自定义查询-->
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select distinct
+     r.ID ID, r.rolecode rolecode, r.rolename rolename, r.update_name update_name, r.update_date update_date, r.create_name create_name, r.create_date create_date
+    from t_s_role r
+    LEFT JOIN t_s_role_user ru ON ru.role_id=r.id
+    <trim prefix="WHERE (" suffix=")" prefixOverrides="AND |OR ">
+      <if test="id != null" >
+        ru.user_id = #{id,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </select>
 </mapper>

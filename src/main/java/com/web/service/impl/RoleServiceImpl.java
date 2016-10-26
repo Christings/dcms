@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色管理业务逻辑接口实现
@@ -166,4 +167,9 @@ public class RoleServiceImpl implements RoleSerivce {
 		return page;
 	}
 
+	@Override
+	public List<Role> getByUserId(Map<String, String> params) {
+		List<Role> roles = roleMapper.selectByUserId(params);
+		return roles;
+	}
 }

@@ -39,4 +39,9 @@ public interface DoMainMapper {
     int updateByPrimaryKeySelective(DoMain record);
 
     int updateByPrimaryKey(DoMain record);
+
+    /**
+     * 自定义根据用户ID 返回角色信息
+     */
+    List<DoMain> selectByUserId(Map<String,String> params);
 }

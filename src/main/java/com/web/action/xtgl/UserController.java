@@ -6,10 +6,10 @@ import com.web.bean.form.UserForm;
 import com.web.bean.result.UserResult;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
+import com.web.entity.DoMain;
 import com.web.entity.OperLog;
+import com.web.entity.Role;
 import com.web.entity.User;
-import com.web.entity.UserDoMain;
-import com.web.entity.UserRole;
 import com.web.example.DoMainExample;
 import com.web.example.RoleExample;
 import com.web.example.UserExample;
@@ -30,14 +30,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static com.web.util.AllResult.buildJSON;
 
@@ -326,16 +326,25 @@ public class UserController extends BaseController {
 			// 去除不需要的字段
 			UserResult result = new UserResult();
 			BeanUtils.copyProperties(user, result);
-			List<UserRole> userRoles = userRoleService.getUserRole(user.getId());
-			for (UserRole userRole : userRoles) {
-				result.addRoleIds(userRole.getRoleId());
+
+			//查询条件
+			Map<String,String> params = new HashMap<String, String>();
+			params.put("id",user.getId());
+			List<Role> roles = roleSerivce.getByUserId(params);
+			if(!CollectionUtils.isEmpty(roles)){
+				result.addRoles(roles);
 			}
-			List<UserDoMain> userDomains = userDoMainService.getUserDomain(user.getId());
-			for (UserDoMain userDoMain : userDomains) {
-				result.addDomainIds(userDoMain.getDomainId());
+			List<DoMain> doMains = doMainService.getByUserId(params);
+			if(!CollectionUtils.isEmpty(doMains)){
+				result.addDomains(doMains);
 			}
 
-			return AllResult.okJSON(result);
+			// 去除不需要的字段
+			String jsonStr = JSON.toJSONString(result,
+					FastjsonUtils.newIgnorePropertyFilter("checked"),
+					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("get User fail:", e.getMessage());
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误, 获取用户信息失败");
@@ -430,13 +439,35 @@ public class UserController extends BaseController {
 
 			Page<User> queryResult = userService.getScrollData(userForm.getPageNum(), userForm.getPageSize(), example);
 
-			// 去除不需要的字段
-			String jsonStr = JSON.toJSONString(queryResult,
-					FastjsonUtils.newIgnorePropertyFilter("password", "updateName", "updateDate", "createName", "createDate"),
-					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+			Page<UserResult> resultPage = new Page<UserResult>();
+			BeanUtils.copyProperties(queryResult,resultPage,"records");
+			List<UserResult> records = new ArrayList<>();
+			if(resultPage.getCount()>0){
+				UserResult ur = null;
+				for(int i=0;i<queryResult.getRecords().size();i++){
+					User user = queryResult.getRecords().get(i);
+					ur = new UserResult();
+					BeanUtils.copyProperties(user,ur);
+					//查询条件
+					Map<String,String> params = new HashMap<String, String>();
+					params.put("id",user.getId());
+					List<Role> roles = roleSerivce.getByUserId(params);
+					if(!CollectionUtils.isEmpty(roles)){
+						ur.addRoles(roles);
+					}
+					List<DoMain> doMains = doMainService.getByUserId(params);
+					if(!CollectionUtils.isEmpty(doMains)){
+						ur.addDomains(doMains);
+					}
+					records.add(ur);
+				}
+			}
+			resultPage.setRecords(records);
 
-			// operLogService.addSystemLog(OperLog.operTypeEnum.select,
-			// OperLog.actionSystemEnum.user,JSON.toJSONString(queryResult.getRecords().size()));
+			// 去除不需要的字段
+			String jsonStr = JSON.toJSONString(resultPage,
+					FastjsonUtils.newIgnorePropertyFilter("checked"),
+					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 
