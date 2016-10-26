@@ -19,6 +19,7 @@ function pageInit() {
 		 */
 		ajax:function(data, callback, settings){
 			//需要把分页参数转为DCMS接口规范的
+			console.log(data);
 			var pageNum=data.start/2+1,pageSize=data.length;
 			var params={
 				pageNum:pageNum,

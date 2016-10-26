@@ -13,6 +13,7 @@ function userUpdateInit(e){
 	// 	dataType: 'json',
 	// 	data: userId,
 	// 	})
+	
 	DCMSUtils.Ajax.doPost("user/get",userId).done((jsonData)=>{
 		var userInfo = jsonData["data"];
 		var userName = userInfo['username'];
@@ -25,6 +26,19 @@ function userUpdateInit(e){
 		var sex = userInfo['sex'];
 		var status = userInfo['status'];
 		var roleIds = userInfo['roleIds']?userInfo['roleIds']:[];
+		var domainIds = userInfo['domainIds'];
+		var domainPIds = '';
+		var domainPNames = '';
+		for(var i=0,len=domainIds.length;i<len;i++){
+			var pDomain=DCMSUtils.SessionStorage.get("Domain_TREE_MAP")[domainIds[i]];
+			if(i == (len - 1)){
+				domainPIds += pDomain.id;
+				domainPNames += pDomain.name;
+			}else{
+				domainPIds += pDomain.id + ',';
+				domainPNames += pDomain.name + ',';
+			}
+		}
 		console.log(roleIds);
 		var sex_selected_0;
 		var sex_selected_1;
@@ -81,8 +95,11 @@ function userUpdateInit(e){
 					  "<div id=\"rolesContent1\">"+content+"</div>"+
 					"</div>"+
 					"<div class='form-group' >"+
-						'<label for="name">选择组织机构</label>'+
-						'<div id="orgTreeAdd1"></div>'+
+						"<label class='col-sm-3'>组织机构：</label>"+
+						'<input id="domainPId1" name="domainPId1" value="'+domainPIds+'" type="hidden">'+
+						"<div class='col-sm-8'>"+
+							'<span id="domainPName1" name="domainPName1" style="width: 50%;">'+domainPNames+'</span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectDomainBtn1" class="btn btn-primary btn-sm btn-outline">选择</a>'+
+						'</div>'+
 					'</div>'+
 					"<div class=\"form-group\">"+
 					  "<label for=\"name\">身份证</label>"+
@@ -124,8 +141,8 @@ function userUpdateInit(e){
 			"</form>";
 			var body = document.getElementById("userUpdateBody");
 			body.innerHTML = html;
-
 			loadOrganizationTree1();
+			
 		});
 	});		// }
 }
@@ -189,12 +206,13 @@ function userUpdate(){
 		var mobile = $("#mobile1").val();
 		var sex = $("#sex1").val();
 		var status = $("#status1").val();
+		var domainIds = $("#domainPId1").val();
 		if(realName == "")
 		{
-			$("#alertName").text("请输入真实姓名国臣");
+			$("#alertName").text("请输入真实姓名");
 			return false;
 		}
-		var userInfo = {id:'',realname:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:'',roleIds:''};
+		var userInfo = {id:'',realname:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:'',roleIds:'',domainIds:''};
 		userInfo['id'] = id;
 		userInfo['username'] = userName;
 		userInfo['realname'] = realName;
@@ -206,16 +224,18 @@ function userUpdate(){
 		userInfo['sex'] = sex;
 		userInfo['status'] = status;
 		userInfo['roleIds'] = roleIds;
+		userInfo['domainIds'] = domainIds;
 		DCMSUtils.Ajax.doPost("user/update",userInfo).done((res)=>{
 			if(res.status == "1"){
 				console.log("更新用户"+userName+"成功");
 				alert("更新用户"+userName+"成功");
+				return true;
 			}else{
 				console.log("更新用户"+userName+"失败"+res.msg);
 				alert("更新用户"+userName+"失败");
+				return false;
 			}
 		});
-		return true;
 	});
 }
 
@@ -244,37 +264,60 @@ function userEditPassword(){
 				return false;
 			}
 		});
-		
 	});
 }
 
 function loadOrganizationTree1(){
-
-
-	$('#orgTreeAdd1').jstree({
-		'plugins':['wholerow','checkbox'],
-		'core':{
-			'data':[
-				{
-					'text':'北京三源合众科技有限公司',
-					'children':[
-						{
-							'text':'研发部',
-							'children':[
-								{'text':'研发一组'},
-								{'text':'研发二组'},
-								{'text':'研发三组'}
-							]
-						},
-						{'text':'测试部'},
-						{'text':'销售部'},
-						{'text':'人力资源部'},
-						{'text':'指挥部'}
-					]
-				}
-			]
-		}
+    
+	$("#selectDomainBtn1").click(function(){
+        $("#userupdate").modal('hide');
+        $("#domainTreeModal").modal('show');      
 	});
+
+	$("#confirmDomainBtn").click(function(){
+	    var selected=$("#domainJsTree").jstree(true).get_selected();
+
+	    if(selected.length==0){
+	        DCMSUtils.Modal.alert('请选择组织机构','');
+	        return ;
+	    }
+	    var pDomain;
+	    var ids = '';
+	    var names = '';
+	    for(var i=0,len=selected.length;i<len;i++){
+	    	pDomain=DCMSUtils.SessionStorage.get("Domain_TREE_MAP")[selected[i]];
+	    	if(i == (len -1)){
+	    		ids += pDomain.id;
+	    		names += pDomain.name;
+	    	}else{
+	    		ids += pDomain.id+',';
+		    	names += pDomain.name+' ';
+	    	}
+	    }
+	    $("#domainPId1").val(ids);
+	    $("#domainPName1").text(names);
+	    // $("#domainLevel").text(pDomain.rank+1);
+	    $("#domainTreeModal").modal('hide');
+	    $("#useradd").modal('hide');
+	    $("#userupdate").modal('show');
+	});
+	/**
+	 * 转换数据适配js tree
+	 * @param domainList
+	 * @param container
+	 * @param pindex
+	 */
+	function transDataToJsTree(domainList,jsIndex){
+	    for(var i=0;i<domainList.length;i++){
+	        var domain=domainList[i];
+	        domain.text=domain.name
+	        if(domain.childDoMain && domain.childDoMain.length>0){
+	            domain.state={'opened': true};
+	            domain.children=transDataToJsTree(domain.childDoMain,jsIndex);
+	        }
+	    }
+	    return domainList;
+	}
 }
 
 
