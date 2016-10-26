@@ -207,7 +207,7 @@ $("#selectIconBtn").click(function () {
         fix: false, //不固定
         closeBtn:1,
         moveOut:true,
-        shadeClose:true,
+        shadeClose:true,//点击遮罩层关闭弹出框
         content: DCMSUtils.URL.getContentPath()+'webpages/pub/iconSelect.html'
     });
 });
