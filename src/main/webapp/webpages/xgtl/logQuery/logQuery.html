@@ -19,6 +19,7 @@
     <script src="../../../3rd-libs/datatables/datatables.js"></script>
     <script src="../../../3rd-libs/datatables/datatables.bootstrap.js"></script>
     <script src="../../../3rd-libs/datatables/datatables-custom.js"></script>
+    <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
 
     <style>
         .text-align-reverse {
@@ -76,7 +77,7 @@
 
         api = tableObj.DataTable({
             "ajax": {
-                "url": "/webapp/operLog/datagrid",
+                "url": DCMSUtils.URL.getContentPath()+"operLog/datagrid",
                 "type": "post",
                 "data": function (parms) {
                     parms.deviceName = $('[name="deviceName"]').val();
