@@ -216,7 +216,7 @@ public class ServiceRoomController extends BaseController {
 				criteria.andPositionLike("%" + form.getPosition() + "%");
 			}
 			// 排序设置
-			example.setOrderByClause("name asc");
+			example.setOrderByClause("create_date desc");
 			Page<ServiceRoom> queryResult = serviceRoomService.getByPage(form.getPageNum(), form.getPageSize(), example);
 			// 去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,
