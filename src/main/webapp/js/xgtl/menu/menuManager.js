@@ -32,6 +32,11 @@ function getMenuList(pageNum, pageSize) {
                         totalPages: data.pageCount,
                         visiblePages: 5,
                         currentPage: pageNum,
+                        first:'<li class="first"><a href="javascript:;">首页</a></li>',
+                        last:'<li class="last"><a href="javascript:;">末页</a></li>',
+                        prev: '<li class="prev"><a href="javascript:;">上一页</a></li>',
+                        next: '<li class="next"><a href="javascript:;">下一页</a></li>',
+                        page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
                         onPageChange: function (num, type) {
                             if(type=='change'){
                                 //关闭精细化权限控制
@@ -202,6 +207,7 @@ $("#selectIconBtn").click(function () {
         fix: false, //不固定
         closeBtn:1,
         moveOut:true,
+        shadeClose:true,//点击遮罩层关闭弹出框
         content: DCMSUtils.URL.getContentPath()+'webpages/pub/iconSelect.html'
     });
 });
@@ -224,12 +230,16 @@ function menuNewUpdate(menuId,type){
     if(type=='new'){
         $("#menuModalTitle").text('新增菜单');
         if(menuId){
+            document.getElementById("menuNewUpdateForm").reset();
             var pMenu=DCMSUtils.SessionStorage.get("MENU_TREE_MAP")[menuId];
             $(".menuPDiv").css('display','block');
             $("#menuLevel").val(pMenu.level+1);
             $("#mLevel").val('N');
             $("#menuPName").text(pMenu.name);
             $("#menuPId").val(pMenu.id);
+        }else{
+            $("#menuPName").text('');
+            document.getElementById("menuNewUpdateForm").reset();
         }
         $("#menuModal").modal();
     }else if(type=='update'){

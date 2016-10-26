@@ -1,8 +1,6 @@
 package com.web.action.business;
 
-import java.io.File;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,12 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.alibaba.fastjson.JSON;
 import com.web.bean.form.ServiceRoomForm;
+import com.web.bean.util.FileUtilBean;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
@@ -26,9 +23,9 @@ import com.web.entity.ServiceRoom;
 import com.web.example.ServiceRoomExample;
 import com.web.service.ServiceRoomService;
 import com.web.util.AllResult;
-import com.web.util.DateUtil;
+import com.web.util.FileUtil;
 import com.web.util.StringUtil;
-import com.web.util.ZIPUtil;
+import com.web.util.UUIDGenerator;
 import com.web.util.fastjson.FastjsonUtils;
 
 /**
@@ -52,37 +49,28 @@ public class ServiceRoomController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public Object save(ServiceRoom serviceRoom, HttpServletRequest request) {
+	public Object save(ServiceRoom serviceRoom, MultipartHttpServletRequest request) {
 		try {
-			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
-			if (multipartResolver.isMultipart(request)) {// 判断是否含有需要上传的文件
-				MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;// 转换成对象
-				Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
-				while (iterator.hasNext()) {
-					MultipartFile file = multipartHttpServletRequest.getFile(iterator.next());
-					if (null != file) {
-						String path = request.getSession().getServletContext().getRealPath("/");// 获取路径
-						String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length());// 获取后缀名
-						String fileName = String.valueOf(DateUtil.getMillis(new Date())) + "." + ext;// 新的文件名
-						File lFile = new File(path + "/upload/serviceRoom");
-						// 创建文件夹
-						ZIPUtil.mkDir(lFile);
-						lFile = new File(path + "/upload/serviceRoom/" + fileName);
-						file.transferTo(lFile);// 转存到本地
-						serviceRoom.setImageUrl("/upload/serviceRoom/" + fileName);
-					}
-				}
-			}
 			if (null == serviceRoom) {
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("request add serviceRoom param: [serviceRoom: {null}]");
 				}
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "新增机房入参为空");
 			}
+			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoom", false);// 上传文件
+			if (files.size() > 0) {
+				if (!"png".equalsIgnoreCase(files.get(0).getFileExt()) && !"jpg".equalsIgnoreCase(files.get(0).getFileExt())
+						&& !"jpeg".equalsIgnoreCase(files.get(0).getFileExt())) {
+					FileUtil.deleteFiles(files);
+					return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请上传正确的图片文件(PNG/JPG/JPEG)");
+				}
+				serviceRoom.setImageUrl(files.get(0).getFileRealPath());
+			}
+			serviceRoom.setId(UUIDGenerator.generatorRandomUUID());
 			if (serviceRoomService.save(serviceRoom) > 0) {
 				// 增加日志
-				operLogService.addBusinessLog("", OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
-						JSON.toJSONString(serviceRoom));
+				operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.insert,
+						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(serviceRoom));
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("机房新增成功", JSON.toJSONString(serviceRoom));
 				}
@@ -91,8 +79,9 @@ public class ServiceRoomController extends BaseController {
 				return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房新增失败:数据未能持久化");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			LOGGER.error("机房新增失败,后台报错", JSON.toJSONString(serviceRoom));
-			operLogService.addBusinessLog("", OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
+			operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
 					JSON.toJSONString(serviceRoom), OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房新增失败:后台报错");
 		}
@@ -104,38 +93,31 @@ public class ServiceRoomController extends BaseController {
 	 * @param serviceRoom
 	 * @param request
 	 */
-	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	public Object update(ServiceRoom serviceRoom, HttpServletRequest request) {
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public Object update(ServiceRoom serviceRoom, MultipartHttpServletRequest request) {
 		try {
 			if (null == serviceRoom) {
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("request edit serviceRoom param: [serviceRoom: {null}]");
 				}
-				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "新增机房入参为空");
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "修改机房入参为空");
 			}
-			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
-			if (multipartResolver.isMultipart(request)) {// 判断是否含有需要上传的文件
-				MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;// 转换成对象
-				Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
-				while (iterator.hasNext()) {
-					MultipartFile file = multipartHttpServletRequest.getFile(iterator.next());
-					if (null != file) {
-						String path = request.getSession().getServletContext().getRealPath("/");// 获取路径
-						String ext = file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length());// 获取后缀名
-						String fileName = String.valueOf(DateUtil.getMillis(new Date())) + "." + ext;// 新的文件名
-						File lFile = new File(path + "/upload/serviceRoom");
-						// 创建文件夹
-						ZIPUtil.mkDir(lFile);
-						lFile = new File(path + "/upload/serviceRoom/" + fileName);
-						file.transferTo(lFile);// 转存到本地
-						serviceRoom.setImageUrl("/upload/serviceRoom/" + fileName);
-					}
+			if (StringUtil.isEmpty(serviceRoom.getId())) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "入参ID不能为空");
+			}
+			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoom", false);// 上传文件
+			if (files.size() > 0) {
+				if (!"jpg".equalsIgnoreCase(files.get(0).getFileExt()) && !"png".equalsIgnoreCase(files.get(0).getFileExt())
+						&& !"jpeg".equalsIgnoreCase(files.get(0).getFileExt())) {
+					FileUtil.deleteFiles(files);
+					return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请上传正确的图片文件(PNG/JPG/JPEG)");
 				}
+				serviceRoom.setImageUrl(files.get(0).getFileRealPath());
 			}
 			if (serviceRoomService.updateById(serviceRoom) > 0) {
 				// 增加日志
-				operLogService.addBusinessLog("", OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom,
-						JSON.toJSONString(serviceRoom));
+				operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.update,
+						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(serviceRoom));
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("机房修改成功", JSON.toJSONString(serviceRoom));
 				}
@@ -145,8 +127,8 @@ public class ServiceRoomController extends BaseController {
 			}
 		} catch (Exception e) {
 			LOGGER.error("机房修改失败,后台报错", JSON.toJSONString(serviceRoom));
-			operLogService.addBusinessLog("", OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom, null,
-					OperLog.logLevelEnum.error);
+			operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom,
+					null, OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房修改失败:后台报错");
 		}
 	}
@@ -171,8 +153,8 @@ public class ServiceRoomController extends BaseController {
 			}
 			if (serviceRoomService.deleteById(serviceRoom.getId()) > 0) {
 				// 增加日志
-				operLogService.addBusinessLog("", OperLog.operTypeEnum.delete, OperLog.actionBusinessEnum.serviceRoom,
-						JSON.toJSONString(serviceRoom));
+				operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.delete,
+						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(serviceRoom));
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("机房删除成功", JSON.toJSONString(serviceRoom));
 				}
@@ -182,14 +164,14 @@ public class ServiceRoomController extends BaseController {
 			}
 		} catch (Exception e) {
 			LOGGER.error("机房删除失败,后台报错", JSON.toJSONString(serviceRoom));
-			operLogService.addBusinessLog("", OperLog.operTypeEnum.delete, OperLog.actionBusinessEnum.serviceRoom,
+			operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.delete, OperLog.actionBusinessEnum.serviceRoom,
 					JSON.toJSONString(serviceRoom), OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房删除失败:后台报错");
 		}
 	}
 
 	/**
-	 * 根据ID查询数据词典
+	 * 根据ID查询机房信息
 	 *
 	 * @param serviceRoom
 	 * @param request
@@ -244,7 +226,7 @@ public class ServiceRoomController extends BaseController {
 				criteria.andPositionLike("%" + form.getPosition() + "%");
 			}
 			// 排序设置
-			example.setOrderByClause("SORT asc");
+			example.setOrderByClause("create_date desc");
 			Page<ServiceRoom> queryResult = serviceRoomService.getByPage(form.getPageNum(), form.getPageSize(), example);
 			// 去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,
