@@ -60,9 +60,23 @@ public class ServiceRoomIcngphController extends BaseController {
 			LOGGER.info("request param: [ServiceRoomIcngph: {}]", JSON.toJSONString(icngph));
 		}
 		try {
+			// 验证名称不能重复
+			if (StringUtil.isNotEmpty(icngph.getFloorName())) {
+				ServiceRoomIcngphExample example = new ServiceRoomIcngphExample();
+				ServiceRoomIcngphExample.Criteria criteria = example.createCriteria();
+				criteria.andFloorNameEqualTo(icngph.getFloorName());
+				List<ServiceRoomIcngph> icngphs = serviceRoomIcngphService.getByExample(example);
+				if (icngphs.size() > 0) {
+					return buildJSON(HttpStatus.BAD_REQUEST.value(), "楼层名称已存在，请重新输入");
+				}
+			} else {
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "楼层名称不能为空");
+			}
+
 			ArrayList<FileUtilBean> beans = FileUtil.uploadFiles(request, "upload/serviceRoomIcngph", true);
-			if (beans.size() < 1) {
-				return buildJSON(HttpStatus.BAD_REQUEST.value(), "上传文件错误，请检查ZIP压缩文件");
+			if (beans.size() != 3) {
+				FileUtil.deleteFiles(beans);
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "上传文件错误，请检查ZIP压缩文件是否只含有YML、JSON和PNG三个文件");
 			}
 			for (FileUtilBean bean : beans) {
 				if ("yml".equalsIgnoreCase(bean.getFileExt())) {
@@ -76,18 +90,12 @@ public class ServiceRoomIcngphController extends BaseController {
 					icngph.setImageRealPath(bean.getFileRealPath());
 				}
 			}
-			// 验证名称不能重复
-			if (StringUtil.isNotEmpty(icngph.getFloorName())) {
-				ServiceRoomIcngphExample example = new ServiceRoomIcngphExample();
-				ServiceRoomIcngphExample.Criteria criteria = example.createCriteria();
-				criteria.andFloorNameEqualTo(icngph.getFloorName());
-				List<ServiceRoomIcngph> icngphs = serviceRoomIcngphService.getByExample(example);
-				if (icngphs.size() > 0) {
-					return buildJSON(HttpStatus.BAD_REQUEST.value(), "楼层名称已存在，请重新输入");
-				}
-			} else {
-				return buildJSON(HttpStatus.BAD_REQUEST.value(), "楼层名称不能为空");
+			String checkResult = this.checkFile(icngph);
+			if (StringUtil.isNotEmpty(checkResult)) {
+				FileUtil.deleteFiles(beans);
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), checkResult);
 			}
+
 			icngph.setId(UUIDGenerator.generatorRandomUUID());
 			serviceRoomIcngphService.save(icngph);
 			// 去除不需要的字段
@@ -126,8 +134,8 @@ public class ServiceRoomIcngphController extends BaseController {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败，入参ID不能为空");
 			}
 			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoomIcngph", true);
-			if (files.size() < 1) {
-				return buildJSON(HttpStatus.BAD_REQUEST.value(), "上传文件错误，请检查ZIP压缩文件");
+			if(files.size() != 3){
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "上传文件错误，请检查ZIP压缩文件是否只含有YML、JSON和PNG三个文件");
 			}
 			for (FileUtilBean file : files) {
 				if ("yml".equalsIgnoreCase(file.getFileExt())) {
@@ -141,7 +149,15 @@ public class ServiceRoomIcngphController extends BaseController {
 					icngph.setJsonRealPath(file.getFileRealPath());
 				}
 			}
-			serviceRoomIcngphService.updateById(icngph);
+			String checkResult = this.checkFile(icngph);
+			if (StringUtil.isNotEmpty(checkResult)) {
+				FileUtil.deleteFiles(files);
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), checkResult);
+			}
+			int result = serviceRoomIcngphService.updateById(icngph);
+			if(result < 1){
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败");
+			}
 			// 去除不需要的字段
 			String jsonStr = JSON.toJSONString(icngph,
 					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateDate", "createName", "createDate"),
@@ -384,5 +400,25 @@ public class ServiceRoomIcngphController extends BaseController {
 					"", OperLog.logLevelEnum.error);
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), "获取数据失败");
 		}
+	}
+
+	/**
+	 * 校验上传文件是否正确
+	 */
+	private String checkFile(ServiceRoomIcngph icngph) {
+		StringBuffer sb = new StringBuffer();
+		if (StringUtil.isEmpty(icngph.getJsonRealPath())) {
+			sb.append("缺少JSON文件、");
+		}
+		if (StringUtil.isEmpty(icngph.getYmlRealPath())) {
+			sb.append("缺少YML文件、");
+		}
+		if (StringUtil.isEmpty(icngph.getImageRealPath())) {
+			sb.append("缺少PNG文件、");
+		}
+		if(StringUtil.isNotEmpty(sb.toString())){
+			return sb.toString().substring(0, sb.toString().length() - 1);
+		}
+		return null;
 	}
 }

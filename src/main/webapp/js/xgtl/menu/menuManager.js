@@ -2,7 +2,7 @@
  * Created by Charles on 2016/9/26.
  */
 var globlePageNum = 1;//页码
-var globlePageSize = 2;//行数
+var globlePageSize = 10;//行数
 
 /**
  * 页面初始化
@@ -207,6 +207,7 @@ $("#selectIconBtn").click(function () {
         fix: false, //不固定
         closeBtn:1,
         moveOut:true,
+        shadeClose:true,//点击遮罩层关闭弹出框
         content: DCMSUtils.URL.getContentPath()+'webpages/pub/iconSelect.html'
     });
 });
@@ -229,12 +230,16 @@ function menuNewUpdate(menuId,type){
     if(type=='new'){
         $("#menuModalTitle").text('新增菜单');
         if(menuId){
+            document.getElementById("menuNewUpdateForm").reset();
             var pMenu=DCMSUtils.SessionStorage.get("MENU_TREE_MAP")[menuId];
             $(".menuPDiv").css('display','block');
             $("#menuLevel").val(pMenu.level+1);
             $("#mLevel").val('N');
             $("#menuPName").text(pMenu.name);
             $("#menuPId").val(pMenu.id);
+        }else{
+            $("#menuPName").text('');
+            document.getElementById("menuNewUpdateForm").reset();
         }
         $("#menuModal").modal();
     }else if(type=='update'){

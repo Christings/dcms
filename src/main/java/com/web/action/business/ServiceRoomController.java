@@ -59,6 +59,11 @@ public class ServiceRoomController extends BaseController {
 			}
 			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoom", false);// 上传文件
 			if (files.size() > 0) {
+				if (!"png".equalsIgnoreCase(files.get(0).getFileExt()) && !"jpg".equalsIgnoreCase(files.get(0).getFileExt())
+						&& !"jpeg".equalsIgnoreCase(files.get(0).getFileExt())) {
+					FileUtil.deleteFiles(files);
+					return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请上传正确的图片文件(PNG/JPG/JPEG)");
+				}
 				serviceRoom.setImageUrl(files.get(0).getFileRealPath());
 			}
 			serviceRoom.setId(UUIDGenerator.generatorRandomUUID());
@@ -102,6 +107,11 @@ public class ServiceRoomController extends BaseController {
 			}
 			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoom", false);// 上传文件
 			if (files.size() > 0) {
+				if (!"jpg".equalsIgnoreCase(files.get(0).getFileExt()) && !"png".equalsIgnoreCase(files.get(0).getFileExt())
+						&& !"jpeg".equalsIgnoreCase(files.get(0).getFileExt())) {
+					FileUtil.deleteFiles(files);
+					return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请上传正确的图片文件(PNG/JPG/JPEG)");
+				}
 				serviceRoom.setImageUrl(files.get(0).getFileRealPath());
 			}
 			if (serviceRoomService.updateById(serviceRoom) > 0) {
@@ -216,7 +226,7 @@ public class ServiceRoomController extends BaseController {
 				criteria.andPositionLike("%" + form.getPosition() + "%");
 			}
 			// 排序设置
-			example.setOrderByClause("name asc");
+			example.setOrderByClause("create_date desc");
 			Page<ServiceRoom> queryResult = serviceRoomService.getByPage(form.getPageNum(), form.getPageSize(), example);
 			// 去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,

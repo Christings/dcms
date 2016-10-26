@@ -3,50 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <title>dcms</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
-    <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="../../../css/dataTables.bootstrap.css" rel="stylesheet">
-    <link href="../../../css/style2.css" rel="stylesheet">
+     <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../3rd-libs/datatables/datatables.bootstrap.css" rel="stylesheet">
+    <link href="../../../3rd-libs/datatables/datatables.css" rel="stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/lib/weui.css" rel="stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/css/jquery-weui.css" rel="stylesheet">
     <link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
     <link href="../../../css/animate.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../../../3rd-libs/jstree/themes/default/style.min.css">
+    
+    
+    <link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="../../../css/animate.css" rel="stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/lib/weui.css" rel = "stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/css/jquery-weui.css" rel = "stylesheet">
+    <link href="../../../css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../../../3rd-libs/datatables/datatables.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../3rd-libs/jstree/themes/default/style.min.css">
+    <link href="../../../css/style2.css" rel="stylesheet">
+     <style>
+        .text-align-left {
+            text-align: left;
+        }
+
+        .text-align-right {
+            text-align: right;
+        }
+
+        .text-align-right > div,
+        .text-align-right > select {
+            margin-right: 6px;
+        }
+
+        .input-group-search {
+            display: inline-table;
+            width: 150px;
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-sm-12">
-                <div class="ibox float-e-margins">
+                <div class="ibox">
                     <div class="ibox-title">
-                        <h5>用户管理1</h5>
-<!--
-                        <div class="ibox-tools">
-                        	<a class="add-menu">
-                        		<i class="fa fa-plus-square-o" data-toggle="modal" data-target="#useradd" onclick="roleGetAll()"></i>
-                        	</a>
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="table_data_tables.html#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="table_data_tables.html#">选项1</a>
-                                </li>
-                                <li><a href="table_data_tables.html#">选项2</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div> -->
+                        <h5>用户管理</h5>
                     </div>
 
                     <div class="ibox-content">
-                    	<div class="" id="upTable">
+                    	<div class="col-md-2 text-align-left" id="upTable">
                             <a data-toggle="modal" style="cursor:pointer" data-target="#useradd" onclick="roleGetAll()" class="btn btn-primary ">添加用户</a>
                         </div>
-                        <table class="table table-striped table-bordered table-hover dataTables-example">
-                            <thead>
+                        <form id="queryForm">
+                            <div class="col-md-10 text-align-right">
+                                <div class="input-group-search">
+                                    <input name="searchUsername" type="text" class="form-control" id="searchUsername"
+                                           placeholder="登录号">
+                                </div>
+                                <div class="input-group-search">
+                                    <input name="searchRealname" type="text" class="form-control" id="searchRealname"
+                                           placeholder="用户名称">
+                                </div>
+                                <div class="input-group-search">
+                                    <input name="searchStatus" type="text" class="form-control" id="searchStatus"
+                                           placeholder="是否激活">
+                                </div>
+                                <div class="input-group-search">
+                                    <input name="searchSex" type="text" class="form-control" id="searchSex"
+                                           placeholder="性别">
+                                </div>
+                                <button class="btn btn-primary" type="button" id="queryBtn">查询</button>
+                                <button class="btn btn-primary" type="button" id="resetBtn">重置</button>
+                            </div>
+                        </form>
+                        <table style="width:100%" id="userListTable" class="table table-striped table-bordered table-hover dataTables-example">
+                            <!-- <thead>
                                 <tr>
                                     <th>登录号</th>
 									<th>用户名称</th>
@@ -75,7 +106,7 @@
                                 </tr>
                             </tfoot>
                             <tbody id="userBody">
-                            </tbody>
+                            </tbody> -->
                         </table>
                     </div>
                 </div>
@@ -145,12 +176,15 @@
 							</div>
 						</div> -->
 						<div class='form-group' >
-							<label for="name">选择组织机构</label>
-							<div id="orgTreeAdd"></div>
+							<label class='col-sm-3'>组织机构：</label>
+							<input id="domainPId" name="domainPId"  type="hidden">
+							<div class='col-sm-8'>
+								<span id='domainPName' name="domainPName" style="width: 50%;"></span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectDomainBtn" class="btn btn-primary btn-sm btn-outline">选择</a>
+							</div>
 						</div>
 						<div class="form-group">
-						  <label for="name">身份证</label>
-						  <input type="text" class="form-control" id="identificationNo" 
+							<label for="name">身份证</label>
+							<input type="text" class="form-control" id="identificationNo" 
 						     placeholder="请输入身份证号">
 						</div>
 						<div class="form-group">
@@ -158,7 +192,7 @@
 						  <input type="text" class="form-control" id="phone" 
 						     placeholder="请输入手机号">
 						</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 						  <label for="name">邮箱</label>
 						  <input type="text" class="form-control" id="email" 
 						     placeholder="请输入邮箱">
@@ -167,7 +201,7 @@
 						  <label for="name">电话</label>
 						  <input type="text" class="form-control" id="mobile" 
 						     placeholder="请输入电话">
-						</div>
+						</div> -->
 						<div class="form-group">
 						  	<label for="name">性别</label>
 						 	<select id="sex">
@@ -240,14 +274,6 @@
 		        <div class="modal-body" id="userUpdateBody">
 		            
 		        </div>
-		        <!-- <div class="modal-footer">
-		            <button type="button" class="btn btn-default" 
-		               data-dismiss="modal">关闭
-		            </button>
-		            <button type="submit" onclick="userUpdate" class="btn btn-primary">
-		               提交更改
-		            </button>
-		        </div> -->
 		    </div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
@@ -287,18 +313,48 @@
 		</div><!-- /.modal -->
 	</div>
 
+	<div class="modal fade" id="domainTreeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" domainTreeModalTitle>
+                        选择组织机构
+                    </h4>
+                </div>
+                <form class="form-horizontal m-t" id="domainTreeForm">
+                    <div class="modal-body" style="max-height: 350px;overflow:scroll;overflow-x: auto;overflow-y: auto;">
+                        <div id="domainJsTree">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">关闭
+                        </button>
+                        <button type="button" class="btn btn-primary" id="confirmDomainBtn">
+                            确定
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 	<script src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
 	<script src="../../../3rd-libs/jstree/jstree.min.js"></script>
     <script src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../../../3rd-libs/jquery/table/jquery.jeditable.js"></script>
-
+	<script src="../../../3rd-libs/jquery-validation/jquery.validate.min.js"></script>
+    <script src="../../../3rd-libs/jquery-validation/localization/messages_zh.min.js"></script>
+    <script src="../../../3rd-libs/jquery-weui/js/jquery-weui.min.js"></script>
     <!-- Data Tables -->
-    <script src="../../../3rd-libs/jquery/table/jquery.dataTables.1.10.12.js"></script>
-    <script src="../../../3rd-libs/bootstrap/js/dataTables.bootstrap.js"></script>
+    <script src="../../../3rd-libs/datatables/datatables.js"></script>
+	<script src="../../../3rd-libs/datatables/datatables.bootstrap.js"></script>
+	<script src="../../../3rd-libs/datatables/datatables-custom.js"></script>
 
     <!-- 自定义js -->
     <script src="../../../js/pub/common.js"></script>
-    <script src="../../../js/pub/content.js"></script>
     <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
  	<script src="../../../js/manage-user/userSelectPage.js"></script>
  	<script src="../../../js/manage-user/userAdd.js"></script>
