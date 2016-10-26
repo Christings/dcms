@@ -70,8 +70,9 @@ public class OperLogController extends BaseController {
 			}
 			if (StringUtil.isNotEmpty(operLogForm.getOperDateSort())) {
 				operLogExample.setOrderByClause(
-						"identificationNo " + ("asc".equalsIgnoreCase(operLogForm.getOperDateSort()) ? "asc" : "desc"));
+						"oper_date " + ("asc".equalsIgnoreCase(operLogForm.getOperDateSort()) ? "asc" : "desc"));
 			}
+			operLogExample.setOrderByClause("oper_date desc");
 			Page<OperLog> queryResult = operLogService.getPageData(operLogForm.getPageNum(), operLogForm.getPageSize(),
 					operLogExample);
 			return AllResult.okJSON(queryResult);

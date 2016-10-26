@@ -109,6 +109,10 @@
             order by ${orderByClause}
         </if>
     </select>
+    <select id="selectByPrimaryKey" parameterType="com.web.entity.ServiceRoomIcngph" resultMap="BaseResultMap">
+        select *
+        from t_b_service_room_icngph where id = #{id,jdbcType=VARCHAR}
+    </select>
     <delete id="deleteByExample" parameterType="com.web.example.ServiceRoomIcngphExample">
         <!--
           WARNING - @mbggenerated
