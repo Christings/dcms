@@ -410,4 +410,21 @@ public class FileUtil {
 		}
 		return code;
 	}
+
+	/**
+	 * 删除多个文件
+	 */
+	public static int deleteFiles(ArrayList<FileUtilBean> files) {
+		int count = 0;
+		String contextPath = ContextHolderUtils.getRequest().getSession().getServletContext().getRealPath("/");
+		for (FileUtilBean bean : files) {
+			String path = bean.getFileRealPath();
+			File file = new File(contextPath + path);
+			if (file.exists()) {
+				file.delete();
+				count++;
+			}
+		}
+		return count;
+	}
 }
