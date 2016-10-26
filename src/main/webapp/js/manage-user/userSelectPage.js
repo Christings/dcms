@@ -1,8 +1,10 @@
 // var user_num = 1;
 // var user_pageCount = 1;
+var dtApi;
 function pageInit(){
 	loadOrganizationTree();
-	loadUserBody();
+	// loadUserBody();
+	userListLoad();
 }
 function loadOrganizationTree(){
 	//加载域信息
@@ -119,155 +121,227 @@ function loadOrganizationTree(){
 	    return domainList;
 	}
 }
-function loadUserBody(){
-	var pageNum = 1;
-	var pageSize = 10;
-	var username = "";
-	var realname = "";
-	var html_content = "";
-	var content = "";
-	console.log("userLoad");
-	// var getUserData = {pageNum: pageNum,pageSize: pageSize,username: username,realname:realname};
-	var getUserData = "";
-	// DCMSUtils.Ajax.doPost("user/datagrid",getUserData).done((jsonData)=>{
-	DCMSUtils.Ajax.doPost("user/getAll",getUserData).done((jsonData)=>{
-		//var userInfo = jsonData["data"]["records"];
-		var userInfo = jsonData["data"];
-	    // user_pageCount = jsonData["data"]["pageCount"];
-		var num = 1;
-		var e;
-		for(var i=0,len=userInfo.length;i<len;i++){
-			e = userInfo[i];
-			var sex;
-			var status;
-			switch(e["sex"]){
-				case 0:
-					sex = "男";
-					break;
-				case 1:
-					sex = "女";
-					break;
-			}
-			if(e["status"] == 2){
-				console.log(e["realname"]+"已被删除");
-				continue;
-			}
-			switch(e["status"]){
-				case 0:
-					status = "是";
-					break;
-				case 1:
-					status = "否";
-					break;
-			}
-			var roleIds = e["roleIds"];
-			 var roleNames = '';
-			// var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
-			// for(var j=0,lenj=roleIds.length;j<lenj;j++){
-			// 	var e = roleIds[i];
-			// 	if(j == (lenj - 1)){
-			// 		roleNames += rolesMap[e]['rolename'];
-			// 	}else{
-			// 		roleNames += rolesMap[e]['rolename']+',';
-			// 	}
-				
-			// }
-			content = "<tr>"+
-				"<td>"+e["username"]+"</td>"+
-				"<td>"+e["realname"]+"</td>"+
-				"<td>"+roleNames+"</td>"+
-				"<td>"+sex+"</td>"+
-				"<td>"+e["identificationno"]+"</td>"+
-				"<td>"+e["phone"]+"</td>"+
-				"<td>"+e["email"]+"</td>"+
-				"<td>"+e["mobile"]+"</td>"+
-				"<td>"+status+"</td>"+
-				"<td>"+
-					"<i style='margin:3px;cursor:pointer' title='编辑' class='fa fa-pencil' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\"></i>"+
-					"<i style='margin:3px;cursor:pointer' title='修改密码' class='fa fa-key' role=\"presentation\" data-toggle=\"modal\" data-target=\"#usereditpassword\" data-value=\""+e["id"]+"\" onclick=\"userPasswordInit(this)\"></i>"+
-					"<i style='margin:3px;cursor:pointer' title='删除' class='fa fa-trash' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\"></i>"+
-					
-					// "<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\">编辑</label>|"+
-					// "<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\">删除</label>"+
-				"</td>"+
-			"</tr>";
-			html_content += content;
-			num++;
-		}
 
-		// var ulContent =" <ul class=\"pagination\" style=\"margin:0;padding:0;float:right\">"+"<li onclick=\"pageMinus()\"><a>&laquo;</a></li>";
-		// var pagination = function(){
-		// 	for(var i=1;i<=user_pageCount;i++){
-		// 		ulContent += "<li data-value=\""+i+"\" onclick=\"selectPage(this)\"><a>"+i+"</a></li>";
-		// 	}
-		// }
-		// pagination();
-		// ulContent += "<li onclick=\"pagePlus()\"><a>&raquo;</a></li></ul>";
-		var index1 = document.getElementById("userBody");
-		index1.innerHTML = html_content;
-		// var index2 = document.getElementById("userPagination");
-		// index2.innerHTML = ulContent;
-		// console.log("userLoad"+userInfo);
-		// $('.dataTables-example').DataTable({
-		// 	"bFilter":false
-		// });
-		$('.dataTables-example').DataTable({
-            "bFilter":true,
-            "aLengthMenu": [10, 25, 50],
-            "oLanguage":{
-                "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
-                "oPaginate": {
-                    "sFirst":    "第一页",
-                    "sPrevious": " 上一页 ",
-                    "sNext":     " 下一页 ",
-                    "sLast":     " 最后一页 "
-                },
-                "sInfoFiltered":"(从一共 _MAX_ 条记录中查找)",
-                "sZeroRecords":"未找到任何相匹配记录",
-            }
-        });
-       
-        var A = $('#DataTables_Table_0_info').parent().parent();
-        $('#DataTables_Table_0_length').children().insertBefore(A);
-        $('#DataTables_Table_0_filter').parent().css('display','none');
-        
-        var title = $('.dataTables-example thead th').eq(0).text();
-        $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="0" placeholder="Search '+title+'" />' ).prependTo('#upTable');
-        title = $('.dataTables-example thead th').eq(1).text();
-        $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="1" placeholder="Search '+title+'" />' ).prependTo('#upTable');
-        title = $('.dataTables-example thead th').eq(3).text();
-        $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="3" placeholder="Search '+title+'" />' ).prependTo('#upTable');
-        title = $('.dataTables-example thead th').eq(8).text();
-        $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="8" placeholder="Search '+title+'" />' ).prependTo('#upTable');
-        $('<a onclick="" href="javascript:void(0);" style="float:right;margin-left:12px;" class="btn btn-primary ">查询</a>').prependTo('#upTable');
+function userListLoad(){
+	var dtTable=$("#userListTable");
+	dtApi=dtTable.dataTable({
+		/**
+		 *
+		 * @param data DT 封装的向后台传递的参数
+		 * @param callback 回调函数，用户向DT传数据
+		 * @param settings 一些设置
+		 */
+		ajax:function(data, callback, settings){
+			//需要把分页参数转为DCMS接口规范的
+			console.log(data);
+			var pageNum=data.start/data.length+1,pageSize=data.length;
+			var params={
+				pageNum:pageNum,
+				pageSize:pageSize,
+				username:$("#searchUsername").val(),
+				realname:$("#searchRealname").val(),
+				status:$("#searchStatus").val(),
+				sex:$("#searchSex").val()
+			};
+			DCMSUtils.Ajax.doPost("user/datagrid",params).then(function (data) {
+				if(data.status=='1'){
+					//组织DT标准的返回值
+					callback({
+						data:data.data.records,
+						recordsTotal:data.data.count,
+						recordsFiltered:data.data.count
+					});
+				}
+			});
+		},
+		columns: [
+			{title: '登录号', data: 'username'},
+			{title: '用户名称', data: 'realname'},
+			{title: '角色名称', data: ''},
+			{title: '性别', data: 'sex'},
+			{title: '身份证', data: 'identification'},
+			{title: '手机号', data: 'phone'},
+			{title: '邮箱', data: 'email'},
+			{title: '电话', data: 'mobile'},
+			{title: '激活', data: 'status'},
+			{title: '操作', data: ''}
+		],
+		columnDefs:[{
+			targets:9,
+			render:function(data,type,row,meta){
+				var html = "<i style='margin:3px;cursor:pointer' title='编辑' class='fa fa-pencil' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+row.id+"\" onclick=\"userUpdateInit(this)\"></i>"+
+					"<i style='margin:3px;cursor:pointer' title='修改密码' class='fa fa-key' role=\"presentation\" data-toggle=\"modal\" data-target=\"#usereditpassword\" data-value=\""+row.id+"\" onclick=\"userPasswordInit(this)\"></i>"+
+					"<i style='margin:3px;cursor:pointer' title='删除' class='fa fa-trash' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+row.id+"\" onclick=\"userDeleteInit(this)\"></i>";
+				return html;
+			}
+		}]
+	}).api();
 
-        var table = $('.dataTables-example').DataTable();
-        $('input[data-id=\'0\']').on('keyup change',function(){
-            table
-                .column( 0 )
-                .search( this.value )
-                .draw();
-        });
-        $('input[data-id=\'1\']').on('keyup change',function(){
-            table
-                .column( 1 )
-                .search( this.value )
-                .draw();
-        });
-        $('input[data-id=\'3\']').on('keyup change',function(){
-            table
-                .column( 3 )
-                .search( this.value )
-                .draw();
-        });
-        $('input[data-id=\'8\']').on('keyup change',function(){
-            table
-                .column( 8 )
-                .search( this.value )
-                .draw();
-        });
+	dtTable.on("draw.DT", datatablesMtr.freeTableHeight(dtTable));
+
+	$("#queryBtn").click(function(){
+		dtApi.ajax.reload();
+	});
+
+	$("#resetBtn").click(function(){
+		document.getElementById("queryForm").reset();
 	});
 }
+
+//-----------------------------
+// function loadUserBody(){
+// 	var pageNum = 1;
+// 	var pageSize = 10;
+// 	var username = "";
+// 	var realname = "";
+// 	var html_content = "";
+// 	var content = "";
+// 	console.log("userLoad");
+// 	// var getUserData = {pageNum: pageNum,pageSize: pageSize,username: username,realname:realname};
+// 	var getUserData = "";
+// 	// DCMSUtils.Ajax.doPost("user/datagrid",getUserData).done((jsonData)=>{
+// 	DCMSUtils.Ajax.doPost("user/getAll",getUserData).done((jsonData)=>{
+// 		//var userInfo = jsonData["data"]["records"];
+// 		var userInfo = jsonData["data"];
+// 	    // user_pageCount = jsonData["data"]["pageCount"];
+// 		var num = 1;
+// 		var e;
+// 		for(var i=0,len=userInfo.length;i<len;i++){
+// 			e = userInfo[i];
+// 			var sex;
+// 			var status;
+// 			switch(e["sex"]){
+// 				case 0:
+// 					sex = "男";
+// 					break;
+// 				case 1:
+// 					sex = "女";
+// 					break;
+// 			}
+// 			if(e["status"] == 2){
+// 				console.log(e["realname"]+"已被删除");
+// 				continue;
+// 			}
+// 			switch(e["status"]){
+// 				case 0:
+// 					status = "是";
+// 					break;
+// 				case 1:
+// 					status = "否";
+// 					break;
+// 			}
+// 			var roleIds = e["roleIds"];
+// 			 var roleNames = '';
+// 			// var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
+// 			// for(var j=0,lenj=roleIds.length;j<lenj;j++){
+// 			// 	var e = roleIds[i];
+// 			// 	if(j == (lenj - 1)){
+// 			// 		roleNames += rolesMap[e]['rolename'];
+// 			// 	}else{
+// 			// 		roleNames += rolesMap[e]['rolename']+',';
+// 			// 	}
+				
+// 			// }
+// 			content = "<tr>"+
+// 				"<td>"+e["username"]+"</td>"+
+// 				"<td>"+e["realname"]+"</td>"+
+// 				"<td>"+roleNames+"</td>"+
+// 				"<td>"+sex+"</td>"+
+// 				"<td>"+e["identificationno"]+"</td>"+
+// 				"<td>"+e["phone"]+"</td>"+
+// 				"<td>"+e["email"]+"</td>"+
+// 				"<td>"+e["mobile"]+"</td>"+
+// 				"<td>"+status+"</td>"+
+// 				"<td>"+
+// 					"<i style='margin:3px;cursor:pointer' title='编辑' class='fa fa-pencil' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\"></i>"+
+// 					"<i style='margin:3px;cursor:pointer' title='修改密码' class='fa fa-key' role=\"presentation\" data-toggle=\"modal\" data-target=\"#usereditpassword\" data-value=\""+e["id"]+"\" onclick=\"userPasswordInit(this)\"></i>"+
+// 					"<i style='margin:3px;cursor:pointer' title='删除' class='fa fa-trash' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\"></i>"+
+					
+// 					// "<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\">编辑</label>|"+
+// 					// "<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\">删除</label>"+
+// 				"</td>"+
+// 			"</tr>";
+// 			html_content += content;
+// 			num++;
+// 		}
+
+// 		// var ulContent =" <ul class=\"pagination\" style=\"margin:0;padding:0;float:right\">"+"<li onclick=\"pageMinus()\"><a>&laquo;</a></li>";
+// 		// var pagination = function(){
+// 		// 	for(var i=1;i<=user_pageCount;i++){
+// 		// 		ulContent += "<li data-value=\""+i+"\" onclick=\"selectPage(this)\"><a>"+i+"</a></li>";
+// 		// 	}
+// 		// }
+// 		// pagination();
+// 		// ulContent += "<li onclick=\"pagePlus()\"><a>&raquo;</a></li></ul>";
+// 		var index1 = document.getElementById("userBody");
+// 		index1.innerHTML = html_content;
+// 		// var index2 = document.getElementById("userPagination");
+// 		// index2.innerHTML = ulContent;
+// 		// console.log("userLoad"+userInfo);
+// 		// $('.dataTables-example').DataTable({
+// 		// 	"bFilter":false
+// 		// });
+// 		$('.dataTables-example').DataTable({
+//             "bFilter":true,
+//             "aLengthMenu": [10, 25, 50],
+//             "oLanguage":{
+//                 "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
+//                 "oPaginate": {
+//                     "sFirst":    "第一页",
+//                     "sPrevious": " 上一页 ",
+//                     "sNext":     " 下一页 ",
+//                     "sLast":     " 最后一页 "
+//                 },
+//                 "sInfoFiltered":"(从一共 _MAX_ 条记录中查找)",
+//                 "sZeroRecords":"未找到任何相匹配记录",
+//             }
+//         });
+       
+//         var A = $('#DataTables_Table_0_info').parent().parent();
+//         $('#DataTables_Table_0_length').children().insertBefore(A);
+//         $('#DataTables_Table_0_filter').parent().css('display','none');
+        
+//         var title = $('.dataTables-example thead th').eq(0).text();
+//         $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="0" placeholder="Search '+title+'" />' ).prependTo('#upTable');
+//         title = $('.dataTables-example thead th').eq(1).text();
+//         $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="1" placeholder="Search '+title+'" />' ).prependTo('#upTable');
+//         title = $('.dataTables-example thead th').eq(3).text();
+//         $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="3" placeholder="Search '+title+'" />' ).prependTo('#upTable');
+//         title = $('.dataTables-example thead th').eq(8).text();
+//         $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="8" placeholder="Search '+title+'" />' ).prependTo('#upTable');
+//         $('<a onclick="" href="javascript:void(0);" style="float:right;margin-left:12px;" class="btn btn-primary ">查询</a>').prependTo('#upTable');
+
+//         var table = $('.dataTables-example').DataTable();
+//         $('input[data-id=\'0\']').on('keyup change',function(){
+//             table
+//                 .column( 0 )
+//                 .search( this.value )
+//                 .draw();
+//         });
+//         $('input[data-id=\'1\']').on('keyup change',function(){
+//             table
+//                 .column( 1 )
+//                 .search( this.value )
+//                 .draw();
+//         });
+//         $('input[data-id=\'3\']').on('keyup change',function(){
+//             table
+//                 .column( 3 )
+//                 .search( this.value )
+//                 .draw();
+//         });
+//         $('input[data-id=\'8\']').on('keyup change',function(){
+//             table
+//                 .column( 8 )
+//                 .search( this.value )
+//                 .draw();
+//         });
+// 	});
+// }
+
+
+
+//------------------------------
 // function userSelectPage(){
 // 		// var obj = document.getElementById("userSelectPage");
 // 		var html_content="";
