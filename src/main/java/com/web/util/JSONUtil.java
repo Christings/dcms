@@ -2,7 +2,8 @@ package com.web.util;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
@@ -58,7 +59,7 @@ public final class JSONUtil {
 
 	/**
 	 * 读取文件内容转换成字符串
-	 * */
+	 */
 	public static String readJsonFile(String path) {
 		File file = new File(path);
 		if (!file.exists()) {
@@ -67,8 +68,10 @@ public final class JSONUtil {
 		BufferedReader reader = null;
 		StringBuffer sb = new StringBuffer();
 		try {
-			reader = new BufferedReader(new FileReader(file));
-			String tempStr =null;
+			String charset = FileUtil.getFileCharset(file);
+			InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), charset);
+			reader = new BufferedReader(inputStreamReader);
+			String tempStr = null;
 			int line = 1;
 			while ((tempStr = reader.readLine()) != null) {
 				sb.append(tempStr);

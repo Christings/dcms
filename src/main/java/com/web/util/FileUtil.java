@@ -345,8 +345,8 @@ public class FileUtil {
 		while (iterator.hasNext()) {
 			String fileName = iterator.next();
 			MultipartFile file = request.getFile(fileName);
-			String ext = FileUtil.getFilenameExtension(file.getOriginalFilename());
-			if (null != file) {
+			if (null != file && file.getSize() > 0) {
+				String ext = FileUtil.getFilenameExtension(file.getOriginalFilename());
 				String path = request.getSession().getServletContext().getRealPath("/") + targetPath;// 获取路径
 				File inFile = new File(path);
 				if (!inFile.exists()) {
@@ -369,6 +369,9 @@ public class FileUtil {
 						bean.setFileRealPath(targetPath + "/" + newFile.getName());
 						beans.add(bean);
 					}
+					if (inFile.exists()) {
+						inFile.delete();
+					}
 				} else {
 					FileUtilBean bean = new FileUtilBean();
 					bean.setFileName(file.getName());
@@ -377,11 +380,51 @@ public class FileUtil {
 					bean.setFileRealPath(targetPath + "/" + newFileName);
 					beans.add(bean);
 				}
-				if (inFile.exists()) {
-					inFile.delete();
-				}
 			}
 		}
 		return beans;
+	}
+
+	/**
+	 * 获取文本文件编码级（txt/json/yml/xml）
+	 * 
+	 * @param file
+	 *            文件对象
+	 **/
+	public static String getFileCharset(File file) throws IOException {
+		BufferedInputStream bin = new BufferedInputStream(new FileInputStream(file));
+		int p = (bin.read() << 8) + bin.read();
+		String code = null;
+		switch (p) {
+		case 0xefbb:
+			code = "UTF-8";
+			break;
+		case 0xfffe:
+			code = "Unicode";
+			break;
+		case 0xfeff:
+			code = "UTF-16BE";
+			break;
+		default:
+			code = "GBK";
+		}
+		return code;
+	}
+
+	/**
+	 * 删除多个文件
+	 */
+	public static int deleteFiles(ArrayList<FileUtilBean> files) {
+		int count = 0;
+		String contextPath = ContextHolderUtils.getRequest().getSession().getServletContext().getRealPath("/");
+		for (FileUtilBean bean : files) {
+			String path = bean.getFileRealPath();
+			File file = new File(contextPath + path);
+			if (file.exists()) {
+				file.delete();
+				count++;
+			}
+		}
+		return count;
 	}
 }

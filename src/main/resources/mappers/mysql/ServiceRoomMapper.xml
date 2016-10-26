@@ -94,6 +94,12 @@
             order by ${orderByClause}
         </if>
     </select>
+    <select id="selectByPrimaryKey" parameterType="com.web.entity.ServiceRoom" resultMap="BaseResultMap">
+        select
+        *
+        from t_s_service_room
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
     <delete id="deleteByExample" parameterType="com.web.example.ServiceRoomExample">
         delete from t_s_service_room
         <if test="_parameter != null">
