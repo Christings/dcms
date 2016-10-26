@@ -197,4 +197,19 @@ public class UserDoMainServiceImpl implements UserDoMainService {
 
         return userDomains;
     }
+
+    @Override
+    public int delete(UserDoMainExample example) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("delete condition example by id: {}", example);
+        }
+
+        // 删除记录数
+        int result = userDoMainMapper.deleteByExample(example) ;
+
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("delete condition object by id result: {}", result);
+        }
+        return result;
+    }
 }

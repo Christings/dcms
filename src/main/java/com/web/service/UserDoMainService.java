@@ -1,6 +1,7 @@
 package com.web.service;
 
 import com.web.entity.UserDoMain;
+import com.web.example.UserDoMainExample;
 
 import java.util.List;
 
@@ -20,4 +21,11 @@ public interface UserDoMainService extends IService<UserDoMain, String> {
      * 根据用户ID 查询用户与域关系数据
      */
     List<UserDoMain> getUserDomain(String userId) ;
+
+    /**
+     * 根据条件删除
+     * @param example
+     * @return
+     */
+    int delete(UserDoMainExample example);
 }

@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.web.core.util.page.Page;
 import com.web.entity.User;
+import com.web.example.UserDoMainExample;
 import com.web.example.UserExample;
+import com.web.example.UserRoleExample;
 import com.web.mappers.UserMapper;
 import com.web.service.UserDoMainService;
 import com.web.service.UserRoleService;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,7 +38,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRoleService userRoleService; //用户角色Service
 	@Autowired
-	UserDoMainService userDoMainService;
+	UserDoMainService userDoMainService; //用户、域 Service
 
 	@Override
 	public int save(User entity) {
@@ -223,5 +226,28 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return users;
+	}
+
+	@Override
+	public int deleteBatch(String... id) {
+		//1.删除用户和角色关联关系数据
+		UserRoleExample e1 = new UserRoleExample();
+		UserRoleExample.Criteria c1 = e1.createCriteria();
+		c1.andUserIdIn(Arrays.asList(id));
+		userRoleService.delete(e1);
+
+		//2.删除用户和域关联关系数据
+		UserDoMainExample e2 = new UserDoMainExample();
+		UserDoMainExample.Criteria c2 = e2.createCriteria();
+		c2.andUserIdIn(Arrays.asList(id));
+		userDoMainService.delete(e2);
+
+		//3.删除用户数据
+		UserExample e3 = new UserExample();
+		UserExample.Criteria c3 = e3.createCriteria();
+		c3.andIdIn(Arrays.asList(id));
+		int result = userMapper.deleteByExample(e3);
+
+		return result;
 	}
 }

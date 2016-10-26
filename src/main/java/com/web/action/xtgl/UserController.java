@@ -261,29 +261,35 @@ public class UserController extends BaseController {
 	}
 
 	/**
-	 * 删除用户（不是真实删除） TODO 回头有需求在进行调整
+	 * 删除用户
 	 */
 	@RequestMapping(value = "/delete", method = { RequestMethod.POST, RequestMethod.GET })
 	public Object delete(String id, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [id: {}]", id);
 		}
-		// TODO 需要添加判断
+
 		if (StringUtils.isEmpty(id) || "".equals(id.trim())) {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID必须提供");
 		}
 
 		try {
-			User user = new User();
-			user.setId(id);
-			user.setStatus((short)2);
-			int result = userService.updateById(user);
-
-			if (result > 0) {
-				// 增加日志
-				operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.user,
-						JSON.toJSONString(user, SerializerFeature.IgnoreNonFieldGetter));
+			String[] ids = id.split(",");
+			UserExample example = new UserExample();
+			UserExample.Criteria criteria = example.createCriteria();
+			criteria.andIdIn(Arrays.asList(ids));
+			List<User> users = userService.getExample(example);
+			if(null == users || users.size()==0){
+				return buildJSON(0, "未查询到用户信息");
 			}
+
+			//批量删除用户信息
+			userService.deleteBatch(id);
+			User u = WebUtils.getUser(request);
+
+			//增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.user,
+						JSON.toJSONString(users, SerializerFeature.IgnoreNonFieldGetter));
 
 			return AllResult.ok();
 		} catch (Exception e) {
