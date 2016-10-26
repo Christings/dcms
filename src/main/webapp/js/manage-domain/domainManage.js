@@ -223,7 +223,13 @@ function domainNewUpdate(domainId,type){
             $(".domainPDiv").css('display','block');
             $("#domainPName").text(pDomain.name);
             $("#domainPId").val(pDomain.id);
+        }else{
+             $("#domainPId").val('');
+             $("#domainPName").text('');
         }
+        $("#domainId").val('');
+        $("#domainName").val('');
+        $("#domainDescript").val('');
         $("#domainModal").modal();
     }else if(type=='update'){
         $("#domainModalTitle").text('编辑组织机构');
@@ -244,6 +250,9 @@ function domainNewUpdate(domainId,type){
         if(pDomain){
             $("#domainPId").val(pDomain.id);
             $("#domainPName").text(pDomain.name);
+        }else{
+            $("#domainPId").val('');
+             $("#domainPName").text('');
         }
         $("#domainModal").modal();
     }
@@ -280,15 +289,17 @@ function saveDomain(){
     var domain={
         id:$("#domainId").val(),
         name:$("#domainName").val(),
-        description:$("#domainDescript").val(),
-        parentId:$("#domainPId").val()
+        description:$("#domainDescript").val()
     }
 
     $("#domainModal").modal('hide');
     DCMSUtils.Modal.showLoading();
-    var ajaxUrl='domain/add';
+    var ajaxUrl;
     if(domain.id){
         ajaxUrl='domain/update';
+    }else{
+        ajaxUrl='domain/add';
+        domain.parentId=$("#domainPId").val();
     }
     DCMSUtils.Ajax.doPost(ajaxUrl,domain).then(function(data){
         DCMSUtils.Modal.hideLoading();
@@ -313,7 +324,7 @@ function domainDelete(domainId){
 
     DCMSUtils.Modal.confirm('确定删除['+domain.name+']吗？','',function () {
         DCMSUtils.Modal.showLoading('组织机构删除中...');
-        DCMSUtils.Ajax.doPost('domain/delete',{key:domainId}).then(function(data){
+        DCMSUtils.Ajax.doPost('domain/delete',{id:domainId}).then(function(data){
             DCMSUtils.Modal.hideLoading();
             if(data.status=='1'){
                 getDomainList(globlePageNum, globlePageSize);

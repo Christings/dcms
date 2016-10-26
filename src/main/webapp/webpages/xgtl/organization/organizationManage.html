@@ -76,8 +76,7 @@
 		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 	                  &times;
 		            </button>
-		            <h4 class="modal-title" id="domainModelTitle">
-		                机构录入
+		            <h4 class="modal-title" id="domainModalTitle">
 		            </h4>
 		        </div>
 
@@ -85,6 +84,7 @@
 		            <form role="form" id="domainNewUpdateForm">
 						<div class="form-group">
 						  <label for="name">组织机构名称</label>
+						  <input id="domainId" name="domainId"  type="hidden">
 						  <input type="text" class="form-control" name="domainName" id="domainName" 
 						     placeholder="请输入组织机构名称">
 						</div>
@@ -93,15 +93,9 @@
 						  <input type="text" class="form-control" name="domainDescript" id="domainDescript" 
 						     placeholder="请输入组织机构描述">
 						</div>
-						<!-- <div class="form-group">
-							<label for="name">机构类型</label>
-							<select id="domainType" onchange="changeLevel(this)">
-								<option selected value = '1'>公司</option>
-								<option value = '0'>内部组织</option>
-							</select>
-						</div> -->
-						<div class="form-group domainPDiv" style="display:none;">
+						<div class="form-group domainPDiv">
 							<label class='col-sm-3'>父组织机构：</label>
+							<input id="domainPId" name="domainPId"  type="hidden">
 							<div class='col-sm-8'>
 								<span id='domainPName' name="domainPName" style="width: 50%;"></span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectParentBtn" class="btn btn-primary btn-sm btn-outline">选择</a>
 							</div>
@@ -117,7 +111,7 @@
 				            <button type="button" class="btn btn-default" 
 				               data-dismiss="modal">关闭
 				            </button>
-				            <button type="submit" onclick="domainAdd()" class="btn btn-primary">
+				            <button type="submit" class="btn btn-primary">
 				               确认添加
 				            </button>
 			        	</div>
@@ -193,7 +187,7 @@
                         <button type="button" class="btn btn-default"
                                 data-dismiss="modal">关闭
                         </button>
-                        <button type="button" class="btn btn-primary" id="confirmParentdomainBtn">
+                        <button type="button" class="btn btn-primary" id="confirmParentDomainBtn">
                             确定
                         </button>
                     </div>

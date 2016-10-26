@@ -1,36 +1,123 @@
 // var user_num = 1;
 // var user_pageCount = 1;
 function pageInit(){
-	loadUserBody();
 	loadOrganizationTree();
+	loadUserBody();
 }
 function loadOrganizationTree(){
-
-	
-    $('#orgTreeAdd').jstree({
-		'plugins':['wholerow','checkbox'],
-		'core':{
-			'data':[
-				{
-					'text':'北京三源合众科技有限公司',
-					'children':[ 
-						{
-							'text':'研发部',
-							'children':[
-								{'text':'研发一组'},
-								{'text':'研发二组'},
-								{'text':'研发三组'}
-							]
-						},
-						{'text':'测试部'},
-						{'text':'销售部'},
-						{'text':'人力资源部'},
-						{'text':'指挥部'}
-					]
-				}
-			]
+	//加载域信息
+    var jsTreeIndex=0;
+	DCMSUtils.Modal.showLoading();
+    DCMSUtils.Ajax.doPost('domain/tree').then(function(data){
+        DCMSUtils.Modal.hideLoading();
+        if(data.status=='1'){
+            var treeData=transDataToJsTree(data.data,jsTreeIndex);
+            // console.log(treeData);
+            $('#domainJsTree').jstree({
+            	'plugins':['wholerow','checkbox'],
+                'core': {
+                    'check_callback': true,
+                    'data':treeData
+                }
+            });
+            DCMSUtils.Modal.hideLoading();
+            initTreeGird(data.data, 0);
+        }else{
+            DCMSUtils.Modal.toast('加载组织机构树异常','forbidden');
+        }
+    },function(error){
+        DCMSUtils.Modal.hideLoading();
+        DCMSUtils.Modal.toast('加载组织机构树异常','forbidden');
+    });
+    //加载角色信息
+    var da = "";
+	DCMSUtils.Ajax.doPost("role/getAll",da).done((jsonData)=>{
+		var roles = jsonData["data"];
+		var content = "";
+		var e;
+		var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
+        if(!rolesMap){
+            rolesMap={};
+        }
+		for(var i=0,len=roles.length;i<len;i++){
+			e = roles[i];
+	        rolesMap[e.id]=e;
+	        DCMSUtils.SessionStorage.set("ROLES_MAP",rolesMap);
 		}
 	});
+
+	$("#selectDomainBtn").click(function(){
+        $("#useradd").modal('hide');
+        $("#domainTreeModal").modal('show');
+	});
+
+	var domainIndex = 0;
+	function initTreeGird(domainTree, parentIndex) {
+	    for (var i = 0; i < domainTree.length; i++) {
+	        domainIndex++;
+	        var domain = domainTree[i];
+
+	        //保存domainTree数据，方便编辑等
+	        var domainMap=DCMSUtils.SessionStorage.get("Domain_TREE_MAP");
+	        if(!domainMap){
+	            domainMap={};
+	        }
+	        domainMap[domain.id]=domain;
+	        DCMSUtils.SessionStorage.set("Domain_TREE_MAP",domainMap);
+
+	        //子节点初始化
+	        var childDomain=domain.childDoMain;
+	        if(childDomain && childDomain.length>0){
+	            var pIndex=domainIndex;
+	            initTreeGird(childDomain,pIndex);
+	        }
+	    }
+	}
+
+	$("#confirmDomainBtn").click(function(){
+	    var selected=$("#domainJsTree").jstree(true).get_selected();
+
+	    if(selected.length==0){
+	        DCMSUtils.Modal.alert('请选择组织机构','');
+	        return ;
+	    }
+	    var pDomain;
+	    var ids = '';
+	    var names = '';
+	    for(var i=0,len=selected.length;i<len;i++){
+	    	pDomain=DCMSUtils.SessionStorage.get("Domain_TREE_MAP")[selected[i]];
+	    	if(i == (len -1)){
+	    		ids += pDomain.id;
+	    		names += pDomain.name;
+	    	}else{
+	    		ids += pDomain.id+',';
+		    	names += pDomain.name+' ';
+	    	}
+	    }
+	    $("#domainPId").val(ids);
+	    $("#domainPName").text(names);
+	    // $("#domainLevel").text(pDomain.rank+1);
+	    $("#domainTreeModal").modal('hide');
+	    $("#userupdate").modal('hide');
+	    $("#useradd").modal('show');
+	});
+	/**
+	 * 转换数据适配js tree
+	 * @param domainList
+	 * @param container
+	 * @param pindex
+	 */
+	function transDataToJsTree(domainList,jsIndex){
+	    for(var i=0;i<domainList.length;i++){
+	        var domain=domainList[i];
+	        domain.text=domain.name
+	        if(domain.childDoMain && domain.childDoMain.length>0){
+	            domain.state={'opened': true};
+	            domain.children=transDataToJsTree(domain.childDoMain,jsIndex);
+	        }
+	    }
+	    return domainList;
+	}
 }
 function loadUserBody(){
 	var pageNum = 1;
@@ -73,10 +160,22 @@ function loadUserBody(){
 					status = "否";
 					break;
 			}
+			var roleIds = e["roleIds"];
+			 var roleNames = '';
+			// var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
+			// for(var j=0,lenj=roleIds.length;j<lenj;j++){
+			// 	var e = roleIds[i];
+			// 	if(j == (lenj - 1)){
+			// 		roleNames += rolesMap[e]['rolename'];
+			// 	}else{
+			// 		roleNames += rolesMap[e]['rolename']+',';
+			// 	}
+				
+			// }
 			content = "<tr>"+
 				"<td>"+e["username"]+"</td>"+
 				"<td>"+e["realname"]+"</td>"+
-				"<td></td>"+
+				"<td>"+roleNames+"</td>"+
 				"<td>"+sex+"</td>"+
 				"<td>"+e["identificationno"]+"</td>"+
 				"<td>"+e["phone"]+"</td>"+
@@ -126,7 +225,6 @@ function loadUserBody(){
                 "sInfoFiltered":"(从一共 _MAX_ 条记录中查找)",
                 "sZeroRecords":"未找到任何相匹配记录",
             }
-            
         });
        
         var A = $('#DataTables_Table_0_info').parent().parent();
