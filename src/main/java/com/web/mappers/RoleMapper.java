@@ -5,6 +5,7 @@ import com.web.example.RoleExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RoleMapper {
     int countByExample(RoleExample example);
@@ -28,4 +29,9 @@ public interface RoleMapper {
     int updateByPrimaryKeySelective(Role record);
 
     int updateByPrimaryKey(Role record);
+
+    /**
+     * 自定义根据用户ID 返回角色信息
+     */
+    List<Role> selectByUserId(Map<String,String> params);
 }

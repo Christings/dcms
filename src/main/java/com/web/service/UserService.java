@@ -48,4 +48,9 @@ public interface UserService extends IService<User,String> {
 	 * @return
      */
 	List<User> getExample(UserExample example) ;
+
+	/**
+	 * 扩展批量删除用户
+	 */
+	int deleteBatch(String ... id);
 }

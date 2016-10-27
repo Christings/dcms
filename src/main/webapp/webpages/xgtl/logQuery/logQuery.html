@@ -22,6 +22,9 @@
     <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
 
     <style>
+        html, body{
+            overflow: hidden;
+        }
         .text-align-reverse {
             text-align: right;
         }
@@ -70,23 +73,31 @@
     </div>
 </div>
 
-<script>
-    var tableObj = $('#logQuery-table');
+<script>    var tableObj = $('#logQuery-table');
     var api;
     $(document).ready(function () {
 
         api = tableObj.DataTable({
-            "ajax": {
-                "url": DCMSUtils.URL.getContentPath()+"operLog/datagrid",
-                "type": "post",
-                "data": function (parms) {
-                    parms.deviceName = $('[name="deviceName"]').val();
-                    parms.operUserName = $('[name="operUserName"]').val();
-                    parms.operDate = $('[name="operDate"]').val();
-                },
-                "dataSrc": function (json) {
-                    return json.data.lists;
-                }
+            ajax:function(data, callback, settings){
+                //需要把分页参数转为DCMS接口规范的
+                var pageNum=data.start/2+1,pageSize=data.length;
+                var params={
+                    pageNum:pageNum,
+                    pageSize:pageSize,
+                    deviceName:$("#deviceName").val(),
+                    operUserName:$("#operUserName").val(),
+                    operDate:$("#operDate").val()
+                };
+                DCMSUtils.Ajax.doPost("operLog/datagrid",params).then(function (data) {
+                    if(data.status=='1'){
+                        //组织DT标准的返回值
+                        callback({
+                            data:data.data.records,
+                            recordsTotal:data.data.count,
+                            recordsFiltered:data.data.count
+                        });
+                    }
+                });
             },
             columns: [
                 {title: '设备名称', data: 'deviceName'},
