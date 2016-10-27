@@ -157,7 +157,7 @@ function userListLoad(){
 		columns: [
 			{title: '登录号', data: 'username'},
 			{title: '用户名称', data: 'realname'},
-			{title: '角色名称', data: ''},
+			{title: '角色名称', data: 'roles'},
 			{title: '性别', data: 'sex'},
 			{title: '身份证', data: 'identification'},
 			{title: '手机号', data: 'phone'},
