@@ -1897,11 +1897,11 @@ div.dataTables_wrapper div.dataTables_paginate .pagination-panel .pagination-pan
     border-bottom: 1px solid #e7e7e7;
 }
 .dataTables_wrapper .footbar {
-    width: 50%;
+    width: 30%;
     position: fixed;
     bottom: 0px;
     background: #ffffff;
-    margin-left: 0;
+    margin-left: -20px;
     margin-right: 0;
     border-top: 1px solid #e7ecf1;
     padding-top: 12px;
@@ -3595,7 +3595,7 @@ video {
 }
 
 .wrapper-content {
-    padding: 20px;
+    padding: 10px;
     height: 100%;
 }
 
@@ -3641,9 +3641,9 @@ ol.unstyled {
     background: none repeat scroll 0 0 white;
     border-top: 1px solid #e7eaec;
     overflow: hidden;
-    padding: 10px 20px;
+    padding: 15px 20px;
     margin: 0 -15px;
-    height: 36px;
+    height: 46px;
 }
 
 .footer.fixed_full {

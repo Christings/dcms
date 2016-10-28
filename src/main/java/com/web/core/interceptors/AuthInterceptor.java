@@ -57,7 +57,8 @@ public class AuthInterceptor implements HandlerInterceptor {
 		}
 		//2.判断用户是否登录
 		if(null == WebUtils.getUser(request)){
-			response.sendRedirect(request.getContextPath()+"/");
+//			response.sendRedirect(request.getContextPath()+"/");
+			response.getWriter().write("<script>window.top.location=\""+request.getContextPath()+"/"+"\"</script>");
 			return false;
 		}
 		//3.判断用户是否有权限访问URL

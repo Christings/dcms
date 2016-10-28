@@ -25,12 +25,12 @@ function userUpdateInit(e){
 		var mobile = userInfo['mobile'];
 		var sex = userInfo['sex'];
 		var status = userInfo['status'];
-		var roleIds = userInfo['roleIds']?userInfo['roleIds']:[];
-		var domainIds = userInfo['domainIds'];
+		var roles = userInfo['roles']?userInfo['roles']:[];
+		var domains = userInfo['domains']?userInfo['domains']:[];
 		var domainPIds = '';
 		var domainPNames = '';
-		for(var i=0,len=domainIds.length;i<len;i++){
-			var pDomain=DCMSUtils.SessionStorage.get("Domain_TREE_MAP")[domainIds[i]];
+		for(var i=0,len=domains.length;i<len;i++){
+			var pDomain=domains[i];
 			if(i == (len - 1)){
 				domainPIds += pDomain.id;
 				domainPNames += pDomain.name;
@@ -39,7 +39,6 @@ function userUpdateInit(e){
 				domainPNames += pDomain.name + ',';
 			}
 		}
-		console.log(roleIds);
 		var sex_selected_0;
 		var sex_selected_1;
 		var status_selected_0;
@@ -64,14 +63,14 @@ function userUpdateInit(e){
 				break;
 		}var da = "";
 		DCMSUtils.Ajax.doPost("role/getAll",da).done((jsonData)=>{
-			var roles = jsonData["data"];
+			var roleIds = jsonData["data"];
 			var content = "";
 			var e;
-			for(var i=0,len=roles.length;i<len;i++){
-				e = roles[i];
+			for(var i=0,len=roleIds.length;i<len;i++){
+				e = roleIds[i];
 				var check = "";
-				for(var j=0,len1=roleIds.length;j<len1;j++){
-					if(roleIds[j] == e["id"]){
+				for(var j=0,len1=roles.length;j<len1;j++){
+					if(roles[j]["id"] == e["id"]){
 						check = "checked";
 						break;
 					}
