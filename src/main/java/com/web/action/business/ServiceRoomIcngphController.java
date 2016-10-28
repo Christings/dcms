@@ -231,7 +231,6 @@ public class ServiceRoomIcngphController extends BaseController {
 			LOGGER.info("request param: [datagrid ServiceRoomIcngph: {}]", JSON.toJSONString(form));
 		}
 		String path = request.getSession().getServletContext().getRealPath("/");
-		System.out.println(path);
 		// 1.验证参数
 		String errorTip = ValidationHelper.build()
 				// 必输条件验证
@@ -249,7 +248,7 @@ public class ServiceRoomIcngphController extends BaseController {
 			ServiceRoomIcngphExample.Criteria criteria2 = example.createCriteria();
 			// 条件设置
 			if (!StringUtils.isEmpty(form.getFloorName())) {
-				criteria.andFloorNameLike("%" + form.getFileName().trim() + "%");
+				criteria.andFloorNameLike("%" + form.getFloorName().trim() + "%");
 			}
 			if (!StringUtils.isEmpty(form.getFileName())) {
 				criteria2.andJsonNameLike("%" + form.getFileName() + "%");
