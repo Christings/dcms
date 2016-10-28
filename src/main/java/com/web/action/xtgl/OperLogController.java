@@ -7,6 +7,9 @@ import com.web.entity.OperLog;
 import com.web.example.OperLogExample;
 import com.web.util.AllResult;
 import com.web.util.StringUtil;
+import com.web.util.validation.GroupBuilder;
+import com.web.util.validation.ValidationHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static com.web.util.AllResult.buildJSON;
 
 /**
  * 业务日志控制器
@@ -32,9 +37,18 @@ public class OperLogController extends BaseController {
 	 */
 	@RequestMapping(value = "/datagrid", method = { RequestMethod.GET, RequestMethod.POST })
 	public Object getScroll(HttpServletRequest request, OperLogForm operLogForm) {
+		// 1.验证参数
+		String errorTip = ValidationHelper.build()
+				// 必输条件验证
+				.addGroup(GroupBuilder.build(operLogForm.getPageNum()).notNull().minValue(1), "页码必须从1开始")
+				.addGroup(GroupBuilder.build(operLogForm.getPageSize()).notNull().minValue(1), "每页记录数量最少1条")
+				.validate();
+
+		if (!StringUtils.isEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
+		}
+
 		try {
-			operLogForm.setPageNum(1);
-			operLogForm.setPageSize(10);
 			OperLogExample operLogExample = new OperLogExample();
 			OperLogExample.Criteria criteria = operLogExample.createCriteria();
 			if (StringUtil.isNotEmpty(operLogForm.getDeviceName())) {
