@@ -16,7 +16,7 @@ var datatablesMtr = function(){
         }else{
             var screenBodyHeight = screenHeight - scrollBodyTop - 78;
             var $footbar = $table.find(".footbar");
-            $footbar.width($scrollBody.width() + 15);
+            $footbar.width($scrollBody.width() + 85);
             $footbar.children("div:eq(1)").addClass("footbar-secondDiv");
         }
 

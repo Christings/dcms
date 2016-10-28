@@ -1,6 +1,6 @@
 /* Set the defaults for DataTables initialisation */
 $.extend(true, $.fn.dataTable.defaults, {
-    "dom": "<'row'<'col-sm-6'><'col-sm-6'f>r>" + "t" + "<'row footbar'<'col-sm-6'i><'col-sm-6'lp>>",
+    "dom": "<'row'<'col-md-6 col-sm-6'><'col-md-6 col-sm-6'f>r>" + "t" + "<'row footbar'<'col-sm-6'i><'col-sm-6'lp>>",
     "language": {
         "paginate": {
             "previous": '上页',
