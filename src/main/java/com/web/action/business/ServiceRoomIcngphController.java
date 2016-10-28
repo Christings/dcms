@@ -134,7 +134,7 @@ public class ServiceRoomIcngphController extends BaseController {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败，入参ID不能为空");
 			}
 			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoomIcngph", true);
-			if(files.size() != 3){
+			if (files.size() != 3) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "上传文件错误，请检查ZIP压缩文件是否只含有YML、JSON和PNG三个文件");
 			}
 			for (FileUtilBean file : files) {
@@ -155,7 +155,7 @@ public class ServiceRoomIcngphController extends BaseController {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), checkResult);
 			}
 			int result = serviceRoomIcngphService.updateById(icngph);
-			if(result < 1){
+			if (result < 1) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败");
 			}
 			// 去除不需要的字段
@@ -251,10 +251,9 @@ public class ServiceRoomIcngphController extends BaseController {
 				criteria.andFloorNameLike("%" + form.getFloorName().trim() + "%");
 			}
 			if (!StringUtils.isEmpty(form.getFileName())) {
-				criteria2.andJsonNameLike("%" + form.getFileName() + "%");
-				criteria2.andYmlNameLike("%" + form.getFileName() + "%");
-				criteria2.andImageNameLike("%" + form.getFileName() + "%");
-				example.or(criteria2);
+				example.or().andJsonNameLike("%" + form.getFileName() + "%");
+				example.or().andYmlNameLike("%" + form.getFileName() + "%");
+				example.or().andImageNameLike("%" + form.getFileName() + "%");
 			}
 
 			// 设置排序条件
@@ -415,7 +414,7 @@ public class ServiceRoomIcngphController extends BaseController {
 		if (StringUtil.isEmpty(icngph.getImageRealPath())) {
 			sb.append("缺少PNG文件、");
 		}
-		if(StringUtil.isNotEmpty(sb.toString())){
+		if (StringUtil.isNotEmpty(sb.toString())) {
 			return sb.toString().substring(0, sb.toString().length() - 1);
 		}
 		return null;
