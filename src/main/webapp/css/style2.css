@@ -1897,11 +1897,11 @@ div.dataTables_wrapper div.dataTables_paginate .pagination-panel .pagination-pan
     border-bottom: 1px solid #e7e7e7;
 }
 .dataTables_wrapper .footbar {
-    width: 50%;
+    width: 30%;
     position: fixed;
     bottom: 0px;
     background: #ffffff;
-    margin-left: -40px;
+    margin-left: -20px;
     margin-right: 0;
     border-top: 1px solid #e7ecf1;
     padding-top: 12px;
