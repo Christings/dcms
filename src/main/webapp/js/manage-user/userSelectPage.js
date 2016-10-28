@@ -144,8 +144,19 @@ function userListLoad(){
 				sex:$("#searchSex").val()
 			};
 			DCMSUtils.Ajax.doPost("user/datagrid",params).then(function (data) {
+				
 				if(data.status=='1'){
+				
 					//组织DT标准的返回值
+					for(var i=0,len=data.data.records.length;i<len;i++){
+						var domains = data.data.records[i].domains[0]?data.data.records[i].domains[0]:[];
+						// if(data.data.records[i].domains.length!=0){
+							console.log(domains);
+							// console.log(data.data.records.domains[0]["name"]);
+						// }
+					}
+					
+					
 					callback({
 						data:data.data.records,
 						recordsTotal:data.data.count,
@@ -158,23 +169,76 @@ function userListLoad(){
 			{title: '登录号', data: 'username'},
 			{title: '用户名称', data: 'realname'},
 			{title: '角色名称', data: ''},
-			{title: '性别', data: 'sex'},
-			{title: '身份证', data: 'identification'},
+			{title: '组织机构', data: ''},
+			{title: '性别', data: ''},
+			{title: '身份证', data: 'identificationno'},
 			{title: '手机号', data: 'phone'},
 			{title: '邮箱', data: 'email'},
 			{title: '电话', data: 'mobile'},
-			{title: '激活', data: 'status'},
+			{title: '激活', data: ''},
 			{title: '操作', data: ''}
 		],
-		columnDefs:[{
-			targets:9,
-			render:function(data,type,row,meta){
-				var html = "<i style='margin:3px;cursor:pointer' title='编辑' class='fa fa-pencil' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+row.id+"\" onclick=\"userUpdateInit(this)\"></i>"+
-					"<i style='margin:3px;cursor:pointer' title='修改密码' class='fa fa-key' role=\"presentation\" data-toggle=\"modal\" data-target=\"#usereditpassword\" data-value=\""+row.id+"\" onclick=\"userPasswordInit(this)\"></i>"+
-					"<i style='margin:3px;cursor:pointer' title='删除' class='fa fa-trash' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+row.id+"\" onclick=\"userDeleteInit(this)\"></i>";
-				return html;
+		columnDefs:[
+			{
+				targets:10,
+				render:function(data,type,row,meta){
+					var html = "<i style='margin:3px;cursor:pointer' title='编辑' class='fa fa-pencil' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+row.id+"\" onclick=\"userUpdateInit(this)\"></i>"+
+						"<i style='margin:3px;cursor:pointer' title='修改密码' class='fa fa-key' role=\"presentation\" data-toggle=\"modal\" data-target=\"#usereditpassword\" data-value=\""+row.id+"\" onclick=\"userPasswordInit(this)\"></i>"+
+						"<i style='margin:3px;cursor:pointer' title='删除' class='fa fa-trash' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+row.id+"\" onclick=\"userDeleteInit(this)\"></i>";
+					return html;
+				}
+			},
+			{	
+				targets:2,
+				render:function(data,type,row,meta){
+					var roles = row.roles;
+					var html = '<span>';
+					for(var i=0,len=roles.length;i<len;i++){
+						html += roles[i]['rolename'];
+					}
+					html += '</span>';
+					return html;
+				}
+			},
+			{	
+				targets:3,
+				render:function(data,type,row,meta){
+					var domains = row.domains;
+					var html = '<span>';
+					for(var i=0,len=domains.length;i<len;i++){
+						html += domains[i]['name'];
+					}
+					html += '</span>';
+					return html;
+				}
+			},
+			{
+				targets:4,
+				render:function(data,type,row,meta){
+					var sex = row.sex;
+					var html = '<span>';
+					if(sex == 0){
+						html += '男';
+					}else{
+						html += '女';
+					}
+					return html;
+				}
+			},
+			{
+				targets:9,
+				render:function(data,type,row,meta){
+					var status = row.status;
+					var html = '<span>';
+					if(status == 0){
+						html += '是';
+					}else{
+						html += '否';
+					}
+					return html;
+				}
 			}
-		}]
+		]
 	}).api();
 
 	dtTable.on("draw.DT", datatablesMtr.freeTableHeight(dtTable));

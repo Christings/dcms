@@ -20,7 +20,7 @@
     <link href="../../../3rd-libs/datatables/datatables.css" rel="stylesheet">
     <link rel="stylesheet" href="../../../3rd-libs/jstree/themes/default/style.min.css">
     <link href="../../../css/style2.css" rel="stylesheet">
-     <style>
+    <style>
         .text-align-left {
             text-align: left;
         }
@@ -47,36 +47,28 @@
             <div class="col-sm-12">
                 <div class="ibox">
                     <div class="ibox-title">
-                        <h5>用户管理</h5>
+                        <h5>机房平面图管理</h5>
                     </div>
 
                     <div class="ibox-content">
                     	<div class="col-md-2 text-align-left" id="upTable">
-                            <a data-toggle="modal" style="cursor:pointer" data-target="#useradd" onclick="roleGetAll()" class="btn btn-primary ">添加用户</a>
+                            <a data-toggle="modal" style="cursor:pointer" data-target="#roomPGAdd" onclick="" class="btn btn-primary ">添加机房平面图</a>
                         </div>
-                        <form id="queryForm">
+                        <form id="queryForm" >
                             <div class="col-md-10 text-align-right">
                                 <div class="input-group-search">
-                                    <input name="searchUsername" type="text" class="form-control" id="searchUsername"
-                                           placeholder="登录号">
+                                    <input name="searchFloorName" type="text" class="form-control" id="searchFloorName"
+                                           placeholder="楼层名">
                                 </div>
                                 <div class="input-group-search">
-                                    <input name="searchRealname" type="text" class="form-control" id="searchRealname"
-                                           placeholder="用户名称">
-                                </div>
-                                <div class="input-group-search">
-                                    <input name="searchStatus" type="text" class="form-control" id="searchStatus"
-                                           placeholder="是否激活">
-                                </div>
-                                <div class="input-group-search">
-                                    <input name="searchSex" type="text" class="form-control" id="searchSex"
-                                           placeholder="性别">
+                                    <input name="searchFileName" type="text" class="form-control" id="searchFileName"
+                                           placeholder="文件名">
                                 </div>
                                 <button class="btn btn-primary" type="button" id="queryBtn">查询</button>
                                 <button class="btn btn-primary" type="button" id="resetBtn">重置</button>
                             </div>
                         </form>
-                        <table style="width:100%" id="userListTable" class="table table-striped table-bordered table-hover dataTables-example">
+                        <table style="width:100%" id="roomPGListTable" class="table table-striped table-bordered table-hover dataTables-example">
                         </table>
                     </div>
                 </div>
@@ -86,21 +78,21 @@
 
 	<!-- <div class="foot" style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
 		<label class="number-page">每页显示
-			<select id="userSelectPage" onchange="userSelectPage()">
+			<select id="roomPGSelectPage" onchange="roomPGSelectPage()">
 				<option value = '2'>2</option>
 				<option value = '5'>5</option>
 				<option selected = "selected" value = '10'>10</option>
 				<option value = '15'>15</option>
 			</select>行
 		</label>
-		<label class="foot-pagination" id="userPagination" style="margin:0;padding:0">
+		<label class="foot-pagination" id="roomPGPagination" style="margin:0;padding:0">
 			
 		</label>
 	</div> -->
 	
 	<!-- 模态框（Modal） -->
 
-	<div class="modal fade" id="useradd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="roomPGAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -108,78 +100,25 @@
 	                  &times;
 		            </button>
 		            <h4 class="modal-title" id="myModalLabel">
-		                用户录入
+		                机房平面图录入
 		            </h4>
 		        </div>
-
 		        <div class="modal-body">
-		            <form role="form" id="userAddForm">
+		            <form role="form" id="roomPGAddForm" enctype="multipart/form-data">
 						<div class="form-group">
-						  <label for="name">登陆账号</label>
-						  <input type="text" class="form-control" id="userName" 
-						     placeholder="请输入登录帐号">
+						  <label for="name">楼层名称</label>
+						  <input name="floorName" type="text" class="form-control" id="floorName" 
+						     placeholder="请输入楼层名称"/>
 						</div>
 						<div class="form-group">
-						  <label for="name">用户姓名</label>
-						  <input type="text" class="form-control" id="realName" 
-						     placeholder="请输入用户姓名">
-						</div>
-						<div class="form-group">
-						  <label for="name">用户密码</label>
-						  <input type="text" class="form-control" id="password" 
-						     placeholder="请输入密码">
-						</div>
-						<div class="form-group">
-							<label for="name">选择用户角色</label>
-							<div id="rolesContent">
-							</div>
-						</div>
-						<div class='form-group' >
-							<label class='col-sm-3'>组织机构：</label>
-							<input id="domainPId" name="domainPId"  type="hidden">
-							<div class='col-sm-8'>
-								<span id='domainPName' name="domainPName" style="width: 50%;"></span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectDomainBtn" class="btn btn-primary btn-sm btn-outline">选择</a>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="name">身份证</label>
-							<input type="text" class="form-control" id="identificationNo" 
-						     placeholder="请输入身份证号">
-						</div>
-						<div class="form-group">
-						  <label for="name">手机号</label>
-						  <input type="text" class="form-control" id="phone" 
-						     placeholder="请输入手机号">
-						</div>
-						<!-- <div class="form-group">
-						  <label for="name">邮箱</label>
-						  <input type="text" class="form-control" id="email" 
-						     placeholder="请输入邮箱">
-						</div>
-						<div class="form-group">
-						  <label for="name">电话</label>
-						  <input type="text" class="form-control" id="mobile" 
-						     placeholder="请输入电话">
-						</div> -->
-						<div class="form-group">
-						  	<label for="name">性别</label>
-						 	<select id="sex">
-								<option value = '0'>男</option>
-								<option value = '1'>女</option>
-							</select>
-						</div>
-						<div class="form-group">
-						  <label for="name">状态</label>
-						  <select id="status">
-								<option value = '1'>未激活</option>
-								<option value = '0'>激活</option>
-						  </select>
+						  <label for="zipFile">平面图zip文件：</label>
+						  <input id="zipFile" name="zipFile"  type="file"  value="选择zip文件..."/>
 						</div>
 						<div class="modal-footer">
 				            <button type="button" class="btn btn-default" 
 				               data-dismiss="modal">关闭
 				            </button>
-				            <button type="submit" onclick="userAdd()" class="btn btn-primary">
+				            <button type="submit" onclick="roomPGAdd()" class="btn btn-primary">
 				               确认添加
 				            </button>
 			        	</div>
@@ -189,7 +128,7 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="user-roles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="roomPG-roles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -202,14 +141,14 @@
 		        </div>
 
 		        <div class="modal-body">
-		            <form role="form" id="userRolesForm">
+		            <form role="form" id="roomPGRolesForm">
 		            </form>
 		        </div>
 		    </div>
 		</div>
 	</div>
 
-	<div class="modal fade" id="userupdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="roomPGUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -217,17 +156,17 @@
 	                  &times;
 		            </button>
 		            <h4 class="modal-title" id="myModalLabel">
-		                用户编辑
+		                机房平面图编辑
 		            </h4>
 		        </div>
-		        <div class="modal-body" id="userUpdateBody">
+		        <div class="modal-body" id="roomPGUpdateBody">
 		            
 		        </div>
 		    </div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
 
-	<div class="modal fade" id="userdelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="roomPGdelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -238,13 +177,13 @@
 		                用户删除
 		            </h4>
 		        </div>
-		        <div class="modal-body" id="userDeleteBody">
+		        <div class="modal-body" id="roomPGDeleteBody">
 		           
 		        </div>    
 		    </div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
-	<div class="modal fade" id="usereditpassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="roomPGeditpassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -255,7 +194,7 @@
 		                更改用户密码
 		            </h4>
 		        </div>
-		        <div class="modal-body" id="userEditPasswordBody">
+		        <div class="modal-body" id="roomPGEditPasswordBody">
 		        	
 		        </div>
 		    </div><!-- /.modal-content -->
@@ -305,10 +244,10 @@
     <!-- 自定义js -->
     <script src="../../../js/pub/common.js"></script>
     <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
- 	<script src="../../../js/manage-user/userSelectPage.js"></script>
- 	<script src="../../../js/manage-user/userAdd.js"></script>
- 	<script src="../../../js/manage-user/userUpdate.js"></script>
- 	<script src="../../../js/manage-user/userDelete.js"></script>
+ 	<script src="../../../js/xgtl/roomPlaneGraph/roomPGManage.js"></script>
+ 	<script src="../../../js/xgtl/roomPlaneGraph/roomPGAdd.js"></script>
+ 	<script src="../../../js/xgtl/roomPlaneGraph/roomPGUpdate.js"></script>
+ 	<script src="../../../js/xgtl/roomPlaneGraph/roomPGDelete.js"></script>
 
  	
 </body>

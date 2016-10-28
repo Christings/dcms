@@ -3595,7 +3595,7 @@ video {
 }
 
 .wrapper-content {
-    padding: 20px;
+    padding: 10px;
     height: 100%;
 }
 
@@ -3641,9 +3641,9 @@ ol.unstyled {
     background: none repeat scroll 0 0 white;
     border-top: 1px solid #e7eaec;
     overflow: hidden;
-    padding: 10px 20px;
+    padding: 15px 20px;
     margin: 0 -15px;
-    height: 36px;
+    height: 46px;
 }
 
 .footer.fixed_full {
