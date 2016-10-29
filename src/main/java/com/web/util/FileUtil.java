@@ -304,6 +304,9 @@ public class FileUtil {
 		OutputStream outputStream = null;
 		try {
 			HttpServletRequest request = ContextHolderUtils.getRequest();
+			if(StringUtil.isEmpty(fileName)){
+				fileName = FileUtil.getFilename(filePath);
+			}
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("multipart/form-data");
 			response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
