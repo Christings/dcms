@@ -338,10 +338,10 @@ public class FileUtil {
 	 * 
 	 * @param targetPath
 	 *            文件转存的目录
-	 * @param isZIP
-	 *            是否是压缩文件
+	 * @param needUnZIP
+	 *            是否需要解压文件
 	 */
-	public static ArrayList<FileUtilBean> uploadFiles(MultipartHttpServletRequest request, String targetPath, boolean isZIP)
+	public static ArrayList<FileUtilBean> uploadFiles(MultipartHttpServletRequest request, String targetPath, boolean needUnZIP)
 			throws IOException {
 		ArrayList<FileUtilBean> beans = new ArrayList<FileUtilBean>();
 		Iterator<String> iterator = request.getFileNames();
@@ -351,6 +351,9 @@ public class FileUtil {
 			if (null != file && file.getSize() > 0) {
 				String ext = FileUtil.getFilenameExtension(file.getOriginalFilename());
 				String path = request.getSession().getServletContext().getRealPath("/") + targetPath;// 获取路径
+				if(!"zip".equalsIgnoreCase(ext)){
+					needUnZIP = false;
+				}
 				File inFile = new File(path);
 				if (!inFile.exists()) {
 					FileUtil.mkDir(inFile);
@@ -358,7 +361,7 @@ public class FileUtil {
 				String newFileName = String.valueOf(DateUtil.getMillis(new Date())) + "." + ext;
 				inFile = new File(path + "/" + newFileName);
 				file.transferTo(inFile);
-				if (isZIP) {
+				if (needUnZIP) {
 					Map<String, File> files = FileUtil.unZipFile(inFile, path);
 					Iterator it = files.keySet().iterator();
 					while (it.hasNext()) {
