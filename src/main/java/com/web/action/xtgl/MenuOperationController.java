@@ -10,17 +10,21 @@ import com.web.service.MenuService;
 import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
 import com.web.util.fastjson.FastjsonUtils;
+import com.web.util.validation.GroupBuilder;
+import com.web.util.validation.ValidationHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import static com.web.util.AllResult.buildJSON;
 
 /**
  * 菜单-->操作接口
@@ -42,18 +46,25 @@ public class MenuOperationController extends BaseController {
 	 * 添加
 	 */
 	@RequestMapping(value = "/add", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object add(MenuOperation menuOperation, HttpServletRequest request) {
+	public Object add(MenuOperation menuOperation) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menuOperation: {}]", JSON.toJSONString(menuOperation));
 		}
 
-		// TODO 需要添加判断
-		if (StringUtils.isEmpty(menuOperation.getName())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "名称不能为空");
-		}else if(StringUtils.isEmpty(menuOperation.getMenuId())){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单ID不能为空");
-		}else if(null == menuService.getById(menuOperation.getMenuId())){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单ID不存在");
+		//验证参数
+		String errorTip = ValidationHelper.build()
+				// 必输条件验证
+				.addGroup(GroupBuilder.build(menuOperation.getName()).notEmpty().maxLength(50), "名称必须提供且最大长度50位")
+				.addGroup(GroupBuilder.build(menuOperation.getMenuId()).notEmpty().maxLength(32), "菜单ID必须提供且最大长度32位")
+				// 非必输条件验证
+				.addGroup(GroupBuilder.buildOr(menuOperation.getUrl()).empty().maxLength(255), "链接最大长度255位")
+				.validate();
+
+		if (StringUtils.isNotEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
+		}
+		if(null == menuService.getById(menuOperation.getMenuId())){
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单不存在");
 		}
 
 		try {
@@ -62,8 +73,8 @@ public class MenuOperationController extends BaseController {
 			menuOperationService.save(menuOperation);
 
 			// 增加日志
-//			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menu,
-//					JSON.toJSONString(menuOperation));
+			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menuOperation,
+					JSON.toJSONString(menuOperation),OperLog.logLevelEnum.success);
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuOperation,
@@ -73,6 +84,9 @@ public class MenuOperationController extends BaseController {
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("save menuOperation object error. : {}", JSON.toJSONString(menuOperation), e);
+			// 增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menuOperation,
+					JSON.toJSONString(menuOperation),OperLog.logLevelEnum.error);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加操作失败");
@@ -88,7 +102,7 @@ public class MenuOperationController extends BaseController {
 		}
 
 		if (StringUtils.isEmpty(id)) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请求参数异常");
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "ID必须提供");
 		}
 
 		try {
@@ -97,18 +111,15 @@ public class MenuOperationController extends BaseController {
 				return AllResult.build(1, "未找到相关操作信息");
 			}
 
-			int result = menuOperationService.deleteById(id);
+			menuOperationService.deleteById(id);
 
-			if(result > 0){
-				// 增加日志
-				operLogService.addSystemLog(OperLog.operTypeEnum.delete, OperLog.actionSystemEnum.menuOperation,
-						JSON.toJSONString(menuOperation));
-			}
+			operLogService.addSystemLog(OperLog.operTypeEnum.delete, OperLog.actionSystemEnum.menuOperation,
+					JSON.toJSONString(menuOperation),OperLog.logLevelEnum.success);
 
 			return AllResult.ok();
 		} catch (Exception e) {
 			LOGGER.error("delete menuOperation object error. : {}", id, e);
-			operLogService.addSystemLog(OperLog.operTypeEnum.delete, OperLog.actionSystemEnum.menu, null,
+			operLogService.addSystemLog(OperLog.operTypeEnum.delete, OperLog.actionSystemEnum.menuOperation, null,
 					OperLog.logLevelEnum.error);
 		}
 
@@ -119,30 +130,36 @@ public class MenuOperationController extends BaseController {
 	 * 修改
 	 */
 	@RequestMapping(value = "/update", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object update(MenuOperation menuOperation, HttpServletRequest request) {
+	public Object update(MenuOperation menuOperation) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("params[menuOperation: {}]", JSON.toJSONString(menuOperation));
 		}
 
-		// TODO 需要添加判断 后期处理
-		if(StringUtils.isEmpty(menuOperation.getId())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "ID不能为空");
-		}else if (StringUtils.isEmpty(menuOperation.getName())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "名称不能为空");
-		}else if(StringUtils.isEmpty(menuOperation.getMenuId())){
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单ID不能为空");
-		}else if(null == menuOperationService.getById(menuOperation.getId())){
+		//验证参数
+		String errorTip = ValidationHelper.build()
+				// 必输条件验证
+				.addGroup(GroupBuilder.build(menuOperation.getId()).notEmpty().maxLength(32), "ID必须提供且最大长度32位")
+				.addGroup(GroupBuilder.build(menuOperation.getName()).notEmpty().maxLength(50), "名称必须提供且最大长度50位")
+				.addGroup(GroupBuilder.build(menuOperation.getMenuId()).notEmpty().maxLength(32), "菜单ID必须提供且最大长度32位")
+				// 非必输条件验证
+				.addGroup(GroupBuilder.buildOr(menuOperation.getUrl()).empty().maxLength(255), "链接最大长度255位")
+				.validate();
+
+		if (StringUtils.isNotEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
+		}
+		if(null == menuService.getById(menuOperation.getMenuId())){
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单不存在");
+		}if(null == menuOperationService.getById(menuOperation.getId())){
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单操作不存在");
 		}
 
 		try {
-			int result = menuOperationService.updateById(menuOperation);
+			menuOperationService.updateById(menuOperation);
 
-			if(result > 0){
-				// 增加日志
-				operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.menuOperation,
-						JSON.toJSONString(menuOperation));
-			}
+			//添加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.menuOperation,
+					JSON.toJSONString(menuOperation),OperLog.logLevelEnum.success);
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuOperation,
@@ -162,9 +179,9 @@ public class MenuOperationController extends BaseController {
 	 * 详情
 	 */
 	@RequestMapping(value = "/get", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object get(String id, HttpServletRequest request) {
+	public Object get(String id) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [key: {}]", id);
+			LOGGER.info("request param: [id: {}]", id);
 		}
 
 		if (StringUtils.isEmpty(id)) {
@@ -178,7 +195,7 @@ public class MenuOperationController extends BaseController {
 				return AllResult.build(1, "未查询到相关数据");
 			}
 
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuOperation, "查询条件key:"+id);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuOperation, "查询条件key:"+id,OperLog.logLevelEnum.success);
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuOperation,
@@ -215,7 +232,7 @@ public class MenuOperationController extends BaseController {
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			// 增加日志
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuOperation,jsonStr);
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuOperation,jsonStr,OperLog.logLevelEnum.success);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
