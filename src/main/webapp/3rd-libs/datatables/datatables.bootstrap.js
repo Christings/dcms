@@ -23,8 +23,8 @@ $.extend(true, $.fn.dataTable.defaults, {
     "scrollY": "400px",
     "order": [],
     "scrollCollapse": "true",
-    "pageLength": 2,
-    "lengthMenu": [[2,25, 50, 100], ['每页2条','每页25条', '每页50条', '每页100条']],
+    "pageLength": 25,
+    "lengthMenu": [[25, 50, 100], ['每页25条', '每页50条', '每页100条']],
     "pagingType":   "bootstrap_extended"
 });
 
