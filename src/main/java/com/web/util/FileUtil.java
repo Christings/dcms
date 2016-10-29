@@ -271,7 +271,7 @@ public class FileUtil {
 			}
 			inputStream.close();
 			outputStream.close();
-			map.put(entry.getName(), file1);
+			map.put(FileUtil.getFilename(entry.getName()), file1);
 		}
 		return map;
 	}
