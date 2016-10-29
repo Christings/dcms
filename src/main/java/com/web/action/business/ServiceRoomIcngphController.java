@@ -133,6 +133,17 @@ public class ServiceRoomIcngphController extends BaseController {
 			if (StringUtil.isEmpty(icngph.getId())) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败，入参ID不能为空");
 			}
+			List<ServiceRoomIcngph> list = new ArrayList<ServiceRoomIcngph>();
+			if(StringUtil.isNotEmpty(icngph.getFloorName())){
+				ServiceRoomIcngphExample example = new ServiceRoomIcngphExample();
+				ServiceRoomIcngphExample.Criteria criteria = example.createCriteria();
+				criteria.andIdNotEqualTo(icngph.getId());
+				criteria.andFloorNameEqualTo(icngph.getFloorName());
+				list = serviceRoomIcngphService.getByExample(example);
+			}
+			if(list.size() > 0){
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败，楼层名称已经被占用，请修改");
+			}
 			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoomIcngph", true);
 			if (files.size() != 3) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "上传文件错误，请检查ZIP压缩文件是否只含有YML、JSON和PNG三个文件");
