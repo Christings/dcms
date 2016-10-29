@@ -29,10 +29,12 @@ function login(){
 	}
 	var inputCode = document.getElementById("input1").value;
 	if (inputCode.length <= 0) {
-		alert("请输入验证码！");
+		DCMSUtils.Modal.toast("请输入验证码！",'forbidden');
+		return;
 	}else if (inputCode != code2) {
-		alert("验证码输入错误！");
+		DCMSUtils.Modal.toast("验证码输入错误！",'forbidden');
 		createCode(); //刷新验证码
+		return;
 	}
 
 	userInformation['username'] = username;
