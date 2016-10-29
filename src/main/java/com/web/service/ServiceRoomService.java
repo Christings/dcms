@@ -1,5 +1,7 @@
 package com.web.service;
 
+import java.util.List;
+
 import com.web.core.util.page.Page;
 import com.web.entity.ServiceRoom;
 import com.web.example.ServiceRoomExample;
@@ -18,5 +20,12 @@ public interface ServiceRoomService extends IService<ServiceRoom, String> {
 	 * @param example
 	 */
 	public Page<ServiceRoom> getByPage(int pageCurrent, int count, ServiceRoomExample example);
+
+	/**
+	 *条件查询获取机房集合
+	 *
+	 * @param example
+	 */
+	List<ServiceRoom> getByExample(ServiceRoomExample example);
 
 }

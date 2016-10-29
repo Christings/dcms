@@ -1,6 +1,7 @@
 package com.web.action.business;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,6 +58,13 @@ public class ServiceRoomController extends BaseController {
 				}
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "新增机房入参为空");
 			}
+			ServiceRoomExample example = new ServiceRoomExample();
+			ServiceRoomExample.Criteria criteria = example.createCriteria();
+			criteria.andResourceCodeEqualTo(serviceRoom.getResourceCode());
+			List<ServiceRoom> list = serviceRoomService.getByExample(example);
+			if(list.size() > 0){
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "资源编码已存在，请检查");
+			}
 			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoom", false);// 上传文件
 			if (files.size() > 0) {
 				if (!"png".equalsIgnoreCase(files.get(0).getFileExt()) && !"jpg".equalsIgnoreCase(files.get(0).getFileExt())
@@ -105,6 +113,16 @@ public class ServiceRoomController extends BaseController {
 			if (StringUtil.isEmpty(serviceRoom.getId())) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "入参ID不能为空");
 			}
+
+			ServiceRoomExample example = new ServiceRoomExample();
+			ServiceRoomExample.Criteria criteria = example.createCriteria();
+			criteria.andResourceCodeEqualTo(serviceRoom.getResourceCode());
+			criteria.andIdNotEqualTo(serviceRoom.getId());
+			List<ServiceRoom> list = serviceRoomService.getByExample(example);
+			if(list.size() > 0){
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "资源编码已存在，请检查");
+			}
+
 			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoom", false);// 上传文件
 			if (files.size() > 0) {
 				if (!"jpg".equalsIgnoreCase(files.get(0).getFileExt()) && !"png".equalsIgnoreCase(files.get(0).getFileExt())

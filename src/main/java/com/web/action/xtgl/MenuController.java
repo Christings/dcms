@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,35 +48,39 @@ public class MenuController extends BaseController {
 	MenuService menuService;
 
 	/**
-	 * 添加菜单
-	 *
-	 * @param menu
-	 * @param request
-	 * @return
+	 * 添加
 	 */
 	@RequestMapping(value = "/add", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object add(Menu menu, HttpServletRequest request) {
+	public Object add(Menu menu) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menu: {}]", JSON.toJSONString(menu));
 		}
 
-		// TODO 需要添加判断
-		if (StringUtils.isEmpty(menu.getName())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单名称不能为空");
-		}
+		//验证参数
+		String errorTip = ValidationHelper.build()
+				// 必输条件验证
+				.addGroup(GroupBuilder.build(menu.getName()).notEmpty().maxLength(50), "菜单名称提供且最大长度50位")
+				// 非必输条件验证
+				.addGroup(GroupBuilder.buildOr(menu.getUrl()).empty().maxLength(255), "链接最大长度255位")
+				.validate();
 
+		if (StringUtils.isNotEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
+		}
 		// 处理外键关联数据传空值问题
 		if (null != menu.getParentId() && "".equals(menu.getParentId().trim())) {
 			menu.setParentId(null);
+		}else if(null == menuService.getById(menu.getParentId())){
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
 		}
 
 		try {
 			menu.setId(UUIDGenerator.generatorRandomUUID());
-			int result = menuService.save(menu);
+			menuService.save(menu);
 
 			// 增加日志
 			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menu,
-					JSON.toJSONString(menu));
+					JSON.toJSONString(menu),OperLog.logLevelEnum.success);
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"), SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
@@ -85,20 +88,19 @@ public class MenuController extends BaseController {
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("save menu object error. : {}", JSON.toJSONString(menu), e);
+			// 增加日志
+			operLogService.addSystemLog(OperLog.operTypeEnum.insert, OperLog.actionSystemEnum.menu,
+					JSON.toJSONString(menu),OperLog.logLevelEnum.error);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加菜单失败");
 	}
 
 	/**
-	 * 删除菜单
-	 *
-	 * @param key
-	 * @param request
-	 * @return
+	 * 删除
 	 */
 	@RequestMapping(value = "/delete", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object delete(String key, HttpServletRequest request) {
+	public Object delete(String key) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", key);
 		}
@@ -123,7 +125,7 @@ public class MenuController extends BaseController {
 			if(result > 0){
 				// 增加日志
 				operLogService.addSystemLog(OperLog.operTypeEnum.delete, OperLog.actionSystemEnum.menu,
-						JSON.toJSONString(menu));
+						JSON.toJSONString(menu),OperLog.logLevelEnum.success);
 			}
 
 			return AllResult.ok();
@@ -137,36 +139,39 @@ public class MenuController extends BaseController {
 	}
 
 	/**
-	 * 修改菜单信息
-	 *
-	 * @param menu
-	 * @param request
-	 * @return
+	 * 修改
 	 */
 	@RequestMapping(value = "/update", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object update(Menu menu, HttpServletRequest request) {
+	public Object update(Menu menu) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("params[menu: {}]", JSON.toJSONString(menu));
 		}
 
-		// TODO 需要添加判断 后期处理
-		if (StringUtils.isEmpty(menu.getName())) {
-			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单名称不能为空");
+		//验证参数
+		String errorTip = ValidationHelper.build()
+				// 必输条件验证
+				.addGroup(GroupBuilder.build(menu.getId()).notEmpty().maxLength(32), "菜单ID提供且最大长度32位")
+				.addGroup(GroupBuilder.build(menu.getName()).notEmpty().maxLength(50), "菜单名称提供且最大长度50位")
+				// 非必输条件验证
+				.addGroup(GroupBuilder.buildOr(menu.getUrl()).empty().maxLength(255), "链接最大长度255位")
+				.validate();
+
+		if (StringUtils.isNotEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
 		// 处理外键关联数据传空值问题
 		if (null != menu.getParentId() && "".equals(menu.getParentId().trim())) {
 			menu.setParentId(null);
+		}else if(null == menuService.getById(menu.getParentId())){
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
 		}
 
 		try {
-			int result = menuService.updateById(menu);
+			menuService.updateById(menu);
 
-			if(result > 0){
-				// 增加日志
-				operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.menu,
-						JSON.toJSONString(menu));
-			}
+			operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.menu,
+					JSON.toJSONString(menu),OperLog.logLevelEnum.success);
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"), SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
@@ -181,14 +186,10 @@ public class MenuController extends BaseController {
 	}
 
 	/**
-	 * 获取某个菜单信息
-	 *
-	 * @param key
-	 * @param request
-	 * @return
+	 * 获取菜单详情
 	 */
 	@RequestMapping(value = "/get", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object get(String key, HttpServletRequest request) {
+	public Object get(String key) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", key);
 		}
@@ -204,7 +205,7 @@ public class MenuController extends BaseController {
 				return AllResult.build(1, "菜单不存在");
 			}
 
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu, "查询条件key:"+key);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu, "查询条件key:"+key,OperLog.logLevelEnum.success);
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
@@ -220,13 +221,9 @@ public class MenuController extends BaseController {
 
 	/**
 	 * 获取根据父ID获取所有子ID
-	 *
-	 * @param key
-	 * @param request
-	 * @return
 	 */
 	@RequestMapping(value = "/getParentId", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object getParentId(String key, HttpServletRequest request) {
+	public Object getParentId(String key) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [key: {}]", key);
 		}
@@ -235,14 +232,14 @@ public class MenuController extends BaseController {
 			List<Menu> menuList = menuService.getByParentId(key);
 
 			if(null == menuList || menuList.size() == 0){
-				return AllResult.build(1, "未获取到菜单");
+				return AllResult.build(1, "未查询到菜单信息");
 			}
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
 			// 增加日志
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr);
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr,OperLog.logLevelEnum.success);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -256,12 +253,9 @@ public class MenuController extends BaseController {
 
 	/**
 	 * 获取所有菜单信息
-	 *
-	 * @param request
-	 * @return
 	 */
 	@RequestMapping(value = "/getAll", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object getAll(HttpServletRequest request) {
+	public Object getAll() {
 		try {
 			List<Menu> menuList = menuService.getAll();
 
@@ -273,7 +267,7 @@ public class MenuController extends BaseController {
 			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
 			// 增加日志
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr);
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr,OperLog.logLevelEnum.success);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -286,10 +280,7 @@ public class MenuController extends BaseController {
 	}
 
 	/**
-	 * 获取所有菜单信息
-	 *
-	 * @param request
-	 * @return
+	 * 获取Tree菜单信息
 	 */
 	@RequestMapping(value = "/tree", method = { RequestMethod.GET, RequestMethod.POST })
 	public Object getTree(String key, HttpServletRequest request) {
@@ -329,8 +320,7 @@ public class MenuController extends BaseController {
 	 * @param pageSize 显示多少行
 	 */
 	@RequestMapping(value = "/datagrid", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object getScroll(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize,
-			HttpServletRequest request) {
+	public Object getScroll(int pageNum, int pageSize) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
 		}
@@ -366,7 +356,7 @@ public class MenuController extends BaseController {
 			String jsonStr = JSON.toJSONString(treePage,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
 
 			// 增加日志
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr);
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr,OperLog.logLevelEnum.success);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 

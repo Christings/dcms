@@ -104,7 +104,7 @@ public class RoleController extends BaseController{
 		//验证参数
 		String errorTip = ValidationHelper.build()
 				// 必输条件验证
-				.addGroup(GroupBuilder.build(role.getId()).notEmpty().maxLength(20), "角色ID必须提供且最大长度32位")
+				.addGroup(GroupBuilder.build(role.getId()).notEmpty().maxLength(32), "角色ID必须提供且最大长度32位")
 				.addGroup(GroupBuilder.build(role.getRolecode()).notEmpty().maxLength(20), "角色编码必须提供且最大长度20位")
 				.addGroup(GroupBuilder.build(role.getRolename()).notEmpty().maxLength(100), "角色名称必须提供且长度在100位")
 				.validate();

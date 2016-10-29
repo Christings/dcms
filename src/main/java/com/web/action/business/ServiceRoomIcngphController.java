@@ -133,8 +133,19 @@ public class ServiceRoomIcngphController extends BaseController {
 			if (StringUtil.isEmpty(icngph.getId())) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败，入参ID不能为空");
 			}
+			List<ServiceRoomIcngph> list = new ArrayList<ServiceRoomIcngph>();
+			if(StringUtil.isNotEmpty(icngph.getFloorName())){
+				ServiceRoomIcngphExample example = new ServiceRoomIcngphExample();
+				ServiceRoomIcngphExample.Criteria criteria = example.createCriteria();
+				criteria.andIdNotEqualTo(icngph.getId());
+				criteria.andFloorNameEqualTo(icngph.getFloorName());
+				list = serviceRoomIcngphService.getByExample(example);
+			}
+			if(list.size() > 0){
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败，楼层名称已经被占用，请修改");
+			}
 			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoomIcngph", true);
-			if(files.size() != 3){
+			if (files.size() != 3) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "上传文件错误，请检查ZIP压缩文件是否只含有YML、JSON和PNG三个文件");
 			}
 			for (FileUtilBean file : files) {
@@ -155,7 +166,7 @@ public class ServiceRoomIcngphController extends BaseController {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), checkResult);
 			}
 			int result = serviceRoomIcngphService.updateById(icngph);
-			if(result < 1){
+			if (result < 1) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败");
 			}
 			// 去除不需要的字段
@@ -231,7 +242,6 @@ public class ServiceRoomIcngphController extends BaseController {
 			LOGGER.info("request param: [datagrid ServiceRoomIcngph: {}]", JSON.toJSONString(form));
 		}
 		String path = request.getSession().getServletContext().getRealPath("/");
-		System.out.println(path);
 		// 1.验证参数
 		String errorTip = ValidationHelper.build()
 				// 必输条件验证
@@ -249,13 +259,12 @@ public class ServiceRoomIcngphController extends BaseController {
 			ServiceRoomIcngphExample.Criteria criteria2 = example.createCriteria();
 			// 条件设置
 			if (!StringUtils.isEmpty(form.getFloorName())) {
-				criteria.andFloorNameLike("%" + form.getFileName().trim() + "%");
+				criteria.andFloorNameLike("%" + form.getFloorName().trim() + "%");
 			}
 			if (!StringUtils.isEmpty(form.getFileName())) {
-				criteria2.andJsonNameLike("%" + form.getFileName() + "%");
-				criteria2.andYmlNameLike("%" + form.getFileName() + "%");
-				criteria2.andImageNameLike("%" + form.getFileName() + "%");
-				example.or(criteria2);
+				example.or().andJsonNameLike("%" + form.getFileName() + "%");
+				example.or().andYmlNameLike("%" + form.getFileName() + "%");
+				example.or().andImageNameLike("%" + form.getFileName() + "%");
 			}
 
 			// 设置排序条件
@@ -416,7 +425,7 @@ public class ServiceRoomIcngphController extends BaseController {
 		if (StringUtil.isEmpty(icngph.getImageRealPath())) {
 			sb.append("缺少PNG文件、");
 		}
-		if(StringUtil.isNotEmpty(sb.toString())){
+		if (StringUtil.isNotEmpty(sb.toString())) {
 			return sb.toString().substring(0, sb.toString().length() - 1);
 		}
 		return null;
