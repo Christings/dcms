@@ -156,7 +156,7 @@ public class ServiceRoomController extends BaseController {
 	}
 
 	/**
-	 * 删除词典数据
+	 * 删除机房信息
 	 *
 	 * @param serviceRoom
 	 * @param request
@@ -365,5 +365,4 @@ public class ServiceRoomController extends BaseController {
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 		}
 	}
-
 }
