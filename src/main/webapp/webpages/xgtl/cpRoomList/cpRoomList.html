@@ -5,12 +5,13 @@
     <title>机房列表</title>
 
     <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <!--<link href="../../../css/dataTables.bootstrap.css" rel="stylesheet">-->
+    <link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="../../../css/animate.css" rel="stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/lib/weui.css" rel = "stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/css/jquery-weui.css" rel = "stylesheet">
     <link href="../../../3rd-libs/datatables/datatables.bootstrap.css" rel="stylesheet">
     <link href="../../../3rd-libs/datatables/datatables.css" rel="stylesheet">
     <link href="../../../css/style2.css" rel="stylesheet">
-    <link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-    <link href="../../../css/animate.css" rel="stylesheet">
 
     <script src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
     <script src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
@@ -19,20 +20,20 @@
     <script src="../../../3rd-libs/datatables/datatables.js"></script>
     <script src="../../../3rd-libs/datatables/datatables.bootstrap.js"></script>
     <script src="../../../3rd-libs/datatables/datatables-custom.js"></script>
+    <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
+
 
     <style>
-        .text-align-reverse {
-            text-align: right;
+        .checkbox-inline input[type=checkbox]{
+            margin-top: 3px;
+            margin-left: -15px;
         }
-
-        .text-align-reverse > div, .text-align-reverse > select {
-            margin-right: 6px;
+        .addUser-checkbox{
+            max-height: 135px;
+            overflow: auto;
         }
-
-        .input-group-search {
-            display: inline-table;
-            width: 150px;
-            vertical-align: middle;
+        .form-control-static{
+            padding-top: 1px;
         }
     </style>
 </head>
@@ -43,15 +44,23 @@
             <div class="ibox">
                 <div class="ibox-content">
                     <div class="row table-top">
+                        <div class="col-md-2">
+                            <div class="pull-left">
+                                <button type="button" class="btn btn-primary" onclick="editItem('','new')">
+                                    <i class="fa fa-plus"></i> &nbsp;增加机房
+                                </button>
+                            </div>
+                        </div>
+
                         <form action="">
-                            <div class="col-md-12 text-align-reverse">
+                            <div class="col-md-10 text-align-reverse">
                                 <div class="input-group-search">
-                                    <input name="deviceName" type="text" class="form-control" id="deviceName"
-                                           placeholder="设备名称">
+                                    <input name="cpRoom-name" type="text" class="form-control" id="cpRoom-name"
+                                           placeholder="机房名称">
                                 </div>
                                 <div class="input-group-search">
-                                    <input name="operDate" type="text" class="form-control" id="fieldName"
-                                           placeholder="字段名称">
+                                    <input name="cpRoom-position" type="text" class="form-control" id="cpRoom-position"
+                                           placeholder="机房位置">
                                 </div>
                                 <button class="btn btn-primary" type="button" id="queryBtn">查询</button>
                             </div>
@@ -65,67 +74,133 @@
     </div>
 </div>
 
-<script>
-    var tableObj = $('#data-table');
-    var api;
-    $(document).ready(function () {
+<!-- 新增/修改机房信息模态框 -->
+<div class="modal fade" id="cpRoomModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="cpRoomModalTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="cpRoomNewUpdateForm">
+                    <div class="form-group">
+                        <label for="name">机房名称</label>
+                        <input id="cpRoomId" name="cpRoomId"  type="hidden">
+                        <input type="text" class="form-control" name="name" id="name"
+                               placeholder="请输入机房名称" maxlength="200">
+                    </div>
+                    <div class="form-group">
+                        <label for="position">位置</label>
+                        <input type="text" class="form-control" name="position" id="position"
+                               placeholder="请输入位置">
+                    </div>
+                    <div class="form-group">
+                        <label for="comment">备注</label>
+                        <input type="text" class="form-control" name="comment" id="comment"
+                               placeholder="请输入备注">
+                    </div>
+                    <div class="form-group">
+                        <label for="exterior">外景</label>
+                        <input type="text" class="form-control" name="exterior" id="exterior"
+                               placeholder="请输入外景">
+                    </div>
+                    <div class="form-group">
+                        <label for="resourceCode">资源编码</label>
+                        <input type="text" class="form-control" name="resourceCode" id="resourceCode"
+                               placeholder="请输入资源编码">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">地址</label>
+                        <input type="text" class="form-control" name="address" id="address"
+                               placeholder="请输入地址">
+                    </div>
+                    <div class="form-group">
+                        <label for="file">机房图</label>
+                        <input type="file" class="form-control" name="file" id="file">
+                    </div>
+                    <div class="form-group">
+                        <label for="area">面积</label>
+                        <input type="text" class="form-control" name="area" id="area"
+                               placeholder="请输入面积">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-        api = tableObj.DataTable({
-            "ajax": {
-                "url": "/dcms/src/test/json/cpRoomList.json", //  /serviceRoom/datagrid
-                "type": "post",
-                "data": function (parms) {
-                    parms.deviceName = $('[name="deviceName"]').val();
-                    parms.operDate = $('[name="fieldName"]').val();
-                },
-                "dataSrc": function (json) {
+<!-- 修改备注模态框 -->
+<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="commentModalTitle">修改备注</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="updateCommentForm">
+                    <div class="form-group">
+                        <label for="comment1">备注</label>
+                        <input id="commentId" name="commentId"  type="hidden">
+                        <textarea class="form-control" name="comment1" id="comment1" placeholder="请输入备注"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    return json.data.lists;
-                }
-            },
-            columns: [
-                {title: '机房名称', data: 'name'},
-                {title: '资源编码', data: 'resourceCode'},
-                {title: '机房位置', data: 'position'},
-                {title: '机房面积', data: 'area'},
-                {title: '操作', data: null}
-            ],
-            columnDefs: [
-                {
-                    orderable:false,//禁用排序
-                    targets:[4]   //指定的列
-                },
-                {
-                    targets: 4,
-                    render: function (a, b, c, d) {
-                        console.log(c);
-                            return "<i class='fa fa-pencil' title='编辑' onclick=\"editItem('" + c+"')\"'></i>" +
-                                    "<i class='fa fa-user' title='添加用户' onclick=\"editItem('" + c+"')\"'></i>" +
-                                    "<i class='fa fa-edit' title='修改备注' onclick=\"editItem('" + c+"')\"'></i>" +
-                                    "<i class='fa fa-edit' title='修改效果图' onclick=\"editItem('" + c+"')\"'></i>" +
-                                    "<i class='fa fa-search' title='查看视图' onclick=\"editItem('" + c+"')\"'></i>" +
-                                    "<i class='fa fa-edit' title='3D视图' onclick=\"editItem('" + c+"')\"'></i>" +
-                                    "<i class='fa fa-eye' title='维修记录' onclick=\"editItem('" + c+"')\"'></i>";
-                    }
-                }
-            ]
 
-        });
+<!-- 添加用户模态框 -->
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="addUserModalTitle">添加用户</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal" id="addUserModalForm">
+                    <div class="form-group">
+                        <label for="comment1" class="col-sm-2 col-md-2 col-xs-2 control-label">机房名称</label>
+                        <input id="addUserId" name="addUserId"  type="hidden">
+                        <div class="col-sm-10 col-md-10 col-xs-10">
+                            <p class="form-control-static" id="addUser-cpRoomName"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment1" class="col-sm-2 col-md-2 col-xs-2 control-label" style="margin-top: 7px;">用户</label>
+                        <div class="col-sm-10 col-md-10 col-xs-10 addUser-checkbox" id="addUser-checkbox">
 
-        //初始化表格
-        tableObj.on("draw.DT", datatablesMtr.freeTableHeight(tableObj));
-    });
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-    //点击查询
-    $("#queryBtn").on("click", function () {
-        api.ajax.reload();
-    });
 
-    function editItem(info){
-        console.log(info);
-    }
+<script src="../../../3rd-libs/jquery-validation/jquery.validate.min.js"></script>
+<script src="../../../3rd-libs/jquery-validation/localization/messages_zh.min.js"></script>
+<script src="../../../3rd-libs/jquery-weui/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../../js/pub/common.js"></script>
+<script type="text/javascript" src="../../../js/pub/utils.js"></script>
+<script type="text/javascript" src="../../../js/xgtl/cpRoomList/cpRoomList.js"></script>
 
-</script>
 
 </body>
 </html>

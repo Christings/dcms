@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.web.entity.ServiceRoomUserRel;
+import com.web.service.ServiceRoomUserRelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,8 @@ public class ServiceRoomController extends BaseController {
 
 	@Autowired
 	private ServiceRoomService serviceRoomService;
+	@Autowired
+	private ServiceRoomUserRelService serviceRoomUserRelService;
 
 	/**
 	 * 新增机房
@@ -62,7 +66,7 @@ public class ServiceRoomController extends BaseController {
 			ServiceRoomExample.Criteria criteria = example.createCriteria();
 			criteria.andResourceCodeEqualTo(serviceRoom.getResourceCode());
 			List<ServiceRoom> list = serviceRoomService.getByExample(example);
-			if(list.size() > 0){
+			if (list.size() > 0) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "资源编码已存在，请检查");
 			}
 			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoom", false);// 上传文件
@@ -119,7 +123,7 @@ public class ServiceRoomController extends BaseController {
 			criteria.andResourceCodeEqualTo(serviceRoom.getResourceCode());
 			criteria.andIdNotEqualTo(serviceRoom.getId());
 			List<ServiceRoom> list = serviceRoomService.getByExample(example);
-			if(list.size() > 0){
+			if (list.size() > 0) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "资源编码已存在，请检查");
 			}
 
@@ -220,7 +224,7 @@ public class ServiceRoomController extends BaseController {
 	}
 
 	/**
-	 * 分页查询词典数据
+	 * 分页查询机房信息
 	 * 
 	 * @param form
 	 * @param request
@@ -259,4 +263,107 @@ public class ServiceRoomController extends BaseController {
 				OperLog.logLevelEnum.error);
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 	}
+
+	/**
+	 * 新增机房和用户对应关系
+	 * 
+	 * @param serviceRoomId
+	 *            机房ID
+	 * @param userIds
+	 *            用户ID
+	 */
+	@RequestMapping(value = "/addServiceRoomUserRel", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object addServiceRoomUserRel(String serviceRoomId, String userIds) {
+		if (StringUtil.isEmpty(serviceRoomId)) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
+		}
+		if (StringUtil.isEmpty(userIds)) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
+		}
+		ServiceRoom serviceRoom = serviceRoomService.getById(serviceRoomId);
+		String serviceRoomName = "";
+		if (null != serviceRoom) {
+			serviceRoomName = serviceRoom.getName();
+		}
+		try {
+			String[] userIdArr = userIds.split(",");
+			if (userIdArr.length < 1) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
+			}
+			int result = serviceRoomUserRelService.batchSave(serviceRoomId, userIdArr);
+			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
+					"{\"userIds\":\"" + userIds + "\"}");
+			return AllResult.okJSON(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
+					"{\"userIds\":\"" + userIds + "\"}", OperLog.logLevelEnum.error);
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
+		}
+	}
+
+	/**
+	 * 根据机房ID查询所有对应关系
+	 * 
+	 * @param serviceRoomUserRel
+	 *            机房ID
+	 */
+	@RequestMapping(value = "/getServiceRoomUserRels", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object getServiceRoomUserRels(ServiceRoomUserRel serviceRoomUserRel) {
+		if (StringUtil.isEmpty(serviceRoomUserRel.getServiceRoomId())) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
+		}
+		ServiceRoom serviceRoom = serviceRoomService.getById(serviceRoomUserRel.getServiceRoomId());
+		String serviceRoomName = "";
+		if (null != serviceRoom) {
+			serviceRoomName = serviceRoom.getName();
+		}
+		try {
+			List<ServiceRoomUserRel> list = serviceRoomUserRelService.selectByServiceRoomId(serviceRoomUserRel);
+			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null);
+			return AllResult.okJSON(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null,
+					OperLog.logLevelEnum.error);
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
+		}
+	}
+
+	/**
+	 * 修改机房和用户对应关系
+	 * 
+	 * @param serviceRoomId
+	 *            机房ID
+	 * @param userIds
+	 *            用户ID
+	 */
+	@RequestMapping(value = "/updateServiceRoomUserRel", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object updateServiceRoomUserRel(String serviceRoomId, String userIds) {
+		if (StringUtil.isEmpty(serviceRoomId)) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
+		}
+		if (StringUtil.isEmpty(userIds)) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
+		}
+		ServiceRoom serviceRoom = serviceRoomService.getById(serviceRoomId);
+		String serviceRoomName = "";
+		if (null != serviceRoom) {
+			serviceRoomName = serviceRoom.getName();
+		}
+		try {
+			String[] userIdArr = userIds.split(",");
+			serviceRoomUserRelService.deleteByServiceRoomId(serviceRoomId);// 删除旧的关联关系
+			int result = serviceRoomUserRelService.batchSave(serviceRoomId, userIdArr);
+			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom,
+					"{\"userIds\":\"" + userIds + "\"}");
+			return AllResult.okJSON(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom,
+					"{\"userIds\":\"" + userIds + "\"}", OperLog.logLevelEnum.error);
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
+		}
+	}
+
 }
