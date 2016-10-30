@@ -49,14 +49,14 @@ function pageInit() {
 		{
 			targets:1,
 			render:function(data,type,row,meta){
-				var html='<a onclick="downloadConfirm()" download="'+row.imageName+'" href="../../../serviceRoomIcngph/downloadFile?id='+row.id+'&"fileName='+row.imageName+'>'+row.imageName+'</a>';
+				var html='<a onclick="downloadConfirm()" download="'+row.imageName+'" href="../../../serviceRoomIcngph/downloadFile?id='+row.id+'&fileName='+row.imageName+'">'+row.imageName+'</a>';
 				return html;
 			}
 		},
 		{
 			targets:2,
 			render:function(data,type,row,meta){
-				var html='<a onclick="downloadConfirm()" download="'+row.ymlName+'" href="../../../serviceRoomIcngph/downloadFile?id='+row.id+'&"fileName='+row.ymlName+'>'+row.ymlName+'</a>';
+				var html='<a onclick="downloadConfirm()" download="'+row.ymlName+'" href="../../../serviceRoomIcngph/downloadFile?id='+row.id+'&fileName='+row.ymlName+'">'+row.ymlName+'</a>';
 				return html;
 			}
 		},
@@ -64,7 +64,7 @@ function pageInit() {
 		{
 			targets:3,
 			render:function(data,type,row,meta){
-				var html='<a onclick="downloadConfirm()" download="'+row.jsonName+'" href="../../../serviceRoomIcngph/downloadFile?id='+row.id+'&"fileName='+row.jsonName+'>'+row.jsonName+'</a>';
+				var html='<a onclick="downloadConfirm()" download="'+row.jsonName+'" href="../../../serviceRoomIcngph/downloadFile?id='+row.id+'&fileName='+row.jsonName+'">'+row.jsonName+'</a>';
 				return html;
 			}
 		},
@@ -89,7 +89,7 @@ function pageInit() {
 	});
 }
 function downloadConfirm(){
-	
+
 }
 // function download(){
 // 	var fileName = '1.png';
