@@ -146,7 +146,6 @@ function editItem(id,type){
 			});
 		}else if(type=='update'){
 			formData.append('id',id);
-			console.log(formData);
 			$.ajax({
 				url:"../../../serviceRoom/update",
 				type:'post',
@@ -188,10 +187,11 @@ function editComment(id,comment,resourceCode){
 
 //查看视图
 function checkView(id,imageUrl){
-	if(imageUrl){
-		DCMSUtils.Modal.alert("<img src='/"+imageUrl+"' />","查看视图","");
-	}else{
+	console.log(imageUrl);
+	if(imageUrl == null || imageUrl == "" || imageUrl == "undefined"){
 		DCMSUtils.Modal.toast('暂无视图！','cancel');
+	}else{
+		DCMSUtils.Modal.alert("<img src='/"+imageUrl+"' />","查看视图","");
 	}
 }
 
@@ -205,8 +205,9 @@ function addUser(id,name){
 			DCMSUtils.Ajax.doPost("serviceRoom/getServiceRoomUserRels",{serviceRoomId:id}).then(function (data2) {
 				var relev_userId =[];
 				for (j in data2.data) {
-					relev_userId.push(data2.data.userId);
+					relev_userId.push(data2.data[j].userId);
 				}
+				console.log(relev_userId);
 				var html = "";
 				for (i in data.data) {
 					if( $.inArray(data.data[i].id , relev_userId) > -1){
@@ -227,19 +228,12 @@ function addUser(id,name){
 		$('input[name="addUser-checkbox"]:checked').each(function(){
 			chk_value.push($(this).val());
 		});
-		var formData = new FormData($("#updateCommentForm"));
-		formData.append('serviceRoomId',id);
-		formData.append('userIds',chk_value);
-		$.ajax({
-			url:"../../../serviceRoom/updateServiceRoomUserRel",
-			type:'post',
-			data: formData,
-			processData: false,  // 告诉jQuery不要去处理发送的数据
-			contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
-			success:function(data){
+		DCMSUtils.Ajax.doPost("serviceRoom/updateServiceRoomUserRel",{serviceRoomId:id,userIds:chk_value}).then(function(data){
+			if(data.status=='1'){
 				dtApi.ajax.reload();
 			}
 		});
+
 	});
 }
 
