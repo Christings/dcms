@@ -12,6 +12,10 @@ import java.util.List;
  */
 public interface MenuRoleService extends IService<MenuRole, String> {
     /**
+     * 根据查询条件返回List列表
+     */
+    List<MenuRole> getRoleMenuOperation(String roleId,String menuId);
+    /**
      * 根据角色ID 查询角色与菜单关系数据
      *
      * @return 返回所有实体对象的集合

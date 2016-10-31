@@ -143,6 +143,19 @@ public class MenuRoleServiceImpl implements MenuRoleService {
     }
 
     @Override
+    public List<MenuRole> getRoleMenuOperation(String roleId, String menuId) {
+        //查询条件
+        MenuRoleExample example = new MenuRoleExample();
+        MenuRoleExample.Criteria criteria = example.createCriteria();
+        criteria.andRoleIdEqualTo(roleId);
+        criteria.andMenuIdEqualTo(menuId);
+        //排序
+        List<MenuRole> menuRoleList = menuRoleMapper.selectByExample(example);
+
+        return menuRoleList;
+    }
+
+    @Override
     @Transactional(propagation = Propagation.SUPPORTS,readOnly = true)
     public List<MenuRole> getRoleMenu(String roleId) {
         if (LOGGER.isInfoEnabled()) {
