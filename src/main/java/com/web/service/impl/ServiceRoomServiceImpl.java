@@ -45,6 +45,11 @@ public class ServiceRoomServiceImpl implements ServiceRoomService {
 	}
 
 	@Override
+	public List<ServiceRoom> getByExample(ServiceRoomExample example) {
+		return serviceRoomMapper.selectByExample(example);
+	}
+
+	@Override
 	public int save(ServiceRoom entity) {
 		return serviceRoomMapper.insert(entity);
 	}
@@ -66,6 +71,6 @@ public class ServiceRoomServiceImpl implements ServiceRoomService {
 
 	@Override
 	public List<ServiceRoom> getAll() {
-		return null;
+		return serviceRoomMapper.selectByExample(new ServiceRoomExample());
 	}
 }

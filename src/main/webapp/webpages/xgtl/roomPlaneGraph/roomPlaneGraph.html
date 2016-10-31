@@ -61,7 +61,7 @@
                                            placeholder="楼层名">
                                 </div>
                                 <div class="input-group-search">
-                                    <input name="searchFileName" type="text" class="form-control" id="searchFileName"
+                                    <input name="searchFileName" type="text" class="form-control" accept="" id="searchFileName"
                                            placeholder="文件名">
                                 </div>
                                 <button class="btn btn-primary" type="button" id="queryBtn">查询</button>
@@ -110,9 +110,10 @@
 						  <input name="floorName" type="text" class="form-control" id="floorName" 
 						     placeholder="请输入楼层名称"/>
 						</div>
+						
 						<div class="form-group">
 						  <label for="zipFile">平面图zip文件：</label>
-						  <input id="zipFile" name="zipFile"  type="file"  value="选择zip文件..."/>
+						  <input id="zipFile" name="zipFile"  type="file" accept="aplication/zip" value="选择zip文件..."/>
 						</div>
 						<div class="modal-footer">
 				            <button type="button" class="btn btn-default" 
@@ -125,26 +126,6 @@
 					</form>
 				</div>
 			</div><!-- /.modal -->
-		</div>
-	</div>
-
-	<div class="modal fade" id="roomPG-roles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-	        <div class="modal-content">
-		        <div class="modal-header">
-		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-	                  &times;
-		            </button>
-		            <h4 class="modal-title">
-		                选择角色
-		            </h4>
-		        </div>
-
-		        <div class="modal-body">
-		            <form role="form" id="roomPGRolesForm">
-		            </form>
-		        </div>
-		    </div>
 		</div>
 	</div>
 
@@ -166,23 +147,6 @@
 		</div><!-- /.modal -->
 	</div>
 
-	<div class="modal fade" id="roomPGdelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-	        <div class="modal-content">
-		        <div class="modal-header">
-		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-	                  &times;
-		            </button>
-		            <h4 class="modal-title" id="myModalLabel">
-		                用户删除
-		            </h4>
-		        </div>
-		        <div class="modal-body" id="roomPGDeleteBody">
-		           
-		        </div>    
-		    </div><!-- /.modal-content -->
-		</div><!-- /.modal -->
-	</div>
 	<div class="modal fade" id="roomPGeditpassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
@@ -195,40 +159,10 @@
 		            </h4>
 		        </div>
 		        <div class="modal-body" id="roomPGEditPasswordBody">
-		        	
 		        </div>
 		    </div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
-
-	<div class="modal fade" id="domainTreeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title" domainTreeModalTitle>
-                        选择组织机构
-                    </h4>
-                </div>
-                <form class="form-horizontal m-t" id="domainTreeForm">
-                    <div class="modal-body" style="max-height: 350px;overflow:scroll;overflow-x: auto;overflow-y: auto;">
-                        <div id="domainJsTree">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default"
-                                data-dismiss="modal">关闭
-                        </button>
-                        <button type="button" class="btn btn-primary" id="confirmDomainBtn">
-                            确定
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
 	<script src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
 	<script src="../../../3rd-libs/jstree/jstree.min.js"></script>

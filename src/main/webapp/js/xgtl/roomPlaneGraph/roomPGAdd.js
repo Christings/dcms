@@ -1,7 +1,8 @@
 function roomPGAdd(){
-	$("#roomPGAddForm").submit(function(){
+	$("#roomPGAddForm").submit(function(event){
 		var floorName = $("#floorName").val();
 		var obj = document.getElementById("zipFile");
+		var zipFile = obj.files[0];
 		if(obj.value == "选择zip文件..." || obj.value == "未选择任何文件"){
 			DCMSUtils.Modal.toast('请选择需要上传的文件!','');
 			return false;
@@ -11,24 +12,19 @@ function roomPGAdd(){
 			DCMSUtils.Modal.toast('请选择zip类型的文件上传!','');
 			return false;
 		}
-		var zipFile = obj.files[0];
-		var reader = new FileReader();
-		reader.onload = function(){
-			var params = {floorName:floorName,zipFile:reader.result};
-			console.log(params);
-			DCMSUtils.Ajax.doPost("serviceRoomIcngph/add",params).done((res)=>{
-				if(res.status == "1"){
-					console.log("添加平面图"+floorName+"成功");
-					alert("添加平面图"+floorName+"成功");
-					return true;
-				}else{
-					console.log("添加平面图"+floorName+"失败"+res.msg);
-					alert("添加平面图"+floorName+"失败");
-					return false;
-				}
-			});
-		}
-		reader.readAsDataURL(zipFile);
-		console.log(zipFile);
+		var formData = new FormData($("#roomPGAddForm"));
+		formData.append('floorName',floorName);
+		formData.append('zipFile',zipFile);
+		$.ajax({
+            url:"../../../serviceRoomIcngph/add",
+            type:'post',
+            data: formData,
+            async:false,
+            processData: false,  // 告诉jQuery不要去处理发送的数据
+            contentType: false   // 告诉jQuery不要去设置Content-Type请求头
+            // success:function(data){
+            // 	window.location.reload();
+            // }
+        });
 	});
 }

@@ -45,10 +45,33 @@ function pageInit() {
 			{title: 'Json文件名称', data: 'jsonName'},
 			{title: '操作', data: ''}
 		],
-		columnDefs:[{
+		columnDefs:[
+		{
+			targets:1,
+			render:function(data,type,row,meta){
+				var html='<a onclick="downloadConfirm()" download="'+row.imageName+'" href="../../../serviceRoomIcngph/downloadFile?id='+row.id+'&fileName='+row.imageName+'">'+row.imageName+'</a>';
+				return html;
+			}
+		},
+		{
+			targets:2,
+			render:function(data,type,row,meta){
+				var html='<a onclick="downloadConfirm()" download="'+row.ymlName+'" href="../../../serviceRoomIcngph/downloadFile?id='+row.id+'&fileName='+row.ymlName+'">'+row.ymlName+'</a>';
+				return html;
+			}
+		},
+		//onclick="download('+row.ymlName+','+row.id+')"
+		{
+			targets:3,
+			render:function(data,type,row,meta){
+				var html='<a onclick="downloadConfirm()" download="'+row.jsonName+'" href="../../../serviceRoomIcngph/downloadFile?id='+row.id+'&fileName='+row.jsonName+'">'+row.jsonName+'</a>';
+				return html;
+			}
+		},
+		{
 			targets:4,
 			render:function(data,type,row,meta){
-				var html='<i class="glyphicon glyphicon-pencil" title="编辑" onclick="roomPGUpdate(\'' + row.id + '\')"></i>&nbsp;&nbsp;' +
+				var html='<i class="glyphicon glyphicon-pencil" title="编辑" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGUpdate\" onclick="roomPGUpdateInit(\'' + row.id +'\',\''+row.floorName+'\')"></i>&nbsp;&nbsp;' +
 					'<i class="glyphicon glyphicon-trash"  title="删除" onclick="roomPGDelete(\'' + row.id +'\',\''+row.floorName+'\')"></i>&nbsp;&nbsp;';
 				return html;
 			}
@@ -65,6 +88,26 @@ function pageInit() {
 		document.getElementById("queryForm").reset();
 	});
 }
+function downloadConfirm(){
+
+}
+// function download(){
+// 	var fileName = '1.png';
+// 	var id = '531478698ca04c9abaa1bc2baa96c402';
+// 	var formData={fileName:fileName,id:id};
+// 	console.log("download"+fileName);
+// 	DCMSUtils.Ajax.doPost("serviceRoomIcngph/downloadFile",formData).done((res)=>{
+// 		if(res.status == "1"){
+// 			console.log("添加平面图"+fileName+"成功");
+// 			alert("添加平面图"+fileName+"成功");
+// 			return true;
+// 		}else{
+// 			console.log("添加平面图"+fileName+"失败"+res.msg);
+// 			alert("添加平面图"+fileName+"失败");
+// 			return false;
+// 		}
+// 	});
+// }
 
 
 

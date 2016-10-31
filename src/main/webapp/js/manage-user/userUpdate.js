@@ -96,26 +96,10 @@ function userUpdateInit(e){
 					"<div class='form-group' >"+
 						"<label class='col-sm-3'>组织机构：</label>"+
 						'<input id="domainPId1" name="domainPId1" value="'+domainPIds+'" type="hidden">'+
-						"<div class='col-sm-8'>"+
+						"<div class='col-sm-9'>"+
 							'<span id="domainPName1" name="domainPName1" style="width: 50%;">'+domainPNames+'</span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectDomainBtn1" class="btn btn-primary btn-sm btn-outline">选择</a>'+
 						'</div>'+
 					'</div>'+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">身份证</label>"+
-					  "<input type=\"text\" class=\"form-control\" id=\"identificationNo1\" value=\""+identificationNo+"\">"+
-					"</div>"+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">手机号</label>"+
-					  "<input type=\"text\" class=\"form-control\" id=\"mobile1\" value=\""+mobile+"\">"+
-					"</div>"+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">邮箱</label>"+
-					  "<input type=\"text\" class=\"form-control\" id=\"email1\" value=\""+email+"\">"+
-					"</div>"+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">电话</label>"+
-					  "<input type=\"text\" class=\"form-control\" id=\"phone1\" value=\""+phone+"\">"+
-					"</div>"+
 					"<div class=\"form-group\">"+
 					  "<label for=\"name\">性别</label>"+
 					  	"<select id=\"sex1\">"+
@@ -138,6 +122,22 @@ function userUpdateInit(e){
 		           "</button>"+
 	        	"</div>"+
 			"</form>";
+			// "<div class=\"form-group\">"+
+			// 		  "<label for=\"name\">身份证</label>"+
+			// 		  "<input type=\"text\" class=\"form-control\" id=\"identificationNo1\" value=\""+identificationNo+"\">"+
+			// 		"</div>"+
+			// 		"<div class=\"form-group\">"+
+			// 		  "<label for=\"name\">手机号</label>"+
+			// 		  "<input type=\"text\" class=\"form-control\" id=\"mobile1\" value=\""+mobile+"\">"+
+			// 		"</div>"+
+			// 		"<div class=\"form-group\">"+
+			// 		  "<label for=\"name\">邮箱</label>"+
+			// 		  "<input type=\"text\" class=\"form-control\" id=\"email1\" value=\""+email+"\">"+
+			// 		"</div>"+
+			// 		"<div class=\"form-group\">"+
+			// 		  "<label for=\"name\">电话</label>"+
+			// 		  "<input type=\"text\" class=\"form-control\" id=\"phone1\" value=\""+phone+"\">"+
+			// 		"</div>"+
 			var body = document.getElementById("userUpdateBody");
 			body.innerHTML = html;
 			loadOrganizationTree1();
