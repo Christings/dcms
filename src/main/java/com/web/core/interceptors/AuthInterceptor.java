@@ -1,5 +1,7 @@
 package com.web.core.interceptors;
 
+import com.alibaba.fastjson.JSON;
+import com.web.util.AllResult;
 import com.web.util.RegExpUtil;
 import com.web.util.WebUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,9 +66,12 @@ public class AuthInterceptor implements HandlerInterceptor {
 		//3.判断用户是否有权限访问URL
 		if(WebUtils.getPrivilege(request).contains(requestUri) ||"admin".equals(WebUtils.getUser(request).getUsername())){
 			return true;
+		}else{
+			//无权限时返回 状态码 5
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("application/json; charset=utf-8");
+			response.getWriter().append(JSON.toJSONString(AllResult.build(5,"对不起，权限不足无法执行该操作！")));
 		}
-		//TODO 需要添加跳转到无权限页面
-//		request.setAttribute("error", "对不起，权限不足无法执行该操作！");
 
 		return false;
 	}

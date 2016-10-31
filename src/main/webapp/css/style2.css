@@ -3675,9 +3675,9 @@ ol.unstyled {
     background: none repeat scroll 0 0 white;
     border-top: 1px solid #e7eaec;
     overflow: hidden;
-    padding: 15px 20px;
+    /*padding: 15px 20px;*/
     margin: 0 -15px;
-    /*height: 46px;*/
+    height: 30px;
 }
 
 .footer.fixed_full {
@@ -3832,7 +3832,7 @@ nav.page-tabs .page-tabs-content {
 }
 
 #content-main {
-    height: calc(100% - 110px);
+    height: calc(100% - 80px);
     overflow: hidden;
 }
 

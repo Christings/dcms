@@ -27,6 +27,16 @@ public class CommonForm {
      */
     private int pageSize;
 
+    /**
+     * 排序字段名称
+     */
+    private String sortName;
+
+    /**
+     * 排序方向 asc,desc
+     */
+    private String sortDesc;
+
     public String getId() {
         return id;
     }
@@ -57,5 +67,21 @@ public class CommonForm {
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getSortName() {
+        return sortName;
+    }
+
+    public void setSortName(String sortName) {
+        this.sortName = sortName;
+    }
+
+    public String getSortDesc() {
+        return sortDesc;
+    }
+
+    public void setSortDesc(String sortDesc) {
+        this.sortDesc = sortDesc;
     }
 }

@@ -45,6 +45,7 @@ function pageInit() {
 			{title: '操作', data: 'rolecode'}
 		],
 		columnDefs:[{
+			orderable:false,
 			targets:2,
 			render:function(data,type,row,meta){
 				var html='<i class="glyphicon glyphicon-cog" title="菜单配置" onclick="roleSetting(\'' + row.id + '\')"></i>&nbsp;&nbsp;' +
@@ -226,23 +227,29 @@ var zTreeSetting={
 function roleSetting(roleId){
 	$("#roleId").val(roleId);
 	DCMSUtils.Modal.showLoading();
-	$.when(DCMSUtils.Ajax.doPost('menu/tree'),DCMSUtils.Ajax.doPost('menu/role/getRoleId',{key:roleId}))
+	$.when(DCMSUtils.Ajax.doPost('menu/tree'),DCMSUtils.Ajax.doPost('menu/role/getRoleId',{roleId:roleId}))
 		.then(function(treeData,roleMenuData){
-			if(treeData.status=='1' && roleMenuData.status=='1'){
-				var roleMenuMap={};
-				if(roleMenuData.data){
-					for(var i=0;i<roleMenuData.data.length;i++){
-						var rm=roleMenuData.data[i];
-						roleMenuMap[rm.menuId]=rm;
-					}
-				}
-				zTreeObj=$.fn.zTree.init($("#roleZtree"),zTreeSetting,transDataToJsTree(treeData.data,jsTreeIndex,roleMenuMap));
-				zTreeObj.expandAll(true);
-				DCMSUtils.Modal.hideLoading();
-				$("#roleSettingDiv").css('display','block');
-			}else{
-				DCMSUtils.Modal.toast('加载菜单树出错','forbidden');
+			if(treeData.status!='1'){
+				DCMSUtils.Modal.toast('加载菜单树出错:'+treeData.msg,'forbidden');
+				return;
 			}
+			if(roleMenuData.status!='1'){
+				DCMSUtils.Modal.toast('加载菜单树出错:'+roleMenuData.msg,'forbidden');
+				return;
+			}
+
+			var roleMenuMap={};
+			if(roleMenuData.data){
+				for(var i=0;i<roleMenuData.data.length;i++){
+					var rm=roleMenuData.data[i];
+					roleMenuMap[rm.menuId]=rm;
+				}
+			}
+			zTreeObj=$.fn.zTree.init($("#roleZtree"),zTreeSetting,transDataToJsTree(treeData.data,jsTreeIndex,roleMenuMap));
+			zTreeObj.expandAll(true);
+			DCMSUtils.Modal.hideLoading();
+			$("#roleSettingDiv").css('display','block');
+
 		},function(error){
 			DCMSUtils.Modal.hideLoading();
 			DCMSUtils.Modal.toast('加载菜单树异常','forbidden');
@@ -253,23 +260,33 @@ function zTreeOnClick(event, treeId, treeNode) {
 	$("#menuId").val(treeNode.id);
 	$("#roleMenuOptContent").css("display",'block');
 	$("#menuOptTBody").empty();
-	//获取菜单的操作
-	DCMSUtils.Ajax.doPost('/menu/operation/getMenuId',{menuId:treeNode.id}).then(function(data){
-		console.log(data);
-		if(data.status==1){
+
+	$.when(
+		DCMSUtils.Ajax.doPost('menu/operation/getMenuId',{menuId:treeNode.id}),
+		DCMSUtils.Ajax.doPost('menu/role/getRoleIdAndMenuId',{menuId:treeNode.id,roleId:$("#roleId").val()})
+	).then(function(menuData,roleOptData){
+		if(menuData.status=='1' && roleOptData.status=='1'){
 			$("#menuOptTBody").empty();
-			for(var i=0;i<data.data.length;i++){
-				var opt=data.data[i];
+			var roleOpts=[];
+			if(roleOptData.data && roleOptData.data[0] && roleOptData.data[0].operationId){
+				roleOpts=roleOptData.data[0].operationId.split(",");
+			}
+			if(roleOpts.length!=0 && roleOpts.length==menuData.data.length){
+				$("#optAllCkb").attr('checked',true);
+			}
+			for(var i=0;i<menuData.data.length;i++){
+				var opt=menuData.data[i];
 				var tr='<tr id="tr_'+opt.id+'">';
-				tr+='<td><input type="checkbox" name="rmOpt" value="'+opt.id+'"></td>';
+				tr+='<td><input type="checkbox" name="rmOpt" value="'+opt.id+'" '+ ($.inArray(opt.id,roleOpts)!=-1?'checked':'')+'></td>';
 				tr+='<td>'+opt.name+'</td>';
 				tr+='</tr>';
 				$("#menuOptTBody").append(tr);
 			}
+
 		}else{
 			DCMSUtils.Modal.toast('获取操作列表出错','forbidden');
 		}
-	},function (error) {
+	},function(error){
 		DCMSUtils.Modal.toast('获取操作列表出错','forbidden');
 	});
 }
