@@ -102,6 +102,11 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
+    public int getCount(UserRoleExample example) {
+        return userRoleMapper.countByExample(example);
+    }
+
+    @Override
     public int delete( UserRoleExample example) {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("delete condition example by id: {}", example);
