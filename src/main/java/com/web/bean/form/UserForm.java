@@ -57,26 +57,6 @@ public class UserForm extends CommonForm {
      */
     private String remark;
 
-    /**
-     * 排序条件（登录名）
-     */
-    private String usernameSort;
-
-    /**
-     * 排序条件（真实名）
-     */
-    private String realnameSort;
-
-    /**
-     * 排序条件（证件号码）
-     */
-    private String idCardSort;
-
-    /**
-     * 排序条件（邮箱）
-     */
-    private String emailSort;
-
     public String getUsername() {
         return username;
     }
@@ -155,37 +135,5 @@ public class UserForm extends CommonForm {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public String getUsernameSort() {
-        return usernameSort;
-    }
-
-    public void setUsernameSort(String usernameSort) {
-        this.usernameSort = usernameSort;
-    }
-
-    public String getRealnameSort() {
-        return realnameSort;
-    }
-
-    public void setRealnameSort(String realnameSort) {
-        this.realnameSort = realnameSort;
-    }
-
-    public String getIdCardSort() {
-        return idCardSort;
-    }
-
-    public void setIdCardSort(String idCardSort) {
-        this.idCardSort = idCardSort;
-    }
-
-    public String getEmailSort() {
-        return emailSort;
-    }
-
-    public void setEmailSort(String emailSort) {
-        this.emailSort = emailSort;
     }
 }

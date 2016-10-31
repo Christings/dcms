@@ -384,7 +384,7 @@ public class UserController extends BaseController {
 	 * 分页获取用户信息
 	 */
 	@RequestMapping(value = "/datagrid", method = { RequestMethod.POST, RequestMethod.GET })
-	public Object getDataGrid(UserForm userForm, HttpServletRequest request) {
+	public Object getDataGrid(UserForm userForm) {
 
 		// 1.验证参数
 		String errorTip = ValidationHelper.build()
@@ -422,18 +422,18 @@ public class UserController extends BaseController {
 
 			// 设置排序条件
 			StringBuffer orderBy = new StringBuffer("");
-			if (!StringUtils.isEmpty(userForm.getUsernameSort())) {
-				orderBy.append("username " + ("asc".equalsIgnoreCase(userForm.getUsernameSort()) ? "asc" : "desc") + ",");
+			if(StringUtils.isNotEmpty(userForm.getSortName())){
+				if("username".equalsIgnoreCase(userForm.getSortName())){
+					orderBy.append("username " + ("asc".equalsIgnoreCase(userForm.getSortDesc()) ? "asc" : "desc") + ",");
+				}else if("realname".equalsIgnoreCase(userForm.getSortName())){
+					orderBy.append("realname " + ("asc".equalsIgnoreCase(userForm.getSortDesc()) ? "asc" : "desc") + ",");
+				}else if("identificationNo".equalsIgnoreCase(userForm.getSortName())){
+					orderBy.append("identificationNo " + ("asc".equalsIgnoreCase(userForm.getSortDesc()) ? "asc" : "desc") + ",");
+				}else if("email".equalsIgnoreCase(userForm.getSortName())){
+					orderBy.append("email " + ("asc".equalsIgnoreCase(userForm.getSortDesc()) ? "asc" : "desc") + ",");
+				}
 			}
-			if (!StringUtils.isEmpty(userForm.getRealnameSort())) {
-				orderBy.append("realname " + ("asc".equalsIgnoreCase(userForm.getRealnameSort()) ? "asc" : "desc") + ",");
-			}
-			if (!StringUtils.isEmpty(userForm.getIdCardSort())) {
-				orderBy.append("identificationNo " + ("asc".equalsIgnoreCase(userForm.getIdCardSort()) ? "asc" : "desc") + ",");
-			}
-			if (!StringUtils.isEmpty(userForm.getEmailSort())) {
-				orderBy.append("email " + ("asc".equalsIgnoreCase(userForm.getEmailSort()) ? "asc" : "desc") + ",");
-			}
+
 			orderBy.append("create_date desc,id asc");
 			example.setOrderByClause(orderBy.toString());
 
