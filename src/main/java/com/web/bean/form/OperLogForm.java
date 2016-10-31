@@ -48,10 +48,6 @@ public class OperLogForm extends CommonForm {
 	 */
 	private String comments;
 
-	/**
-	 * 日志日期排序字段
-	 */
-	private String operDateSort;
 
 	public String getDeviceName() {
 		return deviceName;
@@ -107,14 +103,6 @@ public class OperLogForm extends CommonForm {
 
 	public void setComments(String comments) {
 		this.comments = comments;
-	}
-
-	public String getOperDateSort() {
-		return operDateSort;
-	}
-
-	public void setOperDateSort(String operDateSort) {
-		this.operDateSort = operDateSort;
 	}
 
 	public Date getEndOperDate() {

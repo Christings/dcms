@@ -5,14 +5,12 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.web.bean.util.FileUtilBean;
-import com.web.core.util.ContextHolderUtils;
 
 /**
  * 文件相关操作辅助类。
@@ -303,15 +301,14 @@ public class FileUtil {
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
 		try {
-			HttpServletRequest request = ContextHolderUtils.getRequest();
 			if(StringUtil.isEmpty(fileName)){
 				fileName = FileUtil.getFilename(filePath);
 			}
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("multipart/form-data");
 			response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
-			String path = request.getSession().getServletContext().getRealPath("/");
-			inputStream = new FileInputStream(new File(path + filePath));
+			String path = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH);
+			inputStream = new FileInputStream(new File(filePath));
 			outputStream = response.getOutputStream();
 			byte[] bytes = new byte[1024];
 			int lenth;
@@ -350,7 +347,7 @@ public class FileUtil {
 			MultipartFile file = request.getFile(fileName);
 			if (null != file && file.getSize() > 0) {
 				String ext = FileUtil.getFilenameExtension(file.getOriginalFilename());
-				String path = request.getSession().getServletContext().getRealPath("/") + targetPath;// 获取路径
+				String path = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH) + targetPath;// 获取路径
 				if(!"zip".equalsIgnoreCase(ext)){
 					needUnZIP = false;
 				}
@@ -372,7 +369,7 @@ public class FileUtil {
 						bean.setFileName(key);
 						bean.setNewFileName(newFile.getName());
 						bean.setFileExt(ext);
-						bean.setFileRealPath(targetPath + "/" + newFile.getName());
+						bean.setFileRealPath(path + "/" + newFile.getName());
 						beans.add(bean);
 					}
 					if (inFile.exists()) {
@@ -383,7 +380,7 @@ public class FileUtil {
 					bean.setFileName(file.getName());
 					bean.setNewFileName(newFileName);
 					bean.setFileExt(ext);
-					bean.setFileRealPath(targetPath + "/" + newFileName);
+					bean.setFileRealPath(path + "/" + newFileName);
 					beans.add(bean);
 				}
 			}
@@ -422,15 +419,29 @@ public class FileUtil {
 	 */
 	public static int deleteFiles(ArrayList<FileUtilBean> files) {
 		int count = 0;
-		String contextPath = ContextHolderUtils.getRequest().getSession().getServletContext().getRealPath("/");
+		String filePath = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH);
 		for (FileUtilBean bean : files) {
 			String path = bean.getFileRealPath();
-			File file = new File(contextPath + path);
+			File file = new File(filePath + path);
 			if (file.exists()) {
 				file.delete();
 				count++;
 			}
 		}
 		return count;
+	}
+
+	/**
+	 * 检查文件是否存在
+	 * */
+	public static boolean checkFileExist(String path){
+		if(StringUtil.isEmpty(path)){
+			return false;
+		}
+		File file = new File(path);
+		if(file.exists()){
+			return true;
+		}
+		return false;
 	}
 }
