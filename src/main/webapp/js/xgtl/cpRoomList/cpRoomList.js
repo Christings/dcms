@@ -187,51 +187,66 @@ function editComment(id,comment,resourceCode){
 
 //查看视图
 function checkView(id,imageUrl){
-	console.log(imageUrl);
+	console.log(getContentPath());
 	if(imageUrl == null || imageUrl == "" || imageUrl == "undefined"){
 		DCMSUtils.Modal.toast('暂无视图！','cancel');
 	}else{
-		DCMSUtils.Modal.alert("<img src='/"+imageUrl+"' />","查看视图","");
+		DCMSUtils.Modal.alert("<img src='"+getContentPath()+imageUrl+"' />","查看视图","");
 	}
 }
 
 
 //添加用户
 function addUser(id,name){
+	DCMSUtils.Modal.showLoading();
 	$("#addUser-cpRoomName").text(name);
 
-	DCMSUtils.Ajax.doPost("user/getAll").then(function (data) {
-		if(data.status=='1') {
-			DCMSUtils.Ajax.doPost("serviceRoom/getServiceRoomUserRels",{serviceRoomId:id}).then(function (data2) {
+	$.when(DCMSUtils.Ajax.doPost('user/getAll'),DCMSUtils.Ajax.doPost('serviceRoom/getServiceRoomUserRels',{serviceRoomId:id}))
+		.then(function(userData, userRelsData){
+			if(userData.status=='1' &&  userRelsData.status=='1'){
+				console.log(userRelsData);
 				var relev_userId =[];
-				for (j in data2.data) {
-					relev_userId.push(data2.data[j].userId);
+				for (j in userRelsData.data) {
+					relev_userId.push(userRelsData.data[j].userId);
 				}
 				console.log(relev_userId);
 				var html = "";
-				for (i in data.data) {
-					if( $.inArray(data.data[i].id , relev_userId) > -1){
-						html += '<label class="checkbox-inline"><input type="checkbox" name="addUser-checkbox" value="'+data.data[i].id+'" checked>'+data.data[i].username+'</label>';
+				for (i in userData.data) {
+					if( $.inArray(userData.data[i].id , relev_userId) > -1){
+						html += '<label class="checkbox-inline"><input type="checkbox" name="addUser-checkbox" value="'+userData.data[i].id+'" checked>'+userData.data[i].username+'</label>';
 					}else{
-						html += '<label class="checkbox-inline"><input type="checkbox" name="addUser-checkbox" value="'+data.data[i].id+'">'+data.data[i].username+'</label>';
+						html += '<label class="checkbox-inline"><input type="checkbox" name="addUser-checkbox" value="'+userData.data[i].id+'">'+userData.data[i].username+'</label>';
 					}
 				}
 				$("#addUser-checkbox").html(html);
-			});
+				DCMSUtils.Modal.hideLoading();
+				$("#addUserModal").modal();
+			}else{
+				DCMSUtils.Modal.toast('加载用户信息出错','forbidden');
+			}
+		},function(error){
+			DCMSUtils.Modal.hideLoading();
+			DCMSUtils.Modal.toast('加载用户信息异常','forbidden');
+		});
 
-
-		}
-	});
-	$("#addUserModal").modal();
 	$("#addUserModalForm").submit(function(event){
 		var chk_value =[];
 		$('input[name="addUser-checkbox"]:checked').each(function(){
 			chk_value.push($(this).val());
 		});
+		console.log(chk_value);
+		DCMSUtils.Modal.showLoading();
 		DCMSUtils.Ajax.doPost("serviceRoom/updateServiceRoomUserRel",{serviceRoomId:id,userIds:chk_value}).then(function(data){
+			DCMSUtils.Modal.hideLoading();
 			if(data.status=='1'){
+				DCMSUtils.Modal.toast('保存用户成功','');
 				dtApi.ajax.reload();
+			}else{
+				DCMSUtils.Modal.toast('保存用户异常','forbidden');
 			}
+		},function(error){
+			DCMSUtils.Modal.hideLoading();
+			DCMSUtils.Modal.toast('保存用户异常','forbidden');
 		});
 
 	});
