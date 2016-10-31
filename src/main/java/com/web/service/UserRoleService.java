@@ -12,6 +12,10 @@ import java.util.List;
  * @date 2016-08-11
  */
 public interface UserRoleService extends IService<UserRole,String> {
+    /**
+     * 根据条件查询数量
+     */
+    int getCount(UserRoleExample example);
 
     /**
      * 根据条件删除

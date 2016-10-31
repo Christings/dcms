@@ -1899,13 +1899,13 @@ div.dataTables_wrapper div.dataTables_paginate .pagination-panel .pagination-pan
 .dataTables_wrapper .footbar {
     width: 30%;
     position: fixed;
-    bottom: 0px;
+    bottom: 10px;
     background: #ffffff;
     margin-left: -20px;
     margin-right: 0;
     border-top: 1px solid #e7ecf1;
-    padding-top: 12px;
-    height: 80px;
+    /*padding-top: 12px;*/
+    height: 45px;
 }
 .dataTables_wrapper .dataTables_info {
     float: left;
@@ -3677,7 +3677,7 @@ ol.unstyled {
     overflow: hidden;
     padding: 15px 20px;
     margin: 0 -15px;
-    height: 46px;
+    /*height: 46px;*/
 }
 
 .footer.fixed_full {
@@ -3832,7 +3832,7 @@ nav.page-tabs .page-tabs-content {
 }
 
 #content-main {
-    height: calc(100% - 90px);
+    height: calc(100% - 110px);
     overflow: hidden;
 }
 
