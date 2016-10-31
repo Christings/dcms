@@ -115,7 +115,7 @@ public class MenuRoleController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/batchRoles", method = RequestMethod.POST)
-	public Object batchRoles(String menuId,String roleIds, HttpServletRequest request) {
+	public Object batchRoles(String menuId,String roleIds) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menuId: {},roleIds:{}]",menuId,roleIds );
 		}
@@ -149,17 +149,16 @@ public class MenuRoleController extends BaseController {
 	/**
 	 * 根据角色Id 获取所有角色菜单关系数据
 	 *
-	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/getRoleId", method = RequestMethod.POST)
-	public Object getRoleId(String key,HttpServletRequest request) {
+	public Object getRoleId(String roleId) {
 		try {
-			if(StringUtils.isEmpty(key)){
+			if(StringUtils.isEmpty(roleId)){
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
 			}
 
-			List<MenuRole> menuRoleList = menuRoleService.getRoleMenu(key);
+			List<MenuRole> menuRoleList = menuRoleService.getRoleMenu(roleId);
 
 			if(null == menuRoleList || menuRoleList.size() == 0){
 				return AllResult.build(1, "未查询到相关数据");
@@ -182,17 +181,16 @@ public class MenuRoleController extends BaseController {
 	/**
 	 * 根据菜单Id 获取所有菜单角色关系数据
 	 *
-	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/getMenuId", method = RequestMethod.POST)
-	public Object getMenuId(String key,HttpServletRequest request) {
+	public Object getMenuId(String menuId) {
 		try {
-			if(StringUtils.isEmpty(key)){
+			if(StringUtils.isEmpty(menuId)){
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单ID不能为空");
 			}
 
-			List<MenuRole> menuRoleList = menuRoleService.getMenuRole(key);
+			List<MenuRole> menuRoleList = menuRoleService.getMenuRole(menuId);
 
 			if(null == menuRoleList || menuRoleList.size() == 0){
 				return AllResult.build(1, "未查询到相关数据");
@@ -214,11 +212,10 @@ public class MenuRoleController extends BaseController {
 	/**
 	 * 获取所有菜单角色关系
 	 *
-	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/getAll", method = {RequestMethod.GET,RequestMethod.POST})
-	public Object getAll(HttpServletRequest request) {
+	public Object getAll() {
 		try {
 			List<MenuRole> menuRoleList = menuRoleService.getAll();
 
