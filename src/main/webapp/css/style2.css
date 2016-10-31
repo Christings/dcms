@@ -1850,7 +1850,7 @@ table.dataTable thead .sorting:after {
 }
 
 .footbar .dataTables_length {
-    margin: 10px 0 10px 10px;
+    margin: 5px 0 10px 10px;
     float: right;
     display: block !important;
 }
@@ -1866,7 +1866,7 @@ div.dataTables_wrapper div.dataTables_paginate {
     display: block !important;
 }
 div.dataTables_wrapper div.dataTables_paginate .pagination-panel {
-    margin-top: 6.5px;
+    margin-top: 2px;
 }
 .paging_bootstrap_extended .pagination-panel-info {
     font-size: 14px;
@@ -1880,7 +1880,7 @@ div.dataTables_wrapper div.dataTables_paginate .pagination-panel a.btn {
     background-color: #fff !important;
     border-color: #e5e6e7 !important;
     border-radius: 0 !important;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
     height: 32px;
     color: #555;
 }
@@ -1899,7 +1899,7 @@ div.dataTables_wrapper div.dataTables_paginate .pagination-panel .pagination-pan
 .dataTables_wrapper .footbar {
     width: 30%;
     position: fixed;
-    bottom: 10px;
+    bottom: 0;
     background: #ffffff;
     margin-left: -20px;
     margin-right: 0;
@@ -1912,7 +1912,7 @@ div.dataTables_wrapper div.dataTables_paginate .pagination-panel .pagination-pan
     font-size: 14px;
     white-space: normal !important;
     text-align: left;
-    margin-top: 8px;
+    margin-top: 3px;
 }
 .footbar > div:last-child{
     float: right;
