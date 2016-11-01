@@ -27,6 +27,7 @@ function pageInit() {
 				position:$("#cpRoom-position").val()
 			};
 			DCMSUtils.Ajax.doPost("serviceRoom/datagrid",params).then(function (data) {
+				console.log(data);
 				if(data.status=='1'){
 					//组织DT标准的返回值
 					callback({
@@ -141,6 +142,7 @@ function saveCPRoomInfo() {
 			url:"../../../serviceRoom/add",
 			type:'post',
 			data: formData,
+			async: true,
 			processData: false,  // 告诉jQuery不要去处理发送的数据
 			contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
 			success:function(data){
@@ -215,10 +217,16 @@ function saveComment() {
 
 //查看视图
 function checkView(id,imageUrl){
+	DCMSUtils.Ajax.doPost("serviceRoom/getImage",{id:id}).then(function (data) {
+		console.log(data);
+		if(data.status=='1'){
+
+		}
+	});
 	if(imageUrl == null || imageUrl == "" || imageUrl == "undefined"){
 		DCMSUtils.Modal.toast('暂无视图！','cancel');
 	}else{
-		DCMSUtils.Modal.alert("<img src='"+getContentPath()+imageUrl+"' />","查看视图","");
+		DCMSUtils.Modal.alert("<img src='"+getContentPath()+"serviceRoom/getImage?id="+id+"' />","查看视图","");
 	}
 }
 
