@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import com.web.entity.ServiceRoomUserRel;
-import com.web.service.ServiceRoomUserRelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +22,11 @@ import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
 import com.web.entity.ServiceRoom;
+import com.web.entity.ServiceRoomUserRel;
 import com.web.example.ServiceRoomExample;
 import com.web.service.ServiceRoomService;
-import com.web.util.AllResult;
-import com.web.util.FileUtil;
-import com.web.util.StringUtil;
-import com.web.util.UUIDGenerator;
+import com.web.service.ServiceRoomUserRelService;
+import com.web.util.*;
 import com.web.util.fastjson.FastjsonUtils;
 
 /**
@@ -69,7 +67,7 @@ public class ServiceRoomController extends BaseController {
 			if (list.size() > 0) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "资源编码已存在，请检查");
 			}
-			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoom", false);// 上传文件
+			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "serviceRoom", false);// 上传文件
 			if (files.size() > 0) {
 				if (!"png".equalsIgnoreCase(files.get(0).getFileExt()) && !"jpg".equalsIgnoreCase(files.get(0).getFileExt())
 						&& !"jpeg".equalsIgnoreCase(files.get(0).getFileExt())) {
@@ -127,7 +125,7 @@ public class ServiceRoomController extends BaseController {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "资源编码已存在，请检查");
 			}
 
-			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "upload/serviceRoom", false);// 上传文件
+			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "serviceRoom", false);// 上传文件
 			if (files.size() > 0) {
 				if (!"jpg".equalsIgnoreCase(files.get(0).getFileExt()) && !"png".equalsIgnoreCase(files.get(0).getFileExt())
 						&& !"jpeg".equalsIgnoreCase(files.get(0).getFileExt())) {
@@ -156,7 +154,7 @@ public class ServiceRoomController extends BaseController {
 	}
 
 	/**
-	 * 删除词典数据
+	 * 删除机房信息
 	 *
 	 * @param serviceRoom
 	 * @param request
@@ -247,8 +245,29 @@ public class ServiceRoomController extends BaseController {
 			if (StringUtil.isNotEmpty(form.getPosition())) {
 				criteria.andPositionLike("%" + form.getPosition() + "%");
 			}
+			StringBuffer orderBy = new StringBuffer();
+			if (StringUtil.isNotEmpty(form.getSortName())) {
+				if ("id".equalsIgnoreCase(form.getSortName())) {
+					orderBy.append("id " + ("asc".equalsIgnoreCase(form.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("name".equalsIgnoreCase(form.getSortName())) {
+					orderBy.append("name " + ("asc".equalsIgnoreCase(form.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("position".equalsIgnoreCase(form.getSortName())) {
+					orderBy.append("position " + ("asc".equalsIgnoreCase(form.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("exterior".equalsIgnoreCase(form.getSortName())) {
+					orderBy.append("id " + ("asc".equalsIgnoreCase(form.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("resourceCode".equalsIgnoreCase(form.getSortName())) {
+					orderBy.append("resource_code " + ("asc".equalsIgnoreCase(form.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("address".equalsIgnoreCase(form.getSortName())) {
+					orderBy.append("address " + ("asc".equalsIgnoreCase(form.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("area".equalsIgnoreCase(form.getSortName())) {
+					orderBy.append("area " + ("asc".equalsIgnoreCase(form.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("comment".equalsIgnoreCase(form.getSortName())) {
+					orderBy.append("comment " + ("asc".equalsIgnoreCase(form.getSortDesc()) ? "asc" : "desc") + ",");
+				}
+			}
+			orderBy.append("create_date desc");
 			// 排序设置
-			example.setOrderByClause("create_date desc");
+			example.setOrderByClause(orderBy.toString());
 			Page<ServiceRoom> queryResult = serviceRoomService.getByPage(form.getPageNum(), form.getPageSize(), example);
 			// 去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,
@@ -331,6 +350,31 @@ public class ServiceRoomController extends BaseController {
 	}
 
 	/**
+	 * 获取前台显示图片
+	 */
+	@RequestMapping(value = "/getImage", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object getImage(ServiceRoom serviceRoom, HttpServletResponse response) {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("request param: [ServiceRoom getImage: {}]", JSON.toJSONString(serviceRoom));
+		}
+		if (StringUtil.isEmpty(serviceRoom.getId())) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
+		}
+		try {
+			serviceRoom = serviceRoomService.getById(serviceRoom.getId());
+			boolean isExist = FileUtil.checkFileExist(serviceRoom.getImageUrl());
+			if (!isExist) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "文件不存在");
+			}
+			ImageUtil.getImage(serviceRoom.getImageUrl(), FileUtil.getFilename(serviceRoom.getImageUrl()), response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
+		}
+		return null;
+	}
+
+	/**
 	 * 修改机房和用户对应关系
 	 * 
 	 * @param serviceRoomId
@@ -365,5 +409,4 @@ public class ServiceRoomController extends BaseController {
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 		}
 	}
-
 }

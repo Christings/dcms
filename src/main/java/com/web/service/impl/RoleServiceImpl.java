@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.web.core.util.page.Page;
 import com.web.entity.Role;
+import com.web.example.MenuRoleExample;
 import com.web.example.RoleExample;
+import com.web.mappers.MenuRoleMapper;
 import com.web.mappers.RoleMapper;
 import com.web.service.RoleSerivce;
 import org.slf4j.Logger;
@@ -30,6 +32,8 @@ public class RoleServiceImpl implements RoleSerivce {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RoleServiceImpl.class);
 	@Autowired
 	private RoleMapper roleMapper;
+	@Autowired
+	private MenuRoleMapper menuRoleMapper;
 
 	@Override
 	public int save(Role entity) {
@@ -84,7 +88,13 @@ public class RoleServiceImpl implements RoleSerivce {
 			return 0 ;
 		}
 
-		// 删除记录数
+		//删除菜单和角色关系
+		MenuRoleExample example = new MenuRoleExample();
+		MenuRoleExample.Criteria criteria = example.createCriteria();
+		criteria.andRoleIdEqualTo(key);
+		menuRoleMapper.deleteByExample(example);
+
+		//删除记录数
 		int result = roleMapper.deleteByPrimaryKey(key);
 
 		if (LOGGER.isInfoEnabled()) {

@@ -6,7 +6,9 @@ import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
 import com.web.entity.Role;
 import com.web.example.RoleExample;
+import com.web.example.UserRoleExample;
 import com.web.service.RoleSerivce;
+import com.web.service.UserRoleService;
 import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
 import com.web.util.fastjson.FastjsonUtils;
@@ -40,6 +42,8 @@ public class RoleController extends BaseController{
 
 	@Autowired
 	private RoleSerivce roleService;
+	@Autowired
+	private UserRoleService userRoleService;
 
 	/**
 	 * 添加
@@ -219,9 +223,6 @@ public class RoleController extends BaseController{
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 	}
 
-
-
-
 	/**
 	 * 根据ID查找
 	 */
@@ -274,6 +275,13 @@ public class RoleController extends BaseController{
 		}
 
 		try {
+			UserRoleExample example = new UserRoleExample();
+			UserRoleExample.Criteria criteria = example.createCriteria();
+			criteria.andRoleIdEqualTo(id);
+			if(userRoleService.getCount(example)>0){
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色下包含用户,不允许删除!!!");
+			}
+
 			int result=roleService.deleteById(id);
 
 			if(result > 0){

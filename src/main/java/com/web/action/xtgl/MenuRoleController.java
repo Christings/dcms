@@ -7,17 +7,22 @@ import com.web.entity.OperLog;
 import com.web.service.MenuRoleService;
 import com.web.util.AllResult;
 import com.web.util.UUIDGenerator;
+import com.web.util.fastjson.FastjsonUtils;
+import com.web.util.validation.GroupBuilder;
+import com.web.util.validation.ValidationHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import static com.web.util.AllResult.buildJSON;
 
 /**
  * 菜单角色关系接口
@@ -115,7 +120,7 @@ public class MenuRoleController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/batchRoles", method = RequestMethod.POST)
-	public Object batchRoles(String menuId,String roleIds, HttpServletRequest request) {
+	public Object batchRoles(String menuId,String roleIds) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [menuId: {},roleIds:{}]",menuId,roleIds );
 		}
@@ -149,24 +154,65 @@ public class MenuRoleController extends BaseController {
 	/**
 	 * 根据角色Id 获取所有角色菜单关系数据
 	 *
-	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/getRoleId", method = RequestMethod.POST)
-	public Object getRoleId(String key,HttpServletRequest request) {
+	public Object getRoleId(String roleId) {
 		try {
-			if(StringUtils.isEmpty(key)){
+			if(StringUtils.isEmpty(roleId)){
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "角色ID不能为空");
 			}
 
-			List<MenuRole> menuRoleList = menuRoleService.getRoleMenu(key);
+			List<MenuRole> menuRoleList = menuRoleService.getRoleMenu(roleId);
 
 			if(null == menuRoleList || menuRoleList.size() == 0){
 				return AllResult.build(1, "未查询到相关数据");
 			}
 
 			// 增加日志
-			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
+
+			String jsonStr = JSON.toJSONString(menuRoleList, FastjsonUtils.newIgnorePropertyFilter("operationId"));
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
+		} catch (Exception e) {
+			LOGGER.error("menuRole object error. getMenuRoleList ", e);
+			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole, null,
+					OperLog.logLevelEnum.error);
+
+		}
+
+		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,获取角色菜单时失败");
+	}
+
+	/**
+	 * 根据角色Id和菜单ID获取关系
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/getRoleIdAndMenuId", method = {RequestMethod.POST,RequestMethod.GET})
+	public Object getRoleIdAndMenuId(String roleId,String menuId) {
+		//验证参数
+		String errorTip = ValidationHelper.build()
+				// 必输条件验证
+				.addGroup(GroupBuilder.build(roleId).notEmpty().maxLength(32), "角色ID必须提供且长度最大32位")
+				.addGroup(GroupBuilder.build(menuId).notEmpty().maxLength(32), "菜单ID必须提供且最大长度32位")
+				.validate();
+
+		if (StringUtils.isNotEmpty(errorTip)) {
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
+		}
+
+		try {
+
+			List<MenuRole> menuRoleList = menuRoleService.getRoleMenuOperation(roleId,menuId);
+
+//			if(null == menuRoleList || menuRoleList.size() == 0){
+//				return AllResult.build(1, "未查询到相关数据");
+//			}
+
+			// 增加日志
+//			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
 
 			return AllResult.okJSON(menuRoleList);
 		} catch (Exception e) {
@@ -182,17 +228,16 @@ public class MenuRoleController extends BaseController {
 	/**
 	 * 根据菜单Id 获取所有菜单角色关系数据
 	 *
-	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/getMenuId", method = RequestMethod.POST)
-	public Object getMenuId(String key,HttpServletRequest request) {
+	public Object getMenuId(String menuId) {
 		try {
-			if(StringUtils.isEmpty(key)){
+			if(StringUtils.isEmpty(menuId)){
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单ID不能为空");
 			}
 
-			List<MenuRole> menuRoleList = menuRoleService.getMenuRole(key);
+			List<MenuRole> menuRoleList = menuRoleService.getMenuRole(menuId);
 
 			if(null == menuRoleList || menuRoleList.size() == 0){
 				return AllResult.build(1, "未查询到相关数据");
@@ -201,7 +246,9 @@ public class MenuRoleController extends BaseController {
 			// 增加日志
 //			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole,null);
 
-			return AllResult.okJSON(menuRoleList);
+			String jsonStr = JSON.toJSONString(menuRoleList, FastjsonUtils.newIgnorePropertyFilter("operationId"));
+
+			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("menuRole object error. getMenuRoleList ", e);
 			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menuRole, null,
@@ -214,11 +261,10 @@ public class MenuRoleController extends BaseController {
 	/**
 	 * 获取所有菜单角色关系
 	 *
-	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/getAll", method = {RequestMethod.GET,RequestMethod.POST})
-	public Object getAll(HttpServletRequest request) {
+	public Object getAll() {
 		try {
 			List<MenuRole> menuRoleList = menuRoleService.getAll();
 
