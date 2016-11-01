@@ -15,16 +15,23 @@ function roomPGAdd(){
 		var formData = new FormData($("#roomPGAddForm"));
 		formData.append('floorName',floorName);
 		formData.append('zipFile',zipFile);
+
+		var dtd=$.Deferred();
 		$.ajax({
             url:"../../../serviceRoomIcngph/add",
             type:'post',
             data: formData,
-            async:false,
+            async:true,
             processData: false,  // 告诉jQuery不要去处理发送的数据
             contentType: false   // 告诉jQuery不要去设置Content-Type请求头
             // success:function(data){
             // 	window.location.reload();
             // }
-        });
+        }).then(function(data){
+			console.log(data);
+		},function(error){
+			dtd.reject(error);
+			DCMSUtils.Modal.toast(error,'');
+		});
 	});
 }
