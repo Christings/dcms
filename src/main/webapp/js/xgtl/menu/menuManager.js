@@ -369,6 +369,7 @@ function menuSetting(menuId) {
         optionSetting('hide');
         currentOptionMenuId=menuId;
     }
+    $("#operationBody").empty();
     if($("#menuMainDiv").attr('class')=='col-sm-12'){
         var menu=DCMSUtils.SessionStorage.get("MENU_TREE_MAP")[menuId];
         $("#operationTitle").text('【'+menu.name+'】精细化权限控制');
