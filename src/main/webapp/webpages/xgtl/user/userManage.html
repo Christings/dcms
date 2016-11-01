@@ -39,6 +39,21 @@
             width: 150px;
             vertical-align: middle;
         }
+        #domainJsTree {
+        	height:300px;
+        }
+        #userAddForm .modal-body{
+        	height:300px;
+        	overflow:scroll;
+        	overflow-x: auto;
+        	overflow-y: auto;
+        }
+        #userUpdateForm .modal-body{
+        	height:300px;
+        	overflow:scroll;
+        	overflow-x: auto;
+        	overflow-y: auto;
+        }
     </style>
 </head>
 <body class="gray-bg">
@@ -111,9 +126,8 @@
 		                用户录入
 		            </h4>
 		        </div>
-
-		        <div class="modal-body">
-		            <form role="form" id="userAddForm">
+		        <form role="form" id="userAddForm">
+			        <div class="modal-body">
 						<div class="form-group">
 						  <label for="name">登陆账号</label>
 						  <input type="text" class="form-control" id="userName" 
@@ -141,7 +155,7 @@
 								<span id='domainPName' name="domainPName" style="width: 50%;"></span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectDomainBtn" class="btn btn-primary btn-sm btn-outline">选择</a>
 							</div>
 						</div><br/>
-						<!-- <div class="form-group">
+						<div class="form-group">
 							<label for="name">身份证</label>
 							<input type="text" class="form-control" id="identificationNo" 
 						     placeholder="请输入身份证号">
@@ -150,8 +164,8 @@
 						  <label for="name">手机号</label>
 						  <input type="text" class="form-control" id="phone" 
 						     placeholder="请输入手机号">
-						</div> -->
-						<!-- <div class="form-group">
+						</div> 
+						<div class="form-group">
 						  <label for="name">邮箱</label>
 						  <input type="text" class="form-control" id="email" 
 						     placeholder="请输入邮箱">
@@ -160,7 +174,7 @@
 						  <label for="name">电话</label>
 						  <input type="text" class="form-control" id="mobile" 
 						     placeholder="请输入电话">
-						</div> -->
+						</div>
 						<div class="form-group">
 						  	<label for="name">性别</label>
 						 	<select id="sex">
@@ -175,16 +189,16 @@
 								<option value = '0'>激活</option>
 						  </select>
 						</div>
-						<div class="modal-footer">
-				            <button type="button" class="btn btn-default" 
-				               data-dismiss="modal">关闭
-				            </button>
-				            <button type="submit" onclick="userAdd()" class="btn btn-primary">
-				               确认添加
-				            </button>
-			        	</div>
-					</form>
-				</div>
+					</div>
+					<div class="modal-footer">
+			            <button type="button" class="btn btn-default" 
+			               data-dismiss="modal">关闭
+			            </button>
+			            <button type="submit" onclick="userAdd()" class="btn btn-primary">
+			               确认添加
+			            </button>
+		        	</div>
+				</form>
 			</div><!-- /.modal -->
 		</div>
 	</div>
@@ -220,9 +234,19 @@
 		                用户编辑
 		            </h4>
 		        </div>
-		        <div class="modal-body" id="userUpdateBody">
-		            
-		        </div>
+		        <form role="form" id="userUpdateForm">
+			        <div class="modal-body" id="userUpdateBody">
+			            
+			        </div>
+			        <div class="modal-footer">
+			           <button type="button" class="btn btn-default" data-dismiss="modal">
+			           	关闭
+			            </button>
+			            <button type="submit" onclick="userUpdate()" class="btn btn-primary">
+			            提交修改
+			           </button>
+		        	</div>
+		        </form>
 		    </div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>

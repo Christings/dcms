@@ -77,7 +77,7 @@ function userUpdateInit(e){
 				}
 				content += "<input type=\"checkbox\" "+check+" value=\""+e["id"]+"\">"+e["rolename"];
 			}
-			var html = "<form role=\"form\" id=\"userUpdateForm\">"+
+			var html = 
 					"<div hidden=\"hidden\" class=\"form-group\">"+
 					  "<input id=\"userId1\" value=\""+ id +"\"for=\"name\">"+
 					"</div>"+
@@ -101,6 +101,22 @@ function userUpdateInit(e){
 						'</div>'+
 					'</div>'+
 					"<div class=\"form-group\">"+
+					  "<label for=\"name\">身份证</label>"+
+					  "<input type=\"text\" class=\"form-control\" id=\"identificationNo1\" value=\""+identificationNo+"\">"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">手机号</label>"+
+					  "<input type=\"text\" class=\"form-control\" id=\"mobile1\" value=\""+mobile+"\">"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">邮箱</label>"+
+					  "<input type=\"text\" class=\"form-control\" id=\"email1\" value=\""+email+"\">"+
+					"</div>"+
+					"<div class=\"form-group\">"+
+					  "<label for=\"name\">电话</label>"+
+					  "<input type=\"text\" class=\"form-control\" id=\"phone1\" value=\""+phone+"\">"+
+					"</div>"+
+					"<div class=\"form-group\">"+
 					  "<label for=\"name\">性别</label>"+
 					  	"<select id=\"sex1\">"+
 							"<option "+sex_selected_0+" value = '0'>男</option>"+
@@ -113,31 +129,8 @@ function userUpdateInit(e){
 							"<option "+status_selected_1+" value = '1'>未激活</option>"+
 							"<option "+status_selected_0+" value = '0'>激活</option>"+
 					  "</select>"+
-					"</div>"+
-					"<div class=\"modal-footer\">"+
-		           "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">关闭"+
-		            "</button>"+
-		            "<button type=\"submit\" onclick=\"userUpdate()\" class=\"btn btn-primary\">"+
-		            "提交修改"+
-		           "</button>"+
-	        	"</div>"+
-			"</form>";
-			// "<div class=\"form-group\">"+
-			// 		  "<label for=\"name\">身份证</label>"+
-			// 		  "<input type=\"text\" class=\"form-control\" id=\"identificationNo1\" value=\""+identificationNo+"\">"+
-			// 		"</div>"+
-			// 		"<div class=\"form-group\">"+
-			// 		  "<label for=\"name\">手机号</label>"+
-			// 		  "<input type=\"text\" class=\"form-control\" id=\"mobile1\" value=\""+mobile+"\">"+
-			// 		"</div>"+
-			// 		"<div class=\"form-group\">"+
-			// 		  "<label for=\"name\">邮箱</label>"+
-			// 		  "<input type=\"text\" class=\"form-control\" id=\"email1\" value=\""+email+"\">"+
-			// 		"</div>"+
-			// 		"<div class=\"form-group\">"+
-			// 		  "<label for=\"name\">电话</label>"+
-			// 		  "<input type=\"text\" class=\"form-control\" id=\"phone1\" value=\""+phone+"\">"+
-			// 		"</div>"+
+					"</div>";
+			
 			var body = document.getElementById("userUpdateBody");
 			body.innerHTML = html;
 			loadOrganizationTree1();

@@ -245,9 +245,9 @@ public class FileUtil {
 	 * 解压文件到指定文件夹
 	 */
 	public static Map<String, File> unZipFile(File file, String outPath) throws IOException {
+		Map<String, File> map = new HashMap<String, File>();
 		ZipFile zipFile = new ZipFile(file);
 		Enumeration entrys = zipFile.entries();
-		Map<String, File> map = new HashMap<String, File>();
 		while (entrys.hasMoreElements()) {
 			ZipEntry entry = (ZipEntry) entrys.nextElement();
 			if (entry.isDirectory()) {
@@ -267,10 +267,11 @@ public class FileUtil {
 			while ((len = inputStream.read(buf)) > 0) {
 				outputStream.write(buf, 0, len);
 			}
+			map.put(FileUtil.getFilename(entry.getName()), file1);
 			inputStream.close();
 			outputStream.close();
-			map.put(FileUtil.getFilename(entry.getName()), file1);
 		}
+		zipFile.close();
 		return map;
 	}
 
@@ -301,13 +302,12 @@ public class FileUtil {
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
 		try {
-			if(StringUtil.isEmpty(fileName)){
+			if (StringUtil.isEmpty(fileName)) {
 				fileName = FileUtil.getFilename(filePath);
 			}
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("multipart/form-data");
 			response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
-			String path = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH);
 			inputStream = new FileInputStream(new File(filePath));
 			outputStream = response.getOutputStream();
 			byte[] bytes = new byte[1024];
@@ -348,7 +348,7 @@ public class FileUtil {
 			if (null != file && file.getSize() > 0) {
 				String ext = FileUtil.getFilenameExtension(file.getOriginalFilename());
 				String path = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH) + targetPath;// 获取路径
-				if(!"zip".equalsIgnoreCase(ext)){
+				if (!"zip".equalsIgnoreCase(ext)) {
 					needUnZIP = false;
 				}
 				File inFile = new File(path);
@@ -373,7 +373,7 @@ public class FileUtil {
 						beans.add(bean);
 					}
 					if (inFile.exists()) {
-						inFile.delete();
+						inFile.getAbsoluteFile().delete();
 					}
 				} else {
 					FileUtilBean bean = new FileUtilBean();
@@ -409,7 +409,11 @@ public class FileUtil {
 			code = "UTF-16BE";
 			break;
 		default:
-			code = "GBK";
+			if (isUTF8(file.getAbsolutePath())) {
+				code = "UTF-8";
+			} else {
+				code = "GBK";
+			}
 		}
 		return code;
 	}
@@ -422,9 +426,9 @@ public class FileUtil {
 		String filePath = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH);
 		for (FileUtilBean bean : files) {
 			String path = bean.getFileRealPath();
-			File file = new File(filePath + path);
+			File file = new File(path);
 			if (file.exists()) {
-				file.delete();
+				file.getAbsoluteFile().delete();
 				count++;
 			}
 		}
@@ -433,15 +437,79 @@ public class FileUtil {
 
 	/**
 	 * 检查文件是否存在
-	 * */
-	public static boolean checkFileExist(String path){
-		if(StringUtil.isEmpty(path)){
+	 */
+	public static boolean checkFileExist(String path) {
+		if (StringUtil.isEmpty(path)) {
 			return false;
 		}
 		File file = new File(path);
-		if(file.exists()){
+		if (file.exists()) {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * 判断文件是否是无BOM的UTF-8编码
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	public static boolean isUTF8(String fileName) {
+		boolean state = true;
+		BufferedInputStream bin = null;
+		try {
+			bin = new BufferedInputStream(new FileInputStream(fileName));
+			int count = 10;// 设置判断的字节流的数量
+			int firstByte = 0;
+			// 根据字节流是否符合UTF-8的标准来判断
+			while (true) {
+				if (count-- < 0 || (firstByte = bin.read()) == -1) {
+					break;
+				}
+				// 判断字节流
+				if ((firstByte & 0x80) == 0x00) {
+					// 字节流为0xxxxxxx
+					continue;
+				} else if ((firstByte & 0xe0) == 0xc0) {
+					// 字节流为110xxxxx 10xxxxxx
+					if ((bin.read() & 0xc0) == 0x80)
+						continue;
+				} else if ((firstByte & 0xf0) == 0xe0) {
+					// 字节流为1110xxxx 10xxxxxx 10xxxxxx
+					if ((bin.read() & 0xc0) == 0x80 && (bin.read() & 0xc0) == 0x80)
+						continue;
+				} else if ((firstByte & 0xf8) == 0xf0) {
+					// 字节流为11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+					if ((bin.read() & 0xc0) == 0x80 && (bin.read() & 0xc0) == 0x80 && (bin.read() & 0xc0) == 0x80)
+						continue;
+				} else if ((firstByte & 0xfc) == 0xf8) {
+					// 字节流为111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+					if ((bin.read() & 0xc0) == 0x80 && (bin.read() & 0xc0) == 0x80 && (bin.read() & 0xc0) == 0x80
+							&& (bin.read() & 0xc0) == 0x80)
+						continue;
+				} else if ((firstByte & 0xfe) == 0xfc) {
+					// 字节流为1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+					if ((bin.read() & 0xc0) == 0x80 && (bin.read() & 0xc0) == 0x80 && (bin.read() & 0xc0) == 0x80
+							&& (bin.read() & 0xc0) == 0x80 && (bin.read() & 0xc0) == 0x80)
+						continue;
+				}
+				state = false;
+				break;
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			state = false;
+			e.printStackTrace();
+		} finally {
+			try {
+				if (bin != null)
+					bin.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return state;
 	}
 }

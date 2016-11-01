@@ -22,6 +22,31 @@ var DCMSUtils={
 				dtd.reject(error);
 			});
 			return dtd.promise();
+		},
+		doPostPermit:function(url,params){
+			var dtd=$.Deferred();
+			$.ajax({
+				type:"post",
+				url:getContentPath()+url,
+				dataType: 'json',
+				data: params,
+				async:true
+			}).then(function(data){
+				if(data.status==1){
+					data.resolve(data.data);
+				}else{
+					if(data.status==5){//如果需要单独处理就在此处处理
+						DCMSUtils.Modal.toast(data.msg,'forbidden');
+					}else{
+						DCMSUtils.Modal.toast(data.msg,'forbidden');
+					}
+					data.resolve(data);
+				}
+			},function(error){
+				DCMSUtils.Modal.toast('出小差了，稍后再试','forbidden');
+				dtd.reject(error);
+			});
+			return dtd.promise();
 		}
 	},
 	//URL操作相关

@@ -49,14 +49,16 @@ function pageInit() {
 		{
 			targets:1,
 			render:function(data,type,row,meta){
-				var html='<a onclick="downloadConfirm()" download="'+row.imageName+'" href="../../../serviceRoomIcngph/downloadFile?id='+row.id+'&fileName='+row.imageName+'">'+row.imageName+'</a>';
+				//var html='<a onclick="roomPGDownload(\"'+row.id+'\",\"'+row.imageName+'\")" download="'+row.imageName+'">'+row.imageName+'</a>';
+				var html='<span style="cursor:pointer" onclick="roomPGDownload(\''+row.id+'\',\''+row.imageName+'\')" >'+row.imageName+'</span>';
 				return html;
 			}
 		},
 		{
 			targets:2,
 			render:function(data,type,row,meta){
-				var html='<a onclick="downloadConfirm()" download="'+row.ymlName+'" href="../../../serviceRoomIcngph/downloadFile?id='+row.id+'&fileName='+row.ymlName+'">'+row.ymlName+'</a>';
+				//var html='<a onclick="roomPGDownload(\"'+row.id+'\",\"'+row.ymlName+'\")" download="'+row.ymlName+'">'+row.ymlName+'</a>';
+				var html='<span style="cursor:pointer" onclick="roomPGDownload(\''+row.id+'\',\''+row.ymlName+'\')" >'+row.ymlName+'</span>';
 				return html;
 			}
 		},
@@ -64,7 +66,8 @@ function pageInit() {
 		{
 			targets:3,
 			render:function(data,type,row,meta){
-				var html='<a onclick="downloadConfirm()" download="'+row.jsonName+'" href="../../../serviceRoomIcngph/downloadFile?id='+row.id+'&fileName='+row.jsonName+'">'+row.jsonName+'</a>';
+				//var html='<a onclick="roomPGDownload(\"'+row.id+'\",\"'+row.jsonName+'\")" download="'+row.jsonName+'">'+row.jsonName+'</a>';
+				var html='<span style="cursor:pointer" onclick="roomPGDownload(\''+row.id+'\',\''+row.jsonName+'\')" >'+row.jsonName+'</span>';
 				return html;
 			}
 		},
@@ -72,7 +75,9 @@ function pageInit() {
 			targets:4,
 			render:function(data,type,row,meta){
 				var html='<i class="glyphicon glyphicon-pencil" title="编辑" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGUpdate\" onclick="roomPGUpdateInit(\'' + row.id +'\',\''+row.floorName+'\')"></i>&nbsp;&nbsp;' +
-					'<i class="glyphicon glyphicon-trash"  title="删除" onclick="roomPGDelete(\'' + row.id +'\',\''+row.floorName+'\')"></i>&nbsp;&nbsp;';
+					'<i class="glyphicon glyphicon-trash"  title="删除" onclick="roomPGDelete(\'' + row.id +'\',\''+row.floorName+'\')"></i>&nbsp;&nbsp;'+
+					'<i class="glyphicon glyphicon-search" title="查看平面图" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick="roomPGWatch(\'' + row.id +'\')"></i>';
+
 				return html;
 			}
 		}]
@@ -88,9 +93,7 @@ function pageInit() {
 		document.getElementById("queryForm").reset();
 	});
 }
-function downloadConfirm(){
 
-}
 // function download(){
 // 	var fileName = '1.png';
 // 	var id = '531478698ca04c9abaa1bc2baa96c402';

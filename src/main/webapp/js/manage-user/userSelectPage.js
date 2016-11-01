@@ -2,51 +2,59 @@
 // var user_pageCount = 1;
 var dtApi;
 function pageInit(){
-	loadOrganizationTree();
+	
 	// loadUserBody();
 	userListLoad();
+	loadOrganizationTree();
 }
 function loadOrganizationTree(){
 	//加载域信息
     var jsTreeIndex=0;
-	DCMSUtils.Modal.showLoading();
-    DCMSUtils.Ajax.doPost('domain/tree').then(function(data){
-        DCMSUtils.Modal.hideLoading();
-        if(data.status=='1'){
-            var treeData=transDataToJsTree(data.data,jsTreeIndex);
-            // console.log(treeData);
-            $('#domainJsTree').jstree({
-            	'plugins':['wholerow','checkbox'],
-                'core': {
-                    'check_callback': true,
-                    'data':treeData
-                }
-            });
-            DCMSUtils.Modal.hideLoading();
-            initTreeGird(data.data, 0);
-        }else{
-            DCMSUtils.Modal.toast('加载组织机构树异常','forbidden');
-        }
-    },function(error){
-        DCMSUtils.Modal.hideLoading();
-        DCMSUtils.Modal.toast('加载组织机构树异常','forbidden');
-    });
+	// DCMSUtils.Modal.showLoading();
+	var domainMap=DCMSUtils.SessionStorage.get("Domain_TREE_MAP");
+	if(!domainMap){
+		 DCMSUtils.Ajax.doPost('domain/tree').then(function(data){
+	        DCMSUtils.Modal.hideLoading();
+	        if(data.status=='1'){
+	            var treeData=transDataToJsTree(data.data,jsTreeIndex);
+	            // console.log(treeData);
+	            $('#domainJsTree').jstree({
+	            	'plugins':['wholerow','checkbox'],
+	                'core': {
+	                    'check_callback': true,
+	                    'data':treeData
+	                }
+	            });
+	            // DCMSUtils.Modal.hideLoading();
+	            initTreeGird(data.data, 0);
+	        }else{
+	            DCMSUtils.Modal.toast('加载组织机构树异常','forbidden');
+	        }
+	    },function(error){
+	        // DCMSUtils.Modal.hideLoading();
+	        DCMSUtils.Modal.toast('加载组织机构树异常','forbidden');
+	    });
+	}
+   
     //加载角色信息
     var da = "";
-	DCMSUtils.Ajax.doPost("role/getAll",da).done((jsonData)=>{
-		var roles = jsonData["data"];
-		var content = "";
-		var e;
-		var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
-        if(!rolesMap){
+    var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
+    if(!rolesMap){
+    	DCMSUtils.Ajax.doPost("role/getAll",da).done((jsonData)=>{
+			var roles = jsonData["data"];
+			var content = "";
+			var e;
+			// var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
             rolesMap={};
-        }
-		for(var i=0,len=roles.length;i<len;i++){
-			e = roles[i];
-	        rolesMap[e.id]=e;
-	        DCMSUtils.SessionStorage.set("ROLES_MAP",rolesMap);
-		}
-	});
+	       
+			for(var i=0,len=roles.length;i<len;i++){
+				e = roles[i];
+		        rolesMap[e.id]=e;
+		        DCMSUtils.SessionStorage.set("ROLES_MAP",rolesMap);
+			}
+		});
+    }
+	
 
 	$("#selectDomainBtn").click(function(){
         $("#useradd").modal('hide');
@@ -60,7 +68,7 @@ function loadOrganizationTree(){
 	        var domain = domainTree[i];
 
 	        //保存domainTree数据，方便编辑等
-	        var domainMap=DCMSUtils.SessionStorage.get("Domain_TREE_MAP");
+	        domainMap=DCMSUtils.SessionStorage.get("Domain_TREE_MAP");
 	        if(!domainMap){
 	            domainMap={};
 	        }
@@ -133,11 +141,17 @@ function userListLoad(){
 		 */
 		ajax:function(data, callback, settings){
 			//需要把分页参数转为DCMS接口规范的
-			console.log(data);
+			// console.log(data);
+			if($("th[aria-label^='登录号']").hasClass('sorting_asc')){
+				console.log('登录号'+'asc');
+			}else{
+				console.log('登录号'+'desc');
+			}
 			var pageNum=data.start/data.length+1,pageSize=data.length;
 			var params={
 				pageNum:pageNum,
 				pageSize:pageSize,
+				// usernameSort:$("th[aria-label]"),
 				username:$("#searchUsername").val(),
 				realname:$("#searchRealname").val(),
 				status:$("#searchStatus").val(),
@@ -151,7 +165,7 @@ function userListLoad(){
 					for(var i=0,len=data.data.records.length;i<len;i++){
 						var domains = data.data.records[i].domains[0]?data.data.records[i].domains[0]:[];
 						// if(data.data.records[i].domains.length!=0){
-							console.log(domains);
+							//console.log(domains);
 							// console.log(data.data.records.domains[0]["name"]);
 						// }
 					}
@@ -250,6 +264,12 @@ function userListLoad(){
 	$("#resetBtn").click(function(){
 		document.getElementById("queryForm").reset();
 	});
+
+	
+	// $("th").click(function(){
+	// 	var usernameSort = $("th[aria-label^='登录号']").attr("class");			
+	// 	console.log('usernameSort'+usernameSort);
+	// });
 }
 
 //-----------------------------
