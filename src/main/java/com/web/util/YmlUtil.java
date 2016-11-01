@@ -30,6 +30,7 @@ public class YmlUtil {
 			String charset = FileUtil.getFileCharset(file);
 			InputStreamReader reader = new InputStreamReader(new FileInputStream(file), charset);
 			map = (Map) yml.load(reader);
+			reader.close();
 			return map;
 		}
 		return null;

@@ -62,10 +62,15 @@ public class ImageUtil {
 			inputStream = new FileInputStream(file);
 			bytes = new byte[inputStream.available()];
 			inputStream.read(bytes);
-			inputStream.close();
 		} catch (Exception e) {
 			logger.error("获取图片流失败！");
 			e.printStackTrace();
+		}finally {
+			try {
+				inputStream.close();
+			}catch (Exception e){
+				e.printStackTrace();
+			}
 		}
 		return bytes;
 	}
