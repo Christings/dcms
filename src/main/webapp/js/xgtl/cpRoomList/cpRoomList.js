@@ -72,6 +72,7 @@ function pageInit() {
 
 //新增/修改机房信息
 function editItem(id,type){
+	$("#saveType").val(type);
 	if(type=='new'){
 		$("#cpRoomModalTitle").text('增加机房');
 		$("#file").parent().show();
@@ -94,70 +95,86 @@ function editItem(id,type){
 		});
 	}
 	$("#cpRoomModal").modal();
-	$("#cpRoomNewUpdateForm").submit(function(event){
-		var name = $("#name").val();
-		var position = $("#position").val();
-		var comment = $("#comment").val();
-		var exterior = $("#exterior").val();
-		var resourceCode = $("#resourceCode").val();
-		var address = $("#address").val();
-		var obj = document.getElementById("file");
-		var file = obj.files[0];
-		var area = $("#area").val();
+}
 
-		if(name == null || name == ''){
-			//DCMSUtils.Modal.toast('请输入机房名称！','cancel');
-			alert('请输入机房名称！');
-			$("#name").focus();
-			return false;
-		}
-		if(position == null || position == ''){
-			//DCMSUtils.Modal.toast('请输入位置！','cancel');
-			alert('请输入位置！');
-			$("#position").focus();
-			return false;
-		}
-		if(resourceCode == null || resourceCode == ''){
-			//DCMSUtils.Modal.toast('请输入资源编码！','cancel');
-			alert('请输入资源编码！');
-			$("#resourceCode").focus();
-			return false;
-		}
+//保存机房信息
+function saveCPRoomInfo() {
+	DCMSUtils.Modal.showLoading();
+	var type = $("#saveType").val();
+	var name = $("#name").val();
+	var position = $("#position").val();
+	var comment = $("#comment").val();
+	var exterior = $("#exterior").val();
+	var resourceCode = $("#resourceCode").val();
+	var address = $("#address").val();
+	var obj = document.getElementById("file");
+	var file = obj.files[0];
+	var area = $("#area").val();
 
-		var formData = new FormData($("#cpRoomNewUpdateForm"));
-		formData.append('name',name);
-		formData.append('position',position);
-		formData.append('comment',comment);
-		formData.append('exterior',exterior);
-		formData.append('resourceCode',resourceCode);
-		formData.append('address',address);
-		formData.append('file',file);
-		formData.append('area',area);
-		if(type=='new'){
-			$.ajax({
-				url:"../../../serviceRoom/add",
-				type:'post',
-				data: formData,
-				processData: false,  // 告诉jQuery不要去处理发送的数据
-				contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
-				success:function(data){
-					dtApi.ajax.reload();
-				}
-			});
-		}else if(type=='update'){
-			formData.append('id',id);
-			$.ajax({
-				url:"../../../serviceRoom/update",
-				type:'post',
-				data: formData,
-				processData: false,  // 告诉jQuery不要去处理发送的数据
-				contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
-				success:function(data){
-					dtApi.ajax.reload();
-				}
-			});
-		}
-	});
+	if(name == null || name == ''){
+		DCMSUtils.Modal.toast('请输入机房名称！','cancel');
+		$("#name").focus();
+		return false;
+	}
+	if(position == null || position == ''){
+		DCMSUtils.Modal.toast('请输入位置！','cancel');
+		$("#position").focus();
+		return false;
+	}
+	if(resourceCode == null || resourceCode == ''){
+		DCMSUtils.Modal.toast('请输入资源编码！','cancel');
+		$("#resourceCode").focus();
+		return false;
+	}
+
+	var formData = new FormData($("#cpRoomNewUpdateForm"));
+	formData.append('name',name);
+	formData.append('position',position);
+	formData.append('comment',comment);
+	formData.append('exterior',exterior);
+	formData.append('resourceCode',resourceCode);
+	formData.append('address',address);
+	formData.append('file',file);
+	formData.append('area',area);
+	if(type=='new'){
+		$.ajax({
+			url:"../../../serviceRoom/add",
+			type:'post',
+			data: formData,
+			processData: false,  // 告诉jQuery不要去处理发送的数据
+			contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+			success:function(data){
+				DCMSUtils.Modal.hideLoading();
+				$("#cpRoomModal").modal('hide');
+				DCMSUtils.Modal.toast('保存机房信息成功','');
+				dtApi.ajax.reload();
+			},
+			error:function () {
+				DCMSUtils.Modal.hideLoading();
+				DCMSUtils.Modal.toast('保存机房信息异常','forbidden');
+			}
+		});
+	}else if(type=='update'){
+		var id = $("#cpRoomId").val();
+		formData.append('id',id);
+		$.ajax({
+			url:"../../../serviceRoom/update",
+			type:'post',
+			data: formData,
+			processData: false,  // 告诉jQuery不要去处理发送的数据
+			contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+			success:function(data){
+				DCMSUtils.Modal.hideLoading();
+				$("#cpRoomModal").modal('hide');
+				DCMSUtils.Modal.toast('保存机房信息成功','');
+				dtApi.ajax.reload();
+			},
+			error:function () {
+				DCMSUtils.Modal.hideLoading();
+				DCMSUtils.Modal.toast('保存机房信息异常','forbidden');
+			}
+		});
+	}
 }
 
 
@@ -166,28 +183,38 @@ function editComment(id,comment,resourceCode){
 	$("#commentId").val(id);
 	$("#comment1").val(comment);
 	$("#commentModal").modal();
-	$("#updateCommentForm").submit(function(event){
-		var comment = $("#comment1").val();
-		var formData = new FormData($("#updateCommentForm"));
-		formData.append('id',id);
-		formData.append('comment',comment);
-		formData.append('resourceCode',resourceCode);
-		$.ajax({
-			url:"../../../serviceRoom/update",
-			type:'post',
-			data: formData,
-			processData: false,  // 告诉jQuery不要去处理发送的数据
-			contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
-			success:function(data){
-				dtApi.ajax.reload();
-			}
-		});
+}
+
+//保存备注
+function saveComment() {
+	DCMSUtils.Modal.showLoading();
+	var id = $("#commentId").val();
+	var comment = $("#comment1").val();
+	var formData = new FormData($("#updateCommentForm"));
+	formData.append('id',id);
+	formData.append('comment',comment);
+	formData.append('resourceCode',resourceCode);
+	$.ajax({
+		url:"../../../serviceRoom/update",
+		type:'post',
+		data: formData,
+		processData: false,  // 告诉jQuery不要去处理发送的数据
+		contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+		success:function(data){
+			DCMSUtils.Modal.hideLoading();
+			$("#commentModal").modal('hide');
+			DCMSUtils.Modal.toast('保存备注成功','');
+			dtApi.ajax.reload();
+		},
+		error:function () {
+			DCMSUtils.Modal.hideLoading();
+			DCMSUtils.Modal.toast('保存备注异常','forbidden');
+		}
 	});
 }
 
 //查看视图
 function checkView(id,imageUrl){
-	console.log(getContentPath());
 	if(imageUrl == null || imageUrl == "" || imageUrl == "undefined"){
 		DCMSUtils.Modal.toast('暂无视图！','cancel');
 	}else{
@@ -199,17 +226,16 @@ function checkView(id,imageUrl){
 //添加用户
 function addUser(id,name){
 	DCMSUtils.Modal.showLoading();
+	$("#addUserId").val(id);
 	$("#addUser-cpRoomName").text(name);
 
 	$.when(DCMSUtils.Ajax.doPost('user/getAll'),DCMSUtils.Ajax.doPost('serviceRoom/getServiceRoomUserRels',{serviceRoomId:id}))
 		.then(function(userData, userRelsData){
 			if(userData.status=='1' &&  userRelsData.status=='1'){
-				console.log(userRelsData);
 				var relev_userId =[];
 				for (j in userRelsData.data) {
 					relev_userId.push(userRelsData.data[j].userId);
 				}
-				console.log(relev_userId);
 				var html = "";
 				for (i in userData.data) {
 					if( $.inArray(userData.data[i].id , relev_userId) > -1){
@@ -229,26 +255,29 @@ function addUser(id,name){
 			DCMSUtils.Modal.toast('加载用户信息异常','forbidden');
 		});
 
-	$("#addUserModalForm").submit(function(event){
-		var chk_value =[];
-		$('input[name="addUser-checkbox"]:checked').each(function(){
-			chk_value.push($(this).val());
-		});
-		console.log(chk_value);
-		DCMSUtils.Modal.showLoading();
-		DCMSUtils.Ajax.doPost("serviceRoom/updateServiceRoomUserRel",{serviceRoomId:id,userIds:chk_value}).then(function(data){
-			DCMSUtils.Modal.hideLoading();
-			if(data.status=='1'){
-				DCMSUtils.Modal.toast('保存用户成功','');
-				dtApi.ajax.reload();
-			}else{
-				DCMSUtils.Modal.toast('保存用户异常','forbidden');
-			}
-		},function(error){
-			DCMSUtils.Modal.hideLoading();
-			DCMSUtils.Modal.toast('保存用户异常','forbidden');
-		});
 
+}
+
+//保存添加的用户
+function  saveUsers() {
+	DCMSUtils.Modal.showLoading();
+	var chk_value = "";
+	$('input[name="addUser-checkbox"]:checked').each(function(){
+		//chk_value.push($(this).val());
+		chk_value +=  $(this).val() + ",";
+	});
+	DCMSUtils.Ajax.doPost("serviceRoom/updateServiceRoomUserRel",{serviceRoomId:$("#addUserId").val(),userIds:chk_value}).then(function(data){
+		DCMSUtils.Modal.hideLoading();
+		if(data.status=='1'){
+			$("#addUserModal").modal('hide');
+			DCMSUtils.Modal.toast('保存用户成功','');
+			dtApi.ajax.reload();
+		}else{
+			DCMSUtils.Modal.toast('保存用户异常','forbidden');
+		}
+	},function(error){
+		DCMSUtils.Modal.hideLoading();
+		DCMSUtils.Modal.toast('保存用户异常','forbidden');
 	});
 }
 

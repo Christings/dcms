@@ -1,5 +1,17 @@
 package com.web.action.xtgl;
 
+import static com.web.util.AllResult.buildJSON;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.web.bean.form.OperLogForm;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
@@ -9,17 +21,6 @@ import com.web.util.AllResult;
 import com.web.util.StringUtil;
 import com.web.util.validation.GroupBuilder;
 import com.web.util.validation.ValidationHelper;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-
-import static com.web.util.AllResult.buildJSON;
 
 /**
  * 业务日志控制器
@@ -41,8 +42,7 @@ public class OperLogController extends BaseController {
 		String errorTip = ValidationHelper.build()
 				// 必输条件验证
 				.addGroup(GroupBuilder.build(operLogForm.getPageNum()).notNull().minValue(1), "页码必须从1开始")
-				.addGroup(GroupBuilder.build(operLogForm.getPageSize()).notNull().minValue(1), "每页记录数量最少1条")
-				.validate();
+				.addGroup(GroupBuilder.build(operLogForm.getPageSize()).notNull().minValue(1), "每页记录数量最少1条").validate();
 
 		if (!StringUtils.isEmpty(errorTip)) {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
@@ -82,11 +82,26 @@ public class OperLogController extends BaseController {
 			if (null != operLogForm.getLogType()) {
 				criteria.andLogTypeEqualTo(operLogForm.getLogType());
 			}
-			if (StringUtil.isNotEmpty(operLogForm.getOperDateSort())) {
-				operLogExample.setOrderByClause(
-						"oper_date " + ("asc".equalsIgnoreCase(operLogForm.getOperDateSort()) ? "asc" : "desc"));
+			StringBuffer orderBy = new StringBuffer();
+			if (StringUtil.isNotEmpty(operLogForm.getSortName())) {
+				if ("id".equalsIgnoreCase(operLogForm.getSortName())) {
+					orderBy.append("id " + ("asc".equalsIgnoreCase(operLogForm.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("deviceName".equalsIgnoreCase(operLogForm.getSortName())) {
+					orderBy.append("device_name " + ("asc".equalsIgnoreCase(operLogForm.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("operType".equalsIgnoreCase(operLogForm.getSortName())) {
+					orderBy.append("oper_type " + ("asc".equalsIgnoreCase(operLogForm.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("logLevel".equalsIgnoreCase(operLogForm.getSortName())) {
+					orderBy.append("log_level " + ("asc".equalsIgnoreCase(operLogForm.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("actionType".equalsIgnoreCase(operLogForm.getSortName())) {
+					orderBy.append("action_type " + ("asc".equalsIgnoreCase(operLogForm.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("operUserName".equalsIgnoreCase(operLogForm.getSortName())) {
+					orderBy.append("oper_user_name " + ("asc".equalsIgnoreCase(operLogForm.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("comments".equalsIgnoreCase(operLogForm.getSortName())) {
+					orderBy.append("comments " + ("asc".equalsIgnoreCase(operLogForm.getSortDesc()) ? "asc" : "desc") + ",");
+				}
 			}
-			operLogExample.setOrderByClause("oper_date desc");
+			orderBy.append("create_date desc");
+			operLogExample.setOrderByClause(orderBy.toString());
 			Page<OperLog> queryResult = operLogService.getPageData(operLogForm.getPageNum(), operLogForm.getPageSize(),
 					operLogExample);
 			return AllResult.okJSON(queryResult);

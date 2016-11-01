@@ -87,6 +87,7 @@
                     <div class="form-group">
                         <label for="name">机房名称</label>
                         <input id="cpRoomId" name="cpRoomId"  type="hidden">
+                        <input id="saveType" name="saveType"  type="hidden">
                         <input type="text" class="form-control" name="name" id="name"
                                placeholder="请输入机房名称" maxlength="200">
                     </div>
@@ -126,7 +127,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="submit" class="btn btn-primary">保存</button>
+                        <button type="button" class="btn btn-primary" onclick="saveCPRoomInfo()">保存</button>
                     </div>
                 </form>
             </div>
@@ -151,7 +152,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="submit" class="btn btn-primary">保存</button>
+                        <button type="button" class="btn btn-primary" onclick="saveComment()">保存</button>
                     </div>
                 </form>
             </div>
@@ -185,7 +186,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="submit" class="btn btn-primary">保存</button>
+                        <button type="button" class="btn btn-primary" onclick="saveUsers()">保存</button>
                     </div>
                 </form>
             </div>
