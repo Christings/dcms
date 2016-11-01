@@ -133,11 +133,17 @@ function userListLoad(){
 		 */
 		ajax:function(data, callback, settings){
 			//需要把分页参数转为DCMS接口规范的
-			console.log(data);
+			// console.log(data);
+			if($("th[aria-label^='登录号']").hasClass('sorting_asc')){
+				console.log('登录号'+'asc');
+			}else{
+				console.log('登录号'+'desc');
+			}
 			var pageNum=data.start/data.length+1,pageSize=data.length;
 			var params={
 				pageNum:pageNum,
 				pageSize:pageSize,
+				// usernameSort:$("th[aria-label]"),
 				username:$("#searchUsername").val(),
 				realname:$("#searchRealname").val(),
 				status:$("#searchStatus").val(),
@@ -151,7 +157,7 @@ function userListLoad(){
 					for(var i=0,len=data.data.records.length;i<len;i++){
 						var domains = data.data.records[i].domains[0]?data.data.records[i].domains[0]:[];
 						// if(data.data.records[i].domains.length!=0){
-							console.log(domains);
+							//console.log(domains);
 							// console.log(data.data.records.domains[0]["name"]);
 						// }
 					}
@@ -250,6 +256,12 @@ function userListLoad(){
 	$("#resetBtn").click(function(){
 		document.getElementById("queryForm").reset();
 	});
+
+	
+	// $("th").click(function(){
+	// 	var usernameSort = $("th[aria-label^='登录号']").attr("class");			
+	// 	console.log('usernameSort'+usernameSort);
+	// });
 }
 
 //-----------------------------
