@@ -279,7 +279,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 			if(roleOptData.data && roleOptData.data[0] && roleOptData.data[0].operationId){
 				roleOpts=roleOptData.data[0].operationId.split(",");
 			}
-			if(roleOpts.length!=0 && roleOpts.length==menuData.data.length){
+			if(roleOpts.length>0 && roleOpts.length==menuData.data.length){
 				$("#optAllCkb").attr('checked',true);
 			}
 			for(var i=0;i<menuData.data.length;i++){
