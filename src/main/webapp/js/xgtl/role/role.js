@@ -16,17 +16,20 @@ function pageInit() {
 		ajax:function(data, callback, settings){
 			console.log(data);
 			//需要把分页参数转为DCMS接口规范的,注意：DT的start是随着页数变的，不是页码。
-			var pageNum=data.start/data.length+1,pageSize=data.length;
-			var params={
-				pageNum:pageNum,
-				pageSize:pageSize,
-				codeQuery:$("#searchRoleCode").val(),
-				nameQuery:$("#searchRoleName").val()
-			};
-			if(data.order&&data.order.length && data.order[0]){
-				params.sortName=data.columns[data.order[0].column].name;
-				params.sortDesc=data.order[0].dir;
-			}
+			// var pageNum=data.start/data.length+1,pageSize=data.length;
+			// var params={
+			// 	pageNum:pageNum,
+			// 	pageSize:pageSize,
+			// 	codeQuery:$("#searchRoleCode").val(),
+			// 	nameQuery:$("#searchRoleName").val()
+			// };
+			// if(data.order&&data.order.length && data.order[0]){
+			// 	params.sortName=data.columns[data.order[0].column].name;
+			// 	params.sortDesc=data.order[0].dir;
+			// }
+			var params=DCMSUtils.DataTables.handleParams(data);
+			params.codeQuery=$("#searchRoleCode").val();
+			params.nameQuery=$("#searchRoleName").val();
 			DCMSUtils.Ajax.doPost("role/datagrid",params).then(function (data) {
 				if(data.status=='1'){
 					data=data.data;
