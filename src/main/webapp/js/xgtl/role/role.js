@@ -14,14 +14,22 @@ function pageInit() {
 		 * @param settings 一些设置
 		 */
 		ajax:function(data, callback, settings){
+			console.log(data);
 			//需要把分页参数转为DCMS接口规范的,注意：DT的start是随着页数变的，不是页码。
-			var pageNum=data.start/data.length+1,pageSize=data.length;
-			var params={
-				pageNum:pageNum,
-				pageSize:pageSize,
-				codeQuery:$("#searchRoleCode").val(),
-				nameQuery:$("#searchRoleName").val()
-			};
+			// var pageNum=data.start/data.length+1,pageSize=data.length;
+			// var params={
+			// 	pageNum:pageNum,
+			// 	pageSize:pageSize,
+			// 	codeQuery:$("#searchRoleCode").val(),
+			// 	nameQuery:$("#searchRoleName").val()
+			// };
+			// if(data.order&&data.order.length && data.order[0]){
+			// 	params.sortName=data.columns[data.order[0].column].name;
+			// 	params.sortDesc=data.order[0].dir;
+			// }
+			var params=DCMSUtils.DataTables.handleParams(data);
+			params.codeQuery=$("#searchRoleCode").val();
+			params.nameQuery=$("#searchRoleName").val();
 			DCMSUtils.Ajax.doPost("role/datagrid",params).then(function (data) {
 				if(data.status=='1'){
 					data=data.data;
@@ -40,8 +48,8 @@ function pageInit() {
 			});
 		},
 		columns: [
-			{title: '角色编码', data: 'rolecode'},
-			{title: '角色名称', data: 'rolename'},
+			{title: '角色编码', data: 'rolecode',name:'rolecode'},
+			{title: '角色名称', data: 'rolename',name:'rolename'},
 			{title: '操作', data: 'rolecode'}
 		],
 		columnDefs:[{
@@ -271,7 +279,7 @@ function zTreeOnClick(event, treeId, treeNode) {
 			if(roleOptData.data && roleOptData.data[0] && roleOptData.data[0].operationId){
 				roleOpts=roleOptData.data[0].operationId.split(",");
 			}
-			if(roleOpts.length!=0 && roleOpts.length==menuData.data.length){
+			if(roleOpts.length>0 && roleOpts.length==menuData.data.length){
 				$("#optAllCkb").attr('checked',true);
 			}
 			for(var i=0;i<menuData.data.length;i++){
