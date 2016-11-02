@@ -98,9 +98,12 @@ public class OperLogController extends BaseController {
 					orderBy.append("oper_user_name " + ("asc".equalsIgnoreCase(operLogForm.getSortDesc()) ? "asc" : "desc") + ",");
 				} else if ("comments".equalsIgnoreCase(operLogForm.getSortName())) {
 					orderBy.append("comments " + ("asc".equalsIgnoreCase(operLogForm.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("operDate".equalsIgnoreCase(operLogForm.getSortName())) {
+					orderBy.append("oper_date " + ("asc".equalsIgnoreCase(operLogForm.getSortDesc()) ? "asc" : "desc") + ",");
 				}
+			}else{
+				orderBy.append("oper_date desc");
 			}
-			orderBy.append("create_date desc");
 			operLogExample.setOrderByClause(orderBy.toString());
 			Page<OperLog> queryResult = operLogService.getPageData(operLogForm.getPageNum(), operLogForm.getPageSize(),
 					operLogExample);
