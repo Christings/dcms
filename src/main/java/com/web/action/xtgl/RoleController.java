@@ -1,6 +1,7 @@
 package com.web.action.xtgl;
 
 import com.alibaba.fastjson.JSON;
+import com.web.bean.form.RoleForm;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
@@ -21,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -176,24 +176,18 @@ public class RoleController extends BaseController{
 	
 	/**
 	 * 分页查询
-	 *
-	 * @param pageNum
-	 * @param pageSize
      */
 	@RequestMapping(value="/datagrid",method= { RequestMethod.GET, RequestMethod.POST })
-	public Object datagrid(@RequestParam(value = "pageNum") int pageNum,
-						   @RequestParam(value = "pageSize") int pageSize,
-						   @RequestParam(value = "codeQuery",required = false)String codeQuery,
-						   @RequestParam(value = "nameQuery",required = false)String nameQuery) {
+	public Object datagrid(RoleForm roleForm) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
+			LOGGER.info("request param: [roleForm: {}]", JSON.toJSONString(roleForm));
 		}
 
 		//1.验证参数
 		String errorTip = ValidationHelper.build()
 				//必输条件验证
-				.addGroup(GroupBuilder.build(pageNum).notNull().minValue(1), "页码必须从1开始")
-				.addGroup(GroupBuilder.build(pageSize).notNull().minValue(1), "每页记录数量最少1条")
+				.addGroup(GroupBuilder.build(roleForm.getPageNum()).notNull().minValue(1), "页码必须从1开始")
+				.addGroup(GroupBuilder.build(roleForm.getPageSize()).notNull().minValue(1), "每页记录数量最少1条")
 				.validate();
 
 		if (StringUtils.isNotEmpty(errorTip)) {
@@ -203,13 +197,27 @@ public class RoleController extends BaseController{
 		try {
 			RoleExample example = new RoleExample();
 			RoleExample.Criteria criteria = example.createCriteria();
-			if(StringUtils.isNotEmpty(codeQuery)&&!"".equals(codeQuery.trim())){
-				criteria.andRolecodeLike("%"+codeQuery.trim()+"%");
+			if(StringUtils.isNotEmpty(roleForm.getRolecode())){
+				criteria.andRolecodeLike("%"+roleForm.getRolecode().trim()+"%");
 			}
-			if(StringUtils.isNotEmpty(nameQuery)&&!"".equals(nameQuery.trim())){
-				criteria.andRolenameLike("%"+nameQuery.trim()+"%");
+			if(StringUtils.isNotEmpty(roleForm.getRolename())){
+				criteria.andRolenameLike("%"+roleForm.getRolename().trim()+"%");
 			}
-			Page<Role> queryResult = roleService.getScrollData(pageNum, pageSize, example);
+
+			// 设置排序条件
+			StringBuffer orderBy = new StringBuffer("");
+			if(StringUtils.isNotEmpty(roleForm.getSortName())){
+				if("rolecode".equalsIgnoreCase(roleForm.getSortName())){
+					orderBy.append("rolecode " + ("asc".equalsIgnoreCase(roleForm.getSortDesc()) ? "asc" : "desc") + ",");
+				}else if("rolename".equalsIgnoreCase(roleForm.getSortName())){
+					orderBy.append("rolename " + ("asc".equalsIgnoreCase(roleForm.getSortDesc()) ? "asc" : "desc") + ",");
+				}
+			}
+
+			orderBy.append("create_date desc,id asc");
+			example.setOrderByClause(orderBy.toString());
+
+			Page<Role> queryResult = roleService.getScrollData(roleForm.getPageNum(), roleForm.getPageSize(), example);
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult, FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
@@ -217,7 +225,7 @@ public class RoleController extends BaseController{
 			return AllResult.okJSON(JSON.parse(jsonStr));
 
 		} catch (Exception e) {
-			LOGGER.error("get scroll data error. page: {}, count: {}", pageNum, pageSize, e);
+			LOGGER.error("get 获取角色分页数据时异常:", e);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");

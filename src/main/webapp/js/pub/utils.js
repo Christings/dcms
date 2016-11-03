@@ -116,6 +116,20 @@ var DCMSUtils={
 		hideLoading:function(){
 			$.hideLoading();
 		}
+	},
+	DataTables:{
+		handleParams:function(data){
+			var pageNum=data.start/data.length+1,pageSize=data.length;
+			var params={
+				pageNum:pageNum,
+				pageSize:pageSize
+			};
+			if(data.order&&data.order.length && data.order[0]){
+				params.sortName=data.columns[data.order[0].column].name;
+				params.sortDesc=data.order[0].dir;
+			}
+			return params;
+		}
 	}
 };
 //业务相关,和工具类没关系

@@ -153,7 +153,7 @@ public class FixedEquipmentServiceImpl implements FixedEquipmentService {
     public Page<FixedEquipment> getScrollData(int pageNum, int pageSize, FixedEquipmentExample example) {
         // 分页
         PageHelper.startPage(pageNum, pageSize) ;
-        PageHelper.orderBy("create_date desc,id asc");
+//        PageHelper.orderBy("create_date desc,id asc");
 
         // 查询数据
         List<FixedEquipment> fixedEquipments = fixedEquipmentMapper.selectByExample(example);

@@ -2,6 +2,7 @@ package com.web.action.xtgl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.web.bean.form.FixedEquipmentForm;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.FixedEquipment;
@@ -257,24 +258,21 @@ public class FixedEquipmentController extends BaseController {
 
 	/**
 	 * 分页获取设备信息
-	 *
-	 * @param pageNum 当前页
-	 * @param pageSize 显示多少行
 	 */
 	@RequestMapping(value="/datagrid",method= {RequestMethod.POST, RequestMethod.GET})
-	public Object getDataGrid(int pageNum,int pageSize,String typeQuery,String nameQuery,String vendorQuery) {
+	public Object getDataGrid(FixedEquipmentForm form) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [page: {}, count: {}]", pageNum, pageSize);
+			LOGGER.info("request param: [FixedEquipmentForm: {}]", JSON.toJSONString(form));
 		}
 
 		//验证参数
 		String errorTip = ValidationHelper.build()
 				//必输条件验证
-				.addGroup(GroupBuilder.build(pageNum).notNull().minValue(1), "页码必须从1开始")
-				.addGroup(GroupBuilder.build(pageSize).notNull().minValue(1), "每页记录数量最少1条")
+				.addGroup(GroupBuilder.build(form.getPageNum()).notNull().minValue(1), "页码必须从1开始")
+				.addGroup(GroupBuilder.build(form.getPageSize()).notNull().minValue(1), "每页记录数量最少1条")
 				.validate();
 
-		if (org.apache.commons.lang3.StringUtils.isNotEmpty(errorTip)) {
+		if (StringUtils.isNotEmpty(errorTip)) {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
@@ -282,17 +280,32 @@ public class FixedEquipmentController extends BaseController {
 			// 条件设置
 			FixedEquipmentExample example = new FixedEquipmentExample();
 			FixedEquipmentExample.Criteria criteria = example.createCriteria();
-			if(StringUtils.isNotEmpty(typeQuery)&&!"".equals(typeQuery.trim())){
-				criteria.andEquTypeEqualTo(typeQuery.trim());
+			if(StringUtils.isNotEmpty(form.getEquType())){
+				criteria.andEquTypeEqualTo(form.getEquType().trim());
 			}
-			if(StringUtils.isNotEmpty(nameQuery)&&!"".equals(nameQuery.trim())){
-				criteria.andEquNameLike("%"+nameQuery.trim()+"%");
+			if(StringUtils.isNotEmpty(form.getEquName())){
+				criteria.andEquNameLike("%"+form.getEquName().trim()+"%");
 			}
-			if(StringUtils.isNotEmpty(vendorQuery)&&!"".equals(vendorQuery.trim())){
-				criteria.andEquVendorLike("%"+vendorQuery.trim()+"%");
+			if(StringUtils.isNotEmpty(form.getEquVendor())){
+				criteria.andEquVendorLike("%"+form.getEquVendor().trim()+"%");
 			}
 
-			Page<FixedEquipment> queryResult = fixedEquipmentService.getScrollData(pageNum, pageSize, example);
+			StringBuffer orderBy = new StringBuffer();
+			if (StringUtils.isNotEmpty(form.getSortName())) {
+				if ("equName".equalsIgnoreCase(form.getSortName())) {
+					orderBy.append("edu_name " + ("asc".equalsIgnoreCase(form.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("equType".equalsIgnoreCase(form.getSortName())) {
+					orderBy.append("equ_type " + ("asc".equalsIgnoreCase(form.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("equVendor".equalsIgnoreCase(form.getSortName())) {
+					orderBy.append("equ_vendor " + ("asc".equalsIgnoreCase(form.getSortDesc()) ? "asc" : "desc") + ",");
+				} else if ("status".equalsIgnoreCase(form.getSortName())) {
+					orderBy.append("status " + ("asc".equalsIgnoreCase(form.getSortDesc()) ? "asc" : "desc") + ",");
+				}
+			}
+			orderBy.append("create_date desc,id asc");
+			example.setOrderByClause(orderBy.toString());
+
+			Page<FixedEquipment> queryResult = fixedEquipmentService.getScrollData(form.getPageNum(), form.getPageSize(), example);
 
 			//去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,
@@ -302,7 +315,7 @@ public class FixedEquipmentController extends BaseController {
 			return AllResult.okJSON(JSON.parse(jsonStr));
 
 		} catch (Exception e) {
-			LOGGER.error("get datagrid data error. page: {}, count: {}",pageNum, pageSize,  e);
+			LOGGER.error("get datagrid 获取机柜信息分页数据时异常：",  e);
 		}
 
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
