@@ -25,79 +25,100 @@ function roleGetAll(){
 		index.innerHTML = content;
 	});
 }
-
+var icon = "<i class='fa fa-times-circle'></i> ";
+$("#userAddForm").validate({
+    rules:{
+        userName:{
+            required:true,
+            minlength:2,
+            maxlength:50
+        },
+        realName:{
+            required:true,
+            minlength:2,
+            maxlength:50
+        },
+        identificationNo:{
+            required:false,
+            minlength:18,
+            maxlength:18
+        },
+        phone:{
+            required:false,
+            minlength:11,
+            maxlength:11
+        },
+        email:{
+            required:false,
+            minlength:2,
+            maxlength:50
+        },
+        mobile:{
+            required:false,
+            minlength:2,
+            maxlength:50
+        }
+    },
+    messages:{
+        userName:icon + "请输入2-50个字符的用户名",
+        realName:icon + "请输入2-50个字符的真实姓名",
+        identificationNo:icon + "请输入18个字符的身份证号",
+        phone:icon + "请输入11个字符的电话号码",
+        email:icon + "请输入2-50个字符的组织机构名称",
+        mobile:icon + "请输入2-50个字符的组织机构描述",
+    },
+    submitHandler:function(form){
+        userAdd();
+    }
+});
 function userAdd(){
-	// var name = document.getElementById("userName").value;
-	// var rank = document.getElementById("userRank").value;
-	// var level = document.getElementById("userLevel").value;
-	// // var url = document.getElementById("userName").value;
-	// var parentId = document.getElementById("userParentId").value;
-	// var iconId = document.getElementById("userIcon").value;
-	// var type = document.getElementById("userType").value;
 	console.log("userAdd");
-	$("#userAddForm").submit(function(){
-		var roles = document.getElementsByTagName("input");
-		var roleIds = "";
-		for(var i=0,len=roles.length;i<len;i++){
-			var role = roles[i];
-			if(role.checked == true){
-				console.log(role.value);
-				roleIds += role.value + ",";
-			}
-		}
-		var userName = $("#userName").val();
-		var realName = $("#realName").val();
-		var password = $("#password").val();
-		var identificationNo = $("#identificationNo").val();
-		var phone = $("#phone").val();
-		var email = $("#email").val();
-		var mobile = $("#mobile").val();
-		var sex = $("#sex").val();
-		var status = $("#status").val();
-		var domainIds = $("#domainPId").val();
-		if(userName == "")
-		{
-			$("#alert").text("请输入登陆名称");
+	// var roles = document.getElementsByTagName("input");
+	// var roleIds = "";
+	// for(var i=0,len=roles.length;i<len;i++){
+	// 	var role = roles[i];
+	// 	if(role.checked == true){
+	// 		console.log(role.value);
+	// 		roleIds += role.value + ",";
+	// 	}
+	// }
+	var userName = $("#userName").val();
+	var realName = $("#realName").val();
+	var password = $("#password").val();
+	var identificationNo = $("#identificationNo").val();
+	var phone = $("#phone").val();
+	var email = $("#email").val();
+	var mobile = $("#mobile").val();
+	var sex = $("#sex").val();
+	var status = $("#status").val();
+	var roleIds = $("#rolePId").val();
+	var domainIds = $("#domainPId").val();
+	if(userName == "")
+	{
+		$("#alert").text("请输入登陆名称");
+		return false;
+	}
+	var userInfo = { username:'', realname:'',password:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:'',roleIds:'',domainIds:''};
+	userInfo['username'] = userName;
+	userInfo['realname'] = realName;
+	userInfo['password'] = password;
+	userInfo['identificationno'] = identificationNo;
+	userInfo['phone'] = phone;
+	userInfo['email'] = email;
+	userInfo['mobile'] = mobile;
+	userInfo['sex'] = sex;
+	userInfo['roleIds'] = roleIds;
+	userInfo['status'] = status;
+	userInfo['domainIds'] = domainIds;
+	DCMSUtils.Ajax.doPost("user/add",userInfo).done((res)=>{
+		if(res.status == "1"){
+			DCMSUtils.Modal.toast("添加用户"+userName+"成功",'');
+			dtApi.ajax.reload();
+        	$("#useradd").modal('hide');
+			return true;
+		}else{
+			DCMSUtils.Modal.toast("添加用户失败"+res.msg,'');
 			return false;
 		}
-
-		var userInfo = { username:'', realname:'',password:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:'',roleIds:'',domainIds:''};
-		userInfo['username'] = userName;
-		userInfo['realname'] = realName;
-		userInfo['password'] = password;
-		userInfo['identificationno'] = identificationNo;
-		userInfo['phone'] = phone;
-		userInfo['email'] = email;
-		userInfo['mobile'] = mobile;
-		userInfo['sex'] = sex;
-		userInfo['roleIds'] = roleIds;
-		userInfo['status'] = status;
-		userInfo['domainIds'] = domainIds;
-		DCMSUtils.Ajax.doPost("user/add",userInfo).done((res)=>{
-			if(res.status == "1"){
-				console.log("添加用户"+userName+"成功");
-				alert("添加用户"+userName+"成功");
-				return true;
-			}else{
-				console.log("添加用户"+userName+"失败"+res.msg);
-				alert("添加用户"+userName+"失败");
-				return false;
-			}
-		});
-		// $.ajax({
-		// 	type:"post",
-		// 	url:"user/add",
-		// 	dataType: 'json',
-		// 	data: userInfo,
-		// 	success:function(res){
-		// 		if(res.status == "1"){
-		// 			console.log("添加用户"+userName+"成功");
-		// 			alert("添加用户"+userName+"成功");
-		// 		}else{
-		// 			console.log("添加用户"+userName+"失败"+res.msg);
-		// 			alert("添加用户"+userName+"失败");
-		// 		}
-		// 	}
-		// });
 	});
 }

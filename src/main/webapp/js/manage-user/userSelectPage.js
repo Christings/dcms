@@ -5,7 +5,7 @@ function pageInit(){
 	
 	// loadUserBody();
 	userListLoad();
-	loadOrganizationTree();
+	// loadOrganizationTree();
 }
 function loadOrganizationTree(){
 	//加载域信息
@@ -35,31 +35,6 @@ function loadOrganizationTree(){
         DCMSUtils.Modal.toast('加载组织机构树异常','forbidden');
     });
 	// }
-   
-    //加载角色信息
-    var da = "";
-    var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
-    if(!rolesMap){
-    	DCMSUtils.Ajax.doPost("role/getAll",da).done((jsonData)=>{
-			var roles = jsonData["data"];
-			var content = "";
-			var e;
-			// var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
-            rolesMap={};
-	       
-			for(var i=0,len=roles.length;i<len;i++){
-				e = roles[i];
-		        rolesMap[e.id]=e;
-		        DCMSUtils.SessionStorage.set("ROLES_MAP",rolesMap);
-			}
-		});
-    }
-	
-
-	$("#selectDomainBtn").click(function(){
-        $("#useradd").modal('hide');
-        $("#domainTreeModal").modal('show');
-	});
 
 	var domainIndex = 0;
 	function initTreeGird(domainTree, parentIndex) {
@@ -83,6 +58,95 @@ function loadOrganizationTree(){
 	        }
 	    }
 	}
+    //加载角色信息
+    var da = "";
+    // var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
+    // if(!rolesMap){
+	DCMSUtils.Ajax.doPost("role/getAll",da).done((jsonData)=>{
+		var roles = jsonData["data"];
+		var content = [];
+		var e;
+		// var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
+        rolesMap={};
+       
+		for(var i=0,len=roles.length;i<len;i++){
+			e = roles[i];
+	        rolesMap[e.id]=e;
+	        DCMSUtils.SessionStorage.set("ROLES_MAP",rolesMap);
+	        var tmp = {};
+	        tmp.id = e.id;
+	        tmp.roleName =e.rolename;
+
+	        content.push(tmp);
+		}
+		$('#roleModalTable').bootstrapTable({
+			search:true,
+			striped: true,
+ 			pagination: true,
+ 			singleSelect: false,
+ 			pageNumber: 1,
+			pageSize: 50,
+ 			pageList: [10, 50, 100, 200, 500],
+		    columns: [
+		    {
+                field: 'state',
+                checkbox: true
+            },
+		    {
+		        field: 'id',
+		        title: 'id'
+		    }, {
+		        field: 'roleName',
+		        title: 'roleName'
+		    }],
+		    data: content
+		});
+	});
+    // }
+	$("#selectDomainBtn").click(function(){
+        $("#useradd").modal('hide');
+        $("#domainTreeModal").modal('show');
+	});
+	$("#selectRoleBtn").click(function(){
+		$("#useradd").modal('hide');
+        $("#userRoleModal").modal('show');
+	});
+	
+	$("#confirmRoleBtn").click(function(){
+		var selected = [];
+	    $("tr[class='selected']").each(function(){
+	    	var tmp = {};
+	    	var id = $(this).find('td').get(1).innerHTML;
+	    	var name = $(this).find('td').get(2).innerHTML;
+	    	tmp.id =id;
+	    	tmp.name=name;
+	    	selected.push(tmp);
+	    });
+
+	    if(selected.length==0){
+	        DCMSUtils.Modal.alert('请选择用户角色','');
+	        return ;
+	    }
+	    var pRole;
+	    var ids = '';
+	    var names = '';
+	    for(var i=0,len=selected.length;i<len;i++){
+	    	pRole = selected[i];
+	    	if(i == (len -1)){
+	    		ids += pRole.id;
+	    		names += pRole.name;
+	    	}else{
+	    		ids += pRole.id+',';
+		    	names += pRole.name+',';
+	    	}
+	    }
+	    $("#rolePId").val(ids);
+	    $("#rolePName").text(names);
+	    // $("#RoleLevel").text(pRole.rank+1);
+	    $("#userRoleModal").modal('hide');
+	    $("#userupdate").modal('hide');
+	    $("#useradd").modal('show');
+	});
 
 	$("#confirmDomainBtn").click(function(){
 	    var selected=$("#domainJsTree").jstree(true).get_selected();
@@ -147,21 +211,16 @@ function userListLoad(){
 		ajax:function(data, callback, settings){
 			//需要把分页参数转为DCMS接口规范的
 			// console.log(data);
-			if($("th[aria-label^='登录号']").hasClass('sorting_asc')){
-				console.log('登录号'+'asc');
-			}else{
-				console.log('登录号'+'desc');
-			}
-			var pageNum=data.start/data.length+1,pageSize=data.length;
-			var params={
-				pageNum:pageNum,
-				pageSize:pageSize,
-				// usernameSort:$("th[aria-label]"),
-				username:$("#searchUsername").val(),
-				realname:$("#searchRealname").val(),
-				status:$("#searchStatus").val(),
-				sex:$("#searchSex").val()
-			};
+			// if($("th[aria-label^='登录号']").hasClass('sorting_asc')){
+			// 	console.log('登录号'+'asc');
+			// }else{
+			// 	console.log('登录号'+'desc');
+			// }
+			var params=DCMSUtils.DataTables.handleParams(data);
+			params.username = $("#searchUsername").val();
+			params.realname = $("#searchRealname").val();
+			params.status = $("#searchStatus").val();
+			params.sex = $("#searchSex").val();
 			DCMSUtils.Ajax.doPost("user/datagrid",params).then(function (data) {
 				
 				if(data.status=='1'){
@@ -185,16 +244,16 @@ function userListLoad(){
 			});
 		},
 		columns: [
-			{title: '登录号', data: 'username'},
-			{title: '用户名称', data: 'realname'},
+			{title: '登录号', data: 'username',name:'username'},
+			{title: '用户名称', data: 'realname',name:'realname'},
 			{title: '角色名称', data: ''},
 			{title: '组织机构', data: ''},
-			{title: '性别', data: ''},
+			{title: '性别', data: '',name:'sex'},
 			{title: '身份证', data: 'identificationno'},
 			{title: '手机号', data: 'phone'},
 			{title: '邮箱', data: 'email'},
 			{title: '电话', data: 'mobile'},
-			{title: '激活', data: ''},
+			{title: '激活', data: '',name:'status'},
 			{title: '操作', data: ''}
 		],
 		columnDefs:[

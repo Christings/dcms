@@ -21,29 +21,24 @@
                 <div class="ibox float-e-margins">
                     <div class="ibox-content">
                     	<div class="" id="upTable">
-                            <a style="cursor:pointer" onclick="domainNewUpdate('','new')" class="btn btn-primary ">添加机构1</a>
+                            <a style="cursor:pointer" onclick="domainNewUpdate('','new')" class="btn btn-primary ">添加机构</a>
                         </div>
-                        <table class="table tree table-striped table-bordered table-hover dataTables-example">
-                            <thead>
-                                <tr>
-									<th>组织机构名称</th>
-									<th>组织机构描述</th>
-									<th>操作</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>组织机构名称</th>
-									<th>组织机构描述</th>
-									<th>操作</th>
-                                </tr>
-                            </tfoot>
-                            <tbody id="domainTreeBody">
-                            </tbody>
-                        </table>
-                        <div class="row">
+                        <div style="width:100%;height: 100%;overflow-x: auto;overflow-y: auto;">
+	                        <table class="table tree table-striped table-bordered table-hover dataTables-example">
+	                            <thead>
+	                                <tr>
+										<th>组织机构名称</th>
+										<th>组织机构描述</th>
+										<th>操作</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody id="domainTreeBody">
+	                            </tbody>
+	                        </table>
+	                    </div>
+                        <div class="row" style="position: fixed;bottom:0;right:0;background: #ffffff;border-top:1px solid #e7ecf1;height:45px;width:100%;margin-left:-10px;margin-right:0;">
                             <div class="col-sm-6"></div>
-                            <div class="col-sm-6" align="right">
+                            <div class="col-sm-6" align="right" style="height:45px;bottom:10px;">
                                 <url id="domainTreePage" class="pagination" style="padding-right:10px;"></url>
                             </div>
                         </div>

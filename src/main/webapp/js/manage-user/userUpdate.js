@@ -27,8 +27,20 @@ function userUpdateInit(e){
 		var status = userInfo['status'];
 		var roles = userInfo['roles']?userInfo['roles']:[];
 		var domains = userInfo['domains']?userInfo['domains']:[];
+		var rolePIds = '';
+		var rolePNames = '';
 		var domainPIds = '';
 		var domainPNames = '';
+		for(var i=0,len=roles.length;i<len;i++){
+			var pRole=roles[i];
+			if(i == (len - 1)){
+				rolePIds += pRole.id;
+				rolePNames += pRole.rolename;
+			}else{
+				rolePIds += pRole.id + ',';
+				rolePNames += pRole.rolename + ',';
+			}
+		}
 		for(var i=0,len=domains.length;i<len;i++){
 			var pDomain=domains[i];
 			if(i == (len - 1)){
@@ -61,83 +73,116 @@ function userUpdateInit(e){
 				status_selected_0 = "";
 				status_selected_1 = "selected";
 				break;
-		}var da = "";
-		DCMSUtils.Ajax.doPost("role/getAll",da).done((jsonData)=>{
-			var roleIds = jsonData["data"];
-			var content = "";
-			var e;
-			for(var i=0,len=roleIds.length;i<len;i++){
-				e = roleIds[i];
-				var check = "";
-				for(var j=0,len1=roles.length;j<len1;j++){
-					if(roles[j]["id"] == e["id"]){
-						check = "checked";
-						break;
-					}
-				}
-				content += "<input type=\"checkbox\" "+check+" value=\""+e["id"]+"\">"+e["rolename"];
-			}
-			var html = 
-					"<div hidden=\"hidden\" class=\"form-group\">"+
-					  "<input id=\"userId1\" value=\""+ id +"\"for=\"name\">"+
-					"</div>"+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">登陆账号</label>"+
-					  "<input type=\"text\" class=\"form-control\" id=\"userName1\" value=\""+userName+"\">"+
-					"</div>"+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">用户名称</label>"+
-					  "<input type=\"text\" class=\"form-control\" id=\"realName1\" value=\""+realName+"\">"+
-					"</div>"+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">用户角色</label>"+
-					  "<div id=\"rolesContent1\">"+content+"</div>"+
-					"</div>"+
-					"<div class='form-group' >"+
-						"<label class='col-sm-3'>组织机构：</label>"+
-						'<input id="domainPId1" name="domainPId1" value="'+domainPIds+'" type="hidden">'+
-						"<div class='col-sm-9'>"+
-							'<span id="domainPName1" name="domainPName1" style="width: 50%;">'+domainPNames+'</span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectDomainBtn1" class="btn btn-primary btn-sm btn-outline">选择</a>'+
-						'</div>'+
-					'</div>'+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">身份证</label>"+
-					  "<input type=\"text\" class=\"form-control\" id=\"identificationNo1\" value=\""+identificationNo+"\">"+
-					"</div>"+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">手机号</label>"+
-					  "<input type=\"text\" class=\"form-control\" id=\"mobile1\" value=\""+mobile+"\">"+
-					"</div>"+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">邮箱</label>"+
-					  "<input type=\"text\" class=\"form-control\" id=\"email1\" value=\""+email+"\">"+
-					"</div>"+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">电话</label>"+
-					  "<input type=\"text\" class=\"form-control\" id=\"phone1\" value=\""+phone+"\">"+
-					"</div>"+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">性别</label>"+
-					  	"<select id=\"sex1\">"+
-							"<option "+sex_selected_0+" value = '0'>男</option>"+
-							"<option "+sex_selected_1+" value = '1'>女</option>"+
-						"</select>"+
-					"</div>"+
-					"<div class=\"form-group\">"+
-					  "<label for=\"name\">状态</label>"+
-					  "<select id=\"status1\">"+
-							"<option "+status_selected_1+" value = '1'>未激活</option>"+
-							"<option "+status_selected_0+" value = '0'>激活</option>"+
-					  "</select>"+
-					"</div>";
+		}
+		var html = 
+			"<div hidden=\"hidden\" class=\"form-group\">"+
+			  "<input id=\"userId1\" value=\""+ id +"\"for=\"name\">"+
+			"</div>"+
+			"<div class=\"form-group\">"+
+			  "<label for=\"name\">登陆账号</label>"+
+			  "<input type=\"text\" class=\"form-control\" name='userName1' id=\"userName1\" value=\""+userName+"\">"+
+			"</div>"+
+			"<div class=\"form-group\">"+
+			  "<label for=\"name\">用户名称</label>"+
+			  "<input type=\"text\" class=\"form-control\" name='realName1' id=\"realName1\" value=\""+realName+"\">"+
+			"</div>"+
+			"<div class='form-group' >"+
+				"<label class='col-sm-3'>用户角色</label>"+
+				'<input id="rolePId1" name="rolePId1" value="'+rolePIds+'"  type="hidden">'+
+				"<div class='col-sm-9'>"+
+					'<span id="rolePName1" name="rolePName1" style="width: 50%;">'+rolePNames+'</span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectRoleBtn1" class="btn btn-primary btn-sm btn-outline">选择</a>'+
+				"</div>"+
+			"</div>"+
+			"<div class='form-group' >"+
+				"<label class='col-sm-3'>组织机构：</label>"+
+				'<input id="domainPId1" name="domainPId1" value="'+domainPIds+'" type="hidden">'+
+				"<div class='col-sm-9'>"+
+					'<span id="domainPName1" name="domainPName1" style="width: 50%;">'+domainPNames+'</span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectDomainBtn1" class="btn btn-primary btn-sm btn-outline">选择</a>'+
+				'</div>'+
+			'</div>'+
+			"<div class=\"form-group\">"+
+			  "<label for=\"name\">身份证</label>"+
+			  "<input type=\"text\" class=\"form-control\" name='identificationNo1' id=\"identificationNo1\" value=\""+identificationNo+"\">"+
+			"</div>"+
+			"<div class=\"form-group\">"+
+			  "<label for=\"name\">手机号</label>"+
+			  "<input type=\"text\" class=\"form-control\" name='mobile1' id=\"mobile1\" value=\""+mobile+"\">"+
+			"</div>"+
+			"<div class=\"form-group\">"+
+			  "<label for=\"name\">邮箱</label>"+
+			  "<input type=\"text\" class=\"form-control\" name='email1' id=\"email1\" value=\""+email+"\">"+
+			"</div>"+
+			"<div class=\"form-group\">"+
+			  "<label for=\"name\">电话</label>"+
+			  "<input type=\"text\" class=\"form-control\" name='phone1' id=\"phone1\" value=\""+phone+"\">"+
+			"</div>"+
+			"<div class=\"form-group\">"+
+			  "<label for=\"name\">性别</label>"+
+			  	"<select id=\"sex1\">"+
+					"<option "+sex_selected_0+" value = '0'>男</option>"+
+					"<option "+sex_selected_1+" value = '1'>女</option>"+
+				"</select>"+
+			"</div>"+
+			"<div class=\"form-group\">"+
+			  "<label for=\"name\">状态</label>"+
+			  "<select id=\"status1\">"+
+					"<option "+status_selected_1+" value = '1'>未激活</option>"+
+					"<option "+status_selected_0+" value = '0'>激活</option>"+
+			  "</select>"+
+			"</div>";
 			
-			var body = document.getElementById("userUpdateBody");
-			body.innerHTML = html;
-			loadOrganizationTree1();
+		var body = document.getElementById("userUpdateBody");
+		body.innerHTML = html;
+		loadOrganizationTree1();
 			
-		});
 	});		// }
 }
+var icon = "<i class='fa fa-times-circle'></i> ";
+$("#userUpdateForm").validate({
+    rules:{
+        userName1:{
+            required:true,
+            minlength:2,
+            maxlength:50
+        },
+        realName1:{
+            required:true,
+            minlength:2,
+            maxlength:50
+        },
+        identificationNo1:{
+            required:false,
+            minlength:18,
+            maxlength:18
+        },
+        phone1:{
+            required:false,
+            minlength:11,
+            maxlength:11
+        },
+        email1:{
+            required:false,
+            minlength:2,
+            maxlength:50
+        },
+        mobile1:{
+            required:false,
+            minlength:2,
+            maxlength:50
+        }
+    },
+    messages:{
+        userName1:icon + "请输入2-50个字符的用户名",
+        realName1:icon + "请输入2-50个字符的真实姓名",
+        identificationNo1:icon + "请输入18个字符的身份证号",
+        phone1:icon + "请输入11个字符的电话号码",
+        email1:icon + "请输入2-50个字符的组织机构名称",
+        mobile1:icon + "请输入2-50个字符的组织机构描述",
+    },
+    submitHandler:function(form){
+        userUpdate();
+    }
+});
 
 function userPasswordInit(e){
 	var id = e.getAttribute("data-value");
@@ -175,59 +220,45 @@ function userPasswordInit(e){
 }
 
 function userUpdate(){
-	console.log(1);
-		// $("#form").submit(function(){
-			// var type = document.getElementById("menuType").value;
-	$("#userUpdateForm").submit(function(){
-		console.log(2);
-		var roles = document.getElementsByTagName("input");
-		var roleIds = "";
-		for(var i=0,len=roles.length;i<len;i++){
-			var role = roles[i];
-			if(role.checked == true){
-				console.log(role.value);
-				roleIds += role.value + ",";
-			}
-		}
-		var id = $("#userId1").val();
-		var userName = $("#userName1").val();
-		var realName = $("#realName1").val();
-		var identificationNo = $("#identificationNo1").val();
-		var phone = $("#phone1").val();
-		var email = $("#email1").val();
-		var mobile = $("#mobile1").val();
-		var sex = $("#sex1").val();
-		var status = $("#status1").val();
-		var domainIds = $("#domainPId1").val();
-		if(realName == "")
-		{
-			$("#alertName").text("请输入真实姓名");
+	var id = $("#userId1").val();
+	var userName = $("#userName1").val();
+	var realName = $("#realName1").val();
+	var identificationNo = $("#identificationNo1").val();
+	var phone = $("#phone1").val();
+	var email = $("#email1").val();
+	var mobile = $("#mobile1").val();
+	var sex = $("#sex1").val();
+	var status = $("#status1").val();
+	var domainIds = $("#domainPId1").val();
+	var roleIds = $("#rolePId1").val();
+	if(realName == "")
+	{
+		$("#alertName").text("请输入真实姓名");
+		return false;
+	}
+	var userInfo = {id:'',realname:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:'',roleIds:'',domainIds:''};
+	userInfo['id'] = id;
+	userInfo['username'] = userName;
+	userInfo['realname'] = realName;
+	//userInfo['password'] = password;
+	userInfo['identificationno'] = identificationNo;
+	userInfo['phone'] = phone;
+	userInfo['email'] = email;
+	userInfo['mobile'] = mobile;
+	userInfo['sex'] = sex;
+	userInfo['status'] = status;
+	userInfo['roleIds'] = roleIds;
+	userInfo['domainIds'] = domainIds;
+	DCMSUtils.Ajax.doPost("user/update",userInfo).done((res)=>{
+		if(res.status == "1"){
+			dtApi.ajax.reload();
+			DCMSUtils.Modal.toast("更新用户"+userName+"成功",'');
+        	$("#userupdate").modal('hide');
+			return true;
+		}else{
+			DCMSUtils.Modal.toast("更新用户失败"+res.msg,'');
 			return false;
 		}
-		var userInfo = {id:'',realname:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:'',roleIds:'',domainIds:''};
-		userInfo['id'] = id;
-		userInfo['username'] = userName;
-		userInfo['realname'] = realName;
-		//userInfo['password'] = password;
-		userInfo['identificationno'] = identificationNo;
-		userInfo['phone'] = phone;
-		userInfo['email'] = email;
-		userInfo['mobile'] = mobile;
-		userInfo['sex'] = sex;
-		userInfo['status'] = status;
-		userInfo['roleIds'] = roleIds;
-		userInfo['domainIds'] = domainIds;
-		DCMSUtils.Ajax.doPost("user/update",userInfo).done((res)=>{
-			if(res.status == "1"){
-				console.log("更新用户"+userName+"成功");
-				alert("更新用户"+userName+"成功");
-				return true;
-			}else{
-				console.log("更新用户"+userName+"失败"+res.msg);
-				alert("更新用户"+userName+"失败");
-				return false;
-			}
-		});
 	});
 }
 
