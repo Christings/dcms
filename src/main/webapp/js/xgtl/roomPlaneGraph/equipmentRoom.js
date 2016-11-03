@@ -1,16 +1,19 @@
 var initWidth = 100;
-var bgWidth = 1833;
-var bgHeight = 2048;
+var bgWidth;
+var bgHeight;
 // $(document).ready(function(){
 	//EquipmentFloat(1);
-var times=1;  
-var datas;
+var times;  
+var jsonDatas;
+var ymlDatas;
 function roomPGWatch(id){
-	$('#roomBody').append('<img id="roombg" style="width:100%;" src="../../../serviceRoomIcngph/getImage?id='+id+'">');
+	var path = '../../../serviceRoomIcngph/getImage?id='+id;
+	$('#roombg').attr('src', path);
+	DCMSUtils.Modal.showLoading('机房平面图加载中...');
 	DCMSUtils.Ajax.doPost('serviceRoomIcngph/getJson',{id:id}).then(function(data){
         if(data.status=='1'){
-           datas = data.data;
-           EquipmentFloat();
+           jsonDatas = data.data;
+           
 			var roomBody = document.getElementById('roomBody');
 			if (roomBody.addEventListener) {   
 		    // IE9, Chrome, Safari, Opera   
@@ -25,13 +28,59 @@ function roomPGWatch(id){
             DCMSUtils.Modal.toast('json出错'+data.msg,'forbidden');
         }
     },function (error) {
-        DCMSUtils.Modal.hideLoading();
+        // DCMSUtils.Modal.hideLoading();
         DCMSUtils.Modal.toast('json出错','forbidden');
     });
 
-
+	DCMSUtils.Ajax.doPost('serviceRoomIcngph/getYml',{id:id}).then(function(data){
+        if(data.status=='1'){
+           ymlDatas = data.data;
+           var html = '';
+           for(var i in ymlDatas){
+           		html += '<option value="'+i+'">'+i+'</option>';
+           }
+           document.getElementById('chooseDis').innerHTML = html;
+           console.log(ymlDatas);
+        }
+        else{
+            DCMSUtils.Modal.toast('yml出错'+data.msg,'forbidden');
+        }
+    },function (error) {
+        // DCMSUtils.Modal.hideLoading();
+        DCMSUtils.Modal.toast('yml出错','forbidden');
+    });
+	DCMSUtils.Modal.hideLoading();
+	
 }
 
+function district(){
+	
+}
+// document.getElementById("roombg").onload = function(){
+// 	EquipmentFloat();
+// }
+$("#roombg")[0].onload = function(){
+	document.getElementById('roomBody').style.width ='100%';
+	var bg = document.getElementById("roombg");
+	var image = new Image();
+	image.src = bg.src;
+	bgWidth = image.width;
+	bgHeight = image.height;
+	console.log(bgWidth+"  "+bgHeight);
+	times = 1;
+	EquipmentFloat();
+}
+// function imgLoad(img, callback) {
+//     var timer = setInterval(function() {
+//         if (img.onload) {
+//             callback()
+//             clearInterval(timer)
+//         }
+//     }, 50)
+// }
+// imgLoad($("#roombg")[0], function() {
+//     EquipmentFloat();
+// })
 function MouseWheelHandler(e){
 	var e = window.event || e; // old IE support   
     var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))); 
@@ -56,8 +105,8 @@ function EquipmentFloat(){
 	var eq='';
 	var scrollHeight = $("#roomBody").height();//document.body.scrollHeight;
 	console.log(scrollHeight);
-	for(var i in datas){
-		var data = datas[i];
+	for(var i in jsonDatas){
+		var data = jsonDatas[i];
 		var eqWidth = ((data[7] - data[1])/bgWidth*times*100);
 		var eqHeight = ((data[2] - data[6])/bgHeight*scrollHeight);
 		// var eqHeight = (data[2] - data[6])*times;
@@ -85,7 +134,7 @@ function EquipmentFloat(){
 				color = 'navy';
 				break;
 		}
-		var style = 'style="cursor:pointer;position:absolute;left:'+eqLeft+'%;top:'+eqTop+'px;width:'+eqWidth+'%;height:'+eqHeight+'px;background-color:'+color+';border-left:2px solid #bcbcbc"'
+		var style = 'style="cursor:pointer;position:absolute;left:'+eqLeft+'%;top:'+eqTop+'px;width:'+eqWidth+'%;height:'+eqHeight+'px;background-color:'+color+';border-left:2px solid #bcbcbc;border-bottom:2px solid #bcbcbc;"'
 		// var style = 'style="position:absolute;left:100px;top:60px;width:50px;height:60px;background-color:red;"'; 
 		var mouseOverOut = 'onmouseover="this.style.backgroundColor=\'#c19288\'" onmouseout="this.style.backgroundColor=\''+color+'\'"';
 		if(data_id == i){
@@ -123,11 +172,13 @@ $('#operations_locate button').click(function(){
 	EquipmentFloat(times);
 	console.log($('#'+name).length);
 	if(name == ''){
-		alert("请输入您要查找的设备！");
+		// alert("请输入您要查找的设备！");
+		DCMSUtils.Modal.toast('请输入您要查找的设备！','');
 	}else if($('#'+name).length){
 		$('#'+name).css({'background-color':'green'});
 	}else{
-		alert("您输入的设备不存在！");
+		DCMSUtils.Modal.toast('您输入的设备不存在！','');
+		// alert("您输入的设备不存在！");
 	}
 	
 });
@@ -143,7 +194,13 @@ function make(e){
 		document.getElementById(id).append("x"); 
 	}
 }
-function opLocToggle(){
+//关闭机房平面图后，清除背景和机柜位置信息
+function clearRoombg(){
+	$('#equipments').empty();
+	$('#roombg').attr('src', '');
+	times = 1;
+}
+function searchDistrict(){
 
 }
 function locateInput(){

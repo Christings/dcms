@@ -10,31 +10,31 @@ function pageInit(){
 function loadOrganizationTree(){
 	//加载域信息
     var jsTreeIndex=0;
-	// DCMSUtils.Modal.showLoading();
-	var domainMap=DCMSUtils.SessionStorage.get("Domain_TREE_MAP");
-	if(!domainMap){
-		 DCMSUtils.Ajax.doPost('domain/tree').then(function(data){
-	        DCMSUtils.Modal.hideLoading();
-	        if(data.status=='1'){
-	            var treeData=transDataToJsTree(data.data,jsTreeIndex);
-	            // console.log(treeData);
-	            $('#domainJsTree').jstree({
-	            	'plugins':['wholerow','checkbox'],
-	                'core': {
-	                    'check_callback': true,
-	                    'data':treeData
-	                }
-	            });
-	            // DCMSUtils.Modal.hideLoading();
-	            initTreeGird(data.data, 0);
-	        }else{
-	            DCMSUtils.Modal.toast('加载组织机构树异常','forbidden');
-	        }
-	    },function(error){
-	        // DCMSUtils.Modal.hideLoading();
-	        DCMSUtils.Modal.toast('加载组织机构树异常','forbidden');
-	    });
-	}
+	DCMSUtils.Modal.showLoading();
+	// var domainMap=DCMSUtils.SessionStorage.get("Domain_TREE_MAP");
+	// if(!domainMap){
+	 DCMSUtils.Ajax.doPost('domain/tree').then(function(data){
+        DCMSUtils.Modal.hideLoading();
+        if(data.status=='1'){
+            var treeData=transDataToJsTree(data.data,jsTreeIndex);
+            // console.log(treeData);
+            $('#domainJsTree').jstree({
+            	'plugins':['wholerow','checkbox'],
+                'core': {
+                    'check_callback': true,
+                    'data':treeData
+                }
+            });
+            // DCMSUtils.Modal.hideLoading();
+            initTreeGird(data.data, 0);
+        }else{
+            DCMSUtils.Modal.toast('加载组织机构树异常','forbidden');
+        }
+    },function(error){
+        // DCMSUtils.Modal.hideLoading();
+        DCMSUtils.Modal.toast('加载组织机构树异常','forbidden');
+    });
+	// }
    
     //加载角色信息
     var da = "";
@@ -130,6 +130,11 @@ function loadOrganizationTree(){
 	}
 }
 
+function cancleDomainSelect(){
+	$("#domainTreeModal").modal('hide');
+    // $("#useradd").modal('hide');
+    // $("#userupdate").modal('show');
+}
 function userListLoad(){
 	var dtTable=$("#userListTable");
 	dtApi=dtTable.dataTable({

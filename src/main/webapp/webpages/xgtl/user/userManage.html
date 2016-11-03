@@ -39,8 +39,11 @@
             width: 150px;
             vertical-align: middle;
         }
-        #domainJsTree {
+        #domainTreeForm .modal-body{
         	height:300px;
+        	overflow:scroll;
+        	overflow-x: auto;
+        	overflow-y: auto;
         }
         #userAddForm .modal-body{
         	height:300px;
@@ -290,7 +293,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <button type="button" onclick="cancleDomainSelect()" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;
                     </button>
                     <h4 class="modal-title" domainTreeModalTitle>
@@ -303,7 +306,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default"
+                        <button type="button" onclick="cancleDomainSelect()" class="btn btn-default"
                                 data-dismiss="modal">关闭
                         </button>
                         <button type="button" class="btn btn-primary" id="confirmDomainBtn">

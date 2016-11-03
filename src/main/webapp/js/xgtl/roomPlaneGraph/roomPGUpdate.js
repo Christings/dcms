@@ -42,6 +42,15 @@ function roomPGUpdate(){
             data: formData,
             processData: false,  // 告诉jQuery不要去处理发送的数据
             contentType: false   // 告诉jQuery不要去设置Content-Type请求头
+        }).done((jsonData)=>{
+        	var data = jsonData;
+    	   	if(data.status == 1){
+        		DCMSUtils.Modal.toast('机房平面图信息更新成功'+data.msg,'');
+        		dtApi.ajax.reload();
+        		$("#roomPGUpdate").modal('hide');
+        	}else{
+        		DCMSUtils.Modal.toast(data.msg,'');
+        	}
         });
 	});
 }

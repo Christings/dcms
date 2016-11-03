@@ -47,6 +47,14 @@ function pageInit() {
 		],
 		columnDefs:[
 		{
+			targets:0,
+			render:function(data,type,row,meta){
+				//var html='<a onclick="roomPGDownload(\"'+row.id+'\",\"'+row.imageName+'\")" download="'+row.imageName+'">'+row.imageName+'</a>';
+				var html='<span style="cursor:pointer" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick="roomPGWatch(\'' + row.id +'\')" >'+row.floorName+'</span>';
+				return html;
+			}
+		},
+		{
 			targets:1,
 			render:function(data,type,row,meta){
 				//var html='<a onclick="roomPGDownload(\"'+row.id+'\",\"'+row.imageName+'\")" download="'+row.imageName+'">'+row.imageName+'</a>';
