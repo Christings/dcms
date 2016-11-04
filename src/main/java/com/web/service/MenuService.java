@@ -36,4 +36,9 @@ public interface MenuService extends IService<Menu, String> {
      * @return
      */
     List<Menu> getTree(Map<String,String> params);
+
+    /**
+     * 关联关系删除菜单
+     */
+    int deleteCascadeById(String menuId);
 }
