@@ -70,15 +70,7 @@
 	    	width:350px;
 	    	height:240px;
     	}
-    	.modal-dialog{
-    		width:100%;
-        	height:100%;
-        	margin:0;
-        	overflow:scroll;
-        	overflow-x: auto;
-        	overflow-y: auto;
-        }
-        #roombg{
+    	#roomPGWatch .modal-dialog{
     		width:100%;
         	height:100%;
         	margin:0;
@@ -134,20 +126,6 @@
             </div>
         </div>
     </div>
-
-	<!-- <div class="foot" style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
-		<label class="number-page">每页显示
-			<select id="roomPGSelectPage" onchange="roomPGSelectPage()">
-				<option value = '2'>2</option>
-				<option value = '5'>5</option>
-				<option selected = "selected" value = '10'>10</option>
-				<option value = '15'>15</option>
-			</select>行
-		</label>
-		<label class="foot-pagination" id="roomPGPagination" style="margin:0;padding:0">
-			
-		</label>
-	</div> -->
 	
 	<!-- 模态框（Modal） -->
 
@@ -206,7 +184,7 @@
 		</div><!-- /.modal -->
 	</div>
 
-	<div class="modal fade" id="roomPGWatch" style="width:100%;height:100%;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="roomPGWatch"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header" style="padding:0">
