@@ -1,12 +1,30 @@
+var icon = "<i class='fa fa-times-circle'></i> ";
+$('#roomPGAddForm').validate({
+	rules:{
+		floorName:{
+			required:true,
+			minlength:2,
+			maxlength:50
+		}
+	},
+	messages:{
+		floorName:icon + "请输入2-50个字符的楼层信息"
+	},
+	submitHandler:function(form){
+		roomPGAdd();
+	}
+});
+
 function roomPGAdd(){
 	// $("#roomPGAddForm").submit(function(event){
 		var floorName = $("#floorName").val();
 		var obj = document.getElementById("zipFile");
 		var zipFile = obj.files[0];
-		if(obj.value == "选择zip文件..." || obj.value == "未选择任何文件"){
+		if(obj.value == "选择zip文件..." || obj.value == ""){
 			DCMSUtils.Modal.toast('请选择需要上传的文件!','');
 			return false;
 		}
+		console.log(obj.value);
 		var stuff = obj.value.match(/^(.*)(\.)(.{1,8})$/)[3];
 		if(stuff != 'zip'){
 			DCMSUtils.Modal.toast('请选择zip类型的文件上传!','');
