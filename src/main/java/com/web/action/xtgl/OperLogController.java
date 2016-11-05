@@ -101,9 +101,8 @@ public class OperLogController extends BaseController {
 				} else if ("operDate".equalsIgnoreCase(operLogForm.getSortName())) {
 					orderBy.append("oper_date " + ("asc".equalsIgnoreCase(operLogForm.getSortDesc()) ? "asc" : "desc") + ",");
 				}
-			}else{
-				orderBy.append("oper_date desc");
 			}
+			orderBy.append("oper_date desc");
 			operLogExample.setOrderByClause(orderBy.toString());
 			Page<OperLog> queryResult = operLogService.getPageData(operLogForm.getPageNum(), operLogForm.getPageSize(),
 					operLogExample);

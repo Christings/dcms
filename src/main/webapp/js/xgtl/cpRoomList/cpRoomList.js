@@ -19,13 +19,16 @@ function pageInit() {
 		 */
 		ajax:function(data, callback, settings){
 			//需要把分页参数转为DCMS接口规范的
-			var pageNum=data.start/2+1,pageSize=data.length;
+			/*var pageNum=data.start/2+1,pageSize=data.length;
 			var params={
 				pageNum:pageNum,
 				pageSize:pageSize,
 				name:$("#cpRoom-name").val(),
 				position:$("#cpRoom-position").val()
-			};
+			};*/
+			var params=DCMSUtils.DataTables.handleParams(data);
+			params.name = $("#cpRoom-name").val();
+			params.position = $("#cpRoom-position").val();
 			DCMSUtils.Ajax.doPost("serviceRoom/datagrid",params).then(function (data) {
 				console.log(data);
 				if(data.status=='1'){
@@ -39,10 +42,10 @@ function pageInit() {
 			});
 		},
 		columns: [
-			{title: '机房名称', data: 'name'},
-			{title: '资源编码', data: 'resourceCode'},
-			{title: '机房位置', data: 'position'},
-			{title: '机房面积', data: 'area'},
+			{title: '机房名称', data: 'name', name: 'name'},
+			{title: '资源编码', data: 'resourceCode', name: 'resourceCode'},
+			{title: '机房位置', data: 'position', name: 'position'},
+			{title: '机房面积', data: 'area', name: 'area'},
 			{title: '操作', data: null}
 		],
 		columnDefs: [

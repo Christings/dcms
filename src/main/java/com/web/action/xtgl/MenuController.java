@@ -120,7 +120,7 @@ public class MenuController extends BaseController {
 				return AllResult.build(0, "存在子菜单不允许删除");
 			}
 
-			int result = menuService.deleteById(key);
+			int result = menuService.deleteCascadeById(key);
 
 			if(result > 0){
 				// 增加日志

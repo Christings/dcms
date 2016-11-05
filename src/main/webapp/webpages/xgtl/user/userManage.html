@@ -17,6 +17,7 @@
     <link href="../../../3rd-libs/jquery-weui/lib/weui.css" rel = "stylesheet">
     <link href="../../../3rd-libs/jquery-weui/css/jquery-weui.css" rel = "stylesheet">
     <link href="../../../css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../../../css/bootstrap-table.min.css" rel="stylesheet">
     <link href="../../../3rd-libs/datatables/datatables.css" rel="stylesheet">
     <link rel="stylesheet" href="../../../3rd-libs/jstree/themes/default/style.min.css">
     <link href="../../../css/style2.css" rel="stylesheet">
@@ -39,16 +40,7 @@
             width: 150px;
             vertical-align: middle;
         }
-        #domainJsTree {
-        	height:300px;
-        }
-        #userAddForm .modal-body{
-        	height:300px;
-        	overflow:scroll;
-        	overflow-x: auto;
-        	overflow-y: auto;
-        }
-        #userUpdateForm .modal-body{
+       .modal-body{
         	height:300px;
         	overflow:scroll;
         	overflow-x: auto;
@@ -67,7 +59,7 @@
 
                     <div class="ibox-content">
                     	<div class="col-md-2 text-align-left" id="upTable">
-                            <a data-toggle="modal" style="cursor:pointer" data-target="#useradd" onclick="roleGetAll()" class="btn btn-primary ">添加用户</a>
+                            <a data-toggle="modal" style="cursor:pointer" data-target="#useradd" onclick="loadOrganizationTree()" class="btn btn-primary ">添加用户</a>
                         </div>
                         <form id="queryForm">
                             <div class="col-md-10 text-align-right">
@@ -130,26 +122,28 @@
 			        <div class="modal-body">
 						<div class="form-group">
 						  <label for="name">登陆账号</label>
-						  <input type="text" class="form-control" id="userName" 
+						  <input type="text" class="form-control" name="userName" id="userName" 
 						     placeholder="请输入登录帐号">
 						</div>
 						<div class="form-group">
 						  <label for="name">用户姓名</label>
-						  <input type="text" class="form-control" id="realName" 
+						  <input type="text" class="form-control" name="realName" id="realName" 
 						     placeholder="请输入用户姓名">
 						</div>
-						<div class="form-group">
-						  <label for="name">用户密码</label>
-						  <input type="text" class="form-control" id="password" 
-						     placeholder="请输入密码">
-						</div>
-						<div class="form-group">
-							<label for="name">选择用户角色</label>
-							<div id="rolesContent">
-							</div>
+						<div hidden="hidden" class="form-group">
+						  <label for="name">设置用户密码</label>
+						  <input type="password" class="form-control" name="password" id="password" 
+						     value="3source">
 						</div>
 						<div class='form-group' >
-							<label class='col-sm-3'>组织机构：</label>
+							<label class='col-sm-3'>用户角色</label>
+							<input id="rolePId" name="rolePId"  type="hidden">
+							<div class='col-sm-9'>
+								<span id='rolePName' name="rolePName" style="width: 50%;"></span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectRoleBtn" class="btn btn-primary btn-sm btn-outline">选择</a>
+							</div>
+						</div><br/>
+						<div class='form-group' >
+							<label class='col-sm-3'>组织机构</label>
 							<input id="domainPId" name="domainPId"  type="hidden">
 							<div class='col-sm-9'>
 								<span id='domainPName' name="domainPName" style="width: 50%;"></span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectDomainBtn" class="btn btn-primary btn-sm btn-outline">选择</a>
@@ -157,22 +151,22 @@
 						</div><br/>
 						<div class="form-group">
 							<label for="name">身份证</label>
-							<input type="text" class="form-control" id="identificationNo" 
+							<input type="text" class="form-control" name="identificationNo" id="identificationNo" 
 						     placeholder="请输入身份证号">
 						</div>
 						<div class="form-group">
 						  <label for="name">手机号</label>
-						  <input type="text" class="form-control" id="phone" 
+						  <input type="text" class="form-control" name="phone" id="phone" 
 						     placeholder="请输入手机号">
 						</div> 
 						<div class="form-group">
 						  <label for="name">邮箱</label>
-						  <input type="text" class="form-control" id="email" 
+						  <input type="text" class="form-control" name="email" id="email" 
 						     placeholder="请输入邮箱">
 						</div>
 						<div class="form-group">
 						  <label for="name">电话</label>
-						  <input type="text" class="form-control" id="mobile" 
+						  <input type="text" class="form-control" name="mobile" id="mobile" 
 						     placeholder="请输入电话">
 						</div>
 						<div class="form-group">
@@ -194,7 +188,7 @@
 			            <button type="button" class="btn btn-default" 
 			               data-dismiss="modal">关闭
 			            </button>
-			            <button type="submit" onclick="userAdd()" class="btn btn-primary">
+			            <button type="submit" class="btn btn-primary">
 			               确认添加
 			            </button>
 		        	</div>
@@ -203,7 +197,7 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="user-roles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="userRoleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -216,9 +210,16 @@
 		        </div>
 
 		        <div class="modal-body">
-		            <form role="form" id="userRolesForm">
-		            </form>
+                    <table id="roleModalTable">
+                    </table>
 		        </div>
+		         <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmRoleBtn">
+                        确定
+                    </button>
+                </div>
 		    </div>
 		</div>
 	</div>
@@ -234,19 +235,18 @@
 		                用户编辑
 		            </h4>
 		        </div>
-		        <form role="form" id="userUpdateForm">
+		         <form id="userUpdateForm">
 			        <div class="modal-body" id="userUpdateBody">
-			            
 			        </div>
 			        <div class="modal-footer">
 			           <button type="button" class="btn btn-default" data-dismiss="modal">
 			           	关闭
 			            </button>
-			            <button type="submit" onclick="userUpdate()" class="btn btn-primary">
+			            <button type="submit" class="btn btn-primary">
 			            提交修改
 			           </button>
 		        	</div>
-		        </form>
+	        	</form>
 		    </div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
@@ -290,7 +290,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <button type="button" onclick="cancleDomainSelect()" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;
                     </button>
                     <h4 class="modal-title" domainTreeModalTitle>
@@ -303,7 +303,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default"
+                        <button type="button" onclick="cancleDomainSelect()" class="btn btn-default"
                                 data-dismiss="modal">关闭
                         </button>
                         <button type="button" class="btn btn-primary" id="confirmDomainBtn">
@@ -326,6 +326,11 @@
 	<script src="../../../3rd-libs/datatables/datatables.bootstrap.js"></script>
 	<script src="../../../3rd-libs/datatables/datatables-custom.js"></script>
 
+	<script src="../../../3rd-libs/boostrap-table/bootstrap-table.min.js"></script>
+    <script src="../../../3rd-libs/boostrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+     <!-- Peity -->
+    
+	
     <!-- 自定义js -->
     <script src="../../../js/pub/common.js"></script>
     <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
@@ -333,6 +338,8 @@
  	<script src="../../../js/manage-user/userAdd.js"></script>
  	<script src="../../../js/manage-user/userUpdate.js"></script>
  	<script src="../../../js/manage-user/userDelete.js"></script>
+
+ 	
 
  	
 </body>

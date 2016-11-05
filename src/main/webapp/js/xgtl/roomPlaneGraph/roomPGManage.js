@@ -19,14 +19,9 @@ function pageInit() {
 		 */
 		ajax:function(data, callback, settings){
 			//需要把分页参数转为DCMS接口规范的
-			console.log(data);
-			var pageNum=data.start/data.length+1,pageSize=data.length;
-			var params={
-				pageNum:pageNum,
-				pageSize:pageSize,
-				floorName:$("#searchFloorName").val(),
-				fileName:$("#searchFileName").val()
-			};
+			var params = DCMSUtils.DataTables.handleParams(data);
+			params.floorName = $("#searchFloorName").val();
+			params.fileName = $("#searchFileName").val();
 			DCMSUtils.Ajax.doPost("serviceRoomIcngph/datagrid",params).then(function (data) {
 				if(data.status=='1'){
 					//组织DT标准的返回值
@@ -39,13 +34,21 @@ function pageInit() {
 			});
 		},
 		columns: [
-			{title: '楼层名称', data: 'floorName'},
-			{title: '图片名称', data: 'imageName'},
-			{title: 'Yml文件名称', data: 'ymlName'},
-			{title: 'Json文件名称', data: 'jsonName'},
+			{title: '楼层名称', data: 'floorName',name:'floorName'},
+			{title: '图片名称', data: 'imageName',name:'imageName'},
+			{title: 'Yml文件名称', data: 'ymlName',name:'ymlName'},
+			{title: 'Json文件名称', data: 'jsonName',name:'jsonName'},
 			{title: '操作', data: ''}
 		],
 		columnDefs:[
+		{
+			targets:0,
+			render:function(data,type,row,meta){
+				//var html='<a onclick="roomPGDownload(\"'+row.id+'\",\"'+row.imageName+'\")" download="'+row.imageName+'">'+row.imageName+'</a>';
+				var html='<span style="cursor:pointer" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick="roomPGWatch(\'' + row.id +'\')" >'+row.floorName+'</span>';
+				return html;
+			}
+		},
 		{
 			targets:1,
 			render:function(data,type,row,meta){
