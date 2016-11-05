@@ -408,6 +408,9 @@ function menuSetting(menuId) {
 }
 
 function addNewOperation(){
+    document.getElementById("menuOperationForm").reset();
+    //蛋疼的问题，hidden未被重置
+    $("#operationId").val("");
     $("#menuOptionModal").modal('show');
 }
 /**
@@ -459,6 +462,9 @@ $("#menuOperationForm").validate({
                 tr+='</tr>';
                 $("#operationBody").append(tr);
 
+                var optList=DCMSUtils.SessionStorage.get(optData.menuId+"_OPERATION_LIST");
+                optList.push(data.data);
+                DCMSUtils.SessionStorage.set(optData.menuId+"_OPERATION_LIST",optList);
                 document.getElementById("menuOperationForm").reset();
                 $("#menuOptionModal").modal('hide');
             }else{
