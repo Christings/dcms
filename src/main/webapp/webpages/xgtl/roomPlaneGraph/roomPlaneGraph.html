@@ -17,6 +17,7 @@
     <link href="../../../3rd-libs/jquery-weui/lib/weui.css" rel = "stylesheet">
     <link href="../../../3rd-libs/jquery-weui/css/jquery-weui.css" rel = "stylesheet">
     <link href="../../../css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../../../css/dragscroll.css" rel="stylesheet">
     <link href="../../../3rd-libs/datatables/datatables.css" rel="stylesheet">
     <link rel="stylesheet" href="../../../3rd-libs/jstree/themes/default/style.min.css">
     <link href="../../../css/style2.css" rel="stylesheet">
@@ -69,6 +70,15 @@
 	    	width:350px;
 	    	height:240px;
     	}
+    	#roomPGWatch .modal-dialog{
+    		width:100%;
+        	height:100%;
+        	margin:0;
+        	overflow:scroll;
+        	overflow-x: auto;
+        	overflow-y: auto;
+        }
+
 	    .appear_opLoc {
 	    	visibility: hidden;
 	    	
@@ -116,20 +126,6 @@
             </div>
         </div>
     </div>
-
-	<!-- <div class="foot" style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
-		<label class="number-page">每页显示
-			<select id="roomPGSelectPage" onchange="roomPGSelectPage()">
-				<option value = '2'>2</option>
-				<option value = '5'>5</option>
-				<option selected = "selected" value = '10'>10</option>
-				<option value = '15'>15</option>
-			</select>行
-		</label>
-		<label class="foot-pagination" id="roomPGPagination" style="margin:0;padding:0">
-			
-		</label>
-	</div> -->
 	
 	<!-- 模态框（Modal） -->
 
@@ -160,7 +156,7 @@
 				            <button type="button" class="btn btn-default" 
 				               data-dismiss="modal">关闭
 				            </button>
-				            <button type="button" onclick="roomPGAdd()" class="btn btn-primary">
+				            <button type="submit" class="btn btn-primary">
 				               确认添加
 				            </button>
 			        	</div>
@@ -188,8 +184,8 @@
 		</div><!-- /.modal -->
 	</div>
 
-	<div class="modal fade" id="roomPGWatch" style="width:100%;height:100%;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" style="width:100%;height:100%;margin:0;">
+	<div class="modal fade" id="roomPGWatch"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header" style="padding:0">
 		            <button type="button" onclick="clearRoombg()" class="close" data-dismiss="modal" aria-hidden="true">
@@ -199,84 +195,87 @@
 		                机房平面图
 		            </h4>
 		        </div>
-		        <div class="modal-body" style="padding:0">
+		        <div class="modal-body"  style="padding:0">
 		        	<div id="roomBody">
-						<img id="roombg" style="height:100%;width:100%;"src="">
+						<img id="roombg" class="free dragscroll" style="height:100%;width:100%;z-index:-1;"src="">
 						<div id="roombgFather"></div>
-						<input type="button" style="border-radius:50%; background-image: url('../../../img/1Group.jpg');width:40px;height:40px;top:50px;left:30px;position:absolute;">
-						<input type="button" style="border-radius:50%; background-image: url('../../../img/1DisplayManyPlane.png');width:40px;height:40px;top:100px;left:30px;position:absolute;">
-						<input type="button" id="opLocToggle" style="border-radius:50%; background-image: url('../../../img/1Locate.png');width:40px;height:40px;top:150px;left:30px;position:absolute;">
-						<input type="button" id="opSeaToggle" style="border-radius:50%; background-image: url('../../../img/1Search.png');width:40px;height:40px;top:200px;left:30px;position:absolute;">
-						
-						<div style="color:white;font-size:5px" id="equipments"></div>
-						
-						<div id="operations">
-							<div id="operations_locate" class="input-group input-group-sm">
-								<input style="width:150px;background-color: black;" type="text" class="form-control">
-								<span class="input-group-btn">
-									<button class="btn btn-default" type="button" ><i class="glyphicon glyphicon-ok"></i></button>
-								</span>
-							</div>
+						<div >
+							<input type="button" style="z-index:2;border-radius:50%; background-image: url('../../../img/1Group.jpg');width:40px;height:40px;top:50px;left:30px;position:absolute;">
+							<input type="button" style="z-index:2;border-radius:50%; background-image: url('../../../img/1DisplayManyPlane.png');width:40px;height:40px;top:100px;left:30px;position:absolute;">
+							<input type="button" id="opLocToggle" style="z-index:2;border-radius:50%; background-image: url('../../../img/1Locate.png');width:40px;height:40px;top:150px;left:30px;position:absolute;">
+							<input type="button" id="opSeaToggle" style="z-index:2;border-radius:50%; background-image: url('../../../img/1Search.png');width:40px;height:40px;top:200px;left:30px;position:absolute;">
 							
-							<div id="operations_search" class="input-group input-group-sm">
-								<div class="row">
-									<label style="text-align: right;padding-top: 5px;" class="col-xs-4">空间分布查询</label>
-								</div>
-								<div class="row" style="font-size: 8px">
-									<label style="text-align: right" class="col-xs-4" for="chooseDis">选择区域</label>
-									<select onchange="district()" class="col-xs-4" style="background-color: black;"id="chooseDis">
-									</select>
-								</div>
-								<div class="row" style="font-size: 8px">
-									<label style="text-align: right" class="col-xs-4" for="sequentU">连续空间U树</label>
-									<input class="col-xs-4" id="sequentU" style="background-color: black;" type="number">
-									<i style="cursor: pointer;padding-top: 4px;color:white;" class="col-xs-1 glyphicon glyphicon-search"></i>
-									<i style="cursor: pointer;padding-top: 4px;color:white;" id="expandSearch" class="col-xs-1 glyphicon glyphicon-plus"></i>
-								</div>
+							<div style="color:white;font-size:5px" id="equipments"></div>
+							<div id="disAnimation"></div>
 
-								<div id="operations_search_secondlevel" >
-									<div class="weight">
-										<div style="padding-top: 5px;padding-left: 3px;">
-											<input id="weight_check" type="checkbox"/><span >承重状况查询</span>
-										</div>
-										<div class="row" style="font-size: 8px">
-											<label style="text-align: left;padding-right: 0;padding-left: 30px;" class="col-xs-5" for="singleMaxW">单机柜最大承重量(kg)</label>
-											<input class="col-xs-4" id="singleMaxW" style="background-color: black;" type="number">
-										</div>
-										<div class="row" style="font-size: 8px">
-											<label style="text-align: left;padding-left: 30px;" for="weightM">显示承重大于</label>
-											<input id="weightM" style="background-color: black;width:60px;" type="number">%
-											<label style="text-align: left;padding-left: 0px;" for="weightL">小于</label>
-											<input  id="weightL" style="background-color: black;width:60px;" type="number">%
-										</div>
+							<div id="operations" style="z-index:2;">
+								<div id="operations_locate" style="z-index:2;"class="input-group input-group-sm">
+									<input style="width:150px;background-color: black;" type="text" class="form-control">
+									<span class="input-group-btn">
+										<button class="btn btn-default" type="button" ><i class="glyphicon glyphicon-ok"></i></button>
+									</span>
+								</div>
+								
+								<div id="operations_search" style="z-index:2;"class="input-group input-group-sm">
+									<div class="row">
+										<label style="text-align: right;padding-top: 5px;" class="col-xs-4">空间分布查询</label>
 									</div>
-									<div class="electric">
-										<div style="padding-top: 5px;padding-left: 3px;">
-											<input id="electric_check" type="checkbox"/><span >用电状况查询</span>
-										</div>
-										<div class="row" style="font-size: 8px">
-											<label style="text-align: left;padding-right: 0;padding-left: 30px;" class="col-xs-5" for="singleMaxE">单机柜最大用电量(w)</label>
-											<input class="col-xs-4" id="singleMaxE" style="background-color: black;" type="number">
-										</div>
-										<div class="row" style="font-size: 8px">
-											<label style="text-align: left;padding-left: 30px;" for="electricM">显示用电大于</label>
-											<input id="electricM" style="background-color: black;width:60px;" type="number">%
-											<label style="text-align: left;padding-left: 0px;" for="electricL">小于</label>
-											<input  id="electricL" style="background-color: black;width:60px;" type="number">%
-										</div>
+									<div class="row" style="font-size: 8px">
+										<label style="text-align: right" class="col-xs-4" for="chooseDis">选择区域</label>
+										<select onchange="districtFocus()" class="col-xs-4" style="background-color: black;"id="chooseDis">
+										</select>
 									</div>
-									<div class="infopoint">
-										<div style="padding-top: 5px;padding-left: 3px;">
-											<input id="infopoint_check" type="checkbox"/><span >信息点查询</span>
+									<div class="row" style="font-size: 8px">
+										<label style="text-align: right" class="col-xs-4" for="sequentU">连续空间U树</label>
+										<input class="col-xs-4" id="sequentU" style="background-color: black;" type="number">
+										<i style="cursor: pointer;padding-top: 4px;color:white;" class="col-xs-1 glyphicon glyphicon-search"></i>
+										<i style="cursor: pointer;padding-top: 4px;color:white;" id="expandSearch" class="col-xs-1 glyphicon glyphicon-plus"></i>
+									</div>
+
+									<div id="operations_search_secondlevel" >
+										<div class="weight">
+											<div style="padding-top: 5px;padding-left: 3px;">
+												<input id="weight_check" type="checkbox"/><span >承重状况查询</span>
+											</div>
+											<div class="row" style="font-size: 8px">
+												<label style="text-align: left;padding-right: 0;padding-left: 30px;" class="col-xs-5" for="singleMaxW">单机柜最大承重量(kg)</label>
+												<input class="col-xs-4" id="singleMaxW" style="background-color: black;" type="number">
+											</div>
+											<div class="row" style="font-size: 8px">
+												<label style="text-align: left;padding-left: 30px;" for="weightM">显示承重大于</label>
+												<input id="weightM" style="background-color: black;width:60px;" type="number">%
+												<label style="text-align: left;padding-left: 0px;" for="weightL">小于</label>
+												<input  id="weightL" style="background-color: black;width:60px;" type="number">%
+											</div>
 										</div>
-										<div style="font-size: 8px;padding-left:20px;">
-											<input id="infopoint_check_1" type="checkbox" style="padding-left: 30px;"><label style="text-align: left;" for="electricM">光纤信息点</label>
-											<input id="electricM" style="background-color: black;width:100px;" type="number">%
+										<div class="electric">
+											<div style="padding-top: 5px;padding-left: 3px;">
+												<input id="electric_check" type="checkbox"/><span >用电状况查询</span>
+											</div>
+											<div class="row" style="font-size: 8px">
+												<label style="text-align: left;padding-right: 0;padding-left: 30px;" class="col-xs-5" for="singleMaxE">单机柜最大用电量(w)</label>
+												<input class="col-xs-4" id="singleMaxE" style="background-color: black;" type="number">
+											</div>
+											<div class="row" style="font-size: 8px">
+												<label style="text-align: left;padding-left: 30px;" for="electricM">显示用电大于</label>
+												<input id="electricM" style="background-color: black;width:60px;" type="number">%
+												<label style="text-align: left;padding-left: 0px;" for="electricL">小于</label>
+												<input  id="electricL" style="background-color: black;width:60px;" type="number">%
+											</div>
 										</div>
-										<div style="font-size: 8px;padding-left:20px;">
-											<input id="infopoint_check_2" type="checkbox" style="padding-left: 30px;"><label style="text-align: left;" for="electricM">以太信息点</label>
-											<input id="electricM" style="background-color: black;width:100px;" type="number">%
-											<i style="cursor: pointer;margin-left:45px;" class="glyphicon glyphicon-search"></i>
+										<div class="infopoint">
+											<div style="padding-top: 5px;padding-left: 3px;">
+												<input id="infopoint_check" type="checkbox"/><span >信息点查询</span>
+											</div>
+											<div style="font-size: 8px;padding-left:20px;">
+												<input id="infopoint_check_1" type="checkbox" style="padding-left: 30px;"><label style="text-align: left;" for="electricM">光纤信息点</label>
+												<input id="electricM" style="background-color: black;width:100px;" type="number">%
+											</div>
+											<div style="font-size: 8px;padding-left:20px;">
+												<input id="infopoint_check_2" type="checkbox" style="padding-left: 30px;"><label style="text-align: left;" for="electricM">以太信息点</label>
+												<input id="electricM" style="background-color: black;width:100px;" type="number">%
+												<i style="cursor: pointer;margin-left:45px;" class="glyphicon glyphicon-search"></i>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -318,7 +317,7 @@
     <script src="../../../3rd-libs/datatables/datatables.js"></script>
 	<script src="../../../3rd-libs/datatables/datatables.bootstrap.js"></script>
 	<script src="../../../3rd-libs/datatables/datatables-custom.js"></script>
-
+	<script src="../../../3rd-libs/dragscroll/dragscroll.js"></script>
     <!-- 自定义js -->
     <script src="../../../js/pub/common.js"></script>
     <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>

@@ -40,32 +40,36 @@ $("#userAddForm").validate({
         },
         identificationNo:{
             required:false,
+            number:true,
             minlength:18,
             maxlength:18
         },
         phone:{
             required:false,
+            number:true,
             minlength:11,
             maxlength:11
         },
         email:{
             required:false,
+            email:true,
             minlength:2,
             maxlength:50
         },
         mobile:{
             required:false,
-            minlength:2,
-            maxlength:50
+            number:true,
+            minlength:7,
+            maxlength:11
         }
     },
     messages:{
-        userName:icon + "请输入2-50个字符的用户名",
-        realName:icon + "请输入2-50个字符的真实姓名",
+        userName:icon + "请输入2-50个字符的登录账名",
+        realName:icon + "请输入2-50个字符的用户姓名",
         identificationNo:icon + "请输入18个字符的身份证号",
-        phone:icon + "请输入11个字符的电话号码",
-        email:icon + "请输入2-50个字符的组织机构名称",
-        mobile:icon + "请输入2-50个字符的组织机构描述",
+        phone:icon + "请输入11位数字的手机号码",
+        email:icon + "请输入正确的电子邮件格式",
+        mobile:icon + "请输入7-11位数字的电话号码",
     },
     submitHandler:function(form){
         userAdd();

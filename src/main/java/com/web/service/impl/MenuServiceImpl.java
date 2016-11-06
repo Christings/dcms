@@ -5,7 +5,11 @@ import com.github.pagehelper.PageHelper;
 import com.web.core.util.page.Page;
 import com.web.entity.Menu;
 import com.web.example.MenuExample;
+import com.web.example.MenuOperationExample;
+import com.web.example.MenuRoleExample;
 import com.web.mappers.MenuMapper;
+import com.web.mappers.MenuOperationMapper;
+import com.web.mappers.MenuRoleMapper;
 import com.web.service.MenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +34,10 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     MenuMapper menuMapper;
+    @Autowired
+    MenuRoleMapper menuRoleMapper; //菜单角色关系
+    @Autowired
+    MenuOperationMapper menuOperationMapper; //菜单-操作
 
     @Override
     public int save(Menu menu) {
@@ -198,5 +206,38 @@ public class MenuServiceImpl implements MenuService {
         // 查询数据
         List<Menu> menus = menuMapper.selectByTree(params);
         return menus;
+    }
+
+    @Override
+    public int deleteCascadeById(String menuId) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("delete menuId by id: {}", menuId);
+        }
+
+        if (StringUtils.isEmpty(menuId)) {
+            LOGGER.warn("the menuId id object is null.");
+            return 0 ;
+        }
+
+        //1.删除菜单和角色关系
+        MenuRoleExample e1 = new MenuRoleExample();
+        MenuRoleExample.Criteria c1 = e1.createCriteria();
+        c1.andMenuIdEqualTo(menuId);
+        menuRoleMapper.deleteByExample(e1);
+
+        //2.删除菜单下的操作关系
+        MenuOperationExample e2 = new MenuOperationExample();
+        MenuOperationExample.Criteria c2 = e2.createCriteria();
+        c2.andMenuIdEqualTo(menuId);
+        menuOperationMapper.deleteByExample(e2);
+
+        //3.删除菜单记录数
+        int result = menuMapper.deleteByPrimaryKey(menuId) ;
+
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("delete menu object by id result: {}", result);
+        }
+
+        return result;
     }
 }
