@@ -59,7 +59,7 @@ function pageInit() {
 					var html = "<i class='glyphicon glyphicon-pencil' title='编辑' onclick=\"editItem('" + row.id+"','update')\"'></i>&nbsp;&nbsp;" +
 						"<i class='glyphicon glyphicon-user' title='添加用户' onclick=\"addUser('" + row.id+"','"+row.name+"')\"'></i>&nbsp;&nbsp;" +
 						"<i class='glyphicon glyphicon-edit' title='修改备注' onclick=\"editComment('" + row.id+"','"+row.comment+"','"+row.resourceCode+"')\"'></i>&nbsp;&nbsp;" +
-						"<i class='glyphicon glyphicon-search' title='查看视图' onclick=\"checkView('" + row.id+"','"+row.imageUrl+"')\"'></i>";
+						"<i class='glyphicon glyphicon-search' title='查看视图' data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick=\"checkView('" + row.id + "')\"'></i>";
 					return html;
 				}
 			}
@@ -219,18 +219,8 @@ function saveComment() {
 }
 
 //查看视图
-function checkView(id,imageUrl){
-	DCMSUtils.Ajax.doPost("serviceRoom/getImage",{id:id}).then(function (data) {
-		console.log(data);
-		if(data.status=='1'){
-
-		}
-	});
-	if(imageUrl == null || imageUrl == "" || imageUrl == "undefined"){
-		DCMSUtils.Modal.toast('暂无视图！','cancel');
-	}else{
-		DCMSUtils.Modal.alert("<img src='"+getContentPath()+"serviceRoom/getImage?id="+id+"' />","查看视图","");
-	}
+function checkView(id){
+	roomPGWatch(id);
 }
 
 
