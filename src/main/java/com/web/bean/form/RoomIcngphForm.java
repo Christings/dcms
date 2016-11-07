@@ -6,7 +6,7 @@ package com.web.bean.form;
  * @author 田军兴
  * @date 2016/10/23.
  */
-public class ServiceRoomIcngphForm extends CommonForm {
+public class RoomIcngphForm extends CommonForm {
 
 	/**
 	 * 楼层名称

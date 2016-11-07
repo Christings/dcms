@@ -6,7 +6,7 @@ package com.web.bean.form;
  * @author 田军兴
  * @date 2016/10/23
  */
-public class ServiceRoomForm extends CommonForm{
+public class RoomForm extends CommonForm{
 
     /**
      * 位置

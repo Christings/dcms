@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.web.entity.Room;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
-import com.web.bean.form.ServiceRoomForm;
+import com.web.bean.form.RoomForm;
 import com.web.bean.util.FileUtilBean;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
-import com.web.entity.ServiceRoom;
-import com.web.entity.ServiceRoomUserRel;
-import com.web.example.ServiceRoomExample;
-import com.web.service.ServiceRoomService;
-import com.web.service.ServiceRoomUserRelService;
+import com.web.entity.RoomUserRel;
+import com.web.example.RoomExample;
+import com.web.service.RoomService;
+import com.web.service.RoomUserRelService;
 import com.web.util.*;
 import com.web.util.fastjson.FastjsonUtils;
 
@@ -37,62 +37,62 @@ import com.web.util.fastjson.FastjsonUtils;
  */
 @RestController
 @RequestMapping("/serviceRoom")
-public class ServiceRoomController extends BaseController {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceRoomController.class);
+public class RoomController extends BaseController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RoomController.class);
 
 	@Autowired
-	private ServiceRoomService serviceRoomService;
+	private RoomService roomService;
 	@Autowired
-	private ServiceRoomUserRelService serviceRoomUserRelService;
+	private RoomUserRelService roomUserRelService;
 
 	/**
 	 * 新增机房
 	 *
-	 * @param serviceRoom
+	 * @param room
 	 * @param request
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public Object save(ServiceRoom serviceRoom, MultipartHttpServletRequest request) {
+	public Object save(Room room, MultipartHttpServletRequest request) {
 		try {
-			if (null == serviceRoom) {
+			if (null == room) {
 				if (LOGGER.isInfoEnabled()) {
-					LOGGER.info("request add serviceRoom param: [serviceRoom: {null}]");
+					LOGGER.info("request add room param: [room: {null}]");
 				}
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "新增机房入参为空");
 			}
-			ServiceRoomExample example = new ServiceRoomExample();
-			ServiceRoomExample.Criteria criteria = example.createCriteria();
-			criteria.andResourceCodeEqualTo(serviceRoom.getResourceCode());
-			List<ServiceRoom> list = serviceRoomService.getByExample(example);
+			RoomExample example = new RoomExample();
+			RoomExample.Criteria criteria = example.createCriteria();
+			criteria.andResourceCodeEqualTo(room.getResourceCode());
+			List<Room> list = roomService.getByExample(example);
 			if (list.size() > 0) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "资源编码已存在，请检查");
 			}
-			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "serviceRoom", false);// 上传文件
+			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "room", false);// 上传文件
 			if (files.size() > 0) {
 				if (!"png".equalsIgnoreCase(files.get(0).getFileExt()) && !"jpg".equalsIgnoreCase(files.get(0).getFileExt())
 						&& !"jpeg".equalsIgnoreCase(files.get(0).getFileExt())) {
 					FileUtil.deleteFiles(files);
 					return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请上传正确的图片文件(PNG/JPG/JPEG)");
 				}
-				serviceRoom.setImageUrl(files.get(0).getFileRealPath());
+				room.setImageUrl(files.get(0).getFileRealPath());
 			}
-			serviceRoom.setId(UUIDGenerator.generatorRandomUUID());
-			if (serviceRoomService.save(serviceRoom) > 0) {
+			room.setId(UUIDGenerator.generatorRandomUUID());
+			if (roomService.save(room) > 0) {
 				// 增加日志
-				operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.insert,
-						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(serviceRoom));
+				operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.insert,
+						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(room));
 				if (LOGGER.isInfoEnabled()) {
-					LOGGER.info("机房新增成功", JSON.toJSONString(serviceRoom));
+					LOGGER.info("机房新增成功", JSON.toJSONString(room));
 				}
-				return AllResult.okJSON(serviceRoom);
+				return AllResult.okJSON(room);
 			} else {
 				return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房新增失败:数据未能持久化");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOGGER.error("机房新增失败,后台报错", JSON.toJSONString(serviceRoom));
-			operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
-					JSON.toJSONString(serviceRoom), OperLog.logLevelEnum.error);
+			LOGGER.error("机房新增失败,后台报错", JSON.toJSONString(room));
+			operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
+					JSON.toJSONString(room), OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房新增失败:后台报错");
 		}
 	}
@@ -100,54 +100,54 @@ public class ServiceRoomController extends BaseController {
 	/**
 	 * 编辑机房信息
 	 *
-	 * @param serviceRoom
+	 * @param room
 	 * @param request
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public Object update(ServiceRoom serviceRoom, MultipartHttpServletRequest request) {
+	public Object update(Room room, MultipartHttpServletRequest request) {
 		try {
-			if (null == serviceRoom) {
+			if (null == room) {
 				if (LOGGER.isInfoEnabled()) {
-					LOGGER.info("request edit serviceRoom param: [serviceRoom: {null}]");
+					LOGGER.info("request edit room param: [room: {null}]");
 				}
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "修改机房入参为空");
 			}
-			if (StringUtil.isEmpty(serviceRoom.getId())) {
+			if (StringUtil.isEmpty(room.getId())) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "入参ID不能为空");
 			}
 
-			ServiceRoomExample example = new ServiceRoomExample();
-			ServiceRoomExample.Criteria criteria = example.createCriteria();
-			criteria.andResourceCodeEqualTo(serviceRoom.getResourceCode());
-			criteria.andIdNotEqualTo(serviceRoom.getId());
-			List<ServiceRoom> list = serviceRoomService.getByExample(example);
+			RoomExample example = new RoomExample();
+			RoomExample.Criteria criteria = example.createCriteria();
+			criteria.andResourceCodeEqualTo(room.getResourceCode());
+			criteria.andIdNotEqualTo(room.getId());
+			List<Room> list = roomService.getByExample(example);
 			if (list.size() > 0) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "资源编码已存在，请检查");
 			}
 
-			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "serviceRoom", false);// 上传文件
+			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "room", false);// 上传文件
 			if (files.size() > 0) {
 				if (!"jpg".equalsIgnoreCase(files.get(0).getFileExt()) && !"png".equalsIgnoreCase(files.get(0).getFileExt())
 						&& !"jpeg".equalsIgnoreCase(files.get(0).getFileExt())) {
 					FileUtil.deleteFiles(files);
 					return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "请上传正确的图片文件(PNG/JPG/JPEG)");
 				}
-				serviceRoom.setImageUrl(files.get(0).getFileRealPath());
+				room.setImageUrl(files.get(0).getFileRealPath());
 			}
-			if (serviceRoomService.updateById(serviceRoom) > 0) {
+			if (roomService.updateById(room) > 0) {
 				// 增加日志
-				operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.update,
-						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(serviceRoom));
+				operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.update,
+						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(room));
 				if (LOGGER.isInfoEnabled()) {
-					LOGGER.info("机房修改成功", JSON.toJSONString(serviceRoom));
+					LOGGER.info("机房修改成功", JSON.toJSONString(room));
 				}
-				return AllResult.okJSON(serviceRoom);
+				return AllResult.okJSON(room);
 			} else {
 				return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房修改失败:数据未能持久化");
 			}
 		} catch (Exception e) {
-			LOGGER.error("机房修改失败,后台报错", JSON.toJSONString(serviceRoom));
-			operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom,
+			LOGGER.error("机房修改失败,后台报错", JSON.toJSONString(room));
+			operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom,
 					null, OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房修改失败:后台报错");
 		}
@@ -156,36 +156,36 @@ public class ServiceRoomController extends BaseController {
 	/**
 	 * 删除机房信息
 	 *
-	 * @param serviceRoom
+	 * @param room
 	 * @param request
 	 */
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
-	public Object delete(ServiceRoom serviceRoom, HttpServletRequest request) {
+	public Object delete(Room room, HttpServletRequest request) {
 		try {
-			if (null == serviceRoom) {
+			if (null == room) {
 				if (LOGGER.isInfoEnabled()) {
-					LOGGER.info("request delete serviceRoom param: [serviceRoom: {null}]");
+					LOGGER.info("request delete room param: [room: {null}]");
 				}
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房入参为空");
 			}
-			if (StringUtil.isEmpty(serviceRoom.getId())) {
+			if (StringUtil.isEmpty(room.getId())) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
 			}
-			if (serviceRoomService.deleteById(serviceRoom.getId()) > 0) {
+			if (roomService.deleteById(room.getId()) > 0) {
 				// 增加日志
-				operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.delete,
-						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(serviceRoom));
+				operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.delete,
+						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(room));
 				if (LOGGER.isInfoEnabled()) {
-					LOGGER.info("机房删除成功", JSON.toJSONString(serviceRoom));
+					LOGGER.info("机房删除成功", JSON.toJSONString(room));
 				}
-				return AllResult.okJSON(serviceRoom);
+				return AllResult.okJSON(room);
 			} else {
 				return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房删除失败:删除条数0");
 			}
 		} catch (Exception e) {
-			LOGGER.error("机房删除失败,后台报错", JSON.toJSONString(serviceRoom));
-			operLogService.addBusinessLog(serviceRoom.getName(), OperLog.operTypeEnum.delete, OperLog.actionBusinessEnum.serviceRoom,
-					JSON.toJSONString(serviceRoom), OperLog.logLevelEnum.error);
+			LOGGER.error("机房删除失败,后台报错", JSON.toJSONString(room));
+			operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.delete, OperLog.actionBusinessEnum.serviceRoom,
+					JSON.toJSONString(room), OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房删除失败:后台报错");
 		}
 	}
@@ -193,28 +193,28 @@ public class ServiceRoomController extends BaseController {
 	/**
 	 * 根据ID查询机房信息
 	 *
-	 * @param serviceRoom
+	 * @param room
 	 * @param request
 	 */
 	@RequestMapping(value = "/selectById", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object selectById(ServiceRoom serviceRoom, HttpServletRequest request) {
+	public Object selectById(Room room, HttpServletRequest request) {
 		try {
-			if (null == serviceRoom) {
+			if (null == room) {
 				if (LOGGER.isInfoEnabled()) {
-					LOGGER.info("request select serviceRoom param: [serviceRoom: {null}]");
+					LOGGER.info("request select room param: [room: {null}]");
 				}
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "入参不能为空");
 			}
-			if (StringUtil.isEmpty(serviceRoom.getId())) {
+			if (StringUtil.isEmpty(room.getId())) {
 				if (LOGGER.isInfoEnabled()) {
-					LOGGER.info("request select serviceRoom param: [serviceRoom.id: {null}]");
+					LOGGER.info("request select room param: [room.id: {null}]");
 				}
 				operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null);
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
 			}
-			return AllResult.okJSON(serviceRoomService.getById(serviceRoom.getId()));
+			return AllResult.okJSON(roomService.getById(room.getId()));
 		} catch (Exception e) {
-			LOGGER.error("机房查询失败,后台报错", JSON.toJSONString(serviceRoom));
+			LOGGER.error("机房查询失败,后台报错", JSON.toJSONString(room));
 			operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null,
 					OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "后台出错");
@@ -228,7 +228,7 @@ public class ServiceRoomController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/datagrid", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object getPageData(ServiceRoomForm form, HttpServletRequest request) {
+	public Object getPageData(RoomForm form, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [page: {}, count: {}]", form.getPageNum(), form.getPageSize());
 		}
@@ -237,8 +237,8 @@ public class ServiceRoomController extends BaseController {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
 		}
 		try {
-			ServiceRoomExample example = new ServiceRoomExample();
-			ServiceRoomExample.Criteria criteria = example.createCriteria();
+			RoomExample example = new RoomExample();
+			RoomExample.Criteria criteria = example.createCriteria();
 			if (StringUtil.isNotEmpty(form.getName())) {
 				criteria.andNameLike("%" + form.getName() + "%");
 			}
@@ -268,7 +268,7 @@ public class ServiceRoomController extends BaseController {
 			orderBy.append("create_date desc");
 			// 排序设置
 			example.setOrderByClause(orderBy.toString());
-			Page<ServiceRoom> queryResult = serviceRoomService.getByPage(form.getPageNum(), form.getPageSize(), example);
+			Page<Room> queryResult = roomService.getByPage(form.getPageNum(), form.getPageSize(), example);
 			// 去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,
 					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateCreate", "createName", "createDate"));
@@ -276,7 +276,7 @@ public class ServiceRoomController extends BaseController {
 			operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null);
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
-			LOGGER.error("get serviceRoom data error. page: {}, count: {}", form.getPageNum(), e);
+			LOGGER.error("get room data error. page: {}, count: {}", form.getPageNum(), e);
 		}
 		operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null,
 				OperLog.logLevelEnum.error);
@@ -299,17 +299,17 @@ public class ServiceRoomController extends BaseController {
 		if (StringUtil.isEmpty(userIds)) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
 		}
-		ServiceRoom serviceRoom = serviceRoomService.getById(serviceRoomId);
+		Room room = roomService.getById(serviceRoomId);
 		String serviceRoomName = "";
-		if (null != serviceRoom) {
-			serviceRoomName = serviceRoom.getName();
+		if (null != room) {
+			serviceRoomName = room.getName();
 		}
 		try {
 			String[] userIdArr = userIds.split(",");
 			if (userIdArr.length < 1) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
 			}
-			int result = serviceRoomUserRelService.batchSave(serviceRoomId, userIdArr);
+			int result = roomUserRelService.batchSave(serviceRoomId, userIdArr);
 			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
 					"{\"userIds\":\"" + userIds + "\"}");
 			return AllResult.okJSON(result);
@@ -324,21 +324,21 @@ public class ServiceRoomController extends BaseController {
 	/**
 	 * 根据机房ID查询所有对应关系
 	 * 
-	 * @param serviceRoomUserRel
+	 * @param roomUserRel
 	 *            机房ID
 	 */
 	@RequestMapping(value = "/getServiceRoomUserRels", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object getServiceRoomUserRels(ServiceRoomUserRel serviceRoomUserRel) {
-		if (StringUtil.isEmpty(serviceRoomUserRel.getServiceRoomId())) {
+	public Object getServiceRoomUserRels(RoomUserRel roomUserRel) {
+		if (StringUtil.isEmpty(roomUserRel.getServiceRoomId())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
 		}
-		ServiceRoom serviceRoom = serviceRoomService.getById(serviceRoomUserRel.getServiceRoomId());
+		Room room = roomService.getById(roomUserRel.getServiceRoomId());
 		String serviceRoomName = "";
-		if (null != serviceRoom) {
-			serviceRoomName = serviceRoom.getName();
+		if (null != room) {
+			serviceRoomName = room.getName();
 		}
 		try {
-			List<ServiceRoomUserRel> list = serviceRoomUserRelService.selectByServiceRoomId(serviceRoomUserRel);
+			List<RoomUserRel> list = roomUserRelService.selectByServiceRoomId(roomUserRel);
 			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null);
 			return AllResult.okJSON(list);
 		} catch (Exception e) {
@@ -353,20 +353,20 @@ public class ServiceRoomController extends BaseController {
 	 * 获取前台显示图片
 	 */
 	@RequestMapping(value = "/getImage", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object getImage(ServiceRoom serviceRoom, HttpServletResponse response) {
+	public Object getImage(Room room, HttpServletResponse response) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [ServiceRoom getImage: {}]", JSON.toJSONString(serviceRoom));
+			LOGGER.info("request param: [Room getImage: {}]", JSON.toJSONString(room));
 		}
-		if (StringUtil.isEmpty(serviceRoom.getId())) {
+		if (StringUtil.isEmpty(room.getId())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
 		}
 		try {
-			serviceRoom = serviceRoomService.getById(serviceRoom.getId());
-			boolean isExist = FileUtil.checkFileExist(serviceRoom.getImageUrl());
+			room = roomService.getById(room.getId());
+			boolean isExist = FileUtil.checkFileExist(room.getImageUrl());
 			if (!isExist) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "文件不存在");
 			}
-			ImageUtil.getImage(serviceRoom.getImageUrl(), FileUtil.getFilename(serviceRoom.getImageUrl()), response);
+			ImageUtil.getImage(room.getImageUrl(), FileUtil.getFilename(room.getImageUrl()), response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
@@ -390,15 +390,15 @@ public class ServiceRoomController extends BaseController {
 		if (StringUtil.isEmpty(userIds)) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
 		}
-		ServiceRoom serviceRoom = serviceRoomService.getById(serviceRoomId);
+		Room room = roomService.getById(serviceRoomId);
 		String serviceRoomName = "";
-		if (null != serviceRoom) {
-			serviceRoomName = serviceRoom.getName();
+		if (null != room) {
+			serviceRoomName = room.getName();
 		}
 		try {
 			String[] userIdArr = userIds.split(",");
-			serviceRoomUserRelService.deleteByServiceRoomId(serviceRoomId);// 删除旧的关联关系
-			int result = serviceRoomUserRelService.batchSave(serviceRoomId, userIdArr);
+			roomUserRelService.deleteByServiceRoomId(serviceRoomId);// 删除旧的关联关系
+			int result = roomUserRelService.batchSave(serviceRoomId, userIdArr);
 			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom,
 					"{\"userIds\":\"" + userIds + "\"}");
 			return AllResult.okJSON(result);

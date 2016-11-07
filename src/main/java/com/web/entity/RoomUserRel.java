@@ -6,7 +6,7 @@ package com.web.entity;
  * @author 田军兴
  * @date 2016-10-30
  */
-public class ServiceRoomUserRel {
+public class RoomUserRel {
 	/**
 	 * 机房ID
 	 */

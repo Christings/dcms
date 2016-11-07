@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.web.mappers.ServiceRoomMapper">
-    <resultMap id="BaseResultMap" type="com.web.entity.ServiceRoom">
+<mapper namespace="com.web.mappers.RoomMapper">
+    <resultMap id="BaseResultMap" type="com.web.entity.Room">
         <id column="ID" property="id" jdbcType="VARCHAR"/>
         <result column="NAME" property="name" jdbcType="VARCHAR"/>
         <result column="POSITION" property="position" jdbcType="VARCHAR"/>
@@ -80,13 +80,13 @@
         id, name, position, exterior, resource_code, image_url, address, area, comment, UPDATE_NAME,
         UPDATE_DATE, CREATE_NAME, CREATE_DATE
     </sql>
-    <select id="selectByExample" parameterType="com.web.example.ServiceRoomExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.web.example.RoomExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
         </if>
         <include refid="Base_Column_List"/>
-        from t_s_service_room
+        from t_b_room
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -94,24 +94,24 @@
             order by ${orderByClause}
         </if>
     </select>
-    <select id="selectByPrimaryKey" parameterType="com.web.entity.ServiceRoom" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="com.web.entity.Room" resultMap="BaseResultMap">
         select
         *
-        from t_s_service_room
+        from t_b_room
         where id = #{id,jdbcType=VARCHAR}
     </select>
-    <delete id="deleteByExample" parameterType="com.web.example.ServiceRoomExample">
-        delete from t_s_service_room
+    <delete id="deleteByExample" parameterType="com.web.example.RoomExample">
+        delete from t_b_room
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <delete id="deleteByPrimaryKey" parameterType="com.web.entity.ServiceRoom">
-        delete from t_s_service_room
+    <delete id="deleteByPrimaryKey" parameterType="com.web.entity.Room">
+        delete from t_b_room
         where id = #{id,jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.web.entity.ServiceRoom">
-        insert into t_s_service_room
+    <insert id="insert" parameterType="com.web.entity.Room">
+        insert into t_b_room
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -195,14 +195,14 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.web.example.ServiceRoomExample" resultType="java.lang.Integer">
-        select count(*) from t_s_service_room
+    <select id="countByExample" parameterType="com.web.example.RoomExample" resultType="java.lang.Integer">
+        select count(*) from t_b_room
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </select>
     <update id="updateByExampleSelective" parameterType="map">
-        update t_s_service_room
+        update t_b_room
         <set>
             <if test="record.id != null">
                 id = #{record.id,jdbcType=VARCHAR},
@@ -249,7 +249,7 @@
         </if>
     </update>
     <update id="updateByExample" parameterType="map">
-        update t_s_service_room
+        update t_b_room
         set id = #{record.id,jdbcType=VARCHAR},
         name = #{record.name,jdbcType=VARCHAR},
         position = #{record.position,jdbcType=VARCHAR},
@@ -267,8 +267,8 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.ServiceRoom">
-        update t_s_service_room
+    <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.Room">
+        update t_b_room
         <set>
             <if test="name != null">
                 name = #{name,jdbcType=VARCHAR},

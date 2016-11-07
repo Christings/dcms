@@ -10,7 +10,7 @@ import java.util.Date;
  * @author 田军兴
  * @date 2016-07-30
  */
-public class ServiceRoom extends BaseEntity {
+public class Room extends BaseEntity {
 
 	/**
 	 * 机房名称

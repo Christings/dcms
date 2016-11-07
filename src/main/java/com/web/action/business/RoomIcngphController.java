@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.web.entity.RoomIcngph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +24,14 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.web.bean.form.ServiceRoomIcngphForm;
+import com.web.bean.form.RoomIcngphForm;
 import com.web.bean.util.FileUtilBean;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
-import com.web.entity.ServiceRoom;
-import com.web.entity.ServiceRoomIcngph;
-import com.web.example.ServiceRoomIcngphExample;
-import com.web.service.ServiceRoomIcngphService;
+import com.web.entity.Room;
+import com.web.example.RoomIcngphExample;
+import com.web.service.RoomIcngphService;
 import com.web.util.*;
 import com.web.util.fastjson.FastjsonUtils;
 import com.web.util.validation.GroupBuilder;
@@ -45,10 +45,10 @@ import com.web.util.validation.ValidationHelper;
  */
 @RestController
 @RequestMapping("/serviceRoomIcngph")
-public class ServiceRoomIcngphController extends BaseController {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceRoomIcngphController.class);
+public class RoomIcngphController extends BaseController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RoomIcngphController.class);
 	@Autowired
-	private ServiceRoomIcngphService serviceRoomIcngphService;
+	private RoomIcngphService roomIcngphService;
 
 	/**
 	 * 新增机房平面图
@@ -57,17 +57,17 @@ public class ServiceRoomIcngphController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/add", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object add(ServiceRoomIcngph icngph, MultipartHttpServletRequest request) {
+	public Object add(RoomIcngph icngph, MultipartHttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [ServiceRoomIcngph: {}]", JSON.toJSONString(icngph));
+			LOGGER.info("request param: [RoomIcngph: {}]", JSON.toJSONString(icngph));
 		}
 		try {
 			// 验证名称不能重复
 			if (StringUtil.isNotEmpty(icngph.getFloorName())) {
-				ServiceRoomIcngphExample example = new ServiceRoomIcngphExample();
-				ServiceRoomIcngphExample.Criteria criteria = example.createCriteria();
+				RoomIcngphExample example = new RoomIcngphExample();
+				RoomIcngphExample.Criteria criteria = example.createCriteria();
 				criteria.andFloorNameEqualTo(icngph.getFloorName());
-				List<ServiceRoomIcngph> icngphs = serviceRoomIcngphService.getByExample(example);
+				List<RoomIcngph> icngphs = roomIcngphService.getByExample(example);
 				if (icngphs.size() > 0) {
 					return buildJSON(HttpStatus.BAD_REQUEST.value(), "楼层名称已存在，请重新输入");
 				}
@@ -93,11 +93,11 @@ public class ServiceRoomIcngphController extends BaseController {
 				}
 			}
 			String checkResult = this.checkFile(icngph);
-			ServiceRoomIcngphExample example = new ServiceRoomIcngphExample();
+			RoomIcngphExample example = new RoomIcngphExample();
 			example.or().andJsonNameLike("%" + icngph.getJsonName() + "%");
 			example.or().andYmlNameLike("%" + icngph.getYmlName() + "%");
 			example.or().andImageNameLike("%" + icngph.getImageName() + "%");
-			List<ServiceRoomIcngph> list = serviceRoomIcngphService.getByExample(example);
+			List<RoomIcngph> list = roomIcngphService.getByExample(example);
 			if (StringUtil.isNotEmpty(checkResult)) {
 				FileUtil.deleteFiles(beans);
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), checkResult);
@@ -107,7 +107,7 @@ public class ServiceRoomIcngphController extends BaseController {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "文件名称和已上传文件冲突，请检查");
 			}
 			icngph.setId(UUIDGenerator.generatorRandomUUID());
-			serviceRoomIcngphService.save(icngph);
+			roomIcngphService.save(icngph);
 			// 去除不需要的字段
 			String jsonStr = JSON.toJSONString(icngph,
 					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateDate", "createName", "createDate"),
@@ -118,7 +118,7 @@ public class ServiceRoomIcngphController extends BaseController {
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOGGER.error("save ServiceRoomIcngph fail:", e.getMessage());
+			LOGGER.error("save RoomIcngph fail:", e.getMessage());
 			String jsonStr = JSON.toJSONString(icngph,
 					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateDate", "createName", "createDate"),
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
@@ -135,21 +135,21 @@ public class ServiceRoomIcngphController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/update", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object edit(ServiceRoomIcngph icngph, MultipartHttpServletRequest request) {
+	public Object edit(RoomIcngph icngph, MultipartHttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [ServiceRoomIcngph: {}]", JSON.toJSONString(icngph));
+			LOGGER.info("request param: [RoomIcngph: {}]", JSON.toJSONString(icngph));
 		}
 		try {
 			if (StringUtil.isEmpty(icngph.getId())) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败，入参ID不能为空");
 			}
-			List<ServiceRoomIcngph> list = new ArrayList<ServiceRoomIcngph>();
+			List<RoomIcngph> list = new ArrayList<RoomIcngph>();
 			if (StringUtil.isNotEmpty(icngph.getFloorName())) {
-				ServiceRoomIcngphExample example = new ServiceRoomIcngphExample();
-				ServiceRoomIcngphExample.Criteria criteria = example.createCriteria();
+				RoomIcngphExample example = new RoomIcngphExample();
+				RoomIcngphExample.Criteria criteria = example.createCriteria();
 				criteria.andIdNotEqualTo(icngph.getId());
 				criteria.andFloorNameEqualTo(icngph.getFloorName());
-				list = serviceRoomIcngphService.getByExample(example);
+				list = roomIcngphService.getByExample(example);
 			}
 			if (list.size() > 0) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败，楼层名称已经被占用，请修改");
@@ -175,16 +175,16 @@ public class ServiceRoomIcngphController extends BaseController {
 				FileUtil.deleteFiles(files);
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), checkResult);
 			}
-			ServiceRoomIcngphExample example = new ServiceRoomIcngphExample();
+			RoomIcngphExample example = new RoomIcngphExample();
 			example.or().andJsonNameLike("%" + icngph.getJsonName() + "%");
 			example.or().andYmlNameLike("%" + icngph.getYmlName() + "%");
 			example.or().andImageNameLike("%" + icngph.getImageName() + "%");
-			list = serviceRoomIcngphService.getByExample(example);
+			list = roomIcngphService.getByExample(example);
 			if (list.size() > 0) {
 				FileUtil.deleteFiles(files);
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "文件名称和已上传文件冲突，请检查");
 			}
-			int result = serviceRoomIcngphService.updateById(icngph);
+			int result = roomIcngphService.updateById(icngph);
 			if (result < 1) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败");
 			}
@@ -198,7 +198,7 @@ public class ServiceRoomIcngphController extends BaseController {
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOGGER.error("update ServiceRoomIcngph fail:", e.getMessage());
+			LOGGER.error("update RoomIcngph fail:", e.getMessage());
 			String jsonStr = JSON.toJSONString(icngph,
 					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateDate", "createName", "createDate"),
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
@@ -215,15 +215,15 @@ public class ServiceRoomIcngphController extends BaseController {
 	 * @param request
 	 */
 	@RequestMapping(value = "/delete", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object delete(ServiceRoomIcngph icngph, HttpServletRequest request) {
+	public Object delete(RoomIcngph icngph, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [ServiceRoomIcngph: {}]", JSON.toJSONString(icngph));
+			LOGGER.info("request param: [RoomIcngph: {}]", JSON.toJSONString(icngph));
 		}
 		if (StringUtil.isEmpty(icngph.getId())) {
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "请求异常，入参ID不能为空");
 		}
 		try {
-			icngph = serviceRoomIcngphService.getById(icngph.getId());
+			icngph = roomIcngphService.getById(icngph.getId());
 			// 删除文件
 			String path = request.getSession().getServletContext().getRealPath("/");
 			if (StringUtil.isNotEmpty(icngph.getImageRealPath())) {
@@ -238,7 +238,7 @@ public class ServiceRoomIcngphController extends BaseController {
 				File file = new File(path + icngph.getYmlRealPath());
 				file.delete();
 			}
-			if (serviceRoomIcngphService.deleteById(icngph.getId()) > 0) {
+			if (roomIcngphService.deleteById(icngph.getId()) > 0) {
 				operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.delete,
 						OperLog.actionBusinessEnum.serviceRoomIcn, JSONUtil.object2Json(icngph));
 			}
@@ -256,9 +256,9 @@ public class ServiceRoomIcngphController extends BaseController {
 	 * 分页获取用户信息
 	 */
 	@RequestMapping(value = "/datagrid", method = { RequestMethod.POST, RequestMethod.GET })
-	public Object getDataGrid(ServiceRoomIcngphForm form, HttpServletRequest request) {
+	public Object getDataGrid(RoomIcngphForm form, HttpServletRequest request) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [datagrid ServiceRoomIcngph: {}]", JSON.toJSONString(form));
+			LOGGER.info("request param: [datagrid RoomIcngph: {}]", JSON.toJSONString(form));
 		}
 		String path = request.getSession().getServletContext().getRealPath("/");
 		// 1.验证参数
@@ -273,8 +273,8 @@ public class ServiceRoomIcngphController extends BaseController {
 
 		try {
 
-			ServiceRoomIcngphExample example = new ServiceRoomIcngphExample();
-			ServiceRoomIcngphExample.Criteria criteria = example.createCriteria();
+			RoomIcngphExample example = new RoomIcngphExample();
+			RoomIcngphExample.Criteria criteria = example.createCriteria();
 			// 条件设置
 			if (!StringUtils.isEmpty(form.getFloorName())) {
 				criteria.andFloorNameLike("%" + form.getFloorName().trim() + "%");
@@ -303,7 +303,7 @@ public class ServiceRoomIcngphController extends BaseController {
 			orderBy.append("create_date desc");
 			example.setOrderByClause(orderBy.toString());
 
-			Page<ServiceRoomIcngph> queryResult = serviceRoomIcngphService.getScrollData(form.getPageNum(), form.getPageSize(),
+			Page<RoomIcngph> queryResult = roomIcngphService.getScrollData(form.getPageNum(), form.getPageSize(),
 					example);
 
 			// 去除不需要的字段
@@ -331,16 +331,16 @@ public class ServiceRoomIcngphController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(value = "/downloadFile", method = { RequestMethod.POST, RequestMethod.GET })
-	public Object downloadFile(ServiceRoomIcngphForm form, HttpServletRequest request, HttpServletResponse response) {
+	public Object downloadFile(RoomIcngphForm form, HttpServletRequest request, HttpServletResponse response) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [download ServiceRoomIcngph: {}]", JSON.toJSONString(form));
+			LOGGER.info("request param: [download RoomIcngph: {}]", JSON.toJSONString(form));
 		}
 
 		if (StringUtil.isEmpty(form.getFileName())) {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), "文件名不能为空");
 		}
 		try {
-			ServiceRoomIcngph icngph = serviceRoomIcngphService.getById(form.getId());
+			RoomIcngph icngph = roomIcngphService.getById(form.getId());
 			String ext = form.getFileName().substring(form.getFileName().lastIndexOf(".") + 1, form.getFileName().length());
 			String name = "";
 			String path = "";
@@ -372,15 +372,15 @@ public class ServiceRoomIcngphController extends BaseController {
 	}
 
 	@RequestMapping(value = "/getYml", method = { RequestMethod.POST, RequestMethod.GET })
-	public Object getYml(ServiceRoomIcngphForm form, HttpServletRequest request) {
+	public Object getYml(RoomIcngphForm form, HttpServletRequest request) {
 		if (StringUtil.isEmpty(form.getId())) {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), "入参ID不能为空");
 		}
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [ServiceRoomIcngph getYml: {}]", JSON.toJSONString(form));
+			LOGGER.info("request param: [RoomIcngph getYml: {}]", JSON.toJSONString(form));
 		}
 		try {
-			ServiceRoomIcngph icngph = serviceRoomIcngphService.getById(form.getId());
+			RoomIcngph icngph = roomIcngphService.getById(form.getId());
 			Map result = YmlUtil.getYmlString(icngph.getYmlRealPath());
 			operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.select,
 					OperLog.actionBusinessEnum.serviceRoomIcn, "");
@@ -394,15 +394,15 @@ public class ServiceRoomIcngphController extends BaseController {
 	}
 
 	@RequestMapping(value = "/getJson", method = { RequestMethod.POST, RequestMethod.GET })
-	public Object getJson(ServiceRoomIcngphForm form, HttpServletRequest request) {
+	public Object getJson(RoomIcngphForm form, HttpServletRequest request) {
 		if (StringUtil.isEmpty(form.getId())) {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), "入参ID不能为空");
 		}
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [ServiceRoomIcngph getYml: {}]", JSON.toJSONString(form));
+			LOGGER.info("request param: [RoomIcngph getYml: {}]", JSON.toJSONString(form));
 		}
 		try {
-			ServiceRoomIcngph icngph = serviceRoomIcngphService.getById(form.getId());
+			RoomIcngph icngph = roomIcngphService.getById(form.getId());
 			String jsonStr = JSONUtil.readJsonFile(icngph.getJsonRealPath());
 			Object result = JSON.parse(jsonStr);
 			if (null == result) {
@@ -420,15 +420,15 @@ public class ServiceRoomIcngphController extends BaseController {
 	}
 
 	@RequestMapping(value = "/getImage", method = { RequestMethod.POST, RequestMethod.GET })
-	public Object getImage(ServiceRoomIcngphForm form, HttpServletRequest request, HttpServletResponse response) {
+	public Object getImage(RoomIcngphForm form, HttpServletRequest request, HttpServletResponse response) {
 		if (StringUtil.isEmpty(form.getId())) {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), "入参ID不能为空");
 		}
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [ServiceRoomIcngph getImage: {}]", JSON.toJSONString(form));
+			LOGGER.info("request param: [RoomIcngph getImage: {}]", JSON.toJSONString(form));
 		}
 		try {
-			ServiceRoomIcngph icngph = serviceRoomIcngphService.getById(form.getId());
+			RoomIcngph icngph = roomIcngphService.getById(form.getId());
 			operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.select,
 					OperLog.actionBusinessEnum.serviceRoomIcn, "");
 			ImageUtil.getImage(icngph.getImageRealPath(), icngph.getImageName(), response);
@@ -445,16 +445,16 @@ public class ServiceRoomIcngphController extends BaseController {
 	 * 检查下载文件是否存在
 	 */
 	@RequestMapping(value = "/checkFileIsExist", method = { RequestMethod.POST, RequestMethod.GET })
-	public Object checkFileIsExist(ServiceRoomIcngphForm form) {
+	public Object checkFileIsExist(RoomIcngphForm form) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [download ServiceRoomIcngph: {}]", JSON.toJSONString(form));
+			LOGGER.info("request param: [download RoomIcngph: {}]", JSON.toJSONString(form));
 		}
 
 		if (StringUtil.isEmpty(form.getFileName())) {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), "文件名不能为空");
 		}
 
-		ServiceRoomIcngph icngph = serviceRoomIcngphService.getById(form.getId());
+		RoomIcngph icngph = roomIcngphService.getById(form.getId());
 		String ext = form.getFileName().substring(form.getFileName().lastIndexOf(".") + 1, form.getFileName().length());
 		String name = "";
 		String path = "";
@@ -492,33 +492,33 @@ public class ServiceRoomIcngphController extends BaseController {
 	 *            机房资源编码
 	 */
 	@RequestMapping(value = "/locationServiceRoomByName", method = { RequestMethod.POST, RequestMethod.GET })
-	public Object locationServiceRoomByName(ServiceRoom room) {
+	public Object locationServiceRoomByName(Room room) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("request param: [download ServiceRoomIcngph: {}]", JSONUtil.object2Json(room));
+			LOGGER.info("request param: [download RoomIcngph: {}]", JSONUtil.object2Json(room));
 		}
 		try {
 			if (StringUtil.isEmpty(room.getResourceCode())) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "机房资源编码不能为空");
 			}
-			List<ServiceRoomIcngph> list = serviceRoomIcngphService.getAll();
-			ServiceRoomIcngph serviceRoomIcngph = null;
-			for (ServiceRoomIcngph icngph : list) {
+			List<RoomIcngph> list = roomIcngphService.getAll();
+			RoomIcngph roomIcngph = null;
+			for (RoomIcngph icngph : list) {
 				try {
 					Map map = YmlUtil.getYmlString(icngph.getYmlRealPath());
 					if (null != map.get(room.getResourceCode())) {
-						serviceRoomIcngph = icngph;
+						roomIcngph = icngph;
 						break;
 					}
 				} catch (IOException ioe) {
 					continue;
 				}
 			}
-			if (StringUtil.isEmpty(serviceRoomIcngph.getId())) {
+			if (StringUtil.isEmpty(roomIcngph.getId())) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "找不到此机房的相关信息");
 			} else {
-				operLogService.addBusinessLog(serviceRoomIcngph.getFloorName(), OperLog.operTypeEnum.select,
+				operLogService.addBusinessLog(roomIcngph.getFloorName(), OperLog.operTypeEnum.select,
 						OperLog.actionBusinessEnum.serviceRoomIcn, "");
-				return AllResult.okJSON(serviceRoomIcngph.getId());
+				return AllResult.okJSON(roomIcngph.getId());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -531,7 +531,7 @@ public class ServiceRoomIcngphController extends BaseController {
 	/**
 	 * 校验上传文件是否正确
 	 */
-	private String checkFile(ServiceRoomIcngph icngph) {
+	private String checkFile(RoomIcngph icngph) {
 		StringBuffer sb = new StringBuffer();
 		if (StringUtil.isEmpty(icngph.getJsonRealPath())) {
 			sb.append("缺少JSON文件、");
