@@ -6,8 +6,10 @@ import com.web.core.util.page.Page;
 import com.web.entity.Role;
 import com.web.example.MenuRoleExample;
 import com.web.example.RoleExample;
+import com.web.example.UserRoleExample;
 import com.web.mappers.MenuRoleMapper;
 import com.web.mappers.RoleMapper;
+import com.web.mappers.UserRoleMapper;
 import com.web.service.RoleSerivce;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,8 @@ public class RoleServiceImpl implements RoleSerivce {
 	private RoleMapper roleMapper;
 	@Autowired
 	private MenuRoleMapper menuRoleMapper;
+	@Autowired
+	private UserRoleMapper userRoleMapper;
 
 	@Override
 	public int save(Role entity) {
@@ -78,24 +82,29 @@ public class RoleServiceImpl implements RoleSerivce {
 	}
 
 	@Override
-	public int deleteById(String key) {
+	public int deleteById(String roleId) {
 		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("delete key by id: {}", key);
+			LOGGER.info("delete roleId by id: {}", roleId);
 		}
 
-		if (StringUtils.isEmpty(key)) {
-			LOGGER.warn("the key id object is null.");
+		if (StringUtils.isEmpty(roleId)) {
+			LOGGER.warn("the roleId id object is null.");
 			return 0 ;
 		}
 
+		UserRoleExample e1 = new UserRoleExample();
+		UserRoleExample.Criteria c1 = e1.createCriteria();
+		c1.andRoleIdEqualTo(roleId);
+		userRoleMapper.deleteByExample(e1);
+
 		//删除菜单和角色关系
-		MenuRoleExample example = new MenuRoleExample();
-		MenuRoleExample.Criteria criteria = example.createCriteria();
-		criteria.andRoleIdEqualTo(key);
-		menuRoleMapper.deleteByExample(example);
+		MenuRoleExample e2 = new MenuRoleExample();
+		MenuRoleExample.Criteria c2 = e2.createCriteria();
+		c2.andRoleIdEqualTo(roleId);
+		menuRoleMapper.deleteByExample(e2);
 
 		//删除记录数
-		int result = roleMapper.deleteByPrimaryKey(key);
+		int result = roleMapper.deleteByPrimaryKey(roleId);
 
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("delete role object by id result: {}", result);

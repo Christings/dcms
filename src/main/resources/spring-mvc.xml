@@ -97,6 +97,13 @@
                         <value>/</value>
                     </list>
                 </property>
+                <property name="ignoreUrls"> <!--登录后验证-->
+                    <list>
+                        <value>/menu/tree</value>
+                        <value>/index.html</value>
+                        <value>/content.html</value>
+                    </list>
+                </property>
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>
