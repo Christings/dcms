@@ -67,7 +67,7 @@ public class RoomController extends BaseController {
 			if (list.size() > 0) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "资源编码已存在，请检查");
 			}
-			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "room", false);// 上传文件
+			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "Room", false);// 上传文件
 			if (files.size() > 0) {
 				if (!"png".equalsIgnoreCase(files.get(0).getFileExt()) && !"jpg".equalsIgnoreCase(files.get(0).getFileExt())
 						&& !"jpeg".equalsIgnoreCase(files.get(0).getFileExt())) {
@@ -125,7 +125,7 @@ public class RoomController extends BaseController {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "资源编码已存在，请检查");
 			}
 
-			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "room", false);// 上传文件
+			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "Room", false);// 上传文件
 			if (files.size() > 0) {
 				if (!"jpg".equalsIgnoreCase(files.get(0).getFileExt()) && !"png".equalsIgnoreCase(files.get(0).getFileExt())
 						&& !"jpeg".equalsIgnoreCase(files.get(0).getFileExt())) {
