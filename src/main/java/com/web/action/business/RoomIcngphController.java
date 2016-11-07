@@ -44,7 +44,7 @@ import com.web.util.validation.ValidationHelper;
  * @date 2016-10-22
  */
 @RestController
-@RequestMapping("/serviceRoomIcngph")
+@RequestMapping("/roomIcngph")
 public class RoomIcngphController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RoomIcngphController.class);
 	@Autowired

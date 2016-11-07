@@ -36,7 +36,7 @@ import com.web.util.fastjson.FastjsonUtils;
  * @date 2016-07-30
  */
 @RestController
-@RequestMapping("/serviceRoom")
+@RequestMapping("/room")
 public class RoomController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RoomController.class);
 
