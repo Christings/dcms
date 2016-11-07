@@ -44,7 +44,7 @@ import com.web.util.validation.ValidationHelper;
  * @date 2016-10-22
  */
 @RestController
-@RequestMapping("/serviceRoomIcngph")
+@RequestMapping("/roomIcngph")
 public class RoomIcngphController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RoomIcngphController.class);
 	@Autowired
@@ -75,7 +75,7 @@ public class RoomIcngphController extends BaseController {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "楼层名称不能为空");
 			}
 
-			ArrayList<FileUtilBean> beans = FileUtil.uploadFiles(request, "roomIcngph", true);
+			ArrayList<FileUtilBean> beans = FileUtil.uploadFiles(request, "RoomIcngph", true);
 			if (beans.size() != 3) {
 				FileUtil.deleteFiles(beans);
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "上传文件错误，请检查ZIP压缩文件是否只含有YML、JSON和PNG三个文件");
@@ -154,7 +154,7 @@ public class RoomIcngphController extends BaseController {
 			if (list.size() > 0) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败，楼层名称已经被占用，请修改");
 			}
-			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "roomIcngph", true);
+			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "RoomIcngph", true);
 			if (files.size() != 3) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "上传文件错误，请检查ZIP压缩文件是否只含有YML、JSON和PNG三个文件");
 			}
@@ -225,17 +225,16 @@ public class RoomIcngphController extends BaseController {
 		try {
 			icngph = roomIcngphService.getById(icngph.getId());
 			// 删除文件
-			String path = request.getSession().getServletContext().getRealPath("/");
 			if (StringUtil.isNotEmpty(icngph.getImageRealPath())) {
-				File file = new File(path + icngph.getImageRealPath());
+				File file = new File(icngph.getImageRealPath());
 				file.delete();
 			}
 			if (StringUtil.isNotEmpty(icngph.getJsonRealPath())) {
-				File file = new File(path + icngph.getJsonRealPath());
+				File file = new File(icngph.getJsonRealPath());
 				file.delete();
 			}
 			if (StringUtil.isNotEmpty(icngph.getYmlRealPath())) {
-				File file = new File(path + icngph.getYmlRealPath());
+				File file = new File(icngph.getYmlRealPath());
 				file.delete();
 			}
 			if (roomIcngphService.deleteById(icngph.getId()) > 0) {
