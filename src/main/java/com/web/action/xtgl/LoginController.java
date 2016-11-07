@@ -64,10 +64,6 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public Object login(String username, String password, String code, HttpServletRequest request, HttpServletResponse response) {
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("params[username: {}, password: {}]" + username + "," + password);
-		}
-
 		// 验证码校验
 		String randCode = WebUtils.getCode(request);
 		if (StringUtil.isEmpty(code) || StringUtil.isEmpty(randCode) || !randCode.equalsIgnoreCase(code)) {

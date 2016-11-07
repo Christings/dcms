@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 字符集拦截器
  * 
- * @author  张代浩
+ * @author  qgl
  * 
  */
 public class EncodingInterceptor implements HandlerInterceptor {

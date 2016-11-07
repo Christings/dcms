@@ -1,105 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
       http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
        http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-4.2.xsd
          http://www.springframework.org/schema/mvc
-		http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd ">
+		http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-	<!-- 自动扫描controller包下的所有类，使其认为spring mvc的控制器 -->
-	<!-- 加载controller的时候,不加载service,因为此时事物并未生效,若此时加载了service,那么事物无法对service进行拦截 -->
-	<context:component-scan base-package="com.web.*">
-		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
-	</context:component-scan>
+    <!-- 自动扫描controller包下的所有类，使其认为spring mvc的控制器 -->
+    <!-- 加载controller的时候,不加载service,因为此时事物并未生效,若此时加载了service,那么事物无法对service进行拦截 -->
+    <context:component-scan base-package="com.web.*">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
 
-	<!-- ApplicationContext -->
-	<bean class="com.web.core.util.ApplicationContextUtil"></bean>
+    <!-- ApplicationContext -->
+    <bean class="com.web.core.util.ApplicationContextUtil"></bean>
 
-	<!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
-	<bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:order="3">
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-		<property name="contentType" value="text/html" />
-		<property name="prefix" value="/" />
-		<property name="suffix" value="" />
-	</bean>
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" p:defaultEncoding="UTF-8">
-		<property name="maxUploadSize">
-			<value>104857600</value>
-		</property>
-		<property name="maxInMemorySize">
-			<value>4096</value>
-		</property>
-	</bean>
-	<!-- 异常处理类 -->
-	<bean id="exceptionHandler" class="com.web.core.exception.MyExceptionHandler" />
-	<!-- 系统错误转发配置[并记录错误日志] -->
-	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-		<property name="defaultErrorView" value="500"></property>   <!-- 默认为500，系统错误(error.jsp) -->
-		<property name="defaultStatusCode" value="404"></property>
-		<property name="statusCodes"><!-- 配置多个statusCode -->
-			<props>
-				<prop key="error">500</prop>  <!-- error.jsp -->
-				<prop key="error1">404</prop>    <!-- error1.jsp -->
-			</props>
-		</property>
-		<property name="exceptionMappings">
-			<props>
-				<!-- 这里你可以根据需要定义N多个错误异常转发 -->
-				<prop key="java.sql.SQLException">dbError</prop> <!-- 数据库错误(dbError.jsp) -->
-				<prop key="org.springframework.web.bind.ServletRequestBindingException">bizError</prop> <!-- 参数绑定错误(如：必须参数没传递)(bizError.jsp) -->
-				<prop key="java.lang.IllegalArgumentException">bizError</prop>  <!-- 参数错误(bizError.jsp) -->
-				<prop key="org.springframework.validation.BindException">bizError</prop>  <!-- 参数类型有误(bizError.jsp) -->
-				<prop key="java.lang.Exception">unknowError</prop>  <!-- 其他错误为'未定义错误'(unknowError.jsp) -->
-			</props>
-		</property>
-	</bean>
+    <!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
+    <bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:order="3">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="contentType" value="text/html"/>
+        <property name="prefix" value="/"/>
+        <property name="suffix" value=""/>
+    </bean>
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+          p:defaultEncoding="UTF-8">
+        <property name="maxUploadSize">
+            <value>104857600</value>
+        </property>
+        <property name="maxInMemorySize">
+            <value>4096</value>
+        </property>
+    </bean>
+    <!-- 异常处理类 -->
+    <bean id="exceptionHandler" class="com.web.core.exception.MyExceptionHandler"/>
+    <!-- 系统错误转发配置[并记录错误日志] -->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="defaultErrorView" value="500"></property>   <!-- 默认为500，系统错误(error.jsp) -->
+        <property name="defaultStatusCode" value="404"></property>
+        <property name="statusCodes"><!-- 配置多个statusCode -->
+            <props>
+                <prop key="error">500</prop>  <!-- error.jsp -->
+                <prop key="error1">404</prop>    <!-- error1.jsp -->
+            </props>
+        </property>
+        <property name="exceptionMappings">
+            <props>
+                <!-- 这里你可以根据需要定义N多个错误异常转发 -->
+                <prop key="java.sql.SQLException">dbError</prop> <!-- 数据库错误(dbError.jsp) -->
+                <prop key="org.springframework.web.bind.ServletRequestBindingException">bizError
+                </prop> <!-- 参数绑定错误(如：必须参数没传递)(bizError.jsp) -->
+                <prop key="java.lang.IllegalArgumentException">bizError</prop>  <!-- 参数错误(bizError.jsp) -->
+                <prop key="org.springframework.validation.BindException">bizError</prop>  <!-- 参数类型有误(bizError.jsp) -->
+                <prop key="java.lang.Exception">unknowError</prop>  <!-- 其他错误为'未定义错误'(unknowError.jsp) -->
+            </props>
+        </property>
+    </bean>
 
-	<!-- 配置注解驱动  json 格式化  数据-->
-	<mvc:annotation-driven>
-		<mvc:message-converters register-defaults="true">
-			<bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"
-				p:dateFormat="yyyy-MM-dd HH:mm:ss">
-				<property name="features">
-					<list>
-						<value>WriteMapNullValue</value>
-						<value>WriteNullStringAsEmpty</value>
-						<value>QuoteFieldNames</value>
-					</list>
-				</property>
-			</bean>
-		</mvc:message-converters>
-	</mvc:annotation-driven>
+    <!-- 配置注解驱动  json 格式化  数据-->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"
+                  p:dateFormat="yyyy-MM-dd HH:mm:ss">
+                <property name="features">
+                    <list>
+                        <value>WriteMapNullValue</value>
+                        <value>WriteNullStringAsEmpty</value>
+                        <value>QuoteFieldNames</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
-	<!-- 拦截器 -->
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<bean class="com.web.core.interceptors.EncodingInterceptor" />
-		</mvc:interceptor>
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<bean class="com.web.core.interceptors.AuthInterceptor">
-				<property name="excludeUrls">
-					<list>
-						<value>/main/loginOut</value>
-						<value>/main/login</value>
-						<value>/login.html</value>
-						<value>/code</value>
-						<value>/</value>
-					</list>
-				</property>
-			</bean>
-		</mvc:interceptor>
-	</mvc:interceptors>
+    <!-- 拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.web.core.interceptors.EncodingInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.web.core.interceptors.AuthInterceptor">
+                <property name="excludeUrls">
+                    <list>
+                        <value>/main/loginOut</value>
+                        <value>/main/login</value>
+                        <value>/login.html</value>
+                        <value>/code</value>
+                        <value>/</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
-	<mvc:resources location="/" mapping="/**/*.html"/>
-	<!--<mvc:resources location="/" mapping="/**/*.js"/>-->
-	<!--<mvc:resources location="/" mapping="/**/*.css"/>-->
-	<!--<mvc:resources location="/" mapping="/**/*.png"/>-->
-	<!--<mvc:resources location="/" mapping="/**/*.jpg"/>-->
-	<!--<mvc:resources location="/" mapping="/**/*.gif"/>-->
-	<!--<mvc:resources location="/fonts/" mapping="/fonts/**/*.*"/>-->
-	<!--<mvc:resources location="/img/" mapping="/img/**/*.*"/>-->
+    <mvc:resources location="/" mapping="/**/*.html"/>
+    <!--<mvc:resources location="/" mapping="/**/*.js"/>-->
+    <!--<mvc:resources location="/" mapping="/**/*.css"/>-->
+    <!--<mvc:resources location="/" mapping="/**/*.png"/>-->
+    <!--<mvc:resources location="/" mapping="/**/*.jpg"/>-->
+    <!--<mvc:resources location="/" mapping="/**/*.gif"/>-->
+    <!--<mvc:resources location="/fonts/" mapping="/fonts/**/*.*"/>-->
+    <!--<mvc:resources location="/img/" mapping="/img/**/*.*"/>-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
 </beans>
