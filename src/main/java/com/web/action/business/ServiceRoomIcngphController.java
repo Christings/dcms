@@ -3,6 +3,7 @@ package com.web.action.business;
 import static com.web.util.AllResult.buildJSON;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import com.web.bean.util.FileUtilBean;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
+import com.web.entity.ServiceRoom;
 import com.web.entity.ServiceRoomIcngph;
 import com.web.example.ServiceRoomIcngphExample;
 import com.web.service.ServiceRoomIcngphService;
@@ -481,6 +483,49 @@ public class ServiceRoomIcngphController extends BaseController {
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "文件不存在");
 		}
 		return AllResult.okJSON("success");
+	}
+
+	/**
+	 * 根据机房资源编码定位机房
+	 * 
+	 * @param room
+	 *            机房资源编码
+	 */
+	@RequestMapping(value = "/locationServiceRoomByName", method = { RequestMethod.POST, RequestMethod.GET })
+	public Object locationServiceRoomByName(ServiceRoom room) {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("request param: [download ServiceRoomIcngph: {}]", JSONUtil.object2Json(room));
+		}
+		try {
+			if (StringUtil.isEmpty(room.getResourceCode())) {
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "机房资源编码不能为空");
+			}
+			List<ServiceRoomIcngph> list = serviceRoomIcngphService.getAll();
+			ServiceRoomIcngph serviceRoomIcngph = null;
+			for (ServiceRoomIcngph icngph : list) {
+				try {
+					Map map = YmlUtil.getYmlString(icngph.getYmlRealPath());
+					if (null != map.get(room.getResourceCode())) {
+						serviceRoomIcngph = icngph;
+						break;
+					}
+				} catch (IOException ioe) {
+					continue;
+				}
+			}
+			if (StringUtil.isEmpty(serviceRoomIcngph.getId())) {
+				return buildJSON(HttpStatus.BAD_REQUEST.value(), "找不到此机房的相关信息");
+			} else {
+				operLogService.addBusinessLog(serviceRoomIcngph.getFloorName(), OperLog.operTypeEnum.select,
+						OperLog.actionBusinessEnum.serviceRoomIcn, "");
+				return AllResult.okJSON(serviceRoomIcngph.getId());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			operLogService.addBusinessLog(room.getResourceCode(), OperLog.operTypeEnum.select,
+					OperLog.actionBusinessEnum.serviceRoomIcn, "", OperLog.logLevelEnum.error);
+			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "获取数据失败");
+		}
 	}
 
 	/**
