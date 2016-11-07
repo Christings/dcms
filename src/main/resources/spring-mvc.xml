@@ -86,6 +86,7 @@
 						<value>/main/loginOut</value>
 						<value>/main/login</value>
 						<value>/login.html</value>
+						<value>/code</value>
 						<value>/</value>
 					</list>
 				</property>

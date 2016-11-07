@@ -74,14 +74,15 @@
 						</div>
 						<div class="form-group">
 							<div style="margin:0;position:relative;" class="col-sm-12">
-								<input type="text" class="code col-sm-3" id ="input1" />
-								<input type="text " placeholder="点击获取验证码" onclick="createCode()" readonly="readonly" id="checkCode" class="unchanged col-md-offset-1 col-sm-7"/>
+								<input type="text" class="code col-sm-3" id ="input1" name="code"  style="border:1px solid #ccc;width: 80px;"/>
+								<!--<input type="text " placeholder="点击获取验证码" onclick="createCode()" readonly="readonly" id="checkCode" class="unchanged col-md-offset-1 col-sm-7"/>-->
+								<img id="checkCode" src="code" onclick="createCode()" style="border: 1px solid #ccc;margin-left: 5px;cursor: pointer;"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label style="margin:0" class="col-sm-12">
 								<input type="checkbox">记住密码</input>
-								<a href="" class="col-sm-offset-4">忘记密码？</a>
+								<a href="" class="col-sm-offset-4" style="font-size:14px;">忘记密码？</a>
 							</label>
 						</div>
 						<div class="form-group">
@@ -137,6 +138,5 @@
 		<script src="./3rd-libs/jquery-weui/js/jquery-weui.min.js"></script>
 		<script src="./js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
 		<script src="./js/login.js" type="text/javascript" charset="utf-8"></script>
-		<script src="./js/pub/checkCode.js" type="text/javascript" charset="utf-8"></script>
 	</body>
 </html>
