@@ -75,7 +75,7 @@ public class RoomIcngphController extends BaseController {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "楼层名称不能为空");
 			}
 
-			ArrayList<FileUtilBean> beans = FileUtil.uploadFiles(request, "serviceRoomIcngph", true);
+			ArrayList<FileUtilBean> beans = FileUtil.uploadFiles(request, "roomIcngph", true);
 			if (beans.size() != 3) {
 				FileUtil.deleteFiles(beans);
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "上传文件错误，请检查ZIP压缩文件是否只含有YML、JSON和PNG三个文件");
@@ -114,7 +114,7 @@ public class RoomIcngphController extends BaseController {
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 			// 记录日志
 			operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.insert,
-					OperLog.actionBusinessEnum.serviceRoomIcn, jsonStr);
+					OperLog.actionBusinessEnum.roomIcn, jsonStr);
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -123,7 +123,7 @@ public class RoomIcngphController extends BaseController {
 					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateDate", "createName", "createDate"),
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 			operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.insert,
-					OperLog.actionBusinessEnum.serviceRoomIcn, jsonStr, OperLog.logLevelEnum.error);
+					OperLog.actionBusinessEnum.roomIcn, jsonStr, OperLog.logLevelEnum.error);
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,添加机房平面图失败");
 		}
 	}
@@ -154,7 +154,7 @@ public class RoomIcngphController extends BaseController {
 			if (list.size() > 0) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "更新失败，楼层名称已经被占用，请修改");
 			}
-			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "serviceRoomIcngph", true);
+			ArrayList<FileUtilBean> files = FileUtil.uploadFiles(request, "roomIcngph", true);
 			if (files.size() != 3) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "上传文件错误，请检查ZIP压缩文件是否只含有YML、JSON和PNG三个文件");
 			}
@@ -194,7 +194,7 @@ public class RoomIcngphController extends BaseController {
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 			// 记录日志
 			operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.update,
-					OperLog.actionBusinessEnum.serviceRoomIcn, jsonStr);
+					OperLog.actionBusinessEnum.roomIcn, jsonStr);
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -203,7 +203,7 @@ public class RoomIcngphController extends BaseController {
 					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateDate", "createName", "createDate"),
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 			operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.update,
-					OperLog.actionBusinessEnum.serviceRoomIcn, jsonStr, OperLog.logLevelEnum.error);
+					OperLog.actionBusinessEnum.roomIcn, jsonStr, OperLog.logLevelEnum.error);
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误,修改机房平面图失败");
 		}
 	}
@@ -240,14 +240,14 @@ public class RoomIcngphController extends BaseController {
 			}
 			if (roomIcngphService.deleteById(icngph.getId()) > 0) {
 				operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.delete,
-						OperLog.actionBusinessEnum.serviceRoomIcn, JSONUtil.object2Json(icngph));
+						OperLog.actionBusinessEnum.roomIcn, JSONUtil.object2Json(icngph));
 			}
 			return AllResult.ok();
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOGGER.error("delete serviceRoomIcngph fail:", e.getMessage());
+			LOGGER.error("delete roomIcngph fail:", e.getMessage());
 			operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.delete,
-					OperLog.actionBusinessEnum.serviceRoomIcn, JSONUtil.object2Json(icngph), OperLog.logLevelEnum.error);
+					OperLog.actionBusinessEnum.roomIcn, JSONUtil.object2Json(icngph), OperLog.logLevelEnum.error);
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误, 机房平面图删除失败");
 		}
 	}
@@ -311,12 +311,12 @@ public class RoomIcngphController extends BaseController {
 					FastjsonUtils.newIgnorePropertyFilter("password", "updateName", "updateDate", "createName", "createDate"),
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
-			operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoomIcn, "");
+			operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.roomIcn, "");
 			return AllResult.okJSON(JSON.parse(jsonStr));
 
 		} catch (Exception e) {
 			LOGGER.error("get datagrid data error. page: {}, count: {}", form.getPageNum(), form.getPageSize(), e);
-			operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoomIcn, "",
+			operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.roomIcn, "",
 					OperLog.logLevelEnum.error);
 		}
 
@@ -383,11 +383,11 @@ public class RoomIcngphController extends BaseController {
 			RoomIcngph icngph = roomIcngphService.getById(form.getId());
 			Map result = YmlUtil.getYmlString(icngph.getYmlRealPath());
 			operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.select,
-					OperLog.actionBusinessEnum.serviceRoomIcn, "");
+					OperLog.actionBusinessEnum.roomIcn, "");
 			return AllResult.okJSON(result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			operLogService.addBusinessLog(form.getFileName(), OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoomIcn,
+			operLogService.addBusinessLog(form.getFileName(), OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.roomIcn,
 					"", OperLog.logLevelEnum.error);
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "获取数据失败");
 		}
@@ -409,11 +409,11 @@ public class RoomIcngphController extends BaseController {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "解析JSON失败");
 			}
 			operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.select,
-					OperLog.actionBusinessEnum.serviceRoomIcn, "");
+					OperLog.actionBusinessEnum.roomIcn, "");
 			return AllResult.okJSON(result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			operLogService.addBusinessLog(form.getFileName(), OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoomIcn,
+			operLogService.addBusinessLog(form.getFileName(), OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.roomIcn,
 					"", OperLog.logLevelEnum.error);
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "获取数据失败");
 		}
@@ -430,12 +430,12 @@ public class RoomIcngphController extends BaseController {
 		try {
 			RoomIcngph icngph = roomIcngphService.getById(form.getId());
 			operLogService.addBusinessLog(icngph.getFloorName(), OperLog.operTypeEnum.select,
-					OperLog.actionBusinessEnum.serviceRoomIcn, "");
+					OperLog.actionBusinessEnum.roomIcn, "");
 			ImageUtil.getImage(icngph.getImageRealPath(), icngph.getImageName(), response);
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
-			operLogService.addBusinessLog(form.getFileName(), OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoomIcn,
+			operLogService.addBusinessLog(form.getFileName(), OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.roomIcn,
 					"", OperLog.logLevelEnum.error);
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "获取数据失败");
 		}
@@ -517,13 +517,13 @@ public class RoomIcngphController extends BaseController {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "找不到此机房的相关信息");
 			} else {
 				operLogService.addBusinessLog(roomIcngph.getFloorName(), OperLog.operTypeEnum.select,
-						OperLog.actionBusinessEnum.serviceRoomIcn, "");
+						OperLog.actionBusinessEnum.roomIcn, "");
 				return AllResult.okJSON(roomIcngph.getId());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			operLogService.addBusinessLog(room.getResourceCode(), OperLog.operTypeEnum.select,
-					OperLog.actionBusinessEnum.serviceRoomIcn, "", OperLog.logLevelEnum.error);
+					OperLog.actionBusinessEnum.roomIcn, "", OperLog.logLevelEnum.error);
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "获取数据失败");
 		}
 	}

@@ -80,7 +80,7 @@ public class RoomController extends BaseController {
 			if (roomService.save(room) > 0) {
 				// 增加日志
 				operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.insert,
-						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(room));
+						OperLog.actionBusinessEnum.room, JSON.toJSONString(room));
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("机房新增成功", JSON.toJSONString(room));
 				}
@@ -91,7 +91,7 @@ public class RoomController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error("机房新增失败,后台报错", JSON.toJSONString(room));
-			operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
+			operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.room,
 					JSON.toJSONString(room), OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房新增失败:后台报错");
 		}
@@ -137,7 +137,7 @@ public class RoomController extends BaseController {
 			if (roomService.updateById(room) > 0) {
 				// 增加日志
 				operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.update,
-						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(room));
+						OperLog.actionBusinessEnum.room, JSON.toJSONString(room));
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("机房修改成功", JSON.toJSONString(room));
 				}
@@ -147,7 +147,7 @@ public class RoomController extends BaseController {
 			}
 		} catch (Exception e) {
 			LOGGER.error("机房修改失败,后台报错", JSON.toJSONString(room));
-			operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom,
+			operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.room,
 					null, OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房修改失败:后台报错");
 		}
@@ -174,7 +174,7 @@ public class RoomController extends BaseController {
 			if (roomService.deleteById(room.getId()) > 0) {
 				// 增加日志
 				operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.delete,
-						OperLog.actionBusinessEnum.serviceRoom, JSON.toJSONString(room));
+						OperLog.actionBusinessEnum.room, JSON.toJSONString(room));
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("机房删除成功", JSON.toJSONString(room));
 				}
@@ -184,7 +184,7 @@ public class RoomController extends BaseController {
 			}
 		} catch (Exception e) {
 			LOGGER.error("机房删除失败,后台报错", JSON.toJSONString(room));
-			operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.delete, OperLog.actionBusinessEnum.serviceRoom,
+			operLogService.addBusinessLog(room.getName(), OperLog.operTypeEnum.delete, OperLog.actionBusinessEnum.room,
 					JSON.toJSONString(room), OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "机房删除失败:后台报错");
 		}
@@ -209,13 +209,13 @@ public class RoomController extends BaseController {
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info("request select room param: [room.id: {null}]");
 				}
-				operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null);
+				operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.room, null);
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
 			}
 			return AllResult.okJSON(roomService.getById(room.getId()));
 		} catch (Exception e) {
 			LOGGER.error("机房查询失败,后台报错", JSON.toJSONString(room));
-			operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null,
+			operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.room, null,
 					OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "后台出错");
 		}
@@ -273,12 +273,12 @@ public class RoomController extends BaseController {
 			String jsonStr = JSON.toJSONString(queryResult,
 					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateCreate", "createName", "createDate"));
 
-			operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null);
+			operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.room, null);
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("get room data error. page: {}, count: {}", form.getPageNum(), e);
 		}
-		operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null,
+		operLogService.addBusinessLog("", OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.room, null,
 				OperLog.logLevelEnum.error);
 		return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 	}
@@ -286,36 +286,36 @@ public class RoomController extends BaseController {
 	/**
 	 * 新增机房和用户对应关系
 	 * 
-	 * @param serviceRoomId
+	 * @param roomId
 	 *            机房ID
 	 * @param userIds
 	 *            用户ID
 	 */
-	@RequestMapping(value = "/addServiceRoomUserRel", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object addServiceRoomUserRel(String serviceRoomId, String userIds) {
-		if (StringUtil.isEmpty(serviceRoomId)) {
+	@RequestMapping(value = "/addroomUserRel", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object addroomUserRel(String roomId, String userIds) {
+		if (StringUtil.isEmpty(roomId)) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
 		}
 		if (StringUtil.isEmpty(userIds)) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
 		}
-		Room room = roomService.getById(serviceRoomId);
-		String serviceRoomName = "";
+		Room room = roomService.getById(roomId);
+		String roomName = "";
 		if (null != room) {
-			serviceRoomName = room.getName();
+			roomName = room.getName();
 		}
 		try {
 			String[] userIdArr = userIds.split(",");
 			if (userIdArr.length < 1) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
 			}
-			int result = roomUserRelService.batchSave(serviceRoomId, userIdArr);
-			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
+			int result = roomUserRelService.batchSave(roomId, userIdArr);
+			operLogService.addBusinessLog(roomName, OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.room,
 					"{\"userIds\":\"" + userIds + "\"}");
 			return AllResult.okJSON(result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.serviceRoom,
+			operLogService.addBusinessLog(roomName, OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.room,
 					"{\"userIds\":\"" + userIds + "\"}", OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 		}
@@ -327,23 +327,23 @@ public class RoomController extends BaseController {
 	 * @param roomUserRel
 	 *            机房ID
 	 */
-	@RequestMapping(value = "/getServiceRoomUserRels", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object getServiceRoomUserRels(RoomUserRel roomUserRel) {
+	@RequestMapping(value = "/getroomUserRels", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object getroomUserRels(RoomUserRel roomUserRel) {
 		if (StringUtil.isEmpty(roomUserRel.getServiceRoomId())) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
 		}
 		Room room = roomService.getById(roomUserRel.getServiceRoomId());
-		String serviceRoomName = "";
+		String roomName = "";
 		if (null != room) {
-			serviceRoomName = room.getName();
+			roomName = room.getName();
 		}
 		try {
 			List<RoomUserRel> list = roomUserRelService.selectByServiceRoomId(roomUserRel);
-			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null);
+			operLogService.addBusinessLog(roomName, OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.room, null);
 			return AllResult.okJSON(list);
 		} catch (Exception e) {
 			e.printStackTrace();
-			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.serviceRoom, null,
+			operLogService.addBusinessLog(roomName, OperLog.operTypeEnum.select, OperLog.actionBusinessEnum.room, null,
 					OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 		}
@@ -377,34 +377,34 @@ public class RoomController extends BaseController {
 	/**
 	 * 修改机房和用户对应关系
 	 * 
-	 * @param serviceRoomId
+	 * @param roomId
 	 *            机房ID
 	 * @param userIds
 	 *            用户ID
 	 */
-	@RequestMapping(value = "/updateServiceRoomUserRel", method = { RequestMethod.GET, RequestMethod.POST })
-	public Object updateServiceRoomUserRel(String serviceRoomId, String userIds) {
-		if (StringUtil.isEmpty(serviceRoomId)) {
+	@RequestMapping(value = "/updateroomUserRel", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object updateroomUserRel(String roomId, String userIds) {
+		if (StringUtil.isEmpty(roomId)) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
 		}
 		if (StringUtil.isEmpty(userIds)) {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "用户ID不能为空");
 		}
-		Room room = roomService.getById(serviceRoomId);
-		String serviceRoomName = "";
+		Room room = roomService.getById(roomId);
+		String roomName = "";
 		if (null != room) {
-			serviceRoomName = room.getName();
+			roomName = room.getName();
 		}
 		try {
 			String[] userIdArr = userIds.split(",");
-			roomUserRelService.deleteByServiceRoomId(serviceRoomId);// 删除旧的关联关系
-			int result = roomUserRelService.batchSave(serviceRoomId, userIdArr);
-			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom,
+			roomUserRelService.deleteByServiceRoomId(roomId);// 删除旧的关联关系
+			int result = roomUserRelService.batchSave(roomId, userIdArr);
+			operLogService.addBusinessLog(roomName, OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.room,
 					"{\"userIds\":\"" + userIds + "\"}");
 			return AllResult.okJSON(result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			operLogService.addBusinessLog(serviceRoomName, OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.serviceRoom,
+			operLogService.addBusinessLog(roomName, OperLog.operTypeEnum.update, OperLog.actionBusinessEnum.room,
 					"{\"userIds\":\"" + userIds + "\"}", OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 		}

@@ -210,9 +210,9 @@ public class OperLogServiceImpl implements OperLogService {
 			return operType + "机柜属性";
 		case devicePro:
 			return operType + "设备属性";
-		case serviceRoomIcn:
+		case roomIcn:
 			return operType + "机房平面图";
-		case serviceRoom:
+		case room:
 			return operType + "机房";
 		}
 		return "";
