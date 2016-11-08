@@ -36,7 +36,7 @@ function roomPGAdd(){
 
 		var dtd=$.Deferred();
 		$.ajax({
-            url:"../../../serviceRoomIcngph/add",
+            url:"../../../roomIcngph/add",
             type:'post',
             data: formData,
             async:true,

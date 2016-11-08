@@ -1,30 +1,3 @@
-function roleGetAll(){
-	//初始化用户对应的域信息
-	$("#domainPId").val('');
-	$("#domainPName").text('');
-	var da = "";
-	// var content = "";
-	// var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
-	// for(var i=0,len=rolesMap.length;i<len;i++){
-	// 	var e = rolesMap[i];
-	// 	content += "<input type=\"checkbox\" value=\""+e["id"]+"\">"+e["rolename"];
-	// }
-	DCMSUtils.Ajax.doPost("role/getAll",da).done((jsonData)=>{
-		var roles = jsonData["data"];
-		var content = "";
-		var e;
-		var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
-        if(!rolesMap){
-            rolesMap={};
-        }
-		for(var i=0,len=roles.length;i<len;i++){
-			e = roles[i];
-			content += "<input type=\"checkbox\" value=\""+e["id"]+"\">"+e["rolename"];
-		}
-		var index = document.getElementById("rolesContent");
-		index.innerHTML = content;
-	});
-}
 var icon = "<i class='fa fa-times-circle'></i> ";
 $("#userAddForm").validate({
     rules:{
@@ -97,11 +70,6 @@ function userAdd(){
 	var status = $("#status").val();
 	var roleIds = $("#rolePId").val();
 	var domainIds = $("#domainPId").val();
-	if(userName == "")
-	{
-		$("#alert").text("请输入登陆名称");
-		return false;
-	}
 	var userInfo = { username:'', realname:'',password:'', identificationno:'', phone:'', email:'', mobile:'',sex:'',status:'',roleIds:'',domainIds:''};
 	userInfo['username'] = userName;
 	userInfo['realname'] = realName;
