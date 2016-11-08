@@ -1,4 +1,4 @@
-package com.web.action.xtgl;
+package com.web.action;
 
 import java.util.LinkedHashSet;
 import java.util.List;
