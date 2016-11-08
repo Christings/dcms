@@ -32,6 +32,7 @@ function showErrorMsg(msg) {
     var errorMsg = $("#errorMsg");
     errorMsg.html(msg);
     errorMsg.show();
+    createCode();
 }
 
 /**
