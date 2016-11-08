@@ -61,7 +61,7 @@ public class LogAspect {
 		logger.info("HTTP_METHOD : " + request.getMethod());
 		logger.info("IP : " + request.getRemoteAddr());
 		logger.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-		logger.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));
+		// logger.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));
 		Map<String, String[]> map = request.getParameterMap();
 		StringBuffer sb = new StringBuffer();
 		if (null != map && map.size() > 0) {
