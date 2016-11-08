@@ -122,6 +122,7 @@ public class WebUtils {
 		removePrivilege(request);
 		removeMenuIds(request);
 		removeUser(request);
+		removeCode(request);
 	}
 
 	/**
@@ -136,5 +137,12 @@ public class WebUtils {
 	 */
 	public static String getCode(HttpServletRequest request) {
 		return (String) request.getSession().getAttribute(SESSION_KEY_CODE);
+	}
+
+	/**
+	 * 清除验证码
+	 */
+	public static void removeCode(HttpServletRequest request) {
+		request.getSession().removeAttribute(SESSION_KEY_CODE);
 	}
 }
