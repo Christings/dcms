@@ -5,9 +5,10 @@ function pageInit(){
 	
 	// loadUserBody();
 	userListLoad();
-	// loadOrganizationTree();
+	// loadDomainRole();
+	// selectConfirmBtns();
 }
-function loadOrganizationTree(){
+function loadDomainRole(){
 	//加载域信息
     var jsTreeIndex=0;
 	DCMSUtils.Modal.showLoading();
@@ -67,10 +68,11 @@ function loadOrganizationTree(){
 		var content = [];
 		var e;
 		// var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
-        rolesMap={};
+        var rolesMap={};
        
 		for(var i=0,len=roles.length;i<len;i++){
 			e = roles[i];
+	        rolesMap[e.rolename]=e;
 	        rolesMap[e.id]=e;
 	        DCMSUtils.SessionStorage.set("ROLES_MAP",rolesMap);
 	        var tmp = {};
@@ -92,89 +94,15 @@ function loadOrganizationTree(){
                 field: 'state',
                 checkbox: true
             },
-		    {
-		        field: 'id',
-		        title: 'id'
-		    }, {
+		     {
 		        field: 'roleName',
-		        title: 'roleName'
+		        title: '角色名称'
 		    }],
 		    data: content
 		});
 	});
     // }
-	$("#selectDomainBtn").click(function(){
-        $("#useradd").modal('hide');
-        $("#domainTreeModal").modal('show');
-	});
-	$("#selectRoleBtn").click(function(){
-		$("#useradd").modal('hide');
-        $("#userRoleModal").modal('show');
-	});
 	
-	$("#confirmRoleBtn").click(function(){
-		var selected = [];
-	    $("tr[class='selected']").each(function(){
-	    	var tmp = {};
-	    	var id = $(this).find('td').get(1).innerHTML;
-	    	var name = $(this).find('td').get(2).innerHTML;
-	    	tmp.id =id;
-	    	tmp.name=name;
-	    	selected.push(tmp);
-	    });
-
-	    if(selected.length==0){
-	        DCMSUtils.Modal.alert('请选择用户角色','');
-	        return ;
-	    }
-	    var pRole;
-	    var ids = '';
-	    var names = '';
-	    for(var i=0,len=selected.length;i<len;i++){
-	    	pRole = selected[i];
-	    	if(i == (len -1)){
-	    		ids += pRole.id;
-	    		names += pRole.name;
-	    	}else{
-	    		ids += pRole.id+',';
-		    	names += pRole.name+',';
-	    	}
-	    }
-	    $("#rolePId").val(ids);
-	    $("#rolePName").text(names);
-	    // $("#RoleLevel").text(pRole.rank+1);
-	    $("#userRoleModal").modal('hide');
-	    $("#userupdate").modal('hide');
-	    $("#useradd").modal('show');
-	});
-
-	$("#confirmDomainBtn").click(function(){
-	    var selected=$("#domainJsTree").jstree(true).get_selected();
-
-	    if(selected.length==0){
-	        DCMSUtils.Modal.alert('请选择组织机构','');
-	        return ;
-	    }
-	    var pDomain;
-	    var ids = '';
-	    var names = '';
-	    for(var i=0,len=selected.length;i<len;i++){
-	    	pDomain=DCMSUtils.SessionStorage.get("Domain_TREE_MAP")[selected[i]];
-	    	if(i == (len -1)){
-	    		ids += pDomain.id;
-	    		names += pDomain.name;
-	    	}else{
-	    		ids += pDomain.id+',';
-		    	names += pDomain.name+' ';
-	    	}
-	    }
-	    $("#domainPId").val(ids);
-	    $("#domainPName").text(names);
-	    // $("#domainLevel").text(pDomain.rank+1);
-	    $("#domainTreeModal").modal('hide');
-	    $("#userupdate").modal('hide');
-	    $("#useradd").modal('show');
-	});
 	/**
 	 * 转换数据适配js tree
 	 * @param domainList
@@ -193,6 +121,7 @@ function loadOrganizationTree(){
 	    return domainList;
 	}
 }
+
 
 function cancleDomainSelect(){
 	$("#domainTreeModal").modal('hide');
@@ -272,7 +201,11 @@ function userListLoad(){
 					var roles = row.roles;
 					var html = '<span>';
 					for(var i=0,len=roles.length;i<len;i++){
-						html += roles[i]['rolename'];
+						if(i == len - 1){
+							html += roles[i]['rolename'];
+						}else{
+							html += roles[i]['rolename'] + ',';
+						}
 					}
 					html += '</span>';
 					return html;
@@ -284,7 +217,11 @@ function userListLoad(){
 					var domains = row.domains;
 					var html = '<span>';
 					for(var i=0,len=domains.length;i<len;i++){
-						html += domains[i]['name'];
+						if(i == len - 1){
+							html += domains[i]['name'];
+						}else{
+							html += domains[i]['name']+',';
+						}
 					}
 					html += '</span>';
 					return html;
@@ -329,331 +266,115 @@ function userListLoad(){
 		document.getElementById("queryForm").reset();
 	});
 
-	
-	// $("th").click(function(){
-	// 	var usernameSort = $("th[aria-label^='登录号']").attr("class");			
-	// 	console.log('usernameSort'+usernameSort);
-	// });
 }
+// function selectConfirmBtns(){
+$("#selectRoleBtn").click(function(){
+	if($("#confirmRoleBtn").hasClass('update')){
+		$("#confirmRoleBtn").removeClass('update');
+	}
+	$("#useradd").modal('hide');
+    $("#userRoleModal").modal('show');
+});
 
-//-----------------------------
-// function loadUserBody(){
-// 	var pageNum = 1;
-// 	var pageSize = 10;
-// 	var username = "";
-// 	var realname = "";
-// 	var html_content = "";
-// 	var content = "";
-// 	console.log("userLoad");
-// 	// var getUserData = {pageNum: pageNum,pageSize: pageSize,username: username,realname:realname};
-// 	var getUserData = "";
-// 	// DCMSUtils.Ajax.doPost("user/datagrid",getUserData).done((jsonData)=>{
-// 	DCMSUtils.Ajax.doPost("user/getAll",getUserData).done((jsonData)=>{
-// 		//var userInfo = jsonData["data"]["records"];
-// 		var userInfo = jsonData["data"];
-// 	    // user_pageCount = jsonData["data"]["pageCount"];
-// 		var num = 1;
-// 		var e;
-// 		for(var i=0,len=userInfo.length;i<len;i++){
-// 			e = userInfo[i];
-// 			var sex;
-// 			var status;
-// 			switch(e["sex"]){
-// 				case 0:
-// 					sex = "男";
-// 					break;
-// 				case 1:
-// 					sex = "女";
-// 					break;
-// 			}
-// 			if(e["status"] == 2){
-// 				console.log(e["realname"]+"已被删除");
-// 				continue;
-// 			}
-// 			switch(e["status"]){
-// 				case 0:
-// 					status = "是";
-// 					break;
-// 				case 1:
-// 					status = "否";
-// 					break;
-// 			}
-// 			var roleIds = e["roleIds"];
-// 			 var roleNames = '';
-// 			// var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
-// 			// for(var j=0,lenj=roleIds.length;j<lenj;j++){
-// 			// 	var e = roleIds[i];
-// 			// 	if(j == (lenj - 1)){
-// 			// 		roleNames += rolesMap[e]['rolename'];
-// 			// 	}else{
-// 			// 		roleNames += rolesMap[e]['rolename']+',';
-// 			// 	}
-				
-// 			// }
-// 			content = "<tr>"+
-// 				"<td>"+e["username"]+"</td>"+
-// 				"<td>"+e["realname"]+"</td>"+
-// 				"<td>"+roleNames+"</td>"+
-// 				"<td>"+sex+"</td>"+
-// 				"<td>"+e["identificationno"]+"</td>"+
-// 				"<td>"+e["phone"]+"</td>"+
-// 				"<td>"+e["email"]+"</td>"+
-// 				"<td>"+e["mobile"]+"</td>"+
-// 				"<td>"+status+"</td>"+
-// 				"<td>"+
-// 					"<i style='margin:3px;cursor:pointer' title='编辑' class='fa fa-pencil' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\"></i>"+
-// 					"<i style='margin:3px;cursor:pointer' title='修改密码' class='fa fa-key' role=\"presentation\" data-toggle=\"modal\" data-target=\"#usereditpassword\" data-value=\""+e["id"]+"\" onclick=\"userPasswordInit(this)\"></i>"+
-// 					"<i style='margin:3px;cursor:pointer' title='删除' class='fa fa-trash' role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\"></i>"+
-					
-// 					// "<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\">编辑</label>|"+
-// 					// "<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\">删除</label>"+
-// 				"</td>"+
-// 			"</tr>";
-// 			html_content += content;
-// 			num++;
-// 		}
+$("#selectDomainBtn").click(function(){
+	if($("#confirmDomainBtn").hasClass('update')){
+		$("#confirmDomainBtn").removeClass('update');
+	}
+    $("#useradd").modal('hide');
+    $("#domainTreeModal").modal('show');
+});
+function selectRoleBtn1(){
+    $("#userupdate").modal('hide');
+    $("#userRoleModal").modal('show');
+    if(!$("#confirmRoleBtn").hasClass('update')){
+    	$("#confirmRoleBtn").addClass('update');
+    } 
+}
+function selectDomainBtn1(){
+    $("#userupdate").modal('hide');
+    $("#domainTreeModal").modal('show'); 
+    if(!$("#confirmDomainBtn").hasClass('update')){
+    	$("#confirmDomainBtn").addClass('update');  
+    } 
+}
+$("#confirmRoleBtn").click(function(){
+	var selected = [];
+    $("tr[class='selected']").each(function(){
+    	var tmp = {};
+    	// var id = $(this).find('td').get(1).innerHTML;
+    	var name = $(this).find('td').get(1).innerHTML;
+    	// tmp.id =id;
+    	tmp.name=name;
+    	selected.push(tmp);
+    });
 
-// 		// var ulContent =" <ul class=\"pagination\" style=\"margin:0;padding:0;float:right\">"+"<li onclick=\"pageMinus()\"><a>&laquo;</a></li>";
-// 		// var pagination = function(){
-// 		// 	for(var i=1;i<=user_pageCount;i++){
-// 		// 		ulContent += "<li data-value=\""+i+"\" onclick=\"selectPage(this)\"><a>"+i+"</a></li>";
-// 		// 	}
-// 		// }
-// 		// pagination();
-// 		// ulContent += "<li onclick=\"pagePlus()\"><a>&raquo;</a></li></ul>";
-// 		var index1 = document.getElementById("userBody");
-// 		index1.innerHTML = html_content;
-// 		// var index2 = document.getElementById("userPagination");
-// 		// index2.innerHTML = ulContent;
-// 		// console.log("userLoad"+userInfo);
-// 		// $('.dataTables-example').DataTable({
-// 		// 	"bFilter":false
-// 		// });
-// 		$('.dataTables-example').DataTable({
-//             "bFilter":true,
-//             "aLengthMenu": [10, 25, 50],
-//             "oLanguage":{
-//                 "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
-//                 "oPaginate": {
-//                     "sFirst":    "第一页",
-//                     "sPrevious": " 上一页 ",
-//                     "sNext":     " 下一页 ",
-//                     "sLast":     " 最后一页 "
-//                 },
-//                 "sInfoFiltered":"(从一共 _MAX_ 条记录中查找)",
-//                 "sZeroRecords":"未找到任何相匹配记录",
-//             }
-//         });
-       
-//         var A = $('#DataTables_Table_0_info').parent().parent();
-//         $('#DataTables_Table_0_length').children().insertBefore(A);
-//         $('#DataTables_Table_0_filter').parent().css('display','none');
-        
-//         var title = $('.dataTables-example thead th').eq(0).text();
-//         $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="0" placeholder="Search '+title+'" />' ).prependTo('#upTable');
-//         title = $('.dataTables-example thead th').eq(1).text();
-//         $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="1" placeholder="Search '+title+'" />' ).prependTo('#upTable');
-//         title = $('.dataTables-example thead th').eq(3).text();
-//         $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="3" placeholder="Search '+title+'" />' ).prependTo('#upTable');
-//         title = $('.dataTables-example thead th').eq(8).text();
-//         $( '<input type="text" style="padding:6px 12px;margin-left:12px;float:right" data-id="8" placeholder="Search '+title+'" />' ).prependTo('#upTable');
-//         $('<a onclick="" href="javascript:void(0);" style="float:right;margin-left:12px;" class="btn btn-primary ">查询</a>').prependTo('#upTable');
+    if(selected.length==0){
+        DCMSUtils.Modal.alert('请选择用户角色','');
+        return ;
+    }
+    var pRole;
+    var ids = '';
+    var names = '';
+    var rolesMap = DCMSUtils.SessionStorage.get("ROLES_MAP");
+    for(var i=0,len=selected.length;i<len;i++){
+    	pRole = selected[i];
+    	if(i == (len -1)){
+    		ids += rolesMap[pRole.name]["id"];
+    		names += pRole.name;
+    	}else{
+    		ids += rolesMap[pRole.name]["id"]+',';
+	    	names += pRole.name+',';
+    	}
+    }
+    if($("#confirmRoleBtn").hasClass('update')){
+		$("#rolePId1").val(ids);
+	    $("#rolePName1").text(names);
+	    // $("#RoleLevel").text(pRole.rank+1);
+	    $("#userRoleModal").modal('hide');
+	    $("#useradd").modal('hide');
+	    $("#userupdate").modal('show');
+	}else{
+		$("#rolePId").val(ids);
+	    $("#rolePName").text(names);
+	    // $("#RoleLevel").text(pRole.rank+1);
+	    $("#userRoleModal").modal('hide');
+	    $("#userupdate").modal('hide');
+	    $("#useradd").modal('show');
+	}
+});
 
-//         var table = $('.dataTables-example').DataTable();
-//         $('input[data-id=\'0\']').on('keyup change',function(){
-//             table
-//                 .column( 0 )
-//                 .search( this.value )
-//                 .draw();
-//         });
-//         $('input[data-id=\'1\']').on('keyup change',function(){
-//             table
-//                 .column( 1 )
-//                 .search( this.value )
-//                 .draw();
-//         });
-//         $('input[data-id=\'3\']').on('keyup change',function(){
-//             table
-//                 .column( 3 )
-//                 .search( this.value )
-//                 .draw();
-//         });
-//         $('input[data-id=\'8\']').on('keyup change',function(){
-//             table
-//                 .column( 8 )
-//                 .search( this.value )
-//                 .draw();
-//         });
-// 	});
-// }
+$("#confirmDomainBtn").click(function(){
+    var selected=$("#domainJsTree").jstree(true).get_selected();
 
-
-
-//------------------------------
-// function userSelectPage(){
-// 		// var obj = document.getElementById("userSelectPage");
-// 		var html_content="";
-// 		var htm_final_ele="";
-// 		var ulContent="";//分页
-// 		var size = $("#userSelectPage option:selected").val();
-// 		console.log("size:"+size);
-// 		var getMenuData = {pageNum: 1, pageSize: size};
-// 		// $.ajax({
-// 		// 	// url: "menu/tree",
-// 		// 	url: "user/datagrid",
-// 		// 	dataType: "json",
-// 		// 	//data: "",
-// 		// 	data: getMenuData,
-// 		// 	type: "post"
-// 		// })
-// 		DCMSUtils.Ajax.doPost("user/datagrid",getMenuData).done((jsonData)=>{
-// 			var userInfo = jsonData["data"]["records"];
-// 			user_pageCount = jsonData["data"]["pageCount"];
-// 			var num = 1;
-// 			var e;
-// 			for(var i=0,len=userInfo.length;i<len;i++){
-// 				e = userInfo[i];
-// 				var sex;
-// 				var status;
-// 				switch(e["sex"]){
-// 					case 0:
-// 						sex = "男";
-// 						break;
-// 					case 1:
-// 						sex = "女";
-// 						break;
-// 				}
-// 				switch(e["status"]){
-// 					case 0:
-// 						status = "未激活";
-// 						break;
-// 					case 1:
-// 						status = "激活";
-// 						break;
-// 				}
-// 				content = "<tr>"+
-// 					"<td>"+e["username"]+"</td>"+
-// 					"<td>"+e["realname"]+"</td>"+
-// 					"<td></td>"+
-// 					"<td>"+sex+"</td>"+
-// 					"<td>"+e["identificationno"]+"</td>"+
-// 					"<td>"+e["phone"]+"</td>"+
-// 					"<td>"+e["email"]+"</td>"+
-// 					"<td>"+e["mobile"]+"</td>"+
-// 					"<td>"+status+"</td>"+
-// 					"<td>"+
-// 						"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\">编辑</label>|"+
-// 						"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\">删除</label>"+
-// 					"</td>"+
-// 				"<tr>";
-// 				html_content += content;
-// 				num++;
-// 			}
-// 			// console.log(jsonData);
-// 			// console.log("userGridLoad"+count);
-// 			var ulContent =" <ul class=\"pagination\" style=\"margin:0;padding:0;float:right\">"+"<li onclick=\"pageMinus()\"><a>&laquo;</a></li>";
-// 			var pagination = function(){
-// 				for(var i=1;i<=user_pageCount;i++){
-// 					ulContent += "<li data-value=\""+i+"\" onclick=\"selectPage(this)\"><a>"+i+"</a></li>";
-// 				}
-// 			}
-// 			pagination();
-// 			ulContent += "<li onclick=\"pagePlus()\"><a>&raquo;</a></li></ul>";
-// 			var index1 = document.getElementById("userBody");
-// 			index1.innerHTML = html_content;
-// 			var index2 = document.getElementById("userPagination");
-// 			index2.innerHTML = ulContent;
-// 			console.log("userLoad"+userInfo);
-// 		}).fail((err)=>{
-
-// 		});
-// }
-
-// function tablePerfom(user_num,size){
-// 	var getMenuData = {pageNum: user_num, pageSize: size};
-// 	var html_content="";
-// 	// $.ajax({
-// 	// 	// url: "menu/tree",
-// 	// 	url: "user/datagrid",
-// 	// 	dataType: "json",
-// 	// 	//data: "",
-// 	// 	data: getMenuData,
-// 	// 	type: "post"
-// 	// })
-// 	DCMSUtils.Ajax.doPost("user/datagrid",getMenuData).done((jsonData)=>{
-// 		var userInfo = jsonData["data"]["records"];
-// 		user_pageCount = jsonData["data"]["pageCount"];
-// 		var num = 1;
-// 		var e;
-// 		for(var i=0,len=userInfo.length;i<len;i++){
-// 			e = userInfo[i];
-// 			var sex;
-// 			var status;
-// 			switch(e["sex"]){
-// 				case 0:
-// 					sex = "男";
-// 					break;
-// 				case 1:
-// 					sex = "女";
-// 					break;
-// 			}
-// 			switch(e["status"]){
-// 				case 0:
-// 					status = "未激活";
-// 					break;
-// 				case 1:
-// 					status = "激活";
-// 					break;
-// 			}
-// 			content = "<tr>"+
-// 				"<td>"+e["username"]+"</td>"+
-// 				"<td>"+e["realname"]+"</td>"+
-// 				"<td></td>"+
-// 				"<td>"+sex+"</td>"+
-// 				"<td>"+e["identificationno"]+"</td>"+
-// 				"<td>"+e["phone"]+"</td>"+
-// 				"<td>"+e["email"]+"</td>"+
-// 				"<td>"+e["mobile"]+"</td>"+
-// 				"<td>"+status+"</td>"+
-// 				"<td>"+
-// 					"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userupdate\" data-value=\""+e["id"]+"\" onclick=\"userUpdateInit(this)\">编辑</label>|"+
-// 					"<label role=\"presentation\" data-toggle=\"modal\" data-target=\"#userdelete\" data-value=\""+e["id"]+"\" onclick=\"userDeleteInit(this)\">删除</label>"+
-// 				"</td>"+
-// 			"<tr>";
-// 			html_content += content;
-// 			num++;
-// 		}
-// 		var index = document.getElementById("userBody");
-// 		index.innerHTML = html_content;
-// 	}).fail((err)=>{
-
-// 	});
-// }
-
-// function selectPage(e){
-// 	var size = $("#userSelectPage option:selected").val();
-// 	console.log("size:"+size);
-// 	user_num = e.getAttribute("data-value");
-// 	tablePerfom(user_num,size);
-// }
-
-// function pagePlus(){
-// 	var size = $("#userSelectPage option:selected").val();
-// 	console.log(user_pageCount);
-// 	if(user_num < user_pageCount){
-// 		user_num++;
-// 	}else{
-// 		user_num = 1;
-// 	}
-// 	tablePerfom(user_num,size);
-// }
-
-// function pageMinus(){
-// 	var size = $("#userSelectPage option:selected").val();
-// 	if(user_num > 1){
-// 		user_num--;
-// 	}else{
-// 		user_num = user_pageCount;
-// 	}
-// 	tablePerfom(user_num,size);
+    if(selected.length==0){
+        DCMSUtils.Modal.alert('请选择组织机构','');
+        return ;
+    }
+    var pDomain;
+    var ids = '';
+    var names = '';
+    for(var i=0,len=selected.length;i<len;i++){
+    	pDomain=DCMSUtils.SessionStorage.get("Domain_TREE_MAP")[selected[i]];
+    	if(i == (len -1)){
+    		ids += pDomain.id;
+    		names += pDomain.name;
+    	}else{
+    		ids += pDomain.id+',';
+	    	names += pDomain.name+' ';
+    	}
+    }
+    if($("#confirmDomainBtn").hasClass('update')){
+		$("#domainPId1").val(ids);
+	    $("#domainPName1").text(names);
+	    $("#domainTreeModal").modal('hide');
+	    $("#useradd").modal('hide');
+	    $("#userupdate").modal('show');
+	}else{
+		$("#domainPId").val(ids);
+	    $("#domainPName").text(names);
+	    $("#domainTreeModal").modal('hide');
+	    $("#userupdate").modal('hide');
+	    $("#useradd").modal('show');
+	}
+});
 // }

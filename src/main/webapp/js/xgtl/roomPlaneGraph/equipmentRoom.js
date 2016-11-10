@@ -2,12 +2,13 @@ var initWidth = 100;
 var bgWidth;
 var bgHeight;
 var times;  
-var jsonDatas;
-var ymlDatas;
+var jsonDatas='';
+var ymlDatas='';
 var scrollHeight = $("#roomBody").height();
 var scrollWidth = $("#roomBody").width();
-function roomPGWatch(id){
-	var path = '../../../serviceRoomIcngph/getImage?id='+id;
+var disFlag = '';
+function roomPGWatch(id,dis){
+	var path = '../../../roomIcngph/getImage?id='+id;
 	$('#roombg').attr('src', path);
 	$("#roombg")[0].onload = function(){
 		document.getElementById('roomBody').style.width ='100%';
@@ -16,13 +17,15 @@ function roomPGWatch(id){
 		image.src = bg.src;
 		bgWidth = image.width;
 		bgHeight = image.height;
-		console.log(bgWidth+"  "+bgHeight);
+		console.log("dis"+dis);
 		times = 1;
 		DCMSUtils.Modal.showLoading('机房平面图加载中...');
-		DCMSUtils.Ajax.doPost('serviceRoomIcngph/getJson',{id:id}).then(function(data){
+		DCMSUtils.Ajax.doPost('roomIcngph/getJson',{id:id}).then(function(data){
 	        if(data.status=='1'){
 	           jsonDatas = data.data;
 	           EquipmentFloat();
+	           
+	           
 				var roomBody = document.getElementById('roomBody');
 				if (roomBody.addEventListener) {   
 			    // IE9, Chrome, Safari, Opera   
@@ -41,7 +44,7 @@ function roomPGWatch(id){
 	        DCMSUtils.Modal.toast('json出错','forbidden');
 	    });
 
-		DCMSUtils.Ajax.doPost('serviceRoomIcngph/getYml',{id:id}).then(function(data){
+		DCMSUtils.Ajax.doPost('roomIcngph/getYml',{id:id}).then(function(data){
 	        if(data.status=='1'){
 	           ymlDatas = data.data;
 	           var html = '';
@@ -49,6 +52,10 @@ function roomPGWatch(id){
 	           		html += '<option value="'+i+'">'+i+'</option>';
 	           }
 	           document.getElementById('chooseDis').innerHTML = html;
+	           if(dis != ''){
+	           	disFlag = dis;
+	           	disFocus(dis);
+	           }
 	           console.log(ymlDatas);
 	        }
 	        else{
@@ -66,6 +73,13 @@ function roomPGWatch(id){
 function districtFocus(){
 	var dis = $("#chooseDis").val();
 	// DCMSUtils.Modal.toast(dis,'');
+	disFlag = '';
+	disFocus(dis);
+}
+
+function disFocus(dis){
+	scrollHeight = $("#roomBody").height();//document.body.scrollHeight;
+	scrollWidth = $("#roomBody").width();
 	var leftUpY = ymlDatas[dis][0][1]/bgHeight*scrollHeight/2.12;
 	
 	var leftUpX = ymlDatas[dis][0][0]/bgWidth*scrollWidth/2.12;
@@ -88,11 +102,6 @@ function districtFocus(){
 		'left':leftUpX+'px',
 		'-webkit-animation':'flash 5s 12 ease-in-out'
 	});
-	// var html = "<div "+style+"></div>"
-	// var roomBody = document.getElementById("roomBody");
-	// roomBody.insertBefore(html,roomBody.childNodes[0]);
-	// console.log(disTop+','+disLeft+','+scrollHeight+','+scrollWidth);
-	
 }
 
 function MouseWheelHandler(e){
@@ -108,7 +117,12 @@ function MouseWheelHandler(e){
     times = width/100;
     roomBody.style.width = width + '%';
     EquipmentFloat();
-    districtFocus();
+    if(disFlag){
+    	disFocus(disFlag);
+    }else{
+    	districtFocus();
+    }
+    
     console.log(width);
     //var widths = width.toString;
     

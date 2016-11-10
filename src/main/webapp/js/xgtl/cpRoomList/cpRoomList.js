@@ -29,7 +29,7 @@ function pageInit() {
 			var params=DCMSUtils.DataTables.handleParams(data);
 			params.name = $("#cpRoom-name").val();
 			params.position = $("#cpRoom-position").val();
-			DCMSUtils.Ajax.doPost("serviceRoom/datagrid",params).then(function (data) {
+			DCMSUtils.Ajax.doPost("room/datagrid",params).then(function (data) {
 				console.log(data);
 				if(data.status=='1'){
 					//组织DT标准的返回值
@@ -59,7 +59,7 @@ function pageInit() {
 					var html = "<i class='glyphicon glyphicon-pencil' title='编辑' onclick=\"editItem('" + row.id+"','update')\"'></i>&nbsp;&nbsp;" +
 						"<i class='glyphicon glyphicon-user' title='添加用户' onclick=\"addUser('" + row.id+"','"+row.name+"')\"'></i>&nbsp;&nbsp;" +
 						"<i class='glyphicon glyphicon-edit' title='修改备注' onclick=\"editComment('" + row.id+"','"+row.comment+"','"+row.resourceCode+"')\"'></i>&nbsp;&nbsp;" +
-						"<i class='glyphicon glyphicon-search' title='查看视图' data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick=\"checkView('" + row.id + "')\"'></i>";
+						"<i class='glyphicon glyphicon-search' title='查看视图' data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick=\"checkView('" + row.resourceCode + "')\"'></i>";
 					return html;
 				}
 			}
@@ -85,7 +85,7 @@ function editItem(id,type){
 	}else if(type=='update'){
 		$("#file").parent().hide();
 		$("#cpRoomModalTitle").text('机房属性编辑');
-		DCMSUtils.Ajax.doPost("serviceRoom/selectById",{id:id}).then(function (data) {
+		DCMSUtils.Ajax.doPost("room/selectById",{id:id}).then(function (data) {
 			if(data.status=='1'){
 				$("#cpRoomId").val(id);
 				$("#name").val(data.data.name);
@@ -142,7 +142,7 @@ function saveCPRoomInfo() {
 	formData.append('area',area);
 	if(type=='new'){
 		$.ajax({
-			url:"../../../serviceRoom/add",
+			url:"../../../room/add",
 			type:'post',
 			data: formData,
 			async: true,
@@ -163,7 +163,7 @@ function saveCPRoomInfo() {
 		var id = $("#cpRoomId").val();
 		formData.append('id',id);
 		$.ajax({
-			url:"../../../serviceRoom/update",
+			url:"../../../room/update",
 			type:'post',
 			data: formData,
 			processData: false,  // 告诉jQuery不要去处理发送的数据
@@ -200,7 +200,7 @@ function saveComment() {
 	formData.append('comment',comment);
 	formData.append('resourceCode',resourceCode);
 	$.ajax({
-		url:"../../../serviceRoom/update",
+		url:"../../../room/update",
 		type:'post',
 		data: formData,
 		processData: false,  // 告诉jQuery不要去处理发送的数据
@@ -219,8 +219,14 @@ function saveComment() {
 }
 
 //查看视图
-function checkView(id){
-	roomPGWatch(id);
+function checkView(resourceCode){
+	DCMSUtils.Ajax.doPost('roomIcngph/locationServiceRoomByName',{resourceCode:resourceCode}).then(function(data){
+		if(data.status=='1'){
+			roomPGWatch(data.data,resourceCode);
+		}else{
+			DCMSUtils.Modal.toast('平面图资源异常','forbidden');
+		}
+	});
 }
 
 
@@ -230,7 +236,7 @@ function addUser(id,name){
 	$("#addUserId").val(id);
 	$("#addUser-cpRoomName").text(name);
 
-	$.when(DCMSUtils.Ajax.doPost('user/getAll'),DCMSUtils.Ajax.doPost('serviceRoom/getServiceRoomUserRels',{serviceRoomId:id}))
+	$.when(DCMSUtils.Ajax.doPost('user/getAll'),DCMSUtils.Ajax.doPost('room/getServiceRoomUserRels',{serviceRoomId:id}))
 		.then(function(userData, userRelsData){
 			if(userData.status=='1' &&  userRelsData.status=='1'){
 				var relev_userId =[];
@@ -267,7 +273,7 @@ function  saveUsers() {
 		//chk_value.push($(this).val());
 		chk_value +=  $(this).val() + ",";
 	});
-	DCMSUtils.Ajax.doPost("serviceRoom/updateServiceRoomUserRel",{serviceRoomId:$("#addUserId").val(),userIds:chk_value}).then(function(data){
+	DCMSUtils.Ajax.doPost("room/updateServiceRoomUserRel",{serviceRoomId:$("#addUserId").val(),userIds:chk_value}).then(function(data){
 		DCMSUtils.Modal.hideLoading();
 		if(data.status=='1'){
 			$("#addUserModal").modal('hide');
@@ -281,5 +287,15 @@ function  saveUsers() {
 		DCMSUtils.Modal.toast('保存用户异常','forbidden');
 	});
 }
+//平面图功能面板显示与隐藏
+$('#opLocToggle1').click(function(){
+	$('#operations_locate').toggleClass("appear_opLoc");
+});
+$('#opSeaToggle1').click(function(){
+	$('#operations_search').toggleClass("appear_opSea");
+});
+$('#expandSearch1').click(function(){
+	$('#operations_search_secondlevel').toggleClass("appear_opSea2");
+});
 
 

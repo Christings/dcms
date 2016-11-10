@@ -54,7 +54,7 @@ function roomPGUpdate(){
 	formData.append('floorName',floorName);
 	formData.append('zipFile',zipFile);
 	$.ajax({
-        url:"../../../serviceRoomIcngph/update",
+        url:"../../../roomIcngph/update",
         type:'post',
         data: formData,
         processData: false,  // 告诉jQuery不要去处理发送的数据

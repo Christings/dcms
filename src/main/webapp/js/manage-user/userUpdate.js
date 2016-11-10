@@ -3,17 +3,7 @@ function userUpdateInit(e){
 	var id = e.getAttribute("data-value");
 	var userId = {id:''};
 	userId["id"] = id;
-	
-	// console.log(menu);
-	 console.log(id);
-	// console.log(name);
-	// $.ajax({
-	// 	type:"post",
-	// 	url:"user/get",
-	// 	dataType: 'json',
-	// 	data: userId,
-	// 	})
-	
+	loadDomainRole();
 	DCMSUtils.Ajax.doPost("user/get",userId).done((jsonData)=>{
 		var userInfo = jsonData["data"];
 		var userName = userInfo['username'];
@@ -90,14 +80,14 @@ function userUpdateInit(e){
 				"<label class='col-sm-3'>用户角色</label>"+
 				'<input id="rolePId1" name="rolePId1" value="'+rolePIds+'"  type="hidden">'+
 				"<div class='col-sm-9'>"+
-					'<span id="rolePName1" name="rolePName1" style="width: 50%;">'+rolePNames+'</span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectRoleBtn1" class="btn btn-primary btn-sm btn-outline">选择</a>'+
+					'<span id="rolePName1" name="rolePName1" style="width: 50%;">'+rolePNames+'</span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectRoleBtn1" onclick="selectRoleBtn1()" class="btn btn-primary btn-sm btn-outline">选择</a>'+
 				"</div>"+
 			"</div>"+
 			"<div class='form-group' >"+
 				"<label class='col-sm-3'>组织机构：</label>"+
 				'<input id="domainPId1" name="domainPId1" value="'+domainPIds+'" type="hidden">'+
 				"<div class='col-sm-9'>"+
-					'<span id="domainPName1" name="domainPName1" style="width: 50%;">'+domainPNames+'</span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectDomainBtn1" class="btn btn-primary btn-sm btn-outline">选择</a>'+
+					'<span id="domainPName1" name="domainPName1" style="width: 50%;">'+domainPNames+'</span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectDomainBtn1" onclick="selectDomainBtn1()" class="btn btn-primary btn-sm btn-outline">选择</a>'+
 				'</div>'+
 			'</div>'+
 			"<div class=\"form-group\">"+
@@ -133,7 +123,7 @@ function userUpdateInit(e){
 			
 		var body = document.getElementById("userUpdateBody");
 		body.innerHTML = html;
-		loadOrganizationTree1();
+		
 			
 	});		// }
 }
@@ -186,7 +176,6 @@ $("#userUpdateForm").validate({
 
 function userPasswordInit(e){
 	var id = e.getAttribute("data-value");
-	console.log("密码更新id："+id);
 	var userId = {id:''};
 	userId["id"] = id;
 	DCMSUtils.Ajax.doPost("user/get",userId).done((jsonData)=>{
@@ -208,7 +197,7 @@ function userPasswordInit(e){
 			'<div class="modal-footer">'+
 	            '<button type="button" class="btn btn-default" data-dismiss="modal">关闭'+
 	            '</button>'+
-	           ' <button type="submit" onclick="userEditPassword()" class="btn btn-primary">'+
+	           ' <button type="button" onclick="userEditPassword()" class="btn btn-primary">'+
 	              ' 确认修改'+
 	            '</button>'+    	
 	        '</div>'+  
@@ -263,85 +252,28 @@ function userUpdate(){
 }
 
 function userEditPassword(){
-	$("#userEditPasswordForm").submit(function(){
-		var id = $("#userId2").val();
-		console.log("userId2的value"+id);
-		var password1 = $("#password1").val();
-		var password2 = $("#password2").val();
+	var id = $("#userId2").val();
+	console.log("userId2的value"+id);
+	var password1 = $("#password1").val();
+	var password2 = $("#password2").val();
 
-		if(password1 != password2){
-			alert("两次输入的密码不一致！");
+	if(password1 != password2){
+		alert("两次输入的密码不一致！");
+		return false;
+	}
+	var userInfo = {id:'',password:''};
+	userInfo['id'] = id;
+	userInfo['password'] = password1;
+	DCMSUtils.Ajax.doPost("user/modifyPassword",userInfo).done((res)=>{
+		if(res.status == "1"){
+			dtApi.ajax.reload();
+			DCMSUtils.Modal.toast("更改用户"+userName+"的密码成功",'');
+			return true;
+		}else{
+			DCMSUtils.Modal.toast("更改用户"+userName+"的密码失败"+res.msg,'');
 			return false;
 		}
-		var userInfo = {id:'',password:''};
-		userInfo['id'] = id;
-		userInfo['password'] = password1;
-		DCMSUtils.Ajax.doPost("user/modifyPassword",userInfo).done((res)=>{
-			if(res.status == "1"){
-				console.log("更改用户"+userName+"的密码成功");
-				alert("更改用户"+userName+"的密码成功");
-				return true;
-			}else{
-				console.log("更改用户"+userName+"的密码失败"+res.msg);
-				alert("更改用户"+userName+"的密码失败");
-				return false;
-			}
-		});
 	});
 }
-
-function loadOrganizationTree1(){
-    
-	$("#selectDomainBtn1").click(function(){
-        $("#userupdate").modal('hide');
-        $("#domainTreeModal").modal('show');      
-	});
-
-	$("#confirmDomainBtn").click(function(){
-	    var selected=$("#domainJsTree").jstree(true).get_selected();
-
-	    if(selected.length==0){
-	        DCMSUtils.Modal.alert('请选择组织机构','');
-	        return ;
-	    }
-	    var pDomain;
-	    var ids = '';
-	    var names = '';
-	    for(var i=0,len=selected.length;i<len;i++){
-	    	pDomain=DCMSUtils.SessionStorage.get("Domain_TREE_MAP")[selected[i]];
-	    	if(i == (len -1)){
-	    		ids += pDomain.id;
-	    		names += pDomain.name;
-	    	}else{
-	    		ids += pDomain.id+',';
-		    	names += pDomain.name+' ';
-	    	}
-	    }
-	    $("#domainPId1").val(ids);
-	    $("#domainPName1").text(names);
-	    // $("#domainLevel").text(pDomain.rank+1);
-	    $("#domainTreeModal").modal('hide');
-	    $("#useradd").modal('hide');
-	    $("#userupdate").modal('show');
-	});
-	/**
-	 * 转换数据适配js tree
-	 * @param domainList
-	 * @param container
-	 * @param pindex
-	 */
-	function transDataToJsTree(domainList,jsIndex){
-	    for(var i=0;i<domainList.length;i++){
-	        var domain=domainList[i];
-	        domain.text=domain.name
-	        if(domain.childDoMain && domain.childDoMain.length>0){
-	            domain.state={'opened': true};
-	            domain.children=transDataToJsTree(domain.childDoMain,jsIndex);
-	        }
-	    }
-	    return domainList;
-	}
-}
-
 
 
