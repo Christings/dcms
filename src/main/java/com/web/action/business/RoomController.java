@@ -409,4 +409,22 @@ public class RoomController extends BaseController {
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
 		}
 	}
+
+	/**
+	 * 机房信息下拉列表
+	 *
+	 * @param room
+	 */
+	@RequestMapping(value = "/selectForChoose", method = RequestMethod.POST)
+	public Object selectForChoose(Room room) {
+		try{
+			RoomExample example = new RoomExample();
+			example.setOrderByClause("create_date desc");
+			List<Room> rooms = roomService.selectForChoose(example);
+			return AllResult.okJSON(rooms);
+		}catch (Exception e){
+			e.printStackTrace();
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
+		}
+	}
 }

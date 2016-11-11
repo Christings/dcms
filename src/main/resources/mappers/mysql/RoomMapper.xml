@@ -80,12 +80,29 @@
         id, name, position, exterior, resource_code, image_url, address, area, comment, UPDATE_NAME,
         UPDATE_DATE, CREATE_NAME, CREATE_DATE
     </sql>
+    <sql id="select_Column_List">
+        id, name, resource_code
+    </sql>
     <select id="selectByExample" parameterType="com.web.example.RoomExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
         </if>
         <include refid="Base_Column_List"/>
+        from t_b_room
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectForChoose" parameterType="com.web.example.RoomExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="select_Column_List"/>
         from t_b_room
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
