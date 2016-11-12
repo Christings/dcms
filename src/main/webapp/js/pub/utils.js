@@ -143,10 +143,10 @@ var DCMSBusi={
 		}
 	},
 	Api:{
-		invoke:function (url) {
+		invoke:function (url,param) {
 			DCMSUtils.Modal.showLoading();
 			var dtd=$.Deferred();
-			DCMSUtils.Ajax.doPost(url,null).then(function(data){
+			DCMSUtils.Ajax.doPost(url,param).then(function(data){
 				DCMSUtils.Modal.hideLoading();
 				console.log(data);
 				if(data){
