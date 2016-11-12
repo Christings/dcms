@@ -28,4 +28,9 @@ public interface RoomService extends IService<Room, String> {
 	 */
 	List<Room> getByExample(RoomExample example);
 
+	/**
+	 * 下拉列表
+	 * */
+	List<Room> selectForChoose(RoomExample example);
+
 }

@@ -73,4 +73,9 @@ public class RoomServiceImpl implements RoomService {
 	public List<Room> getAll() {
 		return roomMapper.selectByExample(new RoomExample());
 	}
+
+	@Override
+	public List<Room> selectForChoose(RoomExample example) {
+		return roomMapper.selectForChoose(example);
+	}
 }
