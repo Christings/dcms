@@ -17,7 +17,7 @@ function getMenuList(pageNum, pageSize) {
         console.log('pageNum:'+pageNum+";pageSize:"+pageSize);
         $("#menuTreeBody").empty();
         DCMSUtils.Modal.showLoading('菜单加载中...');
-        DCMSUtils.Ajax.doPost('menu/datagrid', {pageNum: pageNum, pageSize: pageSize})
+        DCMSBusi.Api.invoke('menu/datagrid', {pageNum: pageNum, pageSize: pageSize})
             .then(function (data) {
                 DCMSUtils.Modal.hideLoading();
                 console.log(data);
@@ -139,7 +139,7 @@ function changeLevel(obj) {
 var jsTreeIndex=0;
 $("#selectParentBtn").click(function(){
     DCMSUtils.Modal.showLoading();
-    DCMSUtils.Ajax.doPost('menu/tree').then(function(data){
+    DCMSBusi.Api.invoke('menu/tree').then(function(data){
         if(data.status=='1'){
             var treeData=transDataToJsTree(data.data,jsTreeIndex);
             console.log(treeData);
@@ -239,8 +239,10 @@ function menuNewUpdate(menuId,type){
             $("#menuPId").val(pMenu.id);
         }else{
             $("#menuPName").text('');
+            $("#menuLevel").val(1);
             document.getElementById("menuNewUpdateForm").reset();
         }
+        $("#menuId").val('');
         $("#menuModal").modal();
     }else if(type=='update'){
         $("#menuModalTitle").text('编辑菜单');
@@ -322,7 +324,7 @@ function saveMenu(){
     if(menu.id){
         ajaxUrl='menu/update';
     }
-    DCMSUtils.Ajax.doPost(ajaxUrl,menu).then(function(data){
+    DCMSBusi.Api.invoke(ajaxUrl,menu).then(function(data){
         DCMSUtils.Modal.hideLoading();
         if(data.status=='1'){
             //保存成功清空form
@@ -345,7 +347,7 @@ function menuDelete(menuId){
 
     DCMSUtils.Modal.confirm('确定删除菜单['+menu.name+']吗？','',function () {
         DCMSUtils.Modal.showLoading('菜单删除中...');
-        DCMSUtils.Ajax.doPost('menu/delete',{key:menuId}).then(function(data){
+        DCMSBusi.Api.invoke('menu/delete',{key:menuId}).then(function(data){
             DCMSUtils.Modal.hideLoading();
             if(data.status=='1'){
                 getMenuList(globlePageNum, globlePageSize);
@@ -375,7 +377,7 @@ function menuSetting(menuId) {
         $("#operationTitle").text('【'+menu.name+'】精细化权限控制');
         $("#operationModalTitle").html('【'+menu.name+'】精细化权限控制');
         DCMSUtils.Modal.showLoading('获取操作列表');
-        DCMSUtils.Ajax.doPost('/menu/operation/getMenuId',{menuId:menuId}).then(function(data){
+        DCMSBusi.Api.invoke('/menu/operation/getMenuId',{menuId:menuId}).then(function(data){
             DCMSUtils.Modal.hideLoading();
             console.log(data);
             if(data.status==1){
@@ -445,7 +447,7 @@ $("#menuOperationForm").validate({
             name:$("#operationName").val(),
             url:$("#operationUrl").val()
         }
-        DCMSUtils.Ajax.doPost(ajaxUrl,optData).then(function(data){
+        DCMSBusi.Api.invoke(ajaxUrl,optData).then(function(data){
             DCMSUtils.Modal.hideLoading();
             if(data.status==1){
                 if(operationId){
@@ -515,7 +517,7 @@ function deleteOperation(optId) {
         }
         DCMSUtils.Modal.confirm('确定删除操作['+opt.name+']吗？','',function () {
             DCMSUtils.Modal.showLoading('删除中...');
-            DCMSUtils.Ajax.doPost('menu/operation/delete',{id:optId}).then(function(data){
+            DCMSBusi.Api.invoke('menu/operation/delete',{id:optId}).then(function(data){
                 DCMSUtils.Modal.hideLoading();
                 if(data.status=='1'){
                     $("#tr_"+optId).remove();
