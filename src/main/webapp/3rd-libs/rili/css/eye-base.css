@@ -1,0 +1,38 @@
+﻿
+
+/*===================================== a href =======================================*/
+
+/*a*/
+a
+{
+    color: #006093;
+    text-decoration: underline;
+}
+
+/*a:link*/
+a:link
+{
+    color: #006093;
+    text-decoration: none;
+}
+
+/*a:visited*/
+a:visited
+{
+    color: #006093;
+    text-decoration: none;
+}
+
+/*a:hover*/
+a:hover
+{
+    color: #ff6600;
+    text-decoration: underline;
+}
+
+/*a:active*/
+a:active
+{
+    color: #ff6600;
+    text-decoration: underline;
+}
