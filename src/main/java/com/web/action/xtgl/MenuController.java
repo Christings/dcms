@@ -68,10 +68,20 @@ public class MenuController extends BaseController {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 		// 处理外键关联数据传空值问题
-		if (null != menu.getParentId() && "".equals(menu.getParentId().trim())) {
-			menu.setParentId(null);
-		}else if(null == menuService.getById(menu.getParentId())){
-			return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
+//		if (null != menu.getParentId() && "".equals(menu.getParentId().trim())) {
+//			menu.setParentId(null);
+//		}else if(null == menuService.getById(menu.getParentId())){
+//			return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
+//		}
+
+		if(null != menu.getParentId()){
+			if("".equals(menu.getParentId().trim())){
+				menu.setParentId(null);
+			}else{
+				if(null == menuService.getById(menu.getParentId())){
+					return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
+				}
+			}
 		}
 
 		try {
@@ -161,10 +171,20 @@ public class MenuController extends BaseController {
 		}
 
 		// 处理外键关联数据传空值问题
-		if (null != menu.getParentId() && "".equals(menu.getParentId().trim())) {
-			menu.setParentId(null);
-		}else if(null == menuService.getById(menu.getParentId())){
-			return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
+//		if (null != menu.getParentId() && "".equals(menu.getParentId().trim())) {
+//			menu.setParentId(null);
+//		}else if(null == menuService.getById(menu.getParentId())){
+//			return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
+//		}
+
+		if(null != menu.getParentId()){
+			if("".equals(menu.getParentId().trim())){
+				menu.setParentId(null);
+			}else{
+				if(null == menuService.getById(menu.getParentId())){
+					return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
+				}
+			}
 		}
 
 		try {

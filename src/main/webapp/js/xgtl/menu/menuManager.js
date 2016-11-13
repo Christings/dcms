@@ -15,10 +15,10 @@ function pageInit() {
 //初始化菜单
 function getMenuList(pageNum, pageSize) {
         console.log('pageNum:'+pageNum+";pageSize:"+pageSize);
-        $("#menuTreeBody").empty();
         DCMSUtils.Modal.showLoading('菜单加载中...');
         DCMSBusi.Api.invoke('menu/datagrid', {pageNum: pageNum, pageSize: pageSize})
             .then(function (data) {
+                $("#menuTreeBody").empty();
                 DCMSUtils.Modal.hideLoading();
                 console.log(data);
                 if (data.status === 1) {
