@@ -73,7 +73,7 @@ public class OperLog {
 	}
 
 	public enum actionBusinessEnum {
-		cabinet, device, jumper, cabinetPro, devicePro, room,roomIcn
+		cabinet, device, jumper, cabinetPro, devicePro, room,roomIcn, area
 	}
 
 	public String getId() {

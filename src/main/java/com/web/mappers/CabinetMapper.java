@@ -53,6 +53,8 @@ public interface CabinetMapper {
 
 	int updateByExampleSelective(@Param("record") Cabinet record, @Param("example") CabinetExample example);
 
+	int updateAreaByExample(@Param("record") Cabinet record, @Param("example") CabinetExample example);
+
 	int updateByExample(@Param("record") Cabinet record, @Param("example") CabinetExample example);
 
 	int updateByPrimaryKeySelective(Cabinet record);

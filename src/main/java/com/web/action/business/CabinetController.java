@@ -1,5 +1,10 @@
 package com.web.action.business;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +18,17 @@ import com.web.bean.form.CabinetForm;
 import com.web.bean.result.CabinetResult;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
-import com.web.entity.BoxEquipment;
-import com.web.entity.Cabinet;
-import com.web.entity.OperLog;
+import com.web.entity.*;
 import com.web.example.BoxEquipmentExample;
 import com.web.example.CabinetExample;
 import com.web.service.BoxEquipmentService;
 import com.web.service.CabinetService;
+import com.web.service.RoomIcngphService;
+import com.web.service.RoomService;
 import com.web.util.AllResult;
 import com.web.util.StringUtil;
 import com.web.util.UUIDGenerator;
+import com.web.util.YmlUtil;
 import com.web.util.fastjson.FastjsonUtils;
 
 /**
@@ -39,6 +45,10 @@ public class CabinetController extends BaseController {
 	private CabinetService cabinetService;
 	@Autowired
 	private BoxEquipmentService boxEquipmentService;
+	@Autowired
+	private RoomService roomService;
+	@Autowired
+	private RoomIcngphService roomIcngphService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CabinetController.class);
 
@@ -52,12 +62,15 @@ public class CabinetController extends BaseController {
 		try {
 			if (null == cabinet) {
 				if (LOGGER.isInfoEnabled()) {
-					LOGGER.info("request add cabinet param: [serviceRoom: {null}]");
+					LOGGER.info("request add cabinet param: [cabinet: {null}]");
 				}
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "新增机柜入参为空");
 			}
-			if(StringUtil.isEmpty(cabinet.getResourceCode())){
+			if (StringUtil.isEmpty(cabinet.getResourceCode())) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "资源编码不能为空");
+			}
+			if (StringUtil.isEmpty(cabinet.getEquipmentTypeId())) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "设备类型不能为空");
 			}
 			CabinetExample example = new CabinetExample();
 			CabinetExample.Criteria criteria = example.createCriteria();
@@ -96,17 +109,20 @@ public class CabinetController extends BaseController {
 		try {
 			if (null == cabinet) {
 				if (LOGGER.isInfoEnabled()) {
-					LOGGER.info("request add cabinet param: [serviceRoom: {null}]");
+					LOGGER.info("request add cabinet param: [cabinet: {null}]");
 				}
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "修改机柜入参不能为空");
 			}
 			if (StringUtil.isEmpty(cabinet.getId())) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机柜ID不能为空");
 			}
+			if (StringUtil.isEmpty(cabinet.getEquipmentTypeId())) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "设备类型不能为空");
+			}
 			CabinetExample example = new CabinetExample();
 			CabinetExample.Criteria criteria = example.createCriteria();
 			criteria.andResourceCodeEqualTo(cabinet.getResourceCode());
-			criteria.andIdEqualTo(cabinet.getId());
+			criteria.andIdNotEqualTo(cabinet.getId());
 			int countExist = cabinetService.getCount(example);
 			if (countExist > 0) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "资源编码已存在，请检查");
@@ -170,7 +186,7 @@ public class CabinetController extends BaseController {
 	}
 
 	/**
-	 * 分页查询机房信息
+	 * 分页查询机柜信息
 	 *
 	 * @param form
 	 */
@@ -257,6 +273,86 @@ public class CabinetController extends BaseController {
 			operLogService.addBusinessLog("", OperLog.operTypeEnum.insert, OperLog.actionBusinessEnum.cabinet,
 					JSON.toJSONString(boxEquipment), OperLog.logLevelEnum.error);
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "保存失败");
+		}
+	}
+
+	/**
+	 * 根据机柜id获取单个机柜信息
+	 * 
+	 * @param form
+	 */
+	@RequestMapping(value = "/getCabinetResultById", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object getCabinetResultById(CabinetForm form) {
+		if (null == form) {
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.info("request cabinet getCabinetResultById param: [CabinetForm: {null}]");
+			}
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "入参不能为空");
+		}
+		if (StringUtil.isEmpty(form.getId())) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机柜ID不能为空");
+		}
+		try {
+			CabinetResult result = cabinetService.selectResultById(form.getId());
+			return AllResult.okJSON(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "查询失败");
+		}
+	}
+
+	/**
+	 * 根据机柜资源信息获取坐标和机房等信息
+	 *
+	 */
+	@RequestMapping(value = "/getPositionByResourceCode", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object getPositionByResourceCode(CabinetForm form) {
+		if (null == form) {
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.info("request cabinet getPositionByResourceCode param: [CabinetForm: {null}]");
+			}
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "入参不能为空");
+		}
+		if (StringUtil.isEmpty(form.getResourceCode())) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机柜资源编码不能为空");
+		}
+		try {
+			CabinetExample example = new CabinetExample();
+			CabinetExample.Criteria criteria = example.createCriteria();
+			criteria.andResourceCodeEqualTo(form.getResourceCode());
+			List<Cabinet> cabinets = cabinetService.getByExample(example);
+			if (cabinets.size() != 1) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "查不到相应的机柜信息");
+			}
+			Cabinet cabinet = cabinets.get(0);
+			Room room = roomService.getById(cabinet.getRoomId());
+			if (null == room || StringUtil.isEmpty(room.getResourceCode())) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "无法找到对应机房信息");
+			}
+			List<RoomIcngph> list = roomIcngphService.getAll();
+			RoomIcngph roomIcngph = null;
+			for (RoomIcngph icngph : list) {
+				try {
+					Map map = YmlUtil.getYmlString(icngph.getYmlRealPath());
+					if (null != map.get(room.getResourceCode())) {
+						roomIcngph = icngph;
+						break;
+					}
+				} catch (IOException ioe) {
+					continue;
+				}
+			}
+			if (null == roomIcngph) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "无法找到对应机房平面图信息");
+			}
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			resultMap.put("cabinet", cabinet);
+			resultMap.put("roomId", cabinet.getRoomId());
+			resultMap.put("roomIcngphId", roomIcngph.getId());
+			return AllResult.okJSON(resultMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "查询失败");
 		}
 	}
 }
