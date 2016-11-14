@@ -68,20 +68,20 @@ public class MenuController extends BaseController {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 		// 处理外键关联数据传空值问题
-//		if (null != menu.getParentId() && "".equals(menu.getParentId().trim())) {
-//			menu.setParentId(null);
-//		}else if(null == menuService.getById(menu.getParentId())){
-//			return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
-//		}
-
 		if(null != menu.getParentId()){
 			if("".equals(menu.getParentId().trim())){
 				menu.setParentId(null);
+				menu.setLevel((short)1);
 			}else{
-				if(null == menuService.getById(menu.getParentId())){
+				Menu m = menuService.getById(menu.getParentId());
+				if(null == m){
 					return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
+				}else{
+					menu.setLevel((short)(m.getLevel()+1));
 				}
 			}
+		}else{
+			menu.setLevel((short)1);
 		}
 
 		try {
@@ -93,7 +93,7 @@ public class MenuController extends BaseController {
 					JSON.toJSONString(menu),OperLog.logLevelEnum.success);
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"), SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("level","updateName","updateDate","createName","createDate"), SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -170,31 +170,32 @@ public class MenuController extends BaseController {
 			return buildJSON(HttpStatus.BAD_REQUEST.value(), errorTip);
 		}
 
-		// 处理外键关联数据传空值问题
-//		if (null != menu.getParentId() && "".equals(menu.getParentId().trim())) {
-//			menu.setParentId(null);
-//		}else if(null == menuService.getById(menu.getParentId())){
-//			return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
-//		}
-
-		if(null != menu.getParentId()){
-			if("".equals(menu.getParentId().trim())){
-				menu.setParentId(null);
-			}else{
-				if(null == menuService.getById(menu.getParentId())){
-					return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
-				}
-			}
+		Menu mm = menuService.getById(menu.getId());
+		if(null == mm){
+			return buildJSON(HttpStatus.BAD_REQUEST.value(), "菜单不存在");
 		}
 
+		// 处理外键关联数据传空值问题
+//		if(null != menu.getParentId()){
+//			if("".equals(menu.getParentId().trim())){
+//				menu.setParentId(null);
+//			}else{
+//				if(null == menuService.getById(menu.getParentId())){
+//					return buildJSON(HttpStatus.BAD_REQUEST.value(), "父菜单不存在");
+//				}
+//			}
+//		}
+
 		try {
+			menu.setParentId(mm.getParentId());
+			menu.setLevel(mm.getLevel());
 			menuService.updateById(menu);
 
 			operLogService.addSystemLog(OperLog.operTypeEnum.update, OperLog.actionSystemEnum.menu,
 					JSON.toJSONString(menu),OperLog.logLevelEnum.success);
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"), SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
+			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("level","updateName","updateDate","createName","createDate"), SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
@@ -228,7 +229,7 @@ public class MenuController extends BaseController {
 			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu, "查询条件key:"+key,OperLog.logLevelEnum.success);
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(menu,FastjsonUtils.newIgnorePropertyFilter("level","updateName","updateDate","createName","createDate"));
 			return AllResult.okJSON(JSON.parse(jsonStr));
 		} catch (Exception e) {
 			LOGGER.error("menu object error. id:{}", key, e);
@@ -256,7 +257,7 @@ public class MenuController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("level","updateName","updateDate","createName","createDate"));
 
 			// 增加日志
 //			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr,OperLog.logLevelEnum.success);
@@ -284,7 +285,7 @@ public class MenuController extends BaseController {
 			}
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(menuList,FastjsonUtils.newIgnorePropertyFilter("level","updateName","updateDate","createName","createDate"));
 
 			// 增加日志
 //			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr,OperLog.logLevelEnum.success);
@@ -361,6 +362,8 @@ public class MenuController extends BaseController {
 			MenuExample.Criteria criteria = example.createCriteria();
 			criteria.andParentIdIsNull();
 
+			example.setOrderByClause("create_date desc,id asc");
+
 			Page<Menu> queryResult = menuService.getScrollData(pageNum, pageSize, example);
 
 			if(null == queryResult.getRecords() || queryResult.getRecords().size() == 0){
@@ -373,7 +376,7 @@ public class MenuController extends BaseController {
 //			treePage.setRecords(menuTreeList);
 
 			//去除不需要的字段
-			String jsonStr = JSON.toJSONString(treePage,FastjsonUtils.newIgnorePropertyFilter("updateName","updateDate","createName","createDate"));
+			String jsonStr = JSON.toJSONString(treePage,FastjsonUtils.newIgnorePropertyFilter("level","updateName","updateDate","createName","createDate"));
 
 			// 增加日志
 //			operLogService.addSystemLog(OperLog.operTypeEnum.select, OperLog.actionSystemEnum.menu,jsonStr,OperLog.logLevelEnum.success);

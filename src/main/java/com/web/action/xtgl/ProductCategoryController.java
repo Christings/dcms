@@ -371,6 +371,8 @@ public class ProductCategoryController extends BaseController {
 				criteria.andNameLike("%" + form.getName().trim() + "%");
 			}
 
+			example.setOrderByClause("create_date desc,id asc");
+
 			Page<ProductCategory> queryResult = productCategoryService.getScrollData(form.getPageNum(), form.getPageSize(), example);
 
 			Page<ProductCategoryTreeResult> treePage = new Page<>();
