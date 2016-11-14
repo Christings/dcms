@@ -195,6 +195,7 @@ public class ProductCategoryController extends BaseController {
 		try {
 			//修改
 			productCategory.setName(form.getName());
+			productCategory.setDescription(form.getDescription());
 			productCategory.setUpdateName(null);
 			productCategory.setUpdateDate(null);
 			productCategoryService.updateById(productCategory);
