@@ -30,7 +30,7 @@ function pageInit() {
 			var params=DCMSUtils.DataTables.handleParams(data);
 			params.deviceName = $("#deviceName").val();
 			params.operUserName = $("#operUserName").val();
-			DCMSUtils.Ajax.doPost("operLog/datagrid",params).then(function (data) {
+			DCMSBusi.Api.invoke("operLog/datagrid",params).then(function (data) {
 				if(data.status=='1'){
 					//组织DT标准的返回值
 					callback({

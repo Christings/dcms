@@ -31,6 +31,7 @@
     <resultMap id="gridResultMap" type="com.web.bean.result.CabinetResult" extends="BaseResultMap">
         <result column="room_name" property="roomName" jdbcType="VARCHAR"/>
         <result column="equipment_type_name" property="equipmentTypeName" jdbcType="TIMESTAMP"/>
+        <result column="area_name" property="areaName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Example_Where_Clause">
@@ -470,12 +471,16 @@
         a.height,
         a.warranty_time,
         a.work_time,
+        c.id area_id,
+        c.name area_name,
         b.id room_id,
         b.name room_name
         FROM
         t_b_cabinet a
         LEFT JOIN
         t_b_room b ON a.room_id = b.id
+        LEFT JOIN
+        t_b_area c ON a.area_id = c.id
         WHERE
         1 = 1
         <if test="roomName != null">
@@ -494,4 +499,12 @@
             order by ${orderByClause}
         </if>
     </select>
+
+    <update id="updateAreaByExample" parameterType="map">
+        update t_b_cabinet
+        set area_id = #{record.areaId,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
 </mapper>

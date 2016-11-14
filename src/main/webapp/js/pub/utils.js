@@ -141,6 +141,33 @@ var DCMSBusi={
 		get:function(){
 			return DCMSUtils.SessionStorage.get("_USER_INFO_");
 		}
+	},
+	Api:{
+		invoke:function (url,param) {
+			DCMSUtils.Modal.showLoading();
+			var dtd=$.Deferred();
+			DCMSUtils.Ajax.doPost(url,param).then(function(data){
+				DCMSUtils.Modal.hideLoading();
+				console.log(data);
+				if(data){
+					if(data.status==5){
+						DCMSUtils.Modal.toast(data.msg,'forbidden');
+						dtd.reject(data);
+					}else if(data.status==999){
+						window.top.location=getContentPath();
+					}else{
+						dtd.resolve(data);
+					}
+				}else{
+					dtd.reject(data);
+				}
+			},function(error){
+				DCMSUtils.Modal.hideLoading();
+				console.log(error);
+				dtd.reject(error);
+			});
+			return dtd.promise();
+		}
 	}
 };
 

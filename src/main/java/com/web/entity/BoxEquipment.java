@@ -2,6 +2,12 @@ package com.web.entity;
 
 import com.web.core.entity.BaseEntity;
 
+/**
+ * 设备位置描述信息
+ *
+ * @author 田军兴
+ * @date 2016-11-6
+ */
 public class BoxEquipment extends BaseEntity {
 
 	private String equipmentId;

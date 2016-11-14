@@ -1,214 +1,261 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>dcms</title>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
-	    <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-		<link href="../../../css/dataTables.bootstrap.css" rel="stylesheet">
-		<link href="../../../css/style2.css" rel="stylesheet">
-		<link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-		<link href="../../../css/animate.css" rel="stylesheet">
-	</head>
-	<body class="gray-bg">
-		<div class="wrapper wrapper-content animated fadeInRight">
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="ibox float-e-margins">
-						<div class="ibox-title">
-							<h5>基本 <small>分类，查找</small></h5>
-							<div class="ibox-tools">
-								<a class="add-menu">
-									<i class="fa fa-plus-square-o" data-toggle="modal" data-target="#equipmentAdd"></i>
-								</a>
-								<a class="collapse-link">
-									<i class="fa fa-chevron-up"></i>
-								</a>
-								<a class="dropdown-toggle" data-toggle="dropdown" href="table_data_tables.html#">
-									<i class="fa fa-wrench"></i>
-								</a>
-								<ul class="dropdown-menu dropdown-user">
-									<li><a href="table_data_tables.html#">选项1</a>
-									</li>
-									<li><a href="table_data_tables.html#">选项2</a>
-									</li>
-								</ul>
-								<a class="close-link">
-									<i class="fa fa-times"></i>
-								</a>
-							</div>
-						</div>
-						<div class="ibox-content">
-							<div class="" id="upTable">
-		                        <a data-toggle="modal" style="cursor:pointer" data-target="#equipmentAdd" class="btn btn-primary ">添加设备</a>
-		                    </div>
-							<table class="table table-striped table-bordered table-hover dataTables-example">
-								<thead>
-									<tr>
-										<th>机柜名称</th>
-										<th>类型</th>
-										<th>厂商</th>
-										<th>rso路径</th>
-										<th>max路径</th>
-										<th>操作</th>
-									</tr>
-								</thead>
-								<tbody id="equipmentBody">
-								</tbody>
-								<tfoot>
-									<tr>
-										<th>机柜名称</th>
-										<th>类型</th>
-										<th>厂商</th>
-										<th>rso路径</th>
-										<th>max路径</th>
-										<th>操作</th>
-									</tr>
-								</tfoot>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+<head>
+	<meta charset="UTF-8">
+	<title>机柜管理</title>
 
-<!-- 		<div class="foot" style="position:fixed;bottom:0;width:100%;background-color:#fff;margin:0;padding:0;">
-			<label class="number-page">每页显示
-				<select id="equipmentSelectPage" onchange="equipmentSelectPage()">
-					<option value = '2'>2</option>
-					<option value = '5'>5</option>
-					<option selected = "selected" value = '10'>10</option>
-					<option value = '15'>15</option>
-				</select>行
-			</label>
-			<label>
-				<select id="equipmentSelectType" onchange="equipmentSelectType()">
-					<option selected = "selected" value = '0'>机柜</option>
-					<option value = '1'>空调</option>
-					<option value = '2'>ups</option>
-					<option value = '3'>配电柜</option>
-					<option value = '4'>开关柜</option>
-				</select>
-			</label>
-			<label class="foot-pagination" id="equipmentPagination" style="margin:0;padding:0">
-				
-			</label>
-		</div> -->
-		<!-- 模态框（Modal） -->
-		<div class="modal fade" id="equipmentAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-						&times;
-						</button>
-						<h4 class="modal-title" id="myModalLabel">
-						机柜录入
-						</h4>
-					</div>
-					<div class="modal-body">
-						<form role="form" id="equipmentAddForm">
-							<div class="form-group">
-								<label for="name">机柜名称</label>
-								<input type="text" class="form-control" id="equName"
-								placeholder="请输入名称">
-							</div>
-							<div class="form-group">
-								<label for="name">机柜类型</label>
-								<select id="equTypeOp">
-									<option value = '0'>机柜</option>
-									<option value = '1'>空调</option>
-									<option value = '2'>ups</option>
-									<option value = '3'>配电柜</option>
-									<option value = '4'>开关柜</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label for="name">厂商</label>
-								<input type="text" class="form-control" id="equVendor"
-								placeholder="请输入类型">
-							</div>
-							<div class="form-group">
-								<label for="name">rso文件路径</label>
-								<input type="text" class="form-control" id="rsoPath"
-								placeholder="请输入">
-							</div>
-							<div class="form-group">
-								<label for="name">max文件路径</label>
-								<input type="text" class="form-control" id="maxPath"
-								placeholder="请输入">
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-default"
-								data-dismiss="modal">关闭
+	<link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+	<link href="../../../3rd-libs/datatables/datatables.bootstrap.css" rel="stylesheet">
+	<link href="../../../3rd-libs/datatables/datatables.css" rel="stylesheet">
+	<link href="../../../3rd-libs/rili/css/eye-base.css" rel="stylesheet">
+	<link href="../../../css/style2.css" rel="stylesheet">
+	<link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+	<link href="../../../css/animate.css" rel="stylesheet">
+
+	<script src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
+	<script src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- Data Tables -->
+	<script src="../../../3rd-libs/datatables/datatables.js"></script>
+	<script src="../../../3rd-libs/datatables/datatables.bootstrap.js"></script>
+	<script src="../../../3rd-libs/datatables/datatables-custom.js"></script>
+
+	<!-- 日期 -->
+	<script src="../../../3rd-libs/rili/js/eye-base.js"></script>
+	<script src="../../../3rd-libs/rili/js/eye-all.js"></script>
+
+	<style>
+		html, body{
+			overflow: hidden;
+		}
+		.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody td img.click-icon{
+			cursor: pointer;
+			vertical-align: top;
+		}
+	</style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-content">
+					<div class="row table-top">
+						<div class="col-md-2">
+							<div class="pull-left">
+								<button type="button" class="btn btn-primary" onclick="editItem('','new')">
+									<i class="fa fa-plus"></i> &nbsp;增加机柜
 								</button>
-								<button type="submit" onclick="equipmentAdd()" class="btn btn-primary">
-								确认添加
-								</button>
+							</div>
+						</div>
+						<form action="">
+							<div class="col-md-10 text-align-reverse">
+								<div class="input-group-search">
+									<input name="cabinetName" type="text" class="form-control" id="cabinetName"
+										   placeholder="机柜名称">
+								</div>
+								<div class="input-group-search">
+									<input name="cabinetResourceCode" type="text" class="form-control" id="cabinetResourceCode"
+										   placeholder="资源编码">
+								</div>
+								<div class="input-group-search">
+									<input name="status" type="text" class="form-control" id="status"
+										   placeholder="状态">
+								</div>
+								<div class="input-group-search">
+									<input name="roomName" type="text" class="form-control" id="cabinetRoomName"
+										   placeholder="所属机房">
+								</div>
+								<button class="btn btn-primary" type="button" id="queryBtn">查询</button>
 							</div>
 						</form>
 					</div>
-				</div><!-- /.modal -->
+					<table id="data-table" class="table table-striped table-bordered table-hover dataTables-example"
+						   style="width: 100%"></table>
+				</div>
 			</div>
 		</div>
-		<div class="modal fade" id="equipmentUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-						&times;
-						</button>
-						<h4 class="modal-title" id="myModalLabel">
-						机柜编辑
-						</h4>
-					</div>
-					<div class="modal-body" id="equipmentUpdateBody">
-						
-					</div>
-					<!-- <div class="modal-footer">
-								<button type="button" class="btn btn-default"
-								data-dismiss="modal">关闭
-								</button>
-								<button type="submit" onclick="menuUpdate" class="btn btn-primary">
-								提交更改
-								</button>
-					</div> -->
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal -->
-		</div>
-		<div class="modal fade" id="equipmentDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-						&times;
-						</button>
-						<h4 class="modal-title" id="myModalLabel">
-						机柜删除
-						</h4>
-					</div>
-					<div class="modal-body" id="equipmentDeleteBody">
-						
-					</div>
-					
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal -->
-		</div>
-		<script src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
-	    <script src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
-		<script src="../../../3rd-libs/jquery/table/jquery.jeditable.js"></script>
+	</div>
+</div>
 
-	    <!-- Data Tables -->
-	    <script src="../../../3rd-libs/jquery/table/jquery.dataTables.1.10.12.js"></script>
-	    <script src="../../../3rd-libs/bootstrap/js/dataTables.bootstrap.js"></script>
 
-	    <!-- 自定义js -->
-	    <script src="../../../js/pub/content.js"></script>
-	    <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../../../js/manage-equipment/equipmentSelectPage.js"></script>
-		<script src="../../../js/manage-equipment/equipmentAdd.js"></script>
-		<script src="../../../js/manage-equipment/equipmentUpdate.js"></script>
-		<script src="../../../js/manage-equipment/equipmentDelete.js"></script>
-		
-	</body>
+
+<!-- 新增/修改机柜信息模态框 -->
+<div class="modal fade" id="cabinetEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="cabinetEditModalTitle"></h4>
+			</div>
+			<div class="modal-body">
+				<form role="form" id="cabinetEditForm" enctype="multipart/form-data">
+					<div class="form-group">
+						<label for="equType">设备类型</label>
+						<select class="form-control m-b valid" name="equType" id="equType"></select>
+					</div>
+					<div class="form-group">
+						<label for="name">机柜名称</label>
+						<input id="cabinetId" name="cabinetId"  type="hidden">
+						<input id="saveType" name="saveType"  type="hidden">
+						<input type="text" class="form-control" name="name" id="name"
+							   placeholder="请输入机柜名称" maxlength="200">
+					</div>
+					<div class="form-group">
+						<label for="resourceCode">资产编码</label>
+						<input type="text" class="form-control" name="resourceCode" id="resourceCode"
+							   placeholder="请输入资产编码">
+					</div>
+					<div class="form-group">
+						<label for="warrantyTime">保修时间</label>
+						<input type="text" class="form-control" name="warrantyTime" id="warrantyTime"
+							   placeholder="请输入保修时间" onClick="eye.datePicker.show(this);">
+					</div>
+					<div class="form-group">
+						<label for="workTime">投运时间</label>
+						<input type="text" class="form-control" name="workTime" id="workTime"
+							   placeholder="请输入投运时间" onClick="eye.datePicker.show(this);">
+					</div>
+					<div class="form-group">
+						<label for="roomName">所属机房</label>
+						<select class="form-control m-b valid" name="roomName" id="roomName"></select>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary" onclick="saveCabinet()">保存</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 添加用户模态框 -->
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="addUserModalTitle">录入设备用户</h4>
+			</div>
+			<div class="modal-body">
+				<form role="form" class="form-horizontal" id="addUserModalForm">
+					<div class="form-group">
+						<label for="addUser-cpRoomName" class="col-sm-2 col-md-2 col-xs-2 control-label">设备名称</label>
+						<input id="addUserId" name="addUserId"  type="hidden">
+						<div class="col-sm-10 col-md-10 col-xs-10">
+							<p class="form-control-static" id="addUser-cpRoomName"></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="addUser-checkbox" class="col-sm-2 col-md-2 col-xs-2 control-label" style="margin-top: 7px;">用户</label>
+						<div class="col-sm-10 col-md-10 col-xs-10 addUser-checkbox" id="addUser-checkbox"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary" onclick="saveUsers()">保存</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 添加服务器/网络设备/配线架/小机存储设备/其他设备模态框 -->
+<div class="modal fade" id="addEquModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="addEquModalTitle"></h4>
+			</div>
+			<div class="modal-body">
+				<form role="form" class="form-horizontal" id="addEquForm">
+					<div class="form-group">
+						<label for="addEqu-equType">设备类型</label>
+						<select class="form-control m-b valid" name="addEqu-equType" id="addEqu-equType"></select>
+					</div>
+					<div class="form-group">
+						<label for="equName">设备名称</label>
+						<input id="equCase" name="equCase"  type="hidden">
+						<input type="text" class="form-control" name="equName" id="equName"
+							   placeholder="请输入设备名称" maxlength="200">
+					</div>
+					<div class="form-group">
+						<label for="addEqu-resourceCode">资产编码</label>
+						<input type="text" class="form-control" name="addEqu-resourceCode" id="addEqu-resourceCode"
+							   placeholder="请输入资产编码">
+					</div>
+					<div class="form-group">
+						<label for="addEqu-cabinetName">机柜</label>
+						<p id="addEqu-cabinetName"></p>
+					</div>
+					<div class="form-group">
+						<label for="addEqu-UNum">起始U数</label>
+						<input type="number" class="form-control" name="addEqu-UNum" id="addEqu-UNum"
+							   placeholder="请输入起始U数">
+					</div>
+					<div class="form-group">
+						<label for="addEqu-position">方向</label>
+						<select class="form-control m-b valid" name="addEqu-position" id="addEqu-position">
+							<option value="">请设置方向</option>
+						</select>
+					</div>
+					<div class="form-group" id="group-IP">
+						<label for="addEqu-IP">IP地址</label>
+						<input type="text" class="form-control" name="addEqu-IP" id="addEqu-IP"
+							   placeholder="请输入IP地址">
+					</div>
+					<div class="form-group" id="group-system">
+						<label for="addEqu-system">操作系统</label>
+						<select class="form-control m-b valid" name="addEqu-system" id="addEqu-system">
+							<option value="">请选择操作系统</option>
+						</select>
+					</div>
+					<div class="form-group" id="group-CPU">
+						<label for="addEqu-CPU">CPU型号</label>
+						<input type="text" class="form-control" name="addEqu-CPU" id="addEqu-CPU"
+							   placeholder="请输入CPU型号">
+					</div>
+					<div class="form-group" id="group-disk">
+						<label for="addEqu-disk">磁盘空间(GB)</label>
+						<input type="number" class="form-control" name="addEqu-disk" id="addEqu-disk"
+							   placeholder="请输入>磁盘空间(GB)">
+					</div>
+					<div class="form-group" id="group-memory">
+						<label for="addEqu-memory">内存空间(GB)</label>
+						<input type="number" class="form-control" name="addEqu-memory" id="addEqu-memory"
+							   placeholder="请输入内存空间(GB)">
+					</div>
+					<div class="form-group">
+						<label for="addEqu-warrantyTime">保修时间</label>
+						<input type="text" class="form-control" name="addEqu-warrantyTime" id="addEqu-warrantyTime"
+							   placeholder="请输入保修时间" onClick="eye.datePicker.show(this);">
+					</div>
+					<div class="form-group">
+						<label for="addEqu-workTime">投运时间</label>
+						<input type="text" class="form-control" name="addEqu-workTime" id="addEqu-workTime"
+							   placeholder="请输入投运时间" onClick="eye.datePicker.show(this);">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary" onclick="saveEqu()">保存</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<script src="../../../3rd-libs/jquery-validation/jquery.validate.min.js"></script>
+<script src="../../../3rd-libs/jquery-validation/localization/messages_zh.min.js"></script>
+<script src="../../../3rd-libs/jquery-weui/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../../js/pub/common.js"></script>
+<script type="text/javascript" src="../../../js/pub/utils.js"></script>
+<script type="text/javascript" src="../../../js/xgtl/equipment/equipment.js"></script>
+
+</body>
 </html>

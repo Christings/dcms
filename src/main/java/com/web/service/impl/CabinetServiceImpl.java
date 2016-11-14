@@ -23,59 +23,85 @@ import com.web.service.CabinetService;
  */
 @Service
 @Transactional
-public class CabinetServiceImpl implements CabinetService{
+public class CabinetServiceImpl implements CabinetService {
 
-    @Autowired
-    private CabinetMapper mapper;
+	@Autowired
+	private CabinetMapper mapper;
+
+	@Override
+	public Page<Cabinet> getByPage(int pageCurrent, int count, CabinetExample example) {
+		PageHelper.startPage(pageCurrent, count);
+		List<Cabinet> cabinets = mapper.selectByExample(example);
+		Page<Cabinet> page = new Page<>(cabinets);
+		return page;
+	}
+
+	@Override
+	public Page<CabinetResult> getByPage(int pageCurrent, int count, CabinetForm form) {
+		PageHelper.startPage(pageCurrent, count);
+		List<CabinetResult> grids = mapper.selectGridData(form);
+		Page<CabinetResult> page = new Page<>(grids);
+		return page;
+	}
+
+	@Override
+	public List<Cabinet> getByExample(CabinetExample example) {
+		return mapper.selectByExample(example);
+	}
+
+	@Override
+	public int save(Cabinet entity) {
+		return mapper.insertSelective(entity);
+	}
+
+	@Override
+	public int updateById(Cabinet entity) {
+		return mapper.updateByPrimaryKeySelective(entity);
+	}
+
+	@Override
+	public int deleteById(String key) {
+		return mapper.deleteByPrimaryKey(key);
+	}
+
+	@Override
+	public Cabinet getById(String key) {
+		return mapper.selectByPrimaryKey(key);
+	}
+
+	@Override
+	public List<Cabinet> getAll() {
+		return mapper.selectByExample(new CabinetExample());
+	}
+
+	@Override
+	public int getCount(CabinetExample example) {
+		return mapper.countByExample(example);
+	}
+
+	@Override
+	public int updateAreaIdByExample(CabinetExample example, String areaId) {
+		Cabinet cabinet = new Cabinet();
+		cabinet.setAreaId(areaId);
+		return mapper.updateByExampleSelective(cabinet, example);
+	}
 
     @Override
-    public Page<Cabinet> getByPage(int pageCurrent, int count, CabinetExample example) {
-        PageHelper.startPage(pageCurrent,count);
-        List<Cabinet> cabinets = mapper.selectByExample(example);
-        Page<Cabinet> page = new Page<>(cabinets);
-        return page;
+    public int updateAreaByExample(String areaId) {
+        CabinetExample example = new CabinetExample();
+        CabinetExample.Criteria criteria = example.createCriteria();
+        criteria.andAreaIdEqualTo(areaId);
+        return mapper.updateAreaByExample(new Cabinet(),example);
     }
 
     @Override
-    public Page<CabinetResult> getByPage(int pageCurrent, int count, CabinetForm form) {
-        PageHelper.startPage(pageCurrent,count);
-        List<CabinetResult> grids = mapper.selectGridData(form);
-        Page<CabinetResult> page = new Page<>(grids);
-        return page;
-    }
-
-    @Override
-    public List<Cabinet> getByExample(CabinetExample example) {
-        return mapper.selectByExample(example);
-    }
-
-    @Override
-    public int save(Cabinet entity) {
-        return mapper.insertSelective(entity);
-    }
-
-    @Override
-    public int updateById(Cabinet entity) {
-        return mapper.updateByPrimaryKeySelective(entity);
-    }
-
-    @Override
-    public int deleteById(String key) {
-        return mapper.deleteByPrimaryKey(key);
-    }
-
-    @Override
-    public Cabinet getById(String key) {
-        return mapper.selectByPrimaryKey(key);
-    }
-
-    @Override
-    public List<Cabinet> getAll() {
-        return mapper.selectByExample(new CabinetExample());
-    }
-
-    @Override
-    public int getCount(CabinetExample example) {
-        return mapper.countByExample(example);
+    public CabinetResult selectResultById(String id) {
+        CabinetForm form = new CabinetForm();
+        form.setId(id);
+        List<CabinetResult> list = mapper.selectGridData(form);
+        if(list.size() > 0){
+            return list.get(0);
+        }
+        return null;
     }
 }

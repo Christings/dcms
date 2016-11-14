@@ -28,4 +28,12 @@ public interface CabinetService extends IService<Cabinet,String>{
     List<Cabinet> getByExample(CabinetExample example);
 
     int getCount(CabinetExample example);
+
+    int updateAreaIdByExample(CabinetExample example, String areaId);
+    /**
+     * 清除区域和机柜关联关系
+     * */
+    int updateAreaByExample(String areaId);
+
+    CabinetResult selectResultById(String id);
 }
