@@ -29,8 +29,7 @@ function pageInit() {
 			var params=DCMSUtils.DataTables.handleParams(data);
 			params.name = $("#cpRoom-name").val();
 			params.position = $("#cpRoom-position").val();
-			DCMSUtils.Ajax.doPost("room/datagrid",params).then(function (data) {
-				console.log(data);
+			DCMSBusi.Api.invoke("room/datagrid",params).then(function (data) {
 				if(data.status=='1'){
 					//组织DT标准的返回值
 					callback({
@@ -85,7 +84,7 @@ function editItem(id,type){
 	}else if(type=='update'){
 		$("#file").parent().hide();
 		$("#cpRoomModalTitle").text('机房属性编辑');
-		DCMSUtils.Ajax.doPost("room/selectById",{id:id}).then(function (data) {
+		DCMSBusi.Api.invoke("room/selectById",{id:id}).then(function (data) {
 			if(data.status=='1'){
 				$("#cpRoomId").val(id);
 				$("#name").val(data.data.name);
@@ -220,7 +219,7 @@ function saveComment() {
 
 //查看视图
 function checkView(resourceCode){
-	DCMSUtils.Ajax.doPost('roomIcngph/locationServiceRoomByName',{resourceCode:resourceCode}).then(function(data){
+	DCMSBusi.Api.invoke('roomIcngph/locationServiceRoomByName',{resourceCode:resourceCode}).then(function(data){
 		if(data.status=='1'){
 			roomPGWatch(data.data,resourceCode);
 		}else{
@@ -236,7 +235,7 @@ function addUser(id,name){
 	$("#addUserId").val(id);
 	$("#addUser-cpRoomName").text(name);
 
-	$.when(DCMSUtils.Ajax.doPost('user/getAll'),DCMSUtils.Ajax.doPost('room/getServiceRoomUserRels',{serviceRoomId:id}))
+	$.when(DCMSBusi.Api.invoke('user/getAll'),DCMSBusi.Api.invoke('room/getroomUserRels',{serviceRoomId:id}))
 		.then(function(userData, userRelsData){
 			if(userData.status=='1' &&  userRelsData.status=='1'){
 				var relev_userId =[];
@@ -273,7 +272,7 @@ function  saveUsers() {
 		//chk_value.push($(this).val());
 		chk_value +=  $(this).val() + ",";
 	});
-	DCMSUtils.Ajax.doPost("room/updateServiceRoomUserRel",{serviceRoomId:$("#addUserId").val(),userIds:chk_value}).then(function(data){
+	DCMSBusi.Api.invoke("room/updateServiceRoomUserRel",{serviceRoomId:$("#addUserId").val(),userIds:chk_value}).then(function(data){
 		DCMSUtils.Modal.hideLoading();
 		if(data.status=='1'){
 			$("#addUserModal").modal('hide');

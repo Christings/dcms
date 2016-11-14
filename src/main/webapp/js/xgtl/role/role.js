@@ -30,7 +30,7 @@ function pageInit() {
 			var params=DCMSUtils.DataTables.handleParams(data);
 			params.codeQuery=$("#searchRoleCode").val();
 			params.nameQuery=$("#searchRoleName").val();
-			DCMSUtils.Ajax.doPost("role/datagrid",params).then(function (data) {
+			DCMSBusi.Api.invoke("role/datagrid",params).then(function (data) {
 				if(data.status=='1'){
 					data=data.data;
 					var roleMap={};
@@ -132,7 +132,7 @@ $("#roleNewUpdateForm").validate({
 			url='role/update';
 		}
 		DCMSUtils.Modal.showLoading();
-		DCMSUtils.Ajax.doPost(url,{rolecode:$("#roleCode").val(),rolename:$("#roleName").val(),id:roleId}).then(function(data){
+		DCMSBusi.Api.invoke(url,{rolecode:$("#roleCode").val(),rolename:$("#roleName").val(),id:roleId}).then(function(data){
 			DCMSUtils.Modal.hideLoading();
 			if(data.status=='1'){
 				document.getElementById("roleNewUpdateForm").reset();
@@ -156,7 +156,7 @@ function roleDelete(roleId){
 	var roleMap=DCMSUtils.SessionStorage.get("ROLE_MAP");
 	DCMSUtils.Modal.confirm('确定删除角色['+roleMap[roleId].rolename+']吗？','',function () {
 		DCMSUtils.Modal.showLoading();
-		DCMSUtils.Ajax.doPost('role/delete',{id:roleId}).then(function(data){
+		DCMSBusi.Api.invoke('role/delete',{id:roleId}).then(function(data){
 			DCMSUtils.Modal.hideLoading();
 			if(data.status=='1'){
 				DCMSUtils.Modal.toast('删除角色成功','');
@@ -235,7 +235,7 @@ var zTreeSetting={
 function roleSetting(roleId){
 	$("#roleId").val(roleId);
 	DCMSUtils.Modal.showLoading();
-	$.when(DCMSUtils.Ajax.doPost('menu/tree'),DCMSUtils.Ajax.doPost('menu/role/getRoleId',{roleId:roleId}))
+	$.when(DCMSBusi.Api.invoke('menu/tree'),DCMSBusi.Api.invoke('menu/role/getRoleId',{roleId:roleId}))
 		.then(function(treeData,roleMenuData){
 			if(treeData.status!='1'){
 				DCMSUtils.Modal.toast('加载菜单树出错:'+treeData.msg,'forbidden');
@@ -270,8 +270,8 @@ function zTreeOnClick(event, treeId, treeNode) {
 	$("#menuOptTBody").empty();
 
 	$.when(
-		DCMSUtils.Ajax.doPost('menu/operation/getMenuId',{menuId:treeNode.id}),
-		DCMSUtils.Ajax.doPost('menu/role/getRoleIdAndMenuId',{menuId:treeNode.id,roleId:$("#roleId").val()})
+		DCMSBusi.Api.invoke('menu/operation/getMenuId',{menuId:treeNode.id}),
+		DCMSBusi.Api.invoke('menu/role/getRoleIdAndMenuId',{menuId:treeNode.id,roleId:$("#roleId").val()})
 	).then(function(menuData,roleOptData){
 		if(menuData.status=='1' && roleOptData.status=='1'){
 			$("#menuOptTBody").empty();
@@ -319,7 +319,7 @@ function saveRoleMenus(){
 		menuIds+=","+selected[i].id;
 	}
 	DCMSUtils.Modal.showLoading();
-	DCMSUtils.Ajax.doPost('menu/role/batchMenus',{roleId:$("#roleId").val(),menuIds:menuIds.substring(1)}).then(function(data){
+	DCMSBusi.Api.invoke('menu/role/batchMenus',{roleId:$("#roleId").val(),menuIds:menuIds.substring(1)}).then(function(data){
 		DCMSUtils.Modal.hideLoading();
 		if(data.status=='1'){
 			DCMSUtils.Modal.toast('保存角色菜单成功');
@@ -360,7 +360,7 @@ function saveRoleMenuOpts() {
 		opts+=','+$(this).val();
 	});
 	DCMSUtils.Modal.showLoading();
-	DCMSUtils.Ajax.doPost('menu/role/add',{roleId:$("#roleId").val(),menuId:$("#menuId").val(),operationId:opts.substring(1)}).then(function(data){
+	DCMSBusi.Api.invoke('menu/role/add',{roleId:$("#roleId").val(),menuId:$("#menuId").val(),operationId:opts.substring(1)}).then(function(data){
 		DCMSUtils.Modal.hideLoading();
 		if(data.status=='1'){
 			DCMSUtils.Modal.toast('保存操作成功');

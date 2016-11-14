@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.mappers.CabinetMapper">
+    <resultMap id="BaseResultMap" type="com.web.entity.Cabinet">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="resource_code" property="resourceCode" jdbcType="VARCHAR"/>
+        <result column="room_id" property="roomId" jdbcType="VARCHAR"/>
+        <result column="equipment_type_id" property="equipmentTypeId" jdbcType="VARCHAR"/>
+        <result column="area_id" property="areaId" jdbcType="VARCHAR"/>
+        <result column="x" property="x" jdbcType="FLOAT"/>
+        <result column="y" property="y" jdbcType="FLOAT"/>
+        <result column="z" property="z" jdbcType="FLOAT"/>
+        <result column="height" property="height" jdbcType="SMALLINT"/>
+        <result column="weight" property="weight" jdbcType="FLOAT"/>
+        <result column="power" property="power" jdbcType="FLOAT"/>
+        <result column="room_status" property="roomStatus" jdbcType="SMALLINT"/>
+        <result column="model_height" property="modelHeight" jdbcType="SMALLINT"/>
+        <result column="model_width" property="modelWidth" jdbcType="SMALLINT"/>
+        <result column="model_color" property="modelColor" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="SMALLINT"/>
+        <result column="warranty_time" property="warrantyTime" jdbcType="TIMESTAMP"/>
+        <result column="work_time" property="workTime" jdbcType="TIMESTAMP"/>
+        <result column="u_order" property="uOrder" jdbcType="SMALLINT"/>
+        <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="gridResultMap" type="com.web.bean.result.CabinetResult" extends="BaseResultMap">
+        <result column="room_name" property="roomName" jdbcType="VARCHAR"/>
+        <result column="equipment_type_name" property="equipmentTypeName" jdbcType="TIMESTAMP"/>
+        <result column="area_name" property="areaName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        id, name, resource_code, room_id, equipment_type_id, area_id, x, y, z, height,
+        weight, power, room_status, model_height, model_width, model_color, status, warranty_time,
+        work_time, u_order, create_date, create_name, update_date, update_name
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.CabinetExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_b_cabinet
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <delete id="deleteByExample" parameterType="com.web.example.CabinetExample">
+        delete from t_b_cabinet
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insertSelective" parameterType="com.web.entity.Cabinet">
+        insert into t_b_cabinet
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="resourceCode != null">
+                resource_code,
+            </if>
+            <if test="roomId != null">
+                room_id,
+            </if>
+            <if test="equipmentTypeId != null">
+                equipment_type_id,
+            </if>
+            <if test="areaId != null">
+                area_id,
+            </if>
+            <if test="x != null">
+                x,
+            </if>
+            <if test="y != null">
+                y,
+            </if>
+            <if test="z != null">
+                z,
+            </if>
+            <if test="height != null">
+                height,
+            </if>
+            <if test="weight != null">
+                weight,
+            </if>
+            <if test="power != null">
+                power,
+            </if>
+            <if test="roomStatus != null">
+                room_status,
+            </if>
+            <if test="modelHeight != null">
+                model_height,
+            </if>
+            <if test="modelWidth != null">
+                model_width,
+            </if>
+            <if test="modelColor != null">
+                model_color,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="warrantyTime != null">
+                warranty_time,
+            </if>
+            <if test="workTime != null">
+                work_time,
+            </if>
+            <if test="uOrder != null">
+                u_order,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="createName != null">
+                create_name,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+            <if test="updateName != null">
+                update_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="resourceCode != null">
+                #{resourceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="roomId != null">
+                #{roomId,jdbcType=VARCHAR},
+            </if>
+            <if test="equipmentTypeId != null">
+                #{equipmentTypeId,jdbcType=VARCHAR},
+            </if>
+            <if test="areaId != null">
+                #{areaId,jdbcType=VARCHAR},
+            </if>
+            <if test="x != null">
+                #{x,jdbcType=REAL},
+            </if>
+            <if test="y != null">
+                #{y,jdbcType=REAL},
+            </if>
+            <if test="z != null">
+                #{z,jdbcType=REAL},
+            </if>
+            <if test="height != null">
+                #{height,jdbcType=INTEGER},
+            </if>
+            <if test="weight != null">
+                #{weight,jdbcType=REAL},
+            </if>
+            <if test="power != null">
+                #{power,jdbcType=REAL},
+            </if>
+            <if test="roomStatus != null">
+                #{roomStatus,jdbcType=INTEGER},
+            </if>
+            <if test="modelHeight != null">
+                #{modelHeight,jdbcType=INTEGER},
+            </if>
+            <if test="modelWidth != null">
+                #{modelWidth,jdbcType=INTEGER},
+            </if>
+            <if test="modelColor != null">
+                #{modelColor,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="warrantyTime != null">
+                #{warrantyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="workTime != null">
+                #{workTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="uOrder != null">
+                #{uOrder,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateName != null">
+                #{updateName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.web.example.CabinetExample" resultType="java.lang.Integer">
+        select count(*) from t_b_cabinet
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_b_cabinet
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.resourceCode != null">
+                resource_code = #{record.resourceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.roomId != null">
+                room_id = #{record.roomId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.equipmentTypeId != null">
+                equipment_type_id = #{record.equipmentTypeId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.areaId != null">
+                area_id = #{record.areaId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.x != null">
+                x = #{record.x,jdbcType=REAL},
+            </if>
+            <if test="record.y != null">
+                y = #{record.y,jdbcType=REAL},
+            </if>
+            <if test="record.z != null">
+                z = #{record.z,jdbcType=REAL},
+            </if>
+            <if test="record.height != null">
+                height = #{record.height,jdbcType=INTEGER},
+            </if>
+            <if test="record.weight != null">
+                weight = #{record.weight,jdbcType=REAL},
+            </if>
+            <if test="record.power != null">
+                power = #{record.power,jdbcType=REAL},
+            </if>
+            <if test="record.roomStatus != null">
+                room_status = #{record.roomStatus,jdbcType=INTEGER},
+            </if>
+            <if test="record.modelHeight != null">
+                model_height = #{record.modelHeight,jdbcType=INTEGER},
+            </if>
+            <if test="record.modelWidth != null">
+                model_width = #{record.modelWidth,jdbcType=INTEGER},
+            </if>
+            <if test="record.modelColor != null">
+                model_color = #{record.modelColor,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=INTEGER},
+            </if>
+            <if test="record.warrantyTime != null">
+                warranty_time = #{record.warrantyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.workTime != null">
+                work_time = #{record.workTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.uOrder != null">
+                u_order = #{record.uOrder,jdbcType=INTEGER},
+            </if>
+            <if test="record.createDate != null">
+                create_date = #{record.createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.createName != null">
+                create_name = #{record.createName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.updateDate != null">
+                update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateName != null">
+                update_name = #{record.updateName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_b_cabinet
+        set id = #{record.id,jdbcType=VARCHAR},
+        name = #{record.name,jdbcType=VARCHAR},
+        resource_code = #{record.resourceCode,jdbcType=VARCHAR},
+        room_id = #{record.roomId,jdbcType=VARCHAR},
+        equipment_type_id = #{record.equipmentTypeId,jdbcType=VARCHAR},
+        area_id = #{record.areaId,jdbcType=VARCHAR},
+        x = #{record.x,jdbcType=REAL},
+        y = #{record.y,jdbcType=REAL},
+        z = #{record.z,jdbcType=REAL},
+        height = #{record.height,jdbcType=INTEGER},
+        weight = #{record.weight,jdbcType=REAL},
+        power = #{record.power,jdbcType=REAL},
+        room_status = #{record.roomStatus,jdbcType=INTEGER},
+        model_height = #{record.modelHeight,jdbcType=INTEGER},
+        model_width = #{record.modelWidth,jdbcType=INTEGER},
+        model_color = #{record.modelColor,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=INTEGER},
+        warranty_time = #{record.warrantyTime,jdbcType=TIMESTAMP},
+        work_time = #{record.workTime,jdbcType=TIMESTAMP},
+        u_order = #{record.uOrder,jdbcType=INTEGER},
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+        create_name = #{record.createName,jdbcType=VARCHAR},
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+        update_name = #{record.updateName,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.Cabinet">
+        update t_b_cabinet
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="resourceCode != null">
+                resource_code = #{resourceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="roomId != null">
+                room_id = #{roomId,jdbcType=VARCHAR},
+            </if>
+            <if test="equipmentTypeId != null">
+                equipment_type_id = #{equipmentTypeId,jdbcType=VARCHAR},
+            </if>
+            <if test="areaId != null">
+                area_id = #{areaId,jdbcType=VARCHAR},
+            </if>
+            <if test="x != null">
+                x = #{x,jdbcType=REAL},
+            </if>
+            <if test="y != null">
+                y = #{y,jdbcType=REAL},
+            </if>
+            <if test="z != null">
+                z = #{z,jdbcType=REAL},
+            </if>
+            <if test="height != null">
+                height = #{height,jdbcType=INTEGER},
+            </if>
+            <if test="weight != null">
+                weight = #{weight,jdbcType=REAL},
+            </if>
+            <if test="power != null">
+                power = #{power,jdbcType=REAL},
+            </if>
+            <if test="roomStatus != null">
+                room_status = #{roomStatus,jdbcType=INTEGER},
+            </if>
+            <if test="modelHeight != null">
+                model_height = #{modelHeight,jdbcType=INTEGER},
+            </if>
+            <if test="modelWidth != null">
+                model_width = #{modelWidth,jdbcType=INTEGER},
+            </if>
+            <if test="modelColor != null">
+                model_color = #{modelColor,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="warrantyTime != null">
+                warranty_time = #{warrantyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="workTime != null">
+                work_time = #{workTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="uOrder != null">
+                u_order = #{uOrder,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                create_name = #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateName != null">
+                update_name = #{updateName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectGridData" resultMap="gridResultMap" parameterType="com.web.bean.form.CabinetForm">
+        SELECT
+        a.id,
+        a.name,
+        a.resource_code,
+        a.status,
+        a.height,
+        a.warranty_time,
+        a.work_time,
+        c.id area_id,
+        c.name area_name,
+        b.id room_id,
+        b.name room_name
+        FROM
+        t_b_cabinet a
+        LEFT JOIN
+        t_b_room b ON a.room_id = b.id
+        LEFT JOIN
+        t_b_area c ON a.area_id = c.id
+        WHERE
+        1 = 1
+        <if test="roomName != null">
+            and b.name like CONCAT('%', #{roomName,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="status != null">
+            and a.status = #{status,jdbcType=INTEGER},
+        </if>
+        <if test="name != null">
+            and a.name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="resourceCode != null">
+            and a.resource_code like CONCAT('%', #{resourceCode,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <update id="updateAreaByExample" parameterType="map">
+        update t_b_cabinet
+        set area_id = #{record.areaId,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+</mapper>

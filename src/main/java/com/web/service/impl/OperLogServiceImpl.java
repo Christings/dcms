@@ -214,6 +214,8 @@ public class OperLogServiceImpl implements OperLogService {
 			return operType + "机房平面图";
 		case room:
 			return operType + "机房";
+		case area:
+			return operType + "区域";
 		}
 		return "";
 	}

@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -71,8 +72,14 @@ public class AuthInterceptor implements HandlerInterceptor {
 		}
 		//2.判断用户是否登录
 		if(null == WebUtils.getUser(request)){
-//			response.sendRedirect(request.getContextPath()+"/");
-			response.getWriter().write("<script>window.top.location=\""+request.getContextPath()+"/"+"\"</script>");
+			if(request.getRequestURI().indexOf("webpages")!=-1 || request.getRequestURI().indexOf(".html")!=-1){
+				response.setCharacterEncoding("UTF-8");
+				response.setContentType("text/html; charset=UTF-8"); //转码
+				response.setHeader("Cache-Control", "no-cache");
+				response.getWriter().write("<script type='text/javascript'>window.top.location='"+request.getContextPath()+"'</script>");
+			}else{
+				response.getWriter().append(JSON.toJSONString(AllResult.build(999,"对不起，会话超时请重新登陆！")));
+			}
 			return false;
 		}
 		//3.判断用户是否有权限访问URL
