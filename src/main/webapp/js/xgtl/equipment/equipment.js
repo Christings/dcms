@@ -57,7 +57,7 @@ function pageInit() {
                         "<img class='click-icon' src='"+getContentPath()+"img/distrb_add.png' title='添加配线架' onclick=\"addEqu('" + row.id+"','" + row.name+"','distrb_add')\"' />&nbsp;&nbsp;" +
                         "<img class='click-icon' src='"+getContentPath()+"img/storage_add.png' title='添加小机存储设备' onclick=\"addEqu('" + row.id+"','" + row.name+"','storage_add')\"' />&nbsp;&nbsp;" +
                         "<img class='click-icon' src='"+getContentPath()+"img/other_add.png' title='添加其他设备' onclick=\"addEqu('" + row.id+"','" + row.name+"','other_add')\"' />&nbsp;&nbsp;" +
-                        "<a target='_blank' href='draganddrop.html'><img class='click-icon' src='"+getContentPath()+"img/database_add.png' title='展开机柜' /></a>&nbsp;&nbsp;" +
+                        "<a target='_blank' href='draganddrop.html?cabinet_id=100082&direction=1'><img class='click-icon' src='"+getContentPath()+"img/database_add.png' title='展开机柜' onclick=\"viewCabinet('" + row.resourceCode+"')\"' /></a>&nbsp;&nbsp;" +
                         "<img class='click-icon' src='"+getContentPath()+"img/3D_location.png' title='3D视图' onclick=\"location3D('" + row.id+"')\"' />&nbsp;&nbsp;" +
                         "<i class='glyphicon glyphicon-eye-open' title='维修记录' onclick=\"logEdit('" + row.id+"')\"'></i>&nbsp;&nbsp;" +
                         "<i class='glyphicon glyphicon-remove' title='删除空机房' onclick=\"deleteCabinet('" + row.id+"')\"'></i>";
@@ -78,7 +78,7 @@ function pageInit() {
 //新增/修改机柜信息
 function editItem(id,type){
     $("#saveType").val(type);
-    getEquType("equType");
+    getEquType("equipmentTypeId");
     getCPRoomList("roomName");
     if(type=='new'){
         $("#cabinetEditModalTitle").text('增加机柜');
@@ -86,14 +86,16 @@ function editItem(id,type){
         document.getElementById("cabinetEditForm").reset();
     }else if(type=='update'){
         $("#cabinetEditModalTitle").text('机柜属性编辑');
-        DCMSBusi.Api.invoke("room/selectById",{id:id}).then(function (data) {
+        DCMSBusi.Api.invoke("cabinet/getCabinetResultById",{id:id}).then(function (data) {
             if(data.status=='1'){
                 $("#cabinetId").val(id);
+                $("#equipmentTypeId").val(data.data.equipmentTypeId);
                 $("#name").val(data.data.name);
+                $("#equHeight").val(data.data.height);
                 $("#resourceCode").val(data.data.resourceCode);
                 $("#warrantyTime").val(data.data.warrantyTime);
                 $("#workTime").val(data.data.workTime);
-                $("#roomName").val(data.data.roomName);
+                $("#roomName").val(data.data.roomId);
             }
         });
     }
@@ -138,9 +140,9 @@ function saveCabinet() {
     var workTime = $("#workTime").val();
     var roomId = $("#roomName").val();
 
-    if(equType == null || equType == ''){
+    if(equipmentTypeId == null || equipmentTypeId == ''){
         DCMSUtils.Modal.toast('请选择设备类型！','cancel');
-        $("#equType").focus();
+        $("#equipmentTypeId").focus();
         return false;
     }
     if(name == null || name == ''){
@@ -340,5 +342,18 @@ function deleteCabinet(id) {
     },function(error){
         DCMSUtils.Modal.hideLoading();
         DCMSUtils.Modal.toast('删除机柜信息失败','forbidden');
+    });
+}
+
+//展开机柜
+function viewCabinet(resourceCode) {
+    DCMSUtils.Modal.showLoading();
+    DCMSBusi.Api.invoke("cabinet/getPositionByResourceCode",{resourceCode:resourceCode}).then(function (data) {
+        DCMSUtils.Modal.hideLoading();
+        if(data.status=='1'){
+
+        }else{
+            DCMSUtils.Modal.toast(data.msg,'forbidden');
+        }
     });
 }

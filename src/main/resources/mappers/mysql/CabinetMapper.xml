@@ -495,6 +495,9 @@
         <if test="resourceCode != null">
             and a.resource_code like CONCAT('%', #{resourceCode,jdbcType=VARCHAR}, '%')
         </if>
+        <if test="id != null">
+            and a.id = #{id,jdbcType=VARCHAR}
+        </if>
         <if test="orderByClause != null">
             order by ${orderByClause}
         </if>
