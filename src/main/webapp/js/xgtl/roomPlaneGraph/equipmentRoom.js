@@ -168,9 +168,9 @@ function EquipmentFloat(){
 		// var style = 'style="position:absolute;left:100px;top:60px;width:50px;height:60px;background-color:red;"'; 
 		var mouseOverOut = 'onmouseover="this.style.backgroundColor=\'#c19288\'" onmouseout="this.style.backgroundColor=\''+color+'\'"';
 		if(data_id == i){
-			eq += '<span '+mouseOverOut+'class="equipment" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)>'+i+'</span>';
+			eq += '<span '+mouseOverOut+'class="equipment" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
 		}else{
-			eq += '<span '+mouseOverOut+'class="equipment" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)>'+i+'</span>';
+			eq += '<span '+mouseOverOut+'class="equipment" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
 		}
 	}
 	document.getElementById('equipments').innerHTML = eq;
@@ -197,8 +197,16 @@ function clearRoombg(){
 	times = 1;
 }
 
+$('#opWords').click(function(){
 
+});
 
+$('#opWordsToggle').click(function(){
+	console.log('opwt');
+	$('.equipment > i').each(function(){
+		$(this).toggleClass("disappear_words");
+	});
+});
 $('#opLocToggle').click(function(){
 	$('#operations_locate').toggleClass("appear_opLoc");
 });

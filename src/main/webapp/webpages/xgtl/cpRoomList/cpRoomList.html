@@ -74,7 +74,7 @@
             overflow-x: auto;
             overflow-y: auto;
         }
-         .appear_opLoc {
+        .appear_opLoc {
             visibility: hidden;
             
         }
@@ -83,6 +83,9 @@
             
         }
         .appear_opSea2{
+            visibility: hidden;
+        }
+        .disappear_words{
             visibility: hidden;
         }
     </style>
@@ -261,23 +264,23 @@
                     <img id="roombg" class="free dragscroll" style="height:100%;width:100%;z-index:-1;"src="">
                     <div id="roombgFather"></div>
                     <div >
-                        <input type="button" style="z-index:2;border-radius:50%; background-image: url('../../../img/1Group.jpg');width:40px;height:40px;top:50px;left:30px;position:absolute;">
-                        <input type="button" style="z-index:2;border-radius:50%; background-image: url('../../../img/1DisplayManyPlane.png');width:40px;height:40px;top:100px;left:30px;position:absolute;">
-                        <input type="button" id="opLocToggle1" style="z-index:2;border-radius:50%; background-image: url('../../../img/1Locate.png');width:40px;height:40px;top:150px;left:30px;position:absolute;">
-                        <input type="button" id="opSeaToggle1" style="z-index:2;border-radius:50%; background-image: url('../../../img/1Search.png');width:40px;height:40px;top:200px;left:30px;position:absolute;">
+                        <input type="button" id="opWords" style="z-index:2;border-radius:50%; background-image: url('../../../img/1Group.jpg');width:40px;height:40px;top:50px;left:30px;position:absolute;">
+                        <input type="button" id="opWordsToggle" style="z-index:2;border-radius:50%; background-image: url('../../../img/1DisplayManyPlane.png');width:40px;height:40px;top:100px;left:30px;position:absolute;">
+                        <input type="button" id="opLocToggle"  style="z-index:2;border-radius:50%; background-image: url('../../../img/1Locate.png');width:40px;height:40px;top:150px;left:30px;position:absolute;">
+                        <input type="button" id="opSeaToggle" style="z-index:2;border-radius:50%; background-image: url('../../../img/1Search.png');width:40px;height:40px;top:200px;left:30px;position:absolute;">
                         
                         <div style="color:white;font-size:5px" id="equipments"></div>
                         <div id="disAnimation"></div>
 
                         <div id="operations" style="z-index:2;">
-                            <div id="operations_locate" style="z-index:2;"class="input-group input-group-sm">
-                                <input style="width:150px;background-color: black;" type="text" class="form-control">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" ><i class="glyphicon glyphicon-ok"></i></button>
-                                </span>
-                            </div>
-                            
-                            <div id="operations_search" style="z-index:2;"class="input-group input-group-sm">
+                            <div id="operations_locate" style="z-index:2;"class="input-group input-group-sm appear_opLoc">
+                                    <input style="width:150px;background-color: black;" type="text" class="form-control">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" ><i class="glyphicon glyphicon-ok"></i></button>
+                                    </span>
+                                </div>
+                                
+                                <div id="operations_search" style="z-index:2;"class="input-group input-group-sm appear_opSea">
                                 <div class="row">
                                     <label style="text-align: right;padding-top: 5px;" class="col-xs-4">空间分布查询</label>
                                 </div>
