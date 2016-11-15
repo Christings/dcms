@@ -73,7 +73,11 @@ var DCMSUtils={
 	},
 	SessionStorage:{
 		set:function(name,value){
-			window.sessionStorage.setItem(name,JSON.stringify(value));
+			if(typeof value =='object'){
+				window.sessionStorage.setItem(name,JSON.stringify(value));
+			}else{
+				window.sessionStorage.setItem(name,value);
+			}
 		},
 		get:function(name){
 			var val=window.sessionStorage.getItem(name);
