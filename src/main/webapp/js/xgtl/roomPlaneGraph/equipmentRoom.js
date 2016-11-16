@@ -7,6 +7,7 @@ var ymlDatas='';
 var scrollHeight = $("#roomBody").height();
 var scrollWidth = $("#roomBody").width();
 var disFlag = '';
+
 function roomPGWatch(id,dis){
 	var path = '../../../roomIcngph/getImage?id='+id;
 	$('#roombg').attr('src', path);
@@ -20,7 +21,7 @@ function roomPGWatch(id,dis){
 		console.log("dis"+dis);
 		times = 1;
 		DCMSUtils.Modal.showLoading('机房平面图加载中...');
-		DCMSUtils.Ajax.doPost('roomIcngph/getJson',{id:id}).then(function(data){
+		DCMSBusi.Api.invoke('roomIcngph/getJson',{id:id}).then(function(data){
 	        if(data.status=='1'){
 	           jsonDatas = data.data;
 	           EquipmentFloat();
@@ -44,7 +45,7 @@ function roomPGWatch(id,dis){
 	        DCMSUtils.Modal.toast('json出错','forbidden');
 	    });
 
-		DCMSUtils.Ajax.doPost('roomIcngph/getYml',{id:id}).then(function(data){
+		DCMSBusi.Api.invoke('roomIcngph/getYml',{id:id}).then(function(data){
 	        if(data.status=='1'){
 	           ymlDatas = data.data;
 	           var html = '';
@@ -81,14 +82,13 @@ function disFocus(dis){
 	scrollHeight = $("#roomBody").height();//document.body.scrollHeight;
 	scrollWidth = $("#roomBody").width();
 	var leftUpY = ymlDatas[dis][0][1]/bgHeight*scrollHeight/2.12;
-	
 	var leftUpX = ymlDatas[dis][0][0]/bgWidth*scrollWidth/2.12;
 	var rightDownY = ymlDatas[dis][3][1]/bgHeight*scrollHeight/2.12;
 	var rightDownX = ymlDatas[dis][3][0]/bgWidth*scrollWidth/2.12;
-	console.log('ly:'+leftUpY+','+ymlDatas[dis][0][1]+','+bgHeight+','+scrollHeight);
-	console.log('lx:'+leftUpX+','+ymlDatas[dis][0][0]+','+bgWidth+','+scrollWidth);
-	console.log('ry:'+rightDownY+','+ymlDatas[dis][3][1]+','+bgHeight+','+scrollHeight);
-	console.log('rx:'+rightDownX+','+ymlDatas[dis][3][0]+','+bgWidth+','+scrollWidth);
+	// console.log('ly:'+leftUpY+','+ymlDatas[dis][0][1]+','+bgHeight+','+scrollHeight);
+	// console.log('lx:'+leftUpX+','+ymlDatas[dis][0][0]+','+bgWidth+','+scrollWidth);
+	// console.log('ry:'+rightDownY+','+ymlDatas[dis][3][1]+','+bgHeight+','+scrollHeight);
+	// console.log('rx:'+rightDownX+','+ymlDatas[dis][3][0]+','+bgWidth+','+scrollWidth);
 	var y = (rightDownY - leftUpY)+'px';
 	var x = (rightDownX -leftUpX)+'px';
 	// var style = "style='width:"+x+"px;border:2px dotted red;height:"+y+"px;position: absolute;top:"+leftUpY+";left:"+leftUpX+";-webkit-animation:flash 1s 2 ease-in-out;'";
@@ -132,10 +132,17 @@ function MouseWheelHandler(e){
 function EquipmentFloat(){
 	var data_id = JSON.parse(window.sessionStorage.getItem('data-id'));
 	var eq='';
+	var equipmentsExistFlag = 0;
 	scrollHeight = $("#roomBody").height();//document.body.scrollHeight;
 	scrollWidth = $("#roomBody").width();
+	if(document.getElementById('equipments').childNodes.length > 1){
+		equipmentsExistFlag = 1;
+	}
 	//console.log(scrollHeight);
 	for(var i in jsonDatas){
+		if(i == ''){
+			continue;
+		}
 		var data = jsonDatas[i];
 		var eqWidth = ((data[7] - data[1])/bgWidth*times*100);
 		var eqHeight = ((data[2] - data[6])/bgHeight*scrollHeight);
@@ -166,14 +173,56 @@ function EquipmentFloat(){
 		}
 		var style = 'style="cursor:pointer;position:absolute;z-index:1;left:'+eqLeft+'%;top:'+eqTop+'px;width:'+eqWidth+'%;height:'+eqHeight+'px;background-color:'+color+';border-left:2px solid #bcbcbc;border-bottom:2px solid #bcbcbc;"'
 		// var style = 'style="position:absolute;left:100px;top:60px;width:50px;height:60px;background-color:red;"'; 
-		var mouseOverOut = 'onmouseover="this.style.backgroundColor=\'#c19288\'" onmouseout="this.style.backgroundColor=\''+color+'\'"';
-		if(data_id == i){
-			eq += '<span '+mouseOverOut+'class="equipment" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
+		if(equipmentsExistFlag == 1){
+			var tmp = document.getElementById(i);
+			var rate = eqHeight/$('#'+i+' i').height();
+			tmp.style.left = eqLeft+'%';
+			tmp.style.top = eqTop+'px';
+			tmp.style.width = eqWidth+'%';
+			tmp.style.height = eqHeight+'px';
+			// if(tmp.firstChild.firstChild.nodeValue == 'A1-10'){
+			// 	console.log('A1-10:height'+$('#'+i+' i').height());
+			// 	console.log('eqHeight'+eqHeight);
+			// }
+			
+		    // if ($('#'+i+' i').height() > eqHeight) {
+		    //     //当容器高度大于最大高度的时候，按比例缩放
+		    //     $('#'+i+' i').css({
+		    //     	'display':'inline-block',
+		    //     	'-webkit-transform':'scale('+rate+')'
+		    //     })    
+		    // }
 		}else{
-			eq += '<span '+mouseOverOut+'class="equipment" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
+			var mouseOverOut = 'onmouseover="this.style.backgroundColor=\'#c19288\'" onmouseout="this.style.backgroundColor=\''+color+'\'"';
+			var dataPopOver = 'title="'+i+'" data-trigger="hover" data-container="body" '+
+			'data-toggle="popover" data-placement="top" '+
+			'data-content="右侧的 Popover 中的一些内容"';
+			if(data_id == i){
+				eq += '<span '+dataPopOver+'class="equipment" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
+			}else{
+				eq += '<span '+dataPopOver+'class="equipment" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
+			}
 		}
 	}
-	document.getElementById('equipments').innerHTML = eq;
+	if(equipmentsExistFlag == 0){
+		document.getElementById('equipments').innerHTML = eq;
+		$(function () { 
+			$("[data-toggle='popover']").popover();
+			console.log('popover!!!');
+		});
+		// var tmp = document.getElementById(i);
+		// for (var i = 12; i < 200; i++) {
+		//     if (tmp.firstChild.height() > eqHeight) {
+		//         //当容器高度大于最大高度的时候，上一个尝试的值就是最佳大小。
+		//         tmp.style.fontSize = (i - 2) + 'px';
+		//         //结束循环
+		//         break;
+		//     } else {
+		//         //如果小于最大高度，文字大小加1继续尝试
+		//         tmp.style.fontSize = i + 'px';
+		//     }
+		// }
+	}
 }
 
 function make(e){
@@ -196,6 +245,8 @@ function clearRoombg(){
 	$('#roombg').attr('src', '');
 	times = 1;
 }
+
+
 
 $('#opWords').click(function(){
 

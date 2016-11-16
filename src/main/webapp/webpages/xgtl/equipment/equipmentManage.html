@@ -161,6 +161,38 @@
 	</div>
 </div>
 
+<!-- 维修记录模态框 -->
+<div class="modal fade" id="logFixedModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="logFixedTitle">设备维修记录</h4>
+			</div>
+			<div class="modal-body">
+				<table id="logFixedModalTable">
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 增加维修记录模态框 -->
+<div class="modal fade" id="addLogFixedModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="addLogFixedTitle">增加设备维修记录</h4>
+			</div>
+			<div class="modal-body">
+				<form role="form" class="form-horizontal" id="addLogFixedModalForm">
+					
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- 添加服务器/网络设备/配线架/小机存储设备/其他设备模态框 -->
 <div class="modal fade" id="addEquModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -253,6 +285,8 @@
 <script src="../../../3rd-libs/jquery-validation/jquery.validate.min.js"></script>
 <script src="../../../3rd-libs/jquery-validation/localization/messages_zh.min.js"></script>
 <script src="../../../3rd-libs/jquery-weui/js/jquery-weui.min.js"></script>
+<script src="../../../3rd-libs/boostrap-table/bootstrap-table.min.js"></script>
+<script src="../../../3rd-libs/boostrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
 <script type="text/javascript" src="../../../js/pub/common.js"></script>
 <script type="text/javascript" src="../../../js/pub/utils.js"></script>
 <script type="text/javascript" src="../../../js/xgtl/equipment/equipment.js"></script>

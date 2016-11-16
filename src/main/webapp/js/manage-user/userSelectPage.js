@@ -14,7 +14,7 @@ function loadDomainRole(){
 	DCMSUtils.Modal.showLoading();
 	// var domainMap=DCMSUtils.SessionStorage.get("Domain_TREE_MAP");
 	// if(!domainMap){
-	 DCMSUtils.Ajax.doPost('domain/tree').then(function(data){
+	DCMSBusi.Api.invoke('domain/tree').then(function(data){
         DCMSUtils.Modal.hideLoading();
         if(data.status=='1'){
             var treeData=transDataToJsTree(data.data,jsTreeIndex);
@@ -63,7 +63,7 @@ function loadDomainRole(){
     var da = "";
     // var rolesMap=DCMSUtils.SessionStorage.get("ROLES_MAP");
     // if(!rolesMap){
-	DCMSUtils.Ajax.doPost("role/getAll",da).done((jsonData)=>{
+	DCMSBusi.Api.invoke("role/getAll",da).done((jsonData)=>{
 		var roles = jsonData["data"];
 		var content = [];
 		var e;
@@ -150,7 +150,7 @@ function userListLoad(){
 			params.realname = $("#searchRealname").val();
 			params.status = $("#searchStatus").val();
 			params.sex = $("#searchSex").val();
-			DCMSUtils.Ajax.doPost("user/datagrid",params).then(function (data) {
+			DCMSBusi.Api.invoke("user/datagrid",params).then(function (data) {
 				
 				if(data.status=='1'){
 				

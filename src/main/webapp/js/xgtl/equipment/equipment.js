@@ -59,7 +59,7 @@ function pageInit() {
                         "<img class='click-icon' src='"+getContentPath()+"img/other_add.png' title='添加其他设备' onclick=\"addEqu('" + row.id+"','" + row.name+"','other_add')\"' />&nbsp;&nbsp;" +
                         "<a target='_blank' href='draganddrop.html'><img class='click-icon' src='"+getContentPath()+"img/database_add.png' title='展开机柜' /></a>&nbsp;&nbsp;" +
                         "<img class='click-icon' src='"+getContentPath()+"img/3D_location.png' title='3D视图' onclick=\"location3D('" + row.id+"')\"' />&nbsp;&nbsp;" +
-                        "<i class='glyphicon glyphicon-eye-open' title='维修记录' onclick=\"logEdit('" + row.id+"')\"'></i>&nbsp;&nbsp;" +
+                        "<i class='glyphicon glyphicon-eye-open' title='维修记录' onclick=\"logFixed('" + row.resourceCode+"')\"'></i>&nbsp;&nbsp;" +
                         "<i class='glyphicon glyphicon-remove' title='删除空机房' onclick=\"deleteCabinet('" + row.id+"')\"'></i>";
                     return html;
                 }
@@ -342,3 +342,68 @@ function deleteCabinet(id) {
         DCMSUtils.Modal.toast('删除机柜信息失败','forbidden');
     });
 }
+//add by ding 2016/11/15
+function logFixed(resourceCode){
+    $("#logFixedModal").modal('show');
+    var myDate = new Date();
+    var contents = [];
+    var content = {};
+    content.fixedUserName = 'admin';
+    content.fixedContent = '测试';
+    content.fixedTime = myDate.toLocaleString();
+    contents.push(content);
+    // content.fixedUserName = 'admin';
+    // content.fixedContent = '测试';
+    // content.fixedTime = myDate.toLocaleString();
+    contents.push(content);
+    $('#logFixedModalTable').bootstrapTable({
+            search:true,
+            striped: true,
+            pagination: true,
+            singleSelect: false,
+            pageNumber: 2,
+            pageSize: 1,
+            pageList: [10, 50, 100, 200, 500],
+            columns: [
+            {
+                field: 'fixedUserName',
+                title: '维护人'
+            },
+            {
+                field: 'fixedContent',
+                title: '维护内容'
+            },
+            {
+                field: 'fixedTime',
+                title: '维护时间'
+            }
+            ],
+            data: contents
+        });
+    var button = '<button class="btn btn-primary" type="button" onclick="addLogFixed(\''+resourceCode+'\')">添加记录</button>';
+    var x = document.getElementsByClassName('fixed-table-loading');
+    x[0].innerHTML = button;
+}
+
+function addLogFixed(resourceCode){
+    $('#logFixedModal').modal('hide');
+    $('#addLogFixedModal').modal('show');
+    var user=DCMSBusi.USER.get();
+    var html = '<label>操作人：'+user.username+'</label><br />'+
+                '<label>操作记录</label>'+
+                '<textarea class="form-control" name="log" id="districtRemark" placeholder="请填写记录信息"></textarea>'+
+                '<div id="addLogFixedFooter" class="modal-footer">'+
+                    '<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>'+
+                    '<button type="button" class="btn btn-primary" onclick="saveLogFixed(\''+resourceCode+'\')">保存</button>'+
+               ' </div>';
+    document.getElementById('addLogFixedModalForm').innerHTML = html;
+
+}
+
+function saveLogFixed(resourceCode){
+    $('#addLogFixedModal').modal('hide');
+    logFixed(resourceCode);
+    document.getElementById('addLogFixedModalForm').reset();
+}
+
+

@@ -22,7 +22,7 @@ function pageInit() {
 			var params = DCMSUtils.DataTables.handleParams(data);
 			params.floorName = $("#searchFloorName").val();
 			params.fileName = $("#searchFileName").val();
-			DCMSUtils.Ajax.doPost("roomIcngph/datagrid",params).then(function (data) {
+			DCMSBusi.Api.invoke("roomIcngph/datagrid",params).then(function (data) {
 				if(data.status=='1'){
 					//组织DT标准的返回值
 					callback({

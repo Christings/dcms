@@ -4,7 +4,7 @@ function userUpdateInit(e){
 	var userId = {id:''};
 	userId["id"] = id;
 	loadDomainRole();
-	DCMSUtils.Ajax.doPost("user/get",userId).done((jsonData)=>{
+	DCMSBusi.Api.invoke("user/get",userId).done((jsonData)=>{
 		var userInfo = jsonData["data"];
 		var userName = userInfo['username'];
 		var realName = userInfo['realname'];
@@ -178,7 +178,7 @@ function userPasswordInit(e){
 	var id = e.getAttribute("data-value");
 	var userId = {id:''};
 	userId["id"] = id;
-	DCMSUtils.Ajax.doPost("user/get",userId).done((jsonData)=>{
+	DCMSBusi.Api.invoke("user/get",userId).done((jsonData)=>{
 		var userInfo = jsonData["data"];
 		var realName = userInfo['realname'];
 		var html = '<form role="form" id="userEditPasswordForm">'+
@@ -238,7 +238,7 @@ function userUpdate(){
 	userInfo['status'] = status;
 	userInfo['roleIds'] = roleIds;
 	userInfo['domainIds'] = domainIds;
-	DCMSUtils.Ajax.doPost("user/update",userInfo).done((res)=>{
+	DCMSBusi.Api.invoke("user/update",userInfo).done((res)=>{
 		if(res.status == "1"){
 			dtApi.ajax.reload();
 			DCMSUtils.Modal.toast("更新用户"+userName+"成功",'');
@@ -264,7 +264,7 @@ function userEditPassword(){
 	var userInfo = {id:'',password:''};
 	userInfo['id'] = id;
 	userInfo['password'] = password1;
-	DCMSUtils.Ajax.doPost("user/modifyPassword",userInfo).done((res)=>{
+	DCMSBusi.Api.invoke("user/modifyPassword",userInfo).done((res)=>{
 		if(res.status == "1"){
 			dtApi.ajax.reload();
 			DCMSUtils.Modal.toast("更改用户"+userName+"的密码成功",'');
