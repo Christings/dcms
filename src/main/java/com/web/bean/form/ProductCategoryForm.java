@@ -1,12 +1,12 @@
 package com.web.bean.form;
 
 /**
- * 分类管理Form
+ * 设备分类管理Form
  *
  * @author 杜延雷
- * @date 2016/11/7.
+ * @date 2016/11/14.
  */
-public class TypeForm extends CommonForm {
+public class ProductCategoryForm extends CommonForm {
     /**
      * 父ID
      */
@@ -16,6 +16,11 @@ public class TypeForm extends CommonForm {
      * 分类级别
      */
     private Integer level;
+
+    /**
+     * 描述
+     */
+    private String description;
 
     public String getParentId() {
         return parentId;
@@ -31,5 +36,13 @@ public class TypeForm extends CommonForm {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

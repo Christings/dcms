@@ -1,46 +1,46 @@
 package com.web.service;
 
 import com.web.core.util.page.Page;
-import com.web.entity.Type;
-import com.web.example.TypeExample;
+import com.web.entity.ProductCategory;
+import com.web.example.ProductCategoryExample;
 
 import java.util.List;
 
 /**
- * 分类管理 逻辑接口
+ * 设备分类管理 逻辑接口
  *
  * @author 杜延雷
- * @date 2016-11-07
+ * @date 2016-11-14
  */
-public interface TypeService extends IService<Type, String> {
+public interface ProductCategoryService extends IService<ProductCategory, String> {
 
     /**
      * 根据父ID查询 所有子集
-     * @param key
+     * @param parentId
      * @return
      */
-    List<Type> getByParentId(String key);
+    List<ProductCategory> getByParentId(String parentId);
 
     /**
      * 根据条件查询是否存在相关数据
      * @param example
      * @return
      */
-    int countByExample(TypeExample example);
+    int countByExample(ProductCategoryExample example);
 
     /**
      * 根据条件查询所有的分类
      * @param example
      * @return
      */
-    List<Type> getByExample(TypeExample example);
+    List<ProductCategory> getByExample(ProductCategoryExample example);
 
     /**
      * 根据条件返回 分类树集合
      * @param example
      * @return
      */
-    List<Type> getTree(TypeExample example);
+    List<ProductCategory> getTree(ProductCategoryExample example);
 
     /**
      * 分页处理 根据查询条件进行分页
@@ -49,7 +49,7 @@ public interface TypeService extends IService<Type, String> {
      * @param example
      * @return
      */
-    Page<Type> getScrollData(int pageNum, int pageSize, TypeExample example);
+    Page<ProductCategory> getScrollData(int pageNum, int pageSize, ProductCategoryExample example);
 
     /**
      * 级联删除子类

@@ -320,6 +320,8 @@ public class DoMainController extends BaseController {
 				criteria.andLevelEqualTo(1);
 			}
 
+			example.setOrderByClause("create_date desc,id asc");
+
 			Page<DoMain> queryResult = doMainService.getScrollData(pageNum, pageSize, example);
 
 			if(null == queryResult.getRecords() || queryResult.getRecords().size() == 0){

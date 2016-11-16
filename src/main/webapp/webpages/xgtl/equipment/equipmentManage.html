@@ -91,8 +91,8 @@
 			<div class="modal-body">
 				<form role="form" id="cabinetEditForm" enctype="multipart/form-data">
 					<div class="form-group">
-						<label for="equType">设备类型</label>
-						<select class="form-control m-b valid" name="equType" id="equType"></select>
+						<label for="equipmentTypeId">设备类型</label>
+						<select class="form-control m-b valid" name="equipmentTypeId" id="equipmentTypeId"></select>
 					</div>
 					<div class="form-group">
 						<label for="name">机柜名称</label>
@@ -100,6 +100,11 @@
 						<input id="saveType" name="saveType"  type="hidden">
 						<input type="text" class="form-control" name="name" id="name"
 							   placeholder="请输入机柜名称" maxlength="200">
+					</div>
+					<div class="form-group">
+						<label for="equHeight">机柜高度</label>
+						<input type="text" class="form-control" name="equHeight" id="equHeight"
+							   placeholder="请输入机柜高度">
 					</div>
 					<div class="form-group">
 						<label for="resourceCode">资产编码</label>
@@ -289,6 +294,7 @@
 <script src="../../../3rd-libs/boostrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
 <script type="text/javascript" src="../../../js/pub/common.js"></script>
 <script type="text/javascript" src="../../../js/pub/utils.js"></script>
+<script type="text/javascript" src="../../../js/pub/menu-tree.js"></script>
 <script type="text/javascript" src="../../../js/xgtl/equipment/equipment.js"></script>
 
 </body>
