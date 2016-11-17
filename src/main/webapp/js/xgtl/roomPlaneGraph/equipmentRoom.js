@@ -7,8 +7,9 @@ var ymlDatas='';
 var scrollHeight = $("#roomBody").height();
 var scrollWidth = $("#roomBody").width();
 var disFlag = '';
+var equipFlag = '';
 
-function roomPGWatch(id,dis){
+function roomPGWatch(id,dis,equip){
 	var path = '../../../roomIcngph/getImage?id='+id;
 	$('#roombg').attr('src', path);
 	$("#roombg")[0].onload = function(){
@@ -19,11 +20,14 @@ function roomPGWatch(id,dis){
 		bgWidth = image.width;
 		bgHeight = image.height;
 		console.log("dis"+dis);
-		times = 1;
+		times = 1;//平面图初始放大倍数
 		DCMSUtils.Modal.showLoading('机房平面图加载中...');
 		DCMSBusi.Api.invoke('roomIcngph/getJson',{id:id}).then(function(data){
 	        if(data.status=='1'){
 	           jsonDatas = data.data;
+	           if(equip != ''){
+	           		equipFlag = equip;//记录机柜管理所要查看的机柜资源编码
+	           }
 	           EquipmentFloat();
 	           
 	           
@@ -194,18 +198,26 @@ function EquipmentFloat(){
 		    // }
 		}else{
 			var mouseOverOut = 'onmouseover="this.style.backgroundColor=\'#c19288\'" onmouseout="this.style.backgroundColor=\''+color+'\'"';
-			var dataPopOver = 'title="'+i+'" data-trigger="hover" data-container="body" '+
+			var data_content = "机柜编号<br />品牌<br />承载设备数量<br />已用空间大小<br />承重大小<br />用电信息";
+			var dataPopOver = 'title="'+i+'" data-trigger="hover" data-html="true" data-container="#roomBody" '+
 			'data-toggle="popover" data-placement="top" '+
-			'data-content="右侧的 Popover 中的一些内容"';
+			'data-content="'+data_content+'"';
+			var classType = 'equipment popover-toggle';
+			if(i == equipFlag){
+				classType += ' selected';
+			}
 			if(data_id == i){
-				eq += '<span '+dataPopOver+'class="equipment" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
+				eq += '<span '+dataPopOver+'class="'+classType+'" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
 			}else{
-				eq += '<span '+dataPopOver+'class="equipment" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
+				eq += '<span '+dataPopOver+'class="'+classType+'" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
 			}
 		}
 	}
 	if(equipmentsExistFlag == 0){
 		document.getElementById('equipments').innerHTML = eq;
+		$('span.equipment.selected').css({
+			'background-color': '#c19288'
+		});
 		$(function () { 
 			$("[data-toggle='popover']").popover();
 			console.log('popover!!!');
@@ -246,7 +258,10 @@ function clearRoombg(){
 	times = 1;
 }
 
-
+$('div.popover.fade').css({
+	'backgroundColor':'black',
+	'opacity':'0.7'
+});
 
 $('#opWords').click(function(){
 

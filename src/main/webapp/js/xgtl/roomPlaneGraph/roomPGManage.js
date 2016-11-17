@@ -45,7 +45,7 @@ function pageInit() {
 			targets:0,
 			render:function(data,type,row,meta){
 				//var html='<a onclick="roomPGDownload(\"'+row.id+'\",\"'+row.imageName+'\")" download="'+row.imageName+'">'+row.imageName+'</a>';
-				var html='<span style="cursor:pointer" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick="roomPGWatch(\'' + row.id +'\',\'\')" >'+row.floorName+'</span>';
+				var html='<span style="cursor:pointer" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick="roomPGWatch(\'' + row.id +'\',\'\',\'\')" >'+row.floorName+'</span>';
 				return html;
 			}
 		},
@@ -79,7 +79,7 @@ function pageInit() {
 			render:function(data,type,row,meta){
 				var html='<i class="glyphicon glyphicon-pencil" title="编辑" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGUpdate\" onclick="roomPGUpdateInit(\'' + row.id +'\',\''+row.floorName+'\')"></i>&nbsp;&nbsp;' +
 					'<i class="glyphicon glyphicon-trash"  title="删除" onclick="roomPGDelete(\'' + row.id +'\',\''+row.floorName+'\')"></i>&nbsp;&nbsp;'+
-					'<i class="glyphicon glyphicon-search" title="查看平面图" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick="roomPGWatch(\'' + row.id +'\',\'\')"></i>';
+					'<i class="glyphicon glyphicon-search" title="查看平面图" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick="roomPGWatch(\'' + row.id +'\',\'\',\'\')"></i>';
 
 				return html;
 			}

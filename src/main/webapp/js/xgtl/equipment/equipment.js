@@ -59,6 +59,7 @@ function pageInit() {
                         "<img class='click-icon' src='"+getContentPath()+"img/other_add.png' title='添加其他设备' onclick=\"addEqu('" + row.id+"','" + row.name+"','other_add')\"' />&nbsp;&nbsp;" +
                         "<a target='_blank' href='draganddrop.html?cabinet_id=100082&direction=1'><img class='click-icon' src='"+getContentPath()+"img/database_add.png' title='展开机柜' onclick=\"viewCabinet('" + row.resourceCode+"')\"' /></a>&nbsp;&nbsp;" +
                         "<img class='click-icon' src='"+getContentPath()+"img/3D_location.png' title='3D视图' onclick=\"location3D('" + row.id+"')\"' />&nbsp;&nbsp;" +
+                        "<i class='glyphicon glyphicon-search' data-toggle=\"modal\" data-target=\"#roomPGWatch\" title='平面图' onclick=\"checkView('" + row.resourceCode+"')\"'></i>&nbsp;&nbsp;" +
                         "<i class='glyphicon glyphicon-eye-open' title='维修记录' onclick=\"logFixed('" + row.resourceCode+"')\"'></i>&nbsp;&nbsp;" +
                         "<i class='glyphicon glyphicon-remove' title='删除空机房' onclick=\"deleteCabinet('" + row.id+"')\"'></i>";
                     return html;
@@ -344,8 +345,18 @@ function deleteCabinet(id) {
         DCMSUtils.Modal.toast('删除机柜信息失败','forbidden');
     });
 }
-<<<<<<< HEAD
-//add by ding 2016/11/15
+//Added by ding 2016/11/17
+//查看机柜所在机房平面视图
+function checkView(resourceCode){
+    DCMSBusi.Api.invoke('cabinet/getPositionByResourceCode',{resourceCode:resourceCode}).then(function(data){
+        if(data.status=='1'){
+            roomPGWatch(data.data.roomIcngphId,'',resourceCode);
+        }else{
+            DCMSUtils.Modal.toast('平面图资源异常','forbidden');
+        }
+    });
+}
+//Added by ding 2016/11/15
 function logFixed(resourceCode){
     $("#logFixedModal").modal('show');
     var myDate = new Date();
@@ -410,8 +421,6 @@ function saveLogFixed(resourceCode){
 }
 
 
-=======
-
 //展开机柜
 function viewCabinet(resourceCode) {
     DCMSUtils.Modal.showLoading();
@@ -424,4 +433,3 @@ function viewCabinet(resourceCode) {
         }
     });
 }
->>>>>>> 9fbbcf4a45b35397f3d0a6d243694abdea949d3a
