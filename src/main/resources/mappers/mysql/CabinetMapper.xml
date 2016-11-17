@@ -99,12 +99,29 @@
         weight, power, room_status, model_height, model_width, model_color, status, warranty_time,
         work_time, u_order, create_date, create_name, update_date, update_name
     </sql>
+    <sql id="resourceCode_Column_List">
+        id, resource_code, room_id
+    </sql>
     <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.CabinetExample">
         select
         <if test="distinct">
             distinct
         </if>
         <include refid="Base_Column_List"/>
+        from t_b_cabinet
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectCodesByExample" resultMap="BaseResultMap" parameterType="com.web.example.CabinetExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="resourceCode_Column_List"/>
         from t_b_cabinet
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>

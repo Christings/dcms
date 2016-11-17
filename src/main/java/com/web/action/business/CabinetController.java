@@ -215,6 +215,7 @@ public class CabinetController extends BaseController {
 			orderBy.append("a.create_date desc");
 			form.setOrderByClause(orderBy.toString());
 			Page<CabinetResult> queryResult = cabinetService.getByPage(form.getPageNum(), form.getPageSize(), form);
+
 			// 去除不需要的字段
 			String jsonStr = JSON.toJSONString(queryResult,
 					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateCreate", "createName", "createDate"));
@@ -303,7 +304,8 @@ public class CabinetController extends BaseController {
 
 	/**
 	 * 根据机柜资源信息获取坐标和机房等信息
-	 *
+	 * 
+	 * @param form
 	 */
 	@RequestMapping(value = "/getPositionByResourceCode", method = { RequestMethod.GET, RequestMethod.POST })
 	public Object getPositionByResourceCode(CabinetForm form) {
@@ -348,8 +350,31 @@ public class CabinetController extends BaseController {
 			Map<String, Object> resultMap = new HashMap<String, Object>();
 			resultMap.put("cabinet", cabinet);
 			resultMap.put("roomId", cabinet.getRoomId());
+			resultMap.put("roomResourceCode", room.getResourceCode());
 			resultMap.put("roomIcngphId", roomIcngph.getId());
 			return AllResult.okJSON(resultMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "查询失败");
+		}
+	}
+
+	/**
+	 * 根据机柜资源信息获取坐标和机房等信息
+	 * 
+	 * @param cabinet
+	 */
+	@RequestMapping(value = "/getCabinetsByRoomId", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object getCabinetsByRoomId(Cabinet cabinet) {
+		if (StringUtil.isEmpty(cabinet.getRoomId())) {
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
+		}
+		try {
+			CabinetExample example = new CabinetExample();
+			CabinetExample.Criteria criteria = example.createCriteria();
+			criteria.andRoomIdEqualTo(cabinet.getRoomId());
+			List<Cabinet> cabinets = cabinetService.selectCodesByExample(example);
+			return AllResult.okJSON(cabinets);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "查询失败");
