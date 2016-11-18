@@ -350,7 +350,7 @@ function deleteCabinet(id) {
 function checkView(resourceCode){
     DCMSBusi.Api.invoke('cabinet/getPositionByResourceCode',{resourceCode:resourceCode}).then(function(data){
         if(data.status=='1'){
-            roomPGWatch(data.data.roomIcngphId,'',resourceCode);
+            roomPGWatch(data.data.roomIcngphId,data.data.roomResourceCode,resourceCode);
         }else{
             DCMSUtils.Modal.toast('平面图资源异常','forbidden');
         }
@@ -370,6 +370,7 @@ function logFixed(resourceCode){
     // content.fixedContent = '测试';
     // content.fixedTime = myDate.toLocaleString();
     contents.push(content);
+    $('#logFixedModalTable').bootstrapTable('destroy');
     $('#logFixedModalTable').bootstrapTable({
             search:true,
             striped: true,
