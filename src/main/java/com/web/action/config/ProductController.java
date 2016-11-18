@@ -368,6 +368,7 @@ public class ProductController extends BaseController {
 			FileUtil.uploadFiles(multipartRequest, targetPath, false);
 			String path = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH) + targetPath;
 
+			// 解析3source文件
 		} catch (Exception e) {
 			e.printStackTrace();
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
