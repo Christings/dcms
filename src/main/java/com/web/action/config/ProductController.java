@@ -1,4 +1,4 @@
-package com.web.action.xtgl;
+package com.web.action.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
