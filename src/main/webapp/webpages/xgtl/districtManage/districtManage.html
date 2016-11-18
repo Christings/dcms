@@ -104,13 +104,21 @@
 						</div>
 						<div class="form-group">
 						  	<label for="distictRoomId">所属机房</label>
-						 	<select class="form-control m-b valid" name="districtRoomId" id="districtRoomId">
+						 	<select class="form-control m-b valid" onchange="selectRoom()" name="districtRoomId" id="districtRoomId">
 							</select>
 						</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 						  <label for="cabinetResourceCodes">机柜资产编码</label>
 						  <textarea class="form-control" name="cabinetResourceCodes" id="cabinetResourceCodes" 
 						     placeholder="数据格式：A01,A02,A03..."></textarea>
+						</div> -->
+						<div class='form-group' >
+							<label class='col-sm-3'>机柜资产编码</label>
+							<input id="cabinetResourceCodes" name="cabinetResourceCodes"   style="display: none">
+							<input id="selectRoomId" style="display: none">
+							<div class='col-sm-9'>
+								<span id='cRCName' name="cRCName" style="width: 50%;"></span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectCabinetsBtn" class="btn btn-primary btn-sm btn-outline">选择</a>
+							</div>
 						</div>
 						<div class="form-group">
 						  <label for="districtRemark">备注</label>
@@ -128,6 +136,33 @@
 		        	</div>
 				</form>
 			</div><!-- /.modal -->
+		</div>
+	</div>
+
+	<div class="modal fade" id="districtCabinetsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	        <div class="modal-content">
+		        <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                  &times;
+		            </button>
+		            <h4 class="modal-title">
+		                选择机柜
+		            </h4>
+		        </div>
+
+		        <div class="modal-body">
+                    <table id="cabinetsModalTable">
+                    </table>
+		        </div>
+		         <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmCabinetsBtn">
+                        确定
+                    </button>
+                </div>
+		    </div>
 		</div>
 	</div>
 

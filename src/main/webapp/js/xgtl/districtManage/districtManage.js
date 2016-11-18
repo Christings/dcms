@@ -88,3 +88,145 @@ function getCPRoomList(name, selectRoomId) {
         }
     });
 }
+
+function selectRoom(){
+	var roomId = $("#districtRoomId").val();
+	console.log(roomId);
+	$("#selectRoomId").val(roomId);
+}
+function selectRoom1(){
+	var roomId = $("#districtRoomId1").val();
+	console.log(roomId);
+	$("#selectRoomId1").val(roomId);
+}
+
+$("#selectCabinetsBtn").click(function(){
+	
+    var roomId = $("#selectRoomId").val();
+    if(roomId == ''){
+		DCMSUtils.Modal.toast("请先选择区域所属机房",'');
+		return false;
+	}
+	if($("#confirmCabinetsBtn").hasClass('update')){
+		$("#confirmCabinetsBtn").removeClass('update');
+	}
+	$("#districtAdd").modal('hide');
+    $("#districtCabinetsModal").modal('show');
+    console.log('roomId'+roomId);
+    renderCabinetsTable(roomId);
+});
+
+function selectCabinetsBtn1(){
+	var roomId = $("#selectRoomId1").val();
+	console.log('update-roomId'+roomId);
+    if(roomId == ''){
+		DCMSUtils.Modal.toast("请先选择区域所属机房",'');
+		return false;
+	}
+	if($("#confirmCabinetsBtn").hasClass('update')){
+		$("#confirmCabinetsBtn").removeClass('update');
+	}
+	$("#districtUpdate").modal('hide');
+    $("#districtCabinetsModal").modal('show');
+    if(!$("#confirmCabinetsBtn").hasClass('update')){
+    	$("#confirmCabinetsBtn").addClass('update');
+    } 
+    renderCabinetsTable(roomId);
+}
+
+function renderCabinetsTable(roomId){
+	// console.log('renderRoomId'+roomId);
+	DCMSBusi.Api.invoke("cabinet/getCabinetsByRoomId",{roomId:roomId}).done((res)=>{
+		if(res.status == "1"){
+			var cabinets = res['data'];
+			var content = [];
+
+			for(var i=0,len=cabinets.length;i<len;i++){
+				e = cabinets[i];
+				var tmp = {};
+				tmp.id = e.id;
+				tmp.resourceCode = e.resourceCode;
+				content.push(tmp);
+			}
+			console.log('cabinetsTbale'+cabinets.length);
+			console.log('cabinetsTbaleContent'+content);
+			$('#cabinetsModalTable').bootstrapTable('destroy');
+			$('#cabinetsModalTable').bootstrapTable({
+				search:true,
+				striped: true,
+	 			pagination: true,
+	 			singleSelect: false,
+	 			pageNumber: 1,
+				pageSize: 8,
+	 			pageList: [10, 50, 100, 200, 500],
+			    columns: [
+			    {
+	                field: 'state',
+	                checkbox: true
+	            },
+			    {
+		        field: 'resourceCode',
+			        title: '机柜资源编码'
+			    }],
+			    data: content
+			});
+			return true;
+		}else{
+			DCMSUtils.Modal.toast("获取机柜列表失败"+res.msg,'');
+			return false;
+		}
+	});
+}
+
+
+
+$("#confirmCabinetsBtn").click(function(){
+	var selected = [];
+	var selectedFlag = 0;
+    $("tr[class='selected']").each(function(){
+    	var tmp = {};
+    	// var id = $(this).find('td').get(1).innerHTML;
+    	var resourceCode = $(this).find('td').get(1).innerHTML;
+    	// tmp.id =id;
+    	tmp.resourceCode=resourceCode;
+    	selected.push(tmp);
+    });
+
+    if(selected.length > 0){
+        selectedFlag = 1;
+    }
+    var cabinetsResourceCode = '';
+    for(var i=0,len=selected.length;i<len;i++){
+    	var cabinet = selected[i];
+    	if(i == (len -1)){
+    		cabinetsResourceCode += cabinet['resourceCode'];
+    	}else{
+    		cabinetsResourceCode += cabinet['resourceCode']+',';
+    	}
+    }
+
+    if($("#confirmCabinetsBtn").hasClass('update')){
+		$("#cabinetResourceCodes1").val(cabinetsResourceCode);
+		if(selectedFlag == 1){
+			$("#cRCName1").text('已选择');
+		}else{
+			$("#cRCName1").text('未选择');
+		}
+	    	
+	    // $("#RoleLevel").text(pRole.rank+1);
+	    $("#districtCabinetsModal").modal('hide');
+	    $("#districtAdd").modal('hide');
+	    $("#districtUpdate").modal('show');
+	}else{
+		$("#cabinetResourceCodes").val(cabinetResourceCodes);
+		if(selectedFlag == 1){
+			$("#cRCName").text('已选择');
+		}else{
+			$("#cRCName").text('未选择');
+		}
+	    // $("#RoleLevel").text(pRole.rank+1);
+	    $("#districtCabinetsModal").modal('hide');
+	    $("#districtUpdate").modal('hide');
+	    $("#districtAdd").modal('show');
+	}
+});
