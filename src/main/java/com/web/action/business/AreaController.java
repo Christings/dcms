@@ -3,6 +3,7 @@ package com.web.action.business;
 import java.util.Arrays;
 import java.util.List;
 
+import com.web.entity.Cabinet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,6 +178,11 @@ public class AreaController extends BaseController {
 			Area area = areaService.getById(form.getId());
 			areaName = area.getName();
 			AreaResult result = areaService.getAreaResultById(form);
+			CabinetExample example = new CabinetExample();
+			CabinetExample.Criteria criteria = example.createCriteria();
+			criteria.andRoomIdEqualTo(result.getRoomId());
+			List<Cabinet> cabinets = cabinetService.selectCodesByExample(example);
+			result.setCabinets(cabinets);
 			return AllResult.okJSON(result);
 		} catch (Exception e) {
 			e.printStackTrace();
