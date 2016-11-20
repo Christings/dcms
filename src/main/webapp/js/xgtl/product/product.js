@@ -106,6 +106,7 @@ function newUpdate(id,type) {
 }
 var icon = "<i class='fa fa-times-circle'></i> ";
 $("#newUpdateForm").validate({
+    // debug:true,
     rules:{
         proName:{
             required:true,
@@ -120,16 +121,16 @@ $("#newUpdateForm").validate({
             minlength:2,
             maxlength:50
         },
-        height:{
-            require:true,
+        proHeight:{
+            required:true,
             digits:true
         },
-        weight:{
-            require:true,
+        proWeight:{
+            required:true,
             number:true
         },
-        power:{
-            require:true,
+        proPower:{
+            required:true,
             number:true
         }
     },
@@ -153,12 +154,12 @@ $("#newUpdateForm").validate({
         }
 
         var url='product/add';
-        if(pro.id){
+        if(obj.id){
             url='product/update';
         }
         $("#modal").modal('hide');
         DCMSUtils.Modal.showLoading();
-        DCMSBusi.Api.invoke(url,type).then(function(data){
+        DCMSBusi.Api.invoke(url,obj).then(function(data){
             DCMSUtils.Modal.hideLoading();
             if(data.status=='1'){
                 //保存成功清空form
