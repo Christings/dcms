@@ -8004,3 +8004,6 @@ body.skin-3 {
 
 
 /*自定义*/
+.dataTables-style{
+    width: 100%;min-width: 800px;
+}
