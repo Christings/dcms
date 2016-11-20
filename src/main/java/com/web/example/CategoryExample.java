@@ -10,14 +10,14 @@ import java.util.List;
  * @author 杜延雷
  * @date 2016-11-14
  */
-public class ProductCategoryExample {
+public class CategoryExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ProductCategoryExample() {
+    public CategoryExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

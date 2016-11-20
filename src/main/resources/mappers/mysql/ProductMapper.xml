@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.web.mappers.ProductCategoryMapper" >
-  <resultMap id="BaseResultMap" type="com.web.entity.ProductCategory" >
+<mapper namespace="com.web.mappers.ProductMapper" >
+  <resultMap id="BaseResultMap" type="com.web.entity.Product" >
     <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="level" property="level" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="description" property="description" jdbcType="VARCHAR" />
-    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="type_id" property="typeId" jdbcType="VARCHAR" />
+    <result column="brand" property="brand" jdbcType="VARCHAR" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="weight" property="weight" jdbcType="REAL" />
+    <result column="power" property="power" jdbcType="REAL" />
+    <result column="extra" property="extra" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="update_name" property="updateName" jdbcType="VARCHAR" />
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="create_name" property="createName" jdbcType="VARCHAR" />
@@ -71,15 +75,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, level, name, description, parent_id, update_name, update_date, create_name, create_date
+    id, name, type_id, brand, height, weight, power, extra, status, update_name, update_date, 
+    create_name, create_date
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.ProductCategoryExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.ProductExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_s_product_category
+    from t_s_product
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,46 +95,60 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from t_s_product_category
+    from t_s_product
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from t_s_product_category
+    delete from t_s_product
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.web.example.ProductCategoryExample" >
-    delete from t_s_product_category
+  <delete id="deleteByExample" parameterType="com.web.example.ProductExample" >
+    delete from t_s_product
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.web.entity.ProductCategory" >
-    insert into t_s_product_category (id, level, name, 
-      description, parent_id, update_name, 
-      update_date, create_name, create_date
-      )
-    values (#{id,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{updateName,jdbcType=VARCHAR}, 
-      #{updateDate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}
-      )
+  <insert id="insert" parameterType="com.web.entity.Product" >
+    insert into t_s_product (id, name, type_id, 
+      brand, height, weight, 
+      power, extra, status, 
+      update_name, update_date, create_name, 
+      create_date)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{typeId,jdbcType=VARCHAR}, 
+      #{brand,jdbcType=VARCHAR}, #{height,jdbcType=INTEGER}, #{weight,jdbcType=REAL}, 
+      #{power,jdbcType=REAL}, #{extra,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.web.entity.ProductCategory" >
-    insert into t_s_product_category
+  <insert id="insertSelective" parameterType="com.web.entity.Product" >
+    insert into t_s_product
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
-      <if test="level != null" >
-        level,
-      </if>
       <if test="name != null" >
         name,
       </if>
-      <if test="description != null" >
-        description,
+      <if test="typeId != null" >
+        type_id,
       </if>
-      <if test="parentId != null" >
-        parent_id,
+      <if test="brand != null" >
+        brand,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="power != null" >
+        power,
+      </if>
+      <if test="extra != null" >
+        extra,
+      </if>
+      <if test="status != null" >
+        status,
       </if>
       <if test="updateName != null" >
         update_name,
@@ -148,17 +167,29 @@
       <if test="id != null" >
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="level != null" >
-        #{level,jdbcType=INTEGER},
-      </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="description != null" >
-        #{description,jdbcType=VARCHAR},
+      <if test="typeId != null" >
+        #{typeId,jdbcType=VARCHAR},
       </if>
-      <if test="parentId != null" >
-        #{parentId,jdbcType=VARCHAR},
+      <if test="brand != null" >
+        #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=REAL},
+      </if>
+      <if test="power != null" >
+        #{power,jdbcType=REAL},
+      </if>
+      <if test="extra != null" >
+        #{extra,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="updateName != null" >
         #{updateName,jdbcType=VARCHAR},
@@ -174,29 +205,41 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.web.example.ProductCategoryExample" resultType="java.lang.Integer" >
-    select count(*) from t_s_product_category
+  <select id="countByExample" parameterType="com.web.example.ProductExample" resultType="java.lang.Integer" >
+    select count(*) from t_s_product
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update t_s_product_category
+    update t_s_product
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.level != null" >
-        level = #{record.level,jdbcType=INTEGER},
-      </if>
       <if test="record.name != null" >
         name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.description != null" >
-        description = #{record.description,jdbcType=VARCHAR},
+      <if test="record.typeId != null" >
+        type_id = #{record.typeId,jdbcType=VARCHAR},
       </if>
-      <if test="record.parentId != null" >
-        parent_id = #{record.parentId,jdbcType=VARCHAR},
+      <if test="record.brand != null" >
+        brand = #{record.brand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.height != null" >
+        height = #{record.height,jdbcType=INTEGER},
+      </if>
+      <if test="record.weight != null" >
+        weight = #{record.weight,jdbcType=REAL},
+      </if>
+      <if test="record.power != null" >
+        power = #{record.power,jdbcType=REAL},
+      </if>
+      <if test="record.extra != null" >
+        extra = #{record.extra,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
       </if>
       <if test="record.updateName != null" >
         update_name = #{record.updateName,jdbcType=VARCHAR},
@@ -216,12 +259,16 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update t_s_product_category
+    update t_s_product
     set id = #{record.id,jdbcType=VARCHAR},
-      level = #{record.level,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
-      description = #{record.description,jdbcType=VARCHAR},
-      parent_id = #{record.parentId,jdbcType=VARCHAR},
+      type_id = #{record.typeId,jdbcType=VARCHAR},
+      brand = #{record.brand,jdbcType=VARCHAR},
+      height = #{record.height,jdbcType=INTEGER},
+      weight = #{record.weight,jdbcType=REAL},
+      power = #{record.power,jdbcType=REAL},
+      extra = #{record.extra,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
       update_name = #{record.updateName,jdbcType=VARCHAR},
       update_date = #{record.updateDate,jdbcType=TIMESTAMP},
       create_name = #{record.createName,jdbcType=VARCHAR},
@@ -230,20 +277,32 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.ProductCategory" >
-    update t_s_product_category
+  <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.Product" >
+    update t_s_product
     <set >
-      <if test="level != null" >
-        level = #{level,jdbcType=INTEGER},
-      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="description != null" >
-        description = #{description,jdbcType=VARCHAR},
+      <if test="typeId != null" >
+        type_id = #{typeId,jdbcType=VARCHAR},
       </if>
-      <if test="parentId != null" >
-        parent_id = #{parentId,jdbcType=VARCHAR},
+      <if test="brand != null" >
+        brand = #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=REAL},
+      </if>
+      <if test="power != null" >
+        power = #{power,jdbcType=REAL},
+      </if>
+      <if test="extra != null" >
+        extra = #{extra,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="updateName != null" >
         update_name = #{updateName,jdbcType=VARCHAR},
@@ -260,54 +319,20 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.web.entity.ProductCategory" >
-    update t_s_product_category
-    set level = #{level,jdbcType=INTEGER},
-      name = #{name,jdbcType=VARCHAR},
-      description = #{description,jdbcType=VARCHAR},
-      parent_id = #{parentId,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.web.entity.Product" >
+    update t_s_product
+    set name = #{name,jdbcType=VARCHAR},
+      type_id = #{typeId,jdbcType=VARCHAR},
+      brand = #{brand,jdbcType=VARCHAR},
+      height = #{height,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=REAL},
+      power = #{power,jdbcType=REAL},
+      extra = #{extra,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
       create_name = #{createName,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
-
-<!--根据条件返回树形Tree  begin 自定义-->
-  <resultMap id="TreeResultMap" type="com.web.entity.ProductCategory" extends="BaseResultMap">
-    <association property="children" column="id" javaType="java.util.ArrayList" select="selectByChildren" />
-  </resultMap>
-  <select id="selectByChildren" resultMap="TreeResultMap" parameterType="java.lang.String" >
-    select distinct
-    <include refid="Base_Column_List" />
-    from t_s_product_category
-    where  parent_id= #{id,jdbcType=VARCHAR}
-  </select>
-  <select id="selectByTree" resultMap="TreeResultMap" parameterType="java.util.Map" >
-    select distinct
-    <include refid="Base_Column_List" />
-    from t_s_product_category
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-
-  <select id="selectByExamplePage" resultMap="TreeResultMap" parameterType="com.web.example.ProductCategoryExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from t_s_product_category
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <!--自定义结束-->
 </mapper>

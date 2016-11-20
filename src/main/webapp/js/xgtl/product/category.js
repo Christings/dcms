@@ -1,4 +1,7 @@
 /**
+ * Created by Charles on 2016/11/15.
+ */
+/**
  * Created by Charles on 2016/11/12.
  */
 var globlePageNum = 1;//页码
@@ -10,7 +13,7 @@ function pageInit(){
 
 function getClassList(pageNum,pageSize){
     DCMSUtils.Modal.showLoading('分类加载中...');
-    DCMSBusi.Api.invoke('type/datagrid', {pageNum: pageNum, pageSize: pageSize})
+    DCMSBusi.Api.invoke('product/category/datagrid', {pageNum: pageNum, pageSize: pageSize})
         .then(function (data) {
             $("#treeBody").empty();
             DCMSUtils.Modal.hideLoading();
@@ -59,8 +62,8 @@ function initTreeGird(container, dataList, parentIndex) {
             trHtml+=' treegrid-parent-'+parentIndex;
         }
         trHtml += '">';
-        trHtml += '<td>' + type.id + '</td>';
         trHtml += '<td>' + type.name + '</td>';
+        trHtml += '<td>' + (type.description?type.description:'') + '</td>';
         trHtml += '<td>' +
             '<i class="glyphicon glyphicon-plus"   title="新增分类"     onclick="newUpdate(\''+type.id+'\',\'new\')"></i>&nbsp;&nbsp;' +
             '<i class="glyphicon glyphicon-pencil" title="编辑分类"     onclick="newUpdate(\''+type.id+'\',\'update\')"></i>&nbsp;&nbsp;'+
@@ -90,6 +93,7 @@ function initTreeGird(container, dataList, parentIndex) {
 function newUpdate(id,type) {
     if('new'==type){
         $("#modalTitle").text('新增分类');
+        $("#typeId").val('');
         document.getElementById('newUpdateForm').reset();
         if(id){
             var type=DCMSUtils.SessionStorage.get("TYPE_DATA_MAP")[id];
@@ -108,6 +112,7 @@ function newUpdate(id,type) {
         var type=DCMSUtils.SessionStorage.get("TYPE_DATA_MAP")[id];
         $("#typeId").val(type.id);
         $("#typeName").val(type.name);
+        $("#typeDesc").val(type.description);
 
         var pType=DCMSUtils.SessionStorage.get("TYPE_DATA_MAP")[type.parentId];
         if(pType){
@@ -125,21 +130,27 @@ $("#newUpdateForm").validate({
             required:true,
             minlength:2,
             maxlength:50
+        },
+        typeDesc:{
+            minlength:2,
+            maxlength:120
         }
     },
     messages:{
-        type:icon + "请输入2-50个字符的分类名称"
+        typeName:icon + "请输入2-50个字符的分类名称",
+        typeDesc:icon + "请输入2-120个字符的分类描述"
     },
     submitHandler:function(form){
         var type={
             id:$("#typeId").val(),
             name:$("#typeName").val(),
-            parentId:$("#typePId").val()
+            parentId:$("#typePId").val(),
+            description:$("#typeDesc").val()
         }
 
-        var url='type/add';
+        var url='product/category/add';
         if(type.id){
-            url='type/update';
+            url='product/category/update';
         }
         $("#modal").modal('hide');
         DCMSUtils.Modal.showLoading();
@@ -165,7 +176,7 @@ function deleteFun(id){
 
     DCMSUtils.Modal.confirm('确定删除分类['+type.name+']吗？','',function () {
         DCMSUtils.Modal.showLoading('分类删除中...');
-        DCMSBusi.Api.invoke('type/delete',{id:id}).then(function(data){
+        DCMSBusi.Api.invoke('product/category/delete',{id:id}).then(function(data){
             DCMSUtils.Modal.hideLoading();
             if(data.status=='1'){
                 getClassList(globlePageNum, globlePageSize);

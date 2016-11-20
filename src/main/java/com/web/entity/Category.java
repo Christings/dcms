@@ -10,7 +10,7 @@ import java.util.List;
  * @author 杜延雷
  * @date 2016-11-14
  */
-public class ProductCategory extends BaseEntity {
+public class Category extends BaseEntity {
 
     private Integer level;
 
@@ -23,7 +23,7 @@ public class ProductCategory extends BaseEntity {
     /**
      * 子分类集合
      */
-    private List<ProductCategory> children;
+    private List<Category> children;
 
     public Integer getLevel() {
         return level;
@@ -57,11 +57,11 @@ public class ProductCategory extends BaseEntity {
         this.parentId = parentId == null ? null : parentId.trim();
     }
 
-    public List<ProductCategory> getChildren() {
+    public List<Category> getChildren() {
         return children;
     }
 
-    public void setChildren(List<ProductCategory> children) {
+    public void setChildren(List<Category> children) {
         this.children = children;
     }
 }

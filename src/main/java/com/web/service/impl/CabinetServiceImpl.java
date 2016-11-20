@@ -86,22 +86,27 @@ public class CabinetServiceImpl implements CabinetService {
 		return mapper.updateByExampleSelective(cabinet, example);
 	}
 
-    @Override
-    public int updateAreaByExample(String areaId) {
-        CabinetExample example = new CabinetExample();
-        CabinetExample.Criteria criteria = example.createCriteria();
-        criteria.andAreaIdEqualTo(areaId);
-        return mapper.updateAreaByExample(new Cabinet(),example);
-    }
+	@Override
+	public int updateAreaByExample(String areaId) {
+		CabinetExample example = new CabinetExample();
+		CabinetExample.Criteria criteria = example.createCriteria();
+		criteria.andAreaIdEqualTo(areaId);
+		return mapper.updateAreaByExample(new Cabinet(), example);
+	}
 
-    @Override
-    public CabinetResult selectResultById(String id) {
-        CabinetForm form = new CabinetForm();
-        form.setId(id);
-        List<CabinetResult> list = mapper.selectGridData(form);
-        if(list.size() > 0){
-            return list.get(0);
-        }
-        return null;
-    }
+	@Override
+	public CabinetResult selectResultById(String id) {
+		CabinetForm form = new CabinetForm();
+		form.setId(id);
+		List<CabinetResult> list = mapper.selectGridData(form);
+		if (list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public List<Cabinet> selectCodesByExample(CabinetExample example) {
+		return mapper.selectCodesByExample(example);
+	}
 }

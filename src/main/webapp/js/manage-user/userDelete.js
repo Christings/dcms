@@ -10,7 +10,7 @@ function userDeleteInit(e){
 		// 	dataType: 'json',
 		// 	data: userId,
 		// })
-		DCMSUtils.Ajax.doPost("user/get",userId).done((jsonData)=>{
+		DCMSBusi.Api.invoke("user/get",userId).done((jsonData)=>{
 			var userInfo = jsonData["data"];
 			var userName = userInfo["username"];
 			console.log("delete:"+userName);
@@ -35,7 +35,7 @@ function userDelete(e){
 	var userInfo = {id:''};// 
 	userInfo['id'] = id;
 	console.log("delete:"+userInfo['id']);
-	DCMSUtils.Ajax.doPost("user/delete",userInfo).done((res)=>{
+	DCMSBusi.Api.invoke("user/delete",userInfo).done((res)=>{
 		console.log("delete222:"+userInfo['id']);
 		if(res.status == "1"){
 			console.log("删除用户成功" + res.data);

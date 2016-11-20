@@ -14,26 +14,32 @@ import com.web.example.CabinetExample;
  * @author 田军兴
  * @date 2016-11-07
  */
-public interface CabinetService extends IService<Cabinet,String>{
+public interface CabinetService extends IService<Cabinet, String> {
 
-    /**
-     * 机柜管理分页查询
-     *
-     * @param example
-     */
-    public Page<Cabinet> getByPage(int pageCurrent, int count,CabinetExample example);
+	/**
+	 * 机柜管理分页查询
+	 *
+	 * @param example
+	 */
+	public Page<Cabinet> getByPage(int pageCurrent, int count, CabinetExample example);
 
-    public Page<CabinetResult> getByPage(int pageCurrent, int count, CabinetForm form);
+	public Page<CabinetResult> getByPage(int pageCurrent, int count, CabinetForm form);
 
-    List<Cabinet> getByExample(CabinetExample example);
+	List<Cabinet> getByExample(CabinetExample example);
 
-    int getCount(CabinetExample example);
+	int getCount(CabinetExample example);
 
-    int updateAreaIdByExample(CabinetExample example, String areaId);
-    /**
-     * 清除区域和机柜关联关系
-     * */
-    int updateAreaByExample(String areaId);
+	int updateAreaIdByExample(CabinetExample example, String areaId);
 
-    CabinetResult selectResultById(String id);
+	/**
+	 * 清除区域和机柜关联关系
+	 */
+	int updateAreaByExample(String areaId);
+
+	CabinetResult selectResultById(String id);
+
+	/**
+	 * 根据机房ID获取机柜的ID和资源编码
+	 */
+	List<Cabinet> selectCodesByExample(CabinetExample example);
 }

@@ -77,4 +77,6 @@ public interface CabinetMapper {
 	List<Cabinet> selectWithProNames(String roomName, String name, String resourceCode, Integer status, String orderByClause);
 
 	List<CabinetResult> selectGridData(CabinetForm form);
+
+	List<Cabinet> selectCodesByExample(CabinetExample example);
 }

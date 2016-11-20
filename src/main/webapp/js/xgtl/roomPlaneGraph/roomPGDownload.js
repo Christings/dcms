@@ -1,6 +1,6 @@
 function roomPGDownload(id,fileName){
 	var params = {id:id,fileName:fileName};
-	DCMSUtils.Ajax.doPost("roomIcngph/checkFileIsExist",params).then(function (data) {
+	DCMSBusi.Api.invoke("roomIcngph/checkFileIsExist",params).then(function (data) {
 		if(data.status == 1){
 			window.location.href = '../../../roomIcngph/downloadFile?id='+id+'&fileName='+fileName;
 		}else{

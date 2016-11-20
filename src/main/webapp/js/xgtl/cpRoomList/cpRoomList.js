@@ -221,7 +221,7 @@ function saveComment() {
 function checkView(resourceCode){
 	DCMSBusi.Api.invoke('roomIcngph/locationServiceRoomByName',{resourceCode:resourceCode}).then(function(data){
 		if(data.status=='1'){
-			roomPGWatch(data.data,resourceCode);
+			roomPGWatch(data.data,resourceCode,'');
 		}else{
 			DCMSUtils.Modal.toast('平面图资源异常','forbidden');
 		}

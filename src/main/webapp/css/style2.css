@@ -7949,7 +7949,7 @@ body.skin-3 {
 }
 
 .navbar-header {
-    width: 60%;
+    width: 50%;
 }
 
 .bs-glyphicons {
@@ -8004,3 +8004,6 @@ body.skin-3 {
 
 
 /*自定义*/
+.dataTables-style{
+    width: 100%;min-width: 800px;
+}
