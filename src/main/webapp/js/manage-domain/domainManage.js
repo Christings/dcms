@@ -18,7 +18,7 @@ function getDomainList(pageNum, pageSize) {
         var params =  {pageNum: pageNum, pageSize: pageSize};
         $("#domainTreeBody").empty();
         DCMSUtils.Modal.showLoading('组织机构加载中...');
-        DCMSUtils.Ajax.doPost('domain/datagrid',params).then(function (data) {
+        DCMSBusi.Api.invoke('domain/datagrid',params).then(function (data) {
                 DCMSUtils.Modal.hideLoading();
                 console.log(data);
                 if (data.status === 1) {
@@ -134,7 +134,7 @@ function initTreeGird(container, domainTree, parentIndex) {
 var jsTreeIndex=0;
 $("#selectParentBtn").click(function(){
     DCMSUtils.Modal.showLoading();
-    DCMSUtils.Ajax.doPost('domain/tree').then(function(data){
+    DCMSBusi.Api.invoke('domain/tree').then(function(data){
         DCMSUtils.Modal.hideLoading();
         if(data.status=='1'){
             var treeData=transDataToJsTree(data.data,jsTreeIndex);
@@ -306,7 +306,7 @@ function saveDomain(){
         ajaxUrl='domain/add';
         domain.parentId=$("#domainPId").val();
     }
-    DCMSUtils.Ajax.doPost(ajaxUrl,domain).then(function(data){
+    DCMSBusi.Api.invoke(ajaxUrl,domain).then(function(data){
         DCMSUtils.Modal.hideLoading();
         if(data.status=='1'){
             //保存成功清空form
@@ -329,7 +329,7 @@ function domainDelete(domainId){
 
     DCMSUtils.Modal.confirm('确定删除['+domain.name+']吗？','',function () {
         DCMSUtils.Modal.showLoading('组织机构删除中...');
-        DCMSUtils.Ajax.doPost('domain/delete',{id:domainId}).then(function(data){
+        DCMSBusi.Api.invoke('domain/delete',{id:domainId}).then(function(data){
             DCMSUtils.Modal.hideLoading();
             if(data.status=='1'){
                 getDomainList(globlePageNum, globlePageSize);

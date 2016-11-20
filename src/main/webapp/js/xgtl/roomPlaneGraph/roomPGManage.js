@@ -22,7 +22,7 @@ function pageInit() {
 			var params = DCMSUtils.DataTables.handleParams(data);
 			params.floorName = $("#searchFloorName").val();
 			params.fileName = $("#searchFileName").val();
-			DCMSUtils.Ajax.doPost("roomIcngph/datagrid",params).then(function (data) {
+			DCMSBusi.Api.invoke("roomIcngph/datagrid",params).then(function (data) {
 				if(data.status=='1'){
 					//组织DT标准的返回值
 					callback({
@@ -45,7 +45,7 @@ function pageInit() {
 			targets:0,
 			render:function(data,type,row,meta){
 				//var html='<a onclick="roomPGDownload(\"'+row.id+'\",\"'+row.imageName+'\")" download="'+row.imageName+'">'+row.imageName+'</a>';
-				var html='<span style="cursor:pointer" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick="roomPGWatch(\'' + row.id +'\',\'\')" >'+row.floorName+'</span>';
+				var html='<span style="cursor:pointer" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick="roomPGWatch(\'' + row.id +'\',\'\',\'\')" >'+row.floorName+'</span>';
 				return html;
 			}
 		},
@@ -79,7 +79,7 @@ function pageInit() {
 			render:function(data,type,row,meta){
 				var html='<i class="glyphicon glyphicon-pencil" title="编辑" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGUpdate\" onclick="roomPGUpdateInit(\'' + row.id +'\',\''+row.floorName+'\')"></i>&nbsp;&nbsp;' +
 					'<i class="glyphicon glyphicon-trash"  title="删除" onclick="roomPGDelete(\'' + row.id +'\',\''+row.floorName+'\')"></i>&nbsp;&nbsp;'+
-					'<i class="glyphicon glyphicon-search" title="查看平面图" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick="roomPGWatch(\'' + row.id +'\',\'\')"></i>';
+					'<i class="glyphicon glyphicon-search" title="查看平面图" role=\"presentation\" data-toggle=\"modal\" data-target=\"#roomPGWatch\" onclick="roomPGWatch(\'' + row.id +'\',\'\',\'\')"></i>';
 
 				return html;
 			}

@@ -1,5 +1,9 @@
 package com.web.bean.result;
 
+import com.web.entity.Cabinet;
+
+import java.util.List;
+
 /**
  * 区域管理前台显示
  *
@@ -22,6 +26,11 @@ public class AreaResult {
 	 * 机房ID
 	 */
 	private String roomId;
+
+	/**
+	 * 机柜列表
+	 * */
+	private List<Cabinet>  cabinets;
 
 	/**
 	 * 机房名称
@@ -73,4 +82,11 @@ public class AreaResult {
 		this.remark = remark;
 	}
 
+	public List<Cabinet> getCabinets() {
+		return cabinets;
+	}
+
+	public void setCabinets(List<Cabinet> cabinets) {
+		this.cabinets = cabinets;
+	}
 }

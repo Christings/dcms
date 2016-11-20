@@ -6,7 +6,7 @@ package com.web.bean.result;
  * @author 杜延雷
  * @date 2016/11/14.
  */
-public class ProductCategoryResult {
+public class CategoryResult {
     /**
      * 主键ID
      */

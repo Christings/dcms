@@ -82,7 +82,7 @@ function userAdd(){
 	userInfo['roleIds'] = roleIds;
 	userInfo['status'] = status;
 	userInfo['domainIds'] = domainIds;
-	DCMSUtils.Ajax.doPost("user/add",userInfo).done((res)=>{
+    DCMSBusi.Api.invoke("user/add",userInfo).done((res)=>{
 		if(res.status == "1"){
 			DCMSUtils.Modal.toast("添加用户"+userName+"成功",'');
 			dtApi.ajax.reload();

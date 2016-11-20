@@ -6,7 +6,7 @@ package com.web.bean.form;
  * @author 杜延雷
  * @date 2016/11/14.
  */
-public class ProductCategoryForm extends CommonForm {
+public class CategoryForm extends CommonForm {
     /**
      * 父ID
      */
