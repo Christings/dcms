@@ -1,9 +1,7 @@
 package com.web.action.business;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
 import com.web.bean.form.CabinetForm;
@@ -21,14 +21,10 @@ import com.web.core.util.page.Page;
 import com.web.entity.*;
 import com.web.example.BoxEquipmentExample;
 import com.web.example.CabinetExample;
-import com.web.service.BoxEquipmentService;
-import com.web.service.CabinetService;
-import com.web.service.RoomIcngphService;
-import com.web.service.RoomService;
-import com.web.util.AllResult;
-import com.web.util.StringUtil;
-import com.web.util.UUIDGenerator;
-import com.web.util.YmlUtil;
+import com.web.example.ProductExample;
+import com.web.example.RoomExample;
+import com.web.service.*;
+import com.web.util.*;
 import com.web.util.fastjson.FastjsonUtils;
 
 /**
@@ -49,6 +45,8 @@ public class CabinetController extends BaseController {
 	private RoomService roomService;
 	@Autowired
 	private RoomIcngphService roomIcngphService;
+	@Autowired
+	private ProductService productService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CabinetController.class);
 
@@ -378,6 +376,83 @@ public class CabinetController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "查询失败");
+		}
+	}
+
+	/**
+	 * 导入机柜信息
+	 * @param request
+	 */
+	@RequestMapping(value = "/importCabinetData", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object importCabinetData(MultipartHttpServletRequest request) {
+		try {
+			StringBuffer stringBuffer = new StringBuffer();
+			Iterator<String> fileNames = request.getFileNames();
+			while (fileNames.hasNext()) {
+				String fileName = fileNames.next();
+				if (!"xls".equals(FileUtil.getFilenameExtension(fileName))
+						|| !"xlsx".equals(FileUtil.getFilenameExtension(fileName))) {
+					return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "只能上传excel文件!");
+				}
+				MultipartFile mFile = request.getFile(fileName);
+				if (null != mFile && mFile.getSize() > 0) {
+					ArrayList<String[]> excelData = FileUtil.getExcelData(mFile.getInputStream(), false);
+					for (int j = 0; j < excelData.size(); j++) {
+						String[] cabInfo = excelData.get(j);
+						Cabinet cabinet = new Cabinet();
+						for (int i = 0; i < cabInfo.length; i++) {
+							switch (i) {
+							case 0:
+								cabinet.setResourceCode(cabInfo[i]);
+							case 1:
+								cabinet.setName(cabInfo[i]);
+							case 3:
+								ProductExample example = new ProductExample();
+								ProductExample.Criteria criteria = example.createCriteria();
+								criteria.andNameEqualTo(cabInfo[i]);
+								List<Product> list = productService.getExample(example);
+								if (list.size() == 1) {
+									cabinet.setEquipmentTypeId(cabInfo[i]);
+								}
+							case 4:
+								RoomExample roomExample = new RoomExample();
+								RoomExample.Criteria roomCriteria = roomExample.createCriteria();
+								roomCriteria.andResourceCodeEqualTo(cabInfo[i]);
+								List<Room> rooms = roomService.getByExample(roomExample);
+								if (rooms.size() == 1) {
+									cabinet.setRoomId(rooms.get(0).getId());
+								}
+							case 5:
+								cabinet.setHeight(Integer.parseInt(cabInfo[i]));
+							case 6:
+								cabinet.setuOrder("反".equals(cabInfo[i]) ? 1 : 0);
+							}
+						}
+						CabinetExample example = new CabinetExample();
+						CabinetExample.Criteria criteria = example.createCriteria();
+						criteria.andResourceCodeEqualTo(cabinet.getResourceCode());
+						int countExist = cabinetService.getCount(example);
+						if (countExist > 0) {
+							stringBuffer.append(j + 1 + "行数据资源编码已存在，请检查，");
+							continue;
+						}
+						if (StringUtil.isEmpty(cabinet.getRoomId())) {
+							stringBuffer.append(j + 1 + "行数据找不到关联机房，请检查，");
+							continue;
+						}
+						if (StringUtil.isEmpty(cabinet.getEquipmentTypeId())) {
+							stringBuffer.append(j + 1 + "行数据找不到设备类型，请检查，");
+							continue;
+						}
+						cabinet.setId(UUIDGenerator.generatorRandomUUID());
+						cabinetService.save(cabinet);
+					}
+				}
+			}
+			return AllResult.okJSON(stringBuffer.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "数据导入失败！");
 		}
 	}
 }

@@ -1,24 +1,15 @@
 package com.web.util;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.servlet.http.HttpServletResponse;
+
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
 
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -524,5 +515,39 @@ public class FileUtil {
 			}
 		}
 		return state;
+	}
+
+	/**
+	 * 读取excel数据
+	 * 
+	 * @param inputStream
+	 * @param isFromOne
+	 *            是否从第一行读取
+	 */
+	public static ArrayList<String[]> getExcelData(InputStream inputStream, boolean isFromOne) throws Exception {
+		Workbook workbook = Workbook.getWorkbook(inputStream);
+		Sheet[] sheets = workbook.getSheets();
+		ArrayList<String[]> dataList = new ArrayList<String[]>();
+		System.out.println("sheets.length:" + sheets.length);
+		for (int i = 0; i < sheets.length; i++) {
+			Sheet sheet = sheets[i];
+			int startValue = 1;
+			if (!isFromOne) {
+				startValue = 2;
+			}
+			System.out.println("sheet.getRows():" + sheet.getRows());
+			for (int j = startValue; j < sheet.getRows(); j++) {
+				Cell[] row = sheet.getRow(j);
+				ArrayList<String> valueList = new ArrayList<String>();
+				for (int k = 0; k < row.length; k++) {
+					String value = row[k].getContents();
+					valueList.add(value);
+				}
+				String[] rowValues = valueList.toArray(new String[valueList.size()]);
+				dataList.add(rowValues);
+			}
+		}
+		inputStream.close();
+		return dataList;
 	}
 }
