@@ -1,7 +1,10 @@
 package com.web.action.business;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
+import com.web.bean.excel.cabinet.CabinetExcel;
 import com.web.bean.form.CabinetForm;
 import com.web.bean.result.CabinetResult;
 import com.web.core.action.BaseController;
@@ -381,6 +385,7 @@ public class CabinetController extends BaseController {
 
 	/**
 	 * 导入机柜信息
+	 * 
 	 * @param request
 	 */
 	@RequestMapping(value = "/importCabinetData", method = { RequestMethod.GET, RequestMethod.POST })
@@ -390,58 +395,47 @@ public class CabinetController extends BaseController {
 			Iterator<String> fileNames = request.getFileNames();
 			while (fileNames.hasNext()) {
 				String fileName = fileNames.next();
-				if (!"xls".equals(FileUtil.getFilenameExtension(fileName))
-						|| !"xlsx".equals(FileUtil.getFilenameExtension(fileName))) {
+				if (!"xls".equals(FileUtil.getFileExt(fileName)) || !"xlsx".equals(FileUtil.getFileExt(fileName))) {
 					return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "只能上传excel文件!");
 				}
 				MultipartFile mFile = request.getFile(fileName);
 				if (null != mFile && mFile.getSize() > 0) {
-					ArrayList<String[]> excelData = FileUtil.getExcelData(mFile.getInputStream(), false);
-					for (int j = 0; j < excelData.size(); j++) {
-						String[] cabInfo = excelData.get(j);
+					ExcelUtil<CabinetExcel> excelUtil = new ExcelUtil<CabinetExcel>();
+					CabinetExcel excel = new CabinetExcel();
+					List<CabinetExcel> list = excelUtil.read(mFile.getInputStream(), new CabinetExcel());
+					for (int i = 0; i < list.size(); i++) {
+						excel = list.get(i);
 						Cabinet cabinet = new Cabinet();
-						for (int i = 0; i < cabInfo.length; i++) {
-							switch (i) {
-							case 0:
-								cabinet.setResourceCode(cabInfo[i]);
-							case 1:
-								cabinet.setName(cabInfo[i]);
-							case 3:
-								ProductExample example = new ProductExample();
-								ProductExample.Criteria criteria = example.createCriteria();
-								criteria.andNameEqualTo(cabInfo[i]);
-								List<Product> list = productService.getExample(example);
-								if (list.size() == 1) {
-									cabinet.setEquipmentTypeId(cabInfo[i]);
-								}
-							case 4:
-								RoomExample roomExample = new RoomExample();
-								RoomExample.Criteria roomCriteria = roomExample.createCriteria();
-								roomCriteria.andResourceCodeEqualTo(cabInfo[i]);
-								List<Room> rooms = roomService.getByExample(roomExample);
-								if (rooms.size() == 1) {
-									cabinet.setRoomId(rooms.get(0).getId());
-								}
-							case 5:
-								cabinet.setHeight(Integer.parseInt(cabInfo[i]));
-							case 6:
-								cabinet.setuOrder("反".equals(cabInfo[i]) ? 1 : 0);
-							}
+						cabinet.setResourceCode(excel.getResourceCode());
+						cabinet.setName(excel.getCabinetName());
+						ProductExample example = new ProductExample();
+						ProductExample.Criteria criteria = example.createCriteria();
+						criteria.andNameEqualTo(excel.getProductType());
+						List<Product> pList = productService.getExample(example);
+						if (list.size() == 1) {
+							cabinet.setEquipmentTypeId(pList.get(0).getId());
+						} else {
+							stringBuffer.append(i + 1 + "行数据找不到设备类型，请检查，");
+							continue;
 						}
-						CabinetExample example = new CabinetExample();
-						CabinetExample.Criteria criteria = example.createCriteria();
-						criteria.andResourceCodeEqualTo(cabinet.getResourceCode());
-						int countExist = cabinetService.getCount(example);
+						RoomExample roomExample = new RoomExample();
+						RoomExample.Criteria roomCriteria = roomExample.createCriteria();
+						roomCriteria.andResourceCodeEqualTo(excel.getRoomResourceCode());
+						List<Room> rooms = roomService.getByExample(roomExample);
+						if (rooms.size() == 1) {
+							stringBuffer.append(i + 1 + "行数据找不到关联机房，请检查，");
+							cabinet.setRoomId(rooms.get(0).getId());
+						} else {
+							continue;
+						}
+						cabinet.setHeight(Integer.valueOf(excel.getuHight()));
+						cabinet.setuOrder("反".equals(excel.getuOrder()) ? 1 : 0);
+						CabinetExample cabinetExample = new CabinetExample();
+						CabinetExample.Criteria cabinetCriteria = cabinetExample.createCriteria();
+						cabinetCriteria.andResourceCodeEqualTo(cabinet.getResourceCode());
+						int countExist = cabinetService.getCount(cabinetExample);
 						if (countExist > 0) {
-							stringBuffer.append(j + 1 + "行数据资源编码已存在，请检查，");
-							continue;
-						}
-						if (StringUtil.isEmpty(cabinet.getRoomId())) {
-							stringBuffer.append(j + 1 + "行数据找不到关联机房，请检查，");
-							continue;
-						}
-						if (StringUtil.isEmpty(cabinet.getEquipmentTypeId())) {
-							stringBuffer.append(j + 1 + "行数据找不到设备类型，请检查，");
+							stringBuffer.append(i + 1 + "行数据资源编码已存在，请检查，");
 							continue;
 						}
 						cabinet.setId(UUIDGenerator.generatorRandomUUID());
