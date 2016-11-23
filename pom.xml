@@ -111,7 +111,7 @@
         </dependency>
 
         <!-- web依赖包 -->
-        <dependency>
+        <!--<dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
@@ -121,13 +121,19 @@
             <groupId>javax.servlet</groupId>
             <artifactId>jsp-api</artifactId>
             <version>2.0</version>
-            <scope>provided</scope>
-        </dependency>
+        &lt;!&ndash;    <scope>provided</scope>&ndash;&gt;
+        </dependency>-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
         <!-- WEB end -->
         <!-- spring 依赖包 -->
         <dependency>
@@ -311,12 +317,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
             <version>1.10</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
-            <scope>test</scope>
         </dependency>
 
         <!--分页依赖包-->

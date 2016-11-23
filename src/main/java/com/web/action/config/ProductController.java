@@ -2,6 +2,7 @@ package com.web.action.config;
 
 import static com.web.util.AllResult.buildJSON;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.web.bean.form.ProductForm;
+import com.web.bean.util.FileUtilBean;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
@@ -27,9 +29,11 @@ import com.web.entity.Product;
 import com.web.example.ProductExample;
 import com.web.service.ProductService;
 import com.web.util.AllResult;
+import com.web.util.Constant;
 import com.web.util.FileUtil;
 import com.web.util.PropertiesUtil;
 import com.web.util.UUIDGenerator;
+import com.web.util.ZipUtil;
 import com.web.util.fastjson.FastjsonUtils;
 import com.web.util.validation.GroupBuilder;
 import com.web.util.validation.ValidationHelper;
@@ -365,7 +369,7 @@ public class ProductController extends BaseController {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		String targetPath = "3source";
 		try {
-			FileUtil.uploadFiles(multipartRequest, targetPath, false);
+			List<FileUtilBean> fileList = FileUtil.uploadFiles(multipartRequest, targetPath, false);
 			String path = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH) + targetPath;
 
 			// 解析3source文件
@@ -377,4 +381,53 @@ public class ProductController extends BaseController {
 		return buildJSON(1, "上传成功!");
 	}
 
+	/**
+	 * 3source文件处理
+	 */
+	private static void source3Handle(FileUtilBean fileUtilBean) throws Exception {
+		// 1、重命名3source为zip
+		String oldFilePath = fileUtilBean.getFileRealPath();
+		String newFilePath = fileUtilBean.getFileParentPath() + "/" + fileUtilBean.getNewFileName() + "_2.zip";
+		File source3File = new File(fileUtilBean.getFileRealPath());
+		File newSource3File = new File(newFilePath);
+		source3File.renameTo(newSource3File);
+
+		// 2、压缩文件
+		String basePath = newFilePath.substring(0, newFilePath.lastIndexOf("."));
+		ZipUtil.unZip(newSource3File, basePath, Constant.SOURCE_PASS);
+
+		// 3、RSO文件复制到服务器
+		String rsoPath = basePath + "/3dfiles";
+		File rsoPathFile = new File(rsoPath);
+		String rsoYpPath = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH) + "rso";
+		for (File f : rsoPathFile.listFiles()) {
+			File outFile = new File(rsoYpPath, f.getName());
+			FileUtil.copy(f, outFile, true);
+		}
+
+		// 3、复制图片到服务器
+		String imagesPath = basePath + "/images";
+		File imagesPathFile = new File(imagesPath);
+		String imgYpPath = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH) + "images";
+		for (File f : imagesPathFile.listFiles()) {
+			File outFile = new File(imgYpPath, f.getName());
+			FileUtil.copy(f, outFile, true);
+		}
+
+		// 4、读取excel
+		String excelPath = basePath + "/product.xls";
+		File excelFile = new File(excelPath);
+
+	}
+
+	public static void main(String[] args) throws Exception {
+		FileUtilBean bean = new FileUtilBean();
+		bean.setNewFileName("IBM System x3850 x5.3source");
+		bean.setFileName("IBM System x3850 x5.3source");
+		bean.setFileParentPath("D:\\opt\\test");
+		bean.setFileExt("3source");
+		bean.setFileRealPath(bean.getFileParentPath() + "/" + bean.getNewFileName());
+		source3Handle(bean);
+		System.out.println("dddddddddd");
+	}
 }

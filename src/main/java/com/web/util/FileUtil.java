@@ -86,6 +86,9 @@ public class FileUtil {
 	 * @throws IOException
 	 */
 	private static void copySimpleFile(File inputFile, File outputFile, boolean isOverWrite) throws IOException {
+		if (!outputFile.getParentFile().exists()) {
+			outputFile.getParentFile().mkdirs();
+		}
 		// 目标文件已经存在
 		if (outputFile.exists()) {
 			if (isOverWrite) {
@@ -158,7 +161,7 @@ public class FileUtil {
 	 *            文件路径
 	 * @return 如果path为null，直接返回null。
 	 */
-	public static String getFilenameExtension(String path) {
+	public static String getFileExt(String path) {
 		if (path == null) {
 			return null;
 		}
@@ -350,7 +353,7 @@ public class FileUtil {
 			String fileName = iterator.next();
 			MultipartFile file = request.getFile(fileName);
 			if (null != file && file.getSize() > 0) {
-				String ext = FileUtil.getFilenameExtension(file.getOriginalFilename());
+				String ext = FileUtil.getFileExt(file.getOriginalFilename());
 				String path = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH) + targetPath;// 获取路径
 				if (!"zip".equalsIgnoreCase(ext)) {
 					needUnZIP = false;
@@ -367,13 +370,14 @@ public class FileUtil {
 					Iterator it = files.keySet().iterator();
 					while (it.hasNext()) {
 						String key = (String) it.next();
-						ext = FileUtil.getFilenameExtension(key);
+						ext = FileUtil.getFileExt(key);
 						File newFile = (File) files.get(key);
 						FileUtilBean bean = new FileUtilBean();
 						bean.setFileName(key);
 						bean.setNewFileName(newFile.getName());
 						bean.setFileExt(ext);
 						bean.setFileRealPath(path + "/" + newFile.getName());
+						bean.setFileParentPath(path);
 						beans.add(bean);
 					}
 					if (inFile.exists()) {
@@ -385,6 +389,7 @@ public class FileUtil {
 					bean.setNewFileName(newFileName);
 					bean.setFileExt(ext);
 					bean.setFileRealPath(path + "/" + newFileName);
+					bean.setFileParentPath(path);
 					beans.add(bean);
 				}
 			}
