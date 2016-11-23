@@ -123,6 +123,7 @@
             <version>2.0</version>
         &lt;!&ndash;    <scope>provided</scope>&ndash;&gt;
         </dependency>-->
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
