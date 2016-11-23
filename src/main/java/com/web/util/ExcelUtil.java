@@ -21,6 +21,7 @@ public class ExcelUtil {
         InputStream inputXLS = new BufferedInputStream(new FileInputStream(excelPath));
 
         Bean bean = new Bean();
+
         Map beans = new HashMap();
         beans.put("bean", bean);
         List<Bean> list = new ArrayList<Bean>();
