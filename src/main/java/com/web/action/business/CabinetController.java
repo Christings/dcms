@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.web.bean.result.BoxEquipmentResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -445,6 +446,32 @@ public class CabinetController extends BaseController {
 			}
 			return AllResult.okJSON(stringBuffer.toString());
 		} catch (Exception e) {
+			e.printStackTrace();
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "数据导入失败！");
+		}
+	}
+
+	/**
+	 * 展开机柜
+	 *
+	 * @param cabinetId
+	 * @param direction
+	 */
+	@RequestMapping(value = "/expendCabinet", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object importCabinetData(String cabinetId, Integer direction) {
+		if(StringUtil.isEmpty(cabinetId)){
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机柜ID不能为空");
+		}
+		if(null == direction){
+			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房方向不能为空");
+		}
+		try{
+			BoxEquipment boxEquipment = new BoxEquipment();
+			boxEquipment.setCabinetId(cabinetId);
+			boxEquipment.setDirection(0==direction?true:false);
+			List<BoxEquipmentResult> list = boxEquipmentService.selectWithEquipment(boxEquipment);
+			return AllResult.okJSON(list);
+		}catch (Exception e){
 			e.printStackTrace();
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "数据导入失败！");
 		}
