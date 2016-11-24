@@ -1,3 +1,9 @@
+body{
+	min-width: 970px;
+	overflow:scroll;
+	overflow-x: auto;
+	overflow-y: auto;
+}
 #footer {
 	padding-bottom: 0;
 	position: fixed;

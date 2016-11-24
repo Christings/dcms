@@ -8,6 +8,7 @@ var scrollHeight = $("#roomBody").height();
 var scrollWidth = $("#roomBody").width();
 var disFlag = '';
 var equipFlag = '';
+var selectedEquipments = {};
 
 function roomPGWatch(id,dis,equip){
 	var path = '../../../roomIcngph/getImage?id='+id;
@@ -57,6 +58,7 @@ function roomPGWatch(id,dis,equip){
 	           		html += '<option value="'+i+'">'+i+'</option>';
 	           }
 	           document.getElementById('chooseDis').innerHTML = html;
+	           document.getElementById('chooseDisGroup').innerHTML = html;
 	           if(dis != ''){
 	           	disFlag = dis;
 	           	disFocus(dis);
@@ -134,7 +136,7 @@ function MouseWheelHandler(e){
 }
 
 function EquipmentFloat(){
-	var data_id = JSON.parse(window.sessionStorage.getItem('data-id'));
+	//var data_id = JSON.parse(window.sessionStorage.getItem('data-id'));
 	var eq='';
 	var equipmentsExistFlag = 0;
 	scrollHeight = $("#roomBody").height();//document.body.scrollHeight;
@@ -206,11 +208,11 @@ function EquipmentFloat(){
 			if(i == equipFlag){
 				classType += ' selected';
 			}
-			if(data_id == i){
-				eq += '<span '+dataPopOver+'class="'+classType+'" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
-			}else{
-				eq += '<span '+dataPopOver+'class="'+classType+'" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
-			}
+			// if(data_id == i){
+			eq += '<span '+dataPopOver+'class="'+classType+'" id="'+i+'" data-color="'+color+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
+			// }else{
+			// 	eq += '<span '+dataPopOver+'class="'+classType+'" id="'+i+'" data-id="'+i+'"'+style+'onclick=make(this)><i>'+i+'</i></span>';
+			// }
 		}
 	}
 	if(equipmentsExistFlag == 0){
@@ -218,7 +220,7 @@ function EquipmentFloat(){
 		$('span.equipment.selected').css({
 			'background-color': '#c19288'
 		});
-		$(function () { 
+		$(function(){ 
 			$("[data-toggle='popover']").popover();
 			console.log('popover!!!');
 		});
@@ -239,13 +241,27 @@ function EquipmentFloat(){
 
 function make(e){
 	var id = e.getAttribute('data-id');
-	var test = JSON.parse(window.sessionStorage.getItem('data-id'));
-	if(test == id){
-		window.sessionStorage.removeItem('data-id');
-		document.getElementById(id).innerHTML=id;
+	var color = e.getAttribute('data-color');
+
+	// var test = JSON.parse(window.sessionStorage.getItem('data-id'));
+	if($('#'+id).hasClass('choosed')){
+		// window.sessionStorage.removeItem('data-id');
+		$('#'+id).removeClass('choosed');
+		$('#'+id).css({
+			'background-color':color
+		});
+		delete selectedEquipments[id];
 	}else{
-		window.sessionStorage.setItem('data-id',JSON.stringify(id));
-		document.getElementById(id).append("x"); 
+		// window.sessionStorage.setItem('data-id',JSON.stringify(id));
+		$('#'+id).addClass('choosed');
+		$('#'+id).css({
+			'background-color':'#c19288'
+		});
+		selectedEquipments[id] = id;
+		for(var k in selectedEquipments){
+			console.log(k+' groups '+selectedEquipments[k]);
+		}
+		// console.log(selectedEquipments+'groups'+selectedEquipments[id]);
 	}
 }
 //关闭机房平面图后，清除背景和机柜位置信息
@@ -266,6 +282,9 @@ $('div.popover.fade').css({
 $('#opWords').click(function(){
 
 });
+$('#opGroupToggle').click(function(){
+	$('#operations_group').toggleClass("appear_opGroup");
+});
 
 $('#opWordsToggle').click(function(){
 	console.log('opwt');
@@ -281,6 +300,38 @@ $('#opSeaToggle').click(function(){
 });
 $('#expandSearch').click(function(){
 	$('#operations_search_secondlevel').toggleClass("appear_opSea2");
+});
+
+$('#operations_group button').click(function(){
+	var districtName = $('#operations_group input').val();
+	console.log('districtName'+districtName);
+	console.log(selectedEquipments.length+'group'+selectedEquipments);
+	var tmpEqs = '';
+	for(var k in selectedEquipments){
+		tmpEqs += selectedEquipments[k] + ',';
+	}
+	tmpEqs = tmpEqs.substring(0,tmpEqs.length-1);
+	var cabinetResourceCodes = tmpEqs;
+	var name = districtName;
+	selectedEquipments = {};
+	// var name = $('#districtName').val();
+	// var roomId = $('#districtRoomId').val();
+	// console.log('roomId'+roomId);
+	// var remark = $('#districtRemark').val();
+	// var cabinetResourceCodes = $('#cabinetResourceCodes').val();
+	// var disInfo = {name:name,roomId:roomId,remark:remark,cabinetResourceCodes:cabinetResourceCodes};
+	// DCMSBusi.Api.invoke("area/add",disInfo).done((res)=>{
+	// 	if(res.status == "1"){
+	// 		DCMSUtils.Modal.toast("添加区域"+name+"成功",'');
+	// 		dtApi.ajax.reload();
+ //        	$("#districtAdd").modal('hide');
+ //            districtAddFormReset();//重置表单
+	// 		return true;
+	// 	}else{
+	// 		DCMSUtils.Modal.toast("添加区域失败"+res.msg,'');
+	// 		return false;
+	// 	}
+	// });
 });
 
 $('#operations_locate button').click(function(){
@@ -301,10 +352,8 @@ $('#operations_locate button').click(function(){
 // });
 
 function searchDistrict(){
-
 }
 function locateInput(){
 }
 function locateEquipment(){
-
 }

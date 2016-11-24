@@ -52,11 +52,11 @@ function pageInit() {
                 render: function (data,type,row,meta) {
                     var html = "<i class='glyphicon glyphicon-pencil' title='编辑' onclick=\"editItem('" + row.id+"','update')\"'></i>&nbsp;&nbsp;" +
                         "<i class='glyphicon glyphicon-user' title='添加用户' onclick=\"addUser('" + row.id+"','"+row.equName+"')\"'></i>&nbsp;&nbsp;" +
-                        "<img class='click-icon' src='"+getContentPath()+"img/addserver.png' title='添加服务器' onclick=\"addEqu('" + row.id+"','" + row.name+"','server_add')\"' />&nbsp;&nbsp;" +
+                        /*"<img class='click-icon' src='"+getContentPath()+"img/addserver.png' title='添加服务器' onclick=\"addEqu('" + row.id+"','" + row.name+"','server_add')\"' />&nbsp;&nbsp;" +
                         "<img class='click-icon' src='"+getContentPath()+"img/network_add.png' title='添加网络设备' onclick=\"addEqu('" + row.id+"','" + row.name+"','network_add')\"' />&nbsp;&nbsp;" +
                         "<img class='click-icon' src='"+getContentPath()+"img/distrb_add.png' title='添加配线架' onclick=\"addEqu('" + row.id+"','" + row.name+"','distrb_add')\"' />&nbsp;&nbsp;" +
                         "<img class='click-icon' src='"+getContentPath()+"img/storage_add.png' title='添加小机存储设备' onclick=\"addEqu('" + row.id+"','" + row.name+"','storage_add')\"' />&nbsp;&nbsp;" +
-                        "<img class='click-icon' src='"+getContentPath()+"img/other_add.png' title='添加其他设备' onclick=\"addEqu('" + row.id+"','" + row.name+"','other_add')\"' />&nbsp;&nbsp;" +
+                        "<img class='click-icon' src='"+getContentPath()+"img/other_add.png' title='添加其他设备' onclick=\"addEqu('" + row.id+"','" + row.name+"','other_add')\"' />&nbsp;&nbsp;" +*/
                         "<a class='J_menuItem' onclick='clickAuth()' href='draganddrop.html?cabinet_id="+row.id+"&direction=1'><img class='click-icon' src='"+getContentPath()+"img/database_add.png' title='展开机柜' /></a>&nbsp;&nbsp;" +
                         "<img class='click-icon' src='"+getContentPath()+"img/3D_location.png' title='3D视图' onclick=\"location3D('" + row.id+"')\"' />&nbsp;&nbsp;" +
                         "<i class='glyphicon glyphicon-search' data-toggle=\"modal\" data-target=\"#roomPGWatch\" title='平面图' onclick=\"checkView('" + row.resourceCode+"')\"'></i>&nbsp;&nbsp;" +
@@ -210,6 +210,42 @@ function saveCabinet() {
             DCMSUtils.Modal.toast('保存机柜信息异常','forbidden');
         });
     }
+}
+
+//导入数据
+function importExcel() {
+    var obj = document.getElementById("uploadFile");
+    var uploadFile = obj.files[0];
+    if (!uploadFile) {
+        DCMSUtils.Modal.toast('请选择文件！','cancel');
+        return false;
+    }
+    var stuff = obj.value.match(/^(.*)(\.)(.{1,8})$/)[3];
+    if(stuff != 'xls' && stuff != 'xlsx'){
+        DCMSUtils.Modal.toast('请选择Excel类型的文件上传！','cancel');
+        return false;
+    }
+    var formData = new FormData($("#importDataForm"));
+    formData.append('file',uploadFile);
+    DCMSUtils.Modal.showLoading();
+    $.ajax({
+        url:"../../../cabinet/importCabinetData",
+        type:'post',
+        data: formData,
+        async: true,
+        processData: false,  // 告诉jQuery不要去处理发送的数据
+        contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+        success:function(data){
+            DCMSUtils.Modal.hideLoading();
+            $("#importData").modal('hide');
+            DCMSUtils.Modal.toast('导入机柜信息成功','');
+            dtApi.ajax.reload();
+        },
+        error:function () {
+            DCMSUtils.Modal.hideLoading();
+            DCMSUtils.Modal.toast('导入机柜信息异常','forbidden');
+        }
+    });
 }
 
 //添加用户
