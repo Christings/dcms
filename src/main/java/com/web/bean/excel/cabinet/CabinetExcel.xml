@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+    <worksheet name="Sheet1">
+        <section startRow="0" endRow="0"/>
+        <loop startRow="1" endRow="1" items="beans"
+              var="bean"
+              varType="com.web.bean.excel.cabinet.CabinetExcel">
+            <section startRow="1" endRow="1">
+                <mapping row="1" col="0">bean.resourceCode</mapping>
+                <mapping row="1" col="1">bean.cabinetName</mapping>
+                <mapping row="1" col="2">bean.equType</mapping>
+                <mapping row="1" col="3">bean.productType</mapping>
+                <mapping row="1" col="4">bean.roomResourceCode</mapping>
+                <mapping row="1" col="5">bean.uHight</mapping>
+                <mapping row="1" col="6">bean.uOrder</mapping>
+            </section>
+            <loopbreakcondition>
+                <rowcheck offset="0">
+                    <cellcheck offset="0"></cellcheck>
+                </rowcheck>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>
+</workbook>
