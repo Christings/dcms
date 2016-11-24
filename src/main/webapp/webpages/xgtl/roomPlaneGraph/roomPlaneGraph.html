@@ -40,6 +40,16 @@
             width: 150px;
             vertical-align: middle;
         }
+        #operations_group{
+        	background-color: black;
+	    	position:absolute;
+	    	color:white;
+	    	left:80px;
+	    	top:50px;
+	    	width:200px;
+	    	height:100px;
+	    	opacity:0.7;
+        }
         #operations_locate{
     		display: inline-block;
 	    	position:absolute;
@@ -78,7 +88,9 @@
         	overflow-x: auto;
         	overflow-y: auto;
         }
-
+        .appear_opGroup{
+        	visibility: hidden;
+        }
 	    .appear_opLoc {
 	    	visibility: hidden;
 	    	
@@ -203,7 +215,7 @@
 						<img id="roombg" class="free dragscroll" style="height:100%;width:100%;z-index:-1;"src="">
 						<div id="roombgFather"></div>
 						<div>
-							<input type="button" id="opWords" style="z-index:2;border-radius:50%; background-image: url('../../../img/1Group.jpg');width:40px;height:40px;top:50px;left:30px;position:absolute;">
+							<input type="button" id="opGroupToggle" style="z-index:2;border-radius:50%; background-image: url('../../../img/1Group.jpg');width:40px;height:40px;top:50px;left:30px;position:absolute;">
 							<input type="button" id="opWordsToggle" style="z-index:2;border-radius:50%; background-image: url('../../../img/1DisplayManyPlane.png');width:40px;height:40px;top:100px;left:30px;position:absolute;">
 							<input type="button" id="opLocToggle"  style="z-index:2;border-radius:50%; background-image: url('../../../img/1Locate.png');width:40px;height:40px;top:150px;left:30px;position:absolute;">
 							<input type="button" id="opSeaToggle" style="z-index:2;border-radius:50%; background-image: url('../../../img/1Search.png');width:40px;height:40px;top:200px;left:30px;position:absolute;">
@@ -212,6 +224,19 @@
 							<div id="disAnimation"></div>
 
 							<div id="operations" style="z-index:2;">
+								<div id="operations_group" class="input-group input-group-sm appear_opGroup">
+									<div class="row" style="font-size: 8px">
+										<label style="text-align: right" class="col-xs-5" for="chooseDis">选择区域</label>
+										<select onchange="districtChoose()" class="col-xs-4" style="background-color: black;"id="chooseDisGroup">
+										</select>
+									</div>
+									<div style="display:block-inline;height:50px;"class="input-group input-group-sm">
+										<input style="width:150px;background-color: black;" placeholder="输入划分的区域名称" type="text" class="form-control">
+										<!-- <span class="input-group-btn"> -->
+											<button style="padding-top: 5px;padding-bottom: 5px;" class="btn btn-default" type="button" ><i class="glyphicon glyphicon-ok"></i></button>
+										<!-- </span> -->
+									</div>
+								</div>
 								<div id="operations_locate" style="z-index:2;"class="input-group input-group-sm appear_opLoc">
 									<input style="width:150px;background-color: black;" type="text" class="form-control">
 									<span class="input-group-btn">
