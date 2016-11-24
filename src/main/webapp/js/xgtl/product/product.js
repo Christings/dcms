@@ -100,7 +100,7 @@ function uploadFile() {
     }
 
     var formData = new FormData();
-    formData.append('zipFile',file);
+    formData.append('3sourceFile',file);
     $("#uploadModal").modal('hide');
     DCMSUtils.Modal.showLoading('文件上传中...');
     $.ajax({
