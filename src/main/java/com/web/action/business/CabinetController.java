@@ -2,6 +2,7 @@ package com.web.action.business;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,8 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
+import com.web.bean.excel.cabinet.CabinetExcel;
 import com.web.bean.form.CabinetForm;
 import com.web.bean.result.CabinetResult;
 import com.web.core.action.BaseController;
@@ -21,14 +25,10 @@ import com.web.core.util.page.Page;
 import com.web.entity.*;
 import com.web.example.BoxEquipmentExample;
 import com.web.example.CabinetExample;
-import com.web.service.BoxEquipmentService;
-import com.web.service.CabinetService;
-import com.web.service.RoomIcngphService;
-import com.web.service.RoomService;
-import com.web.util.AllResult;
-import com.web.util.StringUtil;
-import com.web.util.UUIDGenerator;
-import com.web.util.YmlUtil;
+import com.web.example.ProductExample;
+import com.web.example.RoomExample;
+import com.web.service.*;
+import com.web.util.*;
 import com.web.util.fastjson.FastjsonUtils;
 
 /**
@@ -49,6 +49,8 @@ public class CabinetController extends BaseController {
 	private RoomService roomService;
 	@Autowired
 	private RoomIcngphService roomIcngphService;
+	@Autowired
+	private ProductService productService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CabinetController.class);
 
@@ -378,6 +380,73 @@ public class CabinetController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "查询失败");
+		}
+	}
+
+	/**
+	 * 导入机柜信息
+	 * 
+	 * @param request
+	 */
+	@RequestMapping(value = "/importCabinetData", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object importCabinetData(MultipartHttpServletRequest request) {
+		try {
+			StringBuffer stringBuffer = new StringBuffer();
+			Iterator<String> fileNames = request.getFileNames();
+			while (fileNames.hasNext()) {
+				String fileName = fileNames.next();
+				if (!"xls".equals(FileUtil.getFileExt(fileName)) || !"xlsx".equals(FileUtil.getFileExt(fileName))) {
+					return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "只能上传excel文件!");
+				}
+				MultipartFile mFile = request.getFile(fileName);
+				if (null != mFile && mFile.getSize() > 0) {
+					ExcelUtil<CabinetExcel> excelUtil = new ExcelUtil<CabinetExcel>();
+					CabinetExcel excel = new CabinetExcel();
+					List<CabinetExcel> list = excelUtil.read(mFile.getInputStream(), new CabinetExcel());
+					for (int i = 0; i < list.size(); i++) {
+						excel = list.get(i);
+						Cabinet cabinet = new Cabinet();
+						cabinet.setResourceCode(excel.getResourceCode());
+						cabinet.setName(excel.getCabinetName());
+						ProductExample example = new ProductExample();
+						ProductExample.Criteria criteria = example.createCriteria();
+						criteria.andNameEqualTo(excel.getProductType());
+						List<Product> pList = productService.getExample(example);
+						if (list.size() == 1) {
+							cabinet.setEquipmentTypeId(pList.get(0).getId());
+						} else {
+							stringBuffer.append(i + 1 + "行数据找不到设备类型，请检查，");
+							continue;
+						}
+						RoomExample roomExample = new RoomExample();
+						RoomExample.Criteria roomCriteria = roomExample.createCriteria();
+						roomCriteria.andResourceCodeEqualTo(excel.getRoomResourceCode());
+						List<Room> rooms = roomService.getByExample(roomExample);
+						if (rooms.size() == 1) {
+							stringBuffer.append(i + 1 + "行数据找不到关联机房，请检查，");
+							cabinet.setRoomId(rooms.get(0).getId());
+						} else {
+							continue;
+						}
+						cabinet.setHeight(Integer.valueOf(excel.getuHight()));
+						cabinet.setuOrder("反".equals(excel.getuOrder()) ? 1 : 0);
+						CabinetExample cabinetExample = new CabinetExample();
+						CabinetExample.Criteria cabinetCriteria = cabinetExample.createCriteria();
+						cabinetCriteria.andResourceCodeEqualTo(cabinet.getResourceCode());
+						int countExist = cabinetService.getCount(cabinetExample);
+						if (countExist > 0) {
+							stringBuffer.append(i + 1 + "行数据资源编码已存在，请检查，");
+							continue;
+						}
+						cabinet.setId(UUIDGenerator.generatorRandomUUID());
+						cabinetService.save(cabinet);
+					}
+				}
+			}
+			return AllResult.okJSON(stringBuffer.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "数据导入失败！");
 		}
 	}
 }

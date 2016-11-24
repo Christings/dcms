@@ -1,24 +1,15 @@
 package com.web.util;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.servlet.http.HttpServletResponse;
+
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
 
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -95,6 +86,9 @@ public class FileUtil {
 	 * @throws IOException
 	 */
 	private static void copySimpleFile(File inputFile, File outputFile, boolean isOverWrite) throws IOException {
+		if (!outputFile.getParentFile().exists()) {
+			outputFile.getParentFile().mkdirs();
+		}
 		// 目标文件已经存在
 		if (outputFile.exists()) {
 			if (isOverWrite) {
@@ -167,7 +161,7 @@ public class FileUtil {
 	 *            文件路径
 	 * @return 如果path为null，直接返回null。
 	 */
-	public static String getFilenameExtension(String path) {
+	public static String getFileExt(String path) {
 		if (path == null) {
 			return null;
 		}
@@ -359,7 +353,7 @@ public class FileUtil {
 			String fileName = iterator.next();
 			MultipartFile file = request.getFile(fileName);
 			if (null != file && file.getSize() > 0) {
-				String ext = FileUtil.getFilenameExtension(file.getOriginalFilename());
+				String ext = FileUtil.getFileExt(file.getOriginalFilename());
 				String path = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH) + targetPath;// 获取路径
 				if (!"zip".equalsIgnoreCase(ext)) {
 					needUnZIP = false;
@@ -376,13 +370,14 @@ public class FileUtil {
 					Iterator it = files.keySet().iterator();
 					while (it.hasNext()) {
 						String key = (String) it.next();
-						ext = FileUtil.getFilenameExtension(key);
+						ext = FileUtil.getFileExt(key);
 						File newFile = (File) files.get(key);
 						FileUtilBean bean = new FileUtilBean();
 						bean.setFileName(key);
 						bean.setNewFileName(newFile.getName());
 						bean.setFileExt(ext);
 						bean.setFileRealPath(path + "/" + newFile.getName());
+						bean.setFileParentPath(path);
 						beans.add(bean);
 					}
 					if (inFile.exists()) {
@@ -394,6 +389,7 @@ public class FileUtil {
 					bean.setNewFileName(newFileName);
 					bean.setFileExt(ext);
 					bean.setFileRealPath(path + "/" + newFileName);
+					bean.setFileParentPath(path);
 					beans.add(bean);
 				}
 			}
@@ -524,5 +520,39 @@ public class FileUtil {
 			}
 		}
 		return state;
+	}
+
+	/**
+	 * 读取excel数据
+	 * 
+	 * @param inputStream
+	 * @param isFromOne
+	 *            是否从第一行读取
+	 */
+	public static ArrayList<String[]> getExcelData(InputStream inputStream, boolean isFromOne) throws Exception {
+		Workbook workbook = Workbook.getWorkbook(inputStream);
+		Sheet[] sheets = workbook.getSheets();
+		ArrayList<String[]> dataList = new ArrayList<String[]>();
+		System.out.println("sheets.length:" + sheets.length);
+		for (int i = 0; i < sheets.length; i++) {
+			Sheet sheet = sheets[i];
+			int startValue = 1;
+			if (!isFromOne) {
+				startValue = 2;
+			}
+			System.out.println("sheet.getRows():" + sheet.getRows());
+			for (int j = startValue; j < sheet.getRows(); j++) {
+				Cell[] row = sheet.getRow(j);
+				ArrayList<String> valueList = new ArrayList<String>();
+				for (int k = 0; k < row.length; k++) {
+					String value = row[k].getContents();
+					valueList.add(value);
+				}
+				String[] rowValues = valueList.toArray(new String[valueList.size()]);
+				dataList.add(rowValues);
+			}
+		}
+		inputStream.close();
+		return dataList;
 	}
 }

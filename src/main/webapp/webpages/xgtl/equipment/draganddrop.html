@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>机柜视图</title>
+    <link rel="stylesheet" href="../../../3rd-libs/jquery-ui/jquery-ui.min.css"/>
+    <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../css/style2.css" rel="stylesheet">
+    <link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="../../../css/animate.css" rel="stylesheet">
+
+    <script src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
+    <script src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../../3rd-libs/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../../../3rd-libs/jquery-ui/iscroll-zoom.js"></script>
+
+    <style>
+        td {
+            text-align: center;
+        }
+
+        .has {
+            cursor: pointer
+        }
+
+        .cabinet-label {
+            width: 30px !important;
+            height: 48px;
+            background-color: gray;
+            color: white;
+            text-align: center;
+            padding: 0 8px;
+        }
+
+        .empty {
+            width: 600px;
+        }
+    </style>
+
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-content">
+
+                    <table id="main" align="center">
+                        <tr>
+                            <td style="vertical-align:top; width:20px;" _cid="-1" class="empty">
+                                <div style="display: none;" id="store-container">
+
+                                    <table id="store" style="width:200px;">
+                                    </table>
+                                </div>
+                            </td>
+                            <td valign="top" style="width:30px;">
+                            </td>
+                            <td valign="top">
+
+                                <div class="btn-toolbar">
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary" onclick="noShelfEquModal()">未上架设备</a>
+                                    </div>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary" href="javascript:window.location.reload();">刷新</a>
+                                    </div>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary" href="?cabinet_id=100082&direction=1">机柜正面</a>
+                                        <a class="btn btn-primary" href="?cabinet_id=100082&direction=2">机柜背面</a>
+                                    </div>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary" href="?cabinet_id=100082&direction=3">左侧</a>
+                                        <a class="btn btn-primary" href="?cabinet_id=100082&direction=4">中间</a>
+                                        <a class="btn btn-primary" href="?cabinet_id=100082&direction=5">右侧</a>
+                                    </div>
+                                </div>
+                                <p style="font-size:12px">
+                                </p>
+                                <table border="0" align="center" id="cabinetView">
+                                    <tr>
+                                        <td _cid="26" class="cabinet-label empty">26</td>
+                                        <td class="has" _eid="100465" rowspan="4">
+                                            <img title="A01-ODF5"
+                                                 onerror="//this.src='/images/__utm.gif';"
+                                                 ondblclick="new top.SelectBoardDialog(100465,'A01-ODF5').show()"
+                                                 class="has" _eid="100465" src="http://localhost:8080/dcms/img/database_add.png"
+                                                 alt="A01-ODF5" style="width:600px; max-height: 208px"/>
+                                        </td>
+                                        <td class="cabinet-label">26</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="25" class="cabinet-label empty">25</td>
+                                        <td class="cabinet-label">25</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="24" class="cabinet-label empty">24</td>
+                                        <td class="cabinet-label">24</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="23" class="cabinet-label empty">23</td>
+                                        <td class="cabinet-label">23</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="22" class="cabinet-label empty">22</td>
+                                        <td class="has" _eid="100538" rowspan="4">
+                                            <img title="A01-ODF6"
+                                                 onerror="//this.src='/images/__utm.gif';"
+                                                 ondblclick="new top.SelectBoardDialog(100538,'A01-ODF6').show()"
+                                                 class="has" _eid="100538" src="/product/image/?front=1&amp;id=100031"
+                                                 alt="A01-ODF6" style="width:600px; max-height: 208px"/>
+                                        </td>
+                                        <td class="cabinet-label">22</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="21" class="cabinet-label empty">21</td>
+                                        <td class="cabinet-label">21</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="20" class="cabinet-label empty">20</td>
+                                        <td class="cabinet-label">20</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="19" class="cabinet-label empty">19</td>
+                                        <td class="cabinet-label">19</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="18" class="cabinet-label empty">18</td>
+                                        <td _cid="18" class='empty'>空<!--<input type="button" value="添加服务器" onclick="start()"/>--></td>
+                                        <td class="cabinet-label">18</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="17" class="cabinet-label empty">17</td>
+                                        <td _cid="17" class='empty'>空<!--<input type="button" value="添加服务器" onclick="start()"/>--></td>
+                                        <td class="cabinet-label">17</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="16" class="cabinet-label empty">16</td>
+                                        <td _cid="16" class='empty'>空<!--<input type="button" value="添加服务器" onclick="start()"/>--></td>
+                                        <td class="cabinet-label">16</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="15" class="cabinet-label empty">15</td>
+                                        <td class="has" _eid="105308" rowspan="2">
+                                            <img title="hhhh"
+                                                 onerror="//this.src='/images/__utm.gif';"
+                                                 ondblclick="new top.SelectBoardDialog(105308,'hhhh').show()"
+                                                 class="has" _eid="105308" src="/product/image/?front=1&amp;id=100004"
+                                                 alt="hhhh" style="width:600px; max-height: 104px"/>
+                                        </td>
+                                        <td class="cabinet-label">15</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="14" class="cabinet-label empty">14</td>
+                                        <td class="cabinet-label">14</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="13" class="cabinet-label empty">13</td>
+                                        <td class="has" _eid="100611" rowspan="4">
+                                            <img title="A01-ODF7"
+                                                 onerror="//this.src='/images/__utm.gif';"
+                                                 ondblclick="new top.SelectBoardDialog(100611,'A01-ODF7').show()"
+                                                 class="has" _eid="100611" src="/product/image/?front=1&amp;id=100031"
+                                                 alt="A01-ODF7" style="width:600px; max-height: 208px"/>
+                                        </td>
+                                        <td class="cabinet-label">13</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="12" class="cabinet-label empty">12</td>
+                                        <td class="cabinet-label">12</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="11" class="cabinet-label empty">11</td>
+                                        <td class="cabinet-label">11</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="10" class="cabinet-label empty">10</td>
+                                        <td class="cabinet-label">10</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="9" class="cabinet-label empty">9</td>
+                                        <td class="has" _eid="100684" rowspan="4">
+                                            <img title="A01-ODF8"
+                                                 onerror="//this.src='/images/__utm.gif';"
+                                                 ondblclick="new top.SelectBoardDialog(100684,'A01-ODF8').show()"
+                                                 class="has" _eid="100684" src="/product/image/?front=1&amp;id=100031"
+                                                 alt="A01-ODF8" style="width:600px; max-height: 208px"/>
+                                        </td>
+                                        <td class="cabinet-label">9</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="8" class="cabinet-label empty">8</td>
+                                        <td class="cabinet-label">8</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="7" class="cabinet-label empty">7</td>
+                                        <td class="cabinet-label">7</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="6" class="cabinet-label empty">6</td>
+                                        <td class="cabinet-label">6</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="5" class="cabinet-label empty">5</td>
+                                        <td class="has" _eid="100757" rowspan="4">
+                                            <img title="A01-ODF9"
+                                                 onerror="//this.src='/images/__utm.gif';"
+                                                 ondblclick="new top.SelectBoardDialog(100757,'A01-ODF9').show()"
+                                                 class="has" _eid="100757" src="/product/image/?front=1&amp;id=100031"
+                                                 alt="A01-ODF9" style="width:600px; max-height: 208px"/>
+                                        </td>
+                                        <td class="cabinet-label">5</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="4" class="cabinet-label empty">4</td>
+                                        <td class="cabinet-label">4</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="3" class="cabinet-label empty">3</td>
+                                        <td class="cabinet-label">3</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="2" class="cabinet-label empty">2</td>
+                                        <td class="cabinet-label">2</td>
+                                    </tr>
+                                    <tr>
+                                        <td _cid="1" class="cabinet-label empty">1</td>
+                                        <td _cid="1" class='empty'>空<!--<input type="button" value="添加服务器" onclick="start()"/>--></td>
+                                        <td class="cabinet-label">1</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 未上架设备搜索模态框 -->
+<div class="modal fade" id="noShelfEquModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">未上架设备</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="noShelfEquForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="equ-code">设备编码</label>
+                        <input type="text" class="form-control" name="equ-code" id="equ-code"
+                               placeholder="请输入设备编码" maxlength="200">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" onclick="searchNoShelfEqu()">过滤</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../../3rd-libs/jquery-weui/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../../js/pub/utils.js"></script>
+<script type="text/javascript" src="../../../js/xgtl/equipment/draganddrop.js"></script>
+</body>
+</html>

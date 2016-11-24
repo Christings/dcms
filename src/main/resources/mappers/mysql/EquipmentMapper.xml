@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.mappers.EquipmentMapper">
+    <resultMap id="BaseResultMap" type="com.web.entity.Equipment">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="serial" property="serial" jdbcType="VARCHAR"/>
+        <result column="rfid" property="rfid" jdbcType="VARCHAR"/>
+        <result column="biz" property="biz" jdbcType="VARCHAR"/>
+
+        <result column="supplier_id" property="supplierId" jdbcType="INTEGER"/>
+        <result column="product_id" property="productId" jdbcType="VARCHAR"/>
+        <result column="room_id" property="roomId" jdbcType="VARCHAR"/>
+
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="work_time" property="workTime" jdbcType="TIMESTAMP"/>
+        <result column="warranty_time" property="warrantyTime" jdbcType="TIMESTAMP"/>
+        <result column="extra" property="extra" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="flags" property="flags" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID,UPDATE_NAME,UPDATE_DATE,CREATE_NAME,CREATE_DATE,name,serial,rfid,biz,supplier_id,product_id,room_id,type,work_time,warranty_time,extra,remark,flags,status
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_b_equipment
+    </select>
+
+    <insert id="insert" parameterType="com.web.entity.Equipment">
+        insert into t_b_equipment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id
+            </if>
+            <if test="name != null">
+                name
+            </if>
+            <if test="serial != null">
+                serial
+            </if>
+            <if test="rfid != null">
+                rfid
+            </if>
+            <if test="biz != null">
+                biz
+            </if>
+            <if test="supplierId != null">
+                supplier_id
+            </if>
+            <if test="productId != null">
+                product_id
+            </if>
+            <if test="roomId != null">
+                room_id
+            </if>
+            <if test="type != null">
+                type
+            </if>
+            <if test="workTime != null">
+                work_time
+            </if>
+            <if test="warrantyTime != null">
+                warranty_time
+            </if>
+            <if test="extra != null">
+                extra
+            </if>
+            <if test="remark != null">
+                remark
+            </if>
+            <if test="flags != null">
+                flags
+            </if>
+            <if test="status != null">
+                status
+            </if>
+
+            <if test="createDate != null">
+                createDate
+            </if>
+            <if test="createName != null">
+                createName
+            </if>
+            <if test="updateDate != null">
+                updateDate
+            </if>
+            <if test="updateName != null">
+                updateName
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="serial != null">
+                #{serial,jdbcType=VARCHAR},
+            </if>
+            <if test="rfid != null">
+                #{rfid,jdbcType=VARCHAR},
+            </if>
+            <if test="biz != null">
+                #{biz,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierId != null">
+                #{supplier_id,jdbcType=VARCHAR},
+            </if>
+            <if test="productId != null">
+                #{product_id,jdbcType=VARCHAR},
+            </if>
+            <if test="roomId != null">
+                #{room_id,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="workTime != null">
+                #{work_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="warrantyTime != null">
+                #{warranty_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="extra != null">
+                #{extra,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="flags != null">
+                #{flags,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateName != null">
+                #{updateName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

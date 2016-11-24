@@ -20,6 +20,11 @@ public class FileUtilBean {
 	 * 文件路径
 	 */
 	private String fileRealPath;
+
+	/**
+	 * 文件父路径
+	 */
+	private String fileParentPath;
 	/**
 	 * 文件扩展名
 	 */
@@ -55,5 +60,13 @@ public class FileUtilBean {
 
 	public void setFileExt(String fileExt) {
 		this.fileExt = fileExt;
+	}
+
+	public String getFileParentPath() {
+		return fileParentPath;
+	}
+
+	public void setFileParentPath(String fileParentPath) {
+		this.fileParentPath = fileParentPath;
 	}
 }

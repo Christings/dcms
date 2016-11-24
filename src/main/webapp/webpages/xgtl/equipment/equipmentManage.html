@@ -8,6 +8,7 @@
 	<link href="../../../3rd-libs/datatables/datatables.bootstrap.css" rel="stylesheet">
 	<link href="../../../3rd-libs/datatables/datatables.css" rel="stylesheet">
 	<link href="../../../3rd-libs/rili/css/eye-base.css" rel="stylesheet">
+    <link href="../../../3rd-libs/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet">
 	<link href="../../../3rd-libs/jquery-weui/lib/weui.css" rel = "stylesheet">
 	<link href="../../../3rd-libs/jquery-weui/css/jquery-weui.css" rel = "stylesheet">
 	<link href="../../../css/style2.css" rel="stylesheet">
@@ -25,6 +26,9 @@
 	<!-- 日期 -->
 	<script src="../../../3rd-libs/rili/js/eye-base.js"></script>
 	<script src="../../../3rd-libs/rili/js/eye-all.js"></script>
+
+    <!-- 选择文件 -->
+    <script src="../../../3rd-libs/bootstrap-fileinput/bootstrap-fileinput.js"></script>
 
 	<style>
 		html, body{
@@ -96,6 +100,21 @@
 	    /*span.selected{
 	    	background-color: #c19288;
 	    }*/
+
+        .modal-body .fileinput .input-medium{
+            width: 260px;
+            height: 40px;
+            line-height: 1.8;
+        }
+        .modal-body .fileinput .select-file {
+            width: 82px;
+            height: 40px;
+            border: 1px solid #CCC;
+            line-height: 1.8;
+            color: #797979;
+            border-top-right-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+        }
 	</style>
 </head>
 <body class="gray-bg">
@@ -105,15 +124,16 @@
 			<div class="ibox">
 				<div class="ibox-content">
 					<div class="row table-top">
-						<div class="col-md-2">
+						<div class="col-md-3">
 							<div class="pull-left">
 								<button type="button" class="btn btn-primary" onclick="editItem('','new')">
 									<i class="fa fa-plus"></i> &nbsp;增加机柜
 								</button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#importData">导入</button>
 							</div>
 						</div>
 						<form action="">
-							<div class="col-md-10 text-align-reverse">
+							<div class="col-md-9 text-align-reverse">
 								<div class="input-group-search">
 									<input name="cabinetName" type="text" class="form-control" id="cabinetName"
 										   placeholder="机柜名称">
@@ -199,6 +219,38 @@
 	</div>
 </div>
 
+<!-- 批量导入机柜信息 -->
+<div class="modal fade" id="importData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">批量导入</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="importDataForm" enctype="multipart/form-data">
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <div class="input-group input-large">
+                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                <span class="fileinput-filename">请选择导入的文件</span>
+                            </div>
+                            <div class="btn btn-file select-file">
+                                <input type="hidden"><input type="file" name="uploadFile" id="uploadFile" accept=".xls">选择文件
+                            </div>
+                        </div>
+                    </div>
+                    <div class="instructions">导入文件为.xls的excel文件</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" onclick="importExcel()">导入</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 添加用户模态框 -->
 <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -220,7 +272,7 @@
 						<label for="addUser-checkbox" class="col-sm-2 col-md-2 col-xs-2 control-label" style="margin-top: 7px;">用户</label>
 						<div class="col-sm-10 col-md-10 col-xs-10 addUser-checkbox" id="addUser-checkbox"></div>
 					</div>
-					<div class="modal-footer">
+                    <div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 						<button type="button" class="btn btn-primary" onclick="saveUsers()">保存</button>
 					</div>
@@ -347,6 +399,7 @@
 		</div>
 	</div>
 </div>
+
 <!-- 查看视图模态框 -->
 <div class="modal fade" id="roomPGWatch" style="width:100%;height:100%;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="width:100%;height:100%;margin:0;">
