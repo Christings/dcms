@@ -54,27 +54,27 @@
             <div class="col-sm-12">
                 <div class="ibox">
                     <div class="ibox-title">
-                        <h5>区域管理</h5>
+                        <h5>软件资产管理</h5>
                     </div>
                     <div class="ibox-content">
                     	<div class="col-md-2 text-align-left" id="upTable">
-                            <a data-toggle="modal" style="cursor:pointer" data-target="#districtAdd" onclick="getCPRoomList('districtRoomId','')" class="btn btn-primary ">添加区域</a>
+                            <a data-toggle="modal" style="cursor:pointer" data-target="#softwareAdd"  class="btn btn-primary ">添加软件对象</a>
                         </div>
                         <form id="queryForm">
                             <div class="col-md-10 text-align-right">
                                 <div class="input-group-search">
-                                    <input name="searchDistrictname" type="text" class="form-control" id="searchDistrictname"
-                                           placeholder="区域名称">
+                                    <input name="searchSoftwarename" type="text" class="form-control" id="searchSoftwarename"
+                                           placeholder="软件名称">
                                 </div>
                                 <div class="input-group-search">
-                                    <input name="searchRoomName" type="text" class="form-control" id="searchRoomName"
-                                           placeholder="机房名称">
+                                    <input name="searchProductName" type="text" class="form-control" id="searchProductName"
+                                           placeholder="产品名称">
                                 </div>
                                 <button class="btn btn-primary" type="button" id="queryBtn">查询</button>
                                 <button class="btn btn-primary" type="button" id="resetBtn">重置</button>
                             </div>
                         </form>
-                        <table style="width:100%" id="districtListTable" class="table table-striped table-bordered table-hover dataTables-example">
+                        <table style="width:100%" id="softwareListTable" class="table table-striped table-bordered table-hover dataTables-example">
                         </table>
                     </div>
                 </div>
@@ -84,51 +84,103 @@
 	
 	<!-- 模态框（Modal） -->
 
-	<div class="modal fade" id="districtAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal fade" id="softwareAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
-		            <button type="button" class="close" onclick="districtAddFormReset()" data-dismiss="modal" aria-hidden="true">
+		            <button type="button" class="close" onclick="softwareAddFormReset()" data-dismiss="modal" aria-hidden="true">
 	                  &times;
 		            </button>
 		            <h4 class="modal-title" id="myModalLabel">
-		                新增区域
+		                新增软件对象
 		            </h4>
 		        </div>
-		        <form role="form" id="districtAddForm">
+		        <form role="form" id="softwareAddForm">
 			        <div class="modal-body">
-						<div class="form-group">
-						  <label for="districtName">区域名称</label>
-						  <input type="text" class="form-control" name="districtName" id="districtName" 
-						     placeholder="请输入区域名称">
-						</div>
-						<div class="form-group">
-						  	<label for="distictRoomId">所属机房</label>
-						 	<select class="form-control m-b valid" onchange="selectRoom()" name="districtRoomId" id="districtRoomId">
-							</select>
-						</div>
-						<!-- <div class="form-group">
-						  <label for="cabinetResourceCodes">机柜资产编码</label>
-						  <textarea class="form-control" name="cabinetResourceCodes" id="cabinetResourceCodes" 
-						     placeholder="数据格式：A01,A02,A03..."></textarea>
-						</div> -->
-						<div class='form-group' >
-							<label class='col-sm-3'>机柜资产编码</label>
-							<input id="cabinetResourceCodes" name="cabinetResourceCodes"   style="display: none">
-							<input id="selectRoomId" style="display: none">
-							<div class='col-sm-9'>
-								<span id='cRCName' name="cRCName" style="width: 50%;"></span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectCabinetsBtn" class="btn btn-primary btn-sm btn-outline">选择</a>
+			        	<div class="row">
+			        		<div class="form-group col-sm-6">
+								<label for="softwareName">软件名称</label>
+								<input type="text" class="form-control" name="softwareName" id="softwareName" 
+							     placeholder="请输入软件名称">
 							</div>
-						</div>
-						<div class="form-group">
-						  <label for="districtRemark">备注</label>
-						  <textarea class="form-control" name="districtRemark" id="districtRemark" 
-						     placeholder="备注"></textarea> 
-						</div>
+							<div class="form-group col-sm-6">
+								<label for="softwareName">所属业务</label>
+								<input type="text" class="form-control" name="softwareName" id="softwareName" 
+							     placeholder="请输入所属业务">
+							</div>
+			        	</div>
+						
+						<div class="row">
+			        		<div class="form-group col-sm-6">
+								<label for="softwareName">软件类型</label>
+								<input type="text" class="form-control" name="softwareName" id="softwareName" 
+							     placeholder="请输入软件类型">
+							</div>
+							<div class="form-group col-sm-6">
+								<label for="softwareName">所在设备</label>
+								<input type="text" class="form-control" name="softwareName" id="softwareName" 
+							     placeholder="请输入所在设备">
+							</div>
+			        	</div>
+			        	<div class="row">
+			        		<div class="form-group col-sm-6">
+								<label for="softwareName">软件产品</label>
+								<input type="text" class="form-control" name="softwareName" id="softwareName" 
+							     placeholder="请输入软件产品">
+							</div>
+							<div class="form-group col-sm-6">
+								<label for="softwareName">上线时间</label>
+								<input type="text" class="form-control" name="softwareName" id="softwareName" 
+							     placeholder="请输入上线时间">
+							</div>
+			        	</div>
+			        	<div class="row">
+			        		<div class="form-group col-sm-6">
+								<label for="softwareName">软件版本</label>
+								<input type="text" class="form-control" name="softwareName" id="softwareName" 
+							     placeholder="请输入软件版本">
+							</div>
+							<div class="form-group col-sm-6">
+								<label for="softwareName">软件集成商</label>
+								<input type="text" class="form-control" name="softwareName" id="softwareName" 
+							     placeholder="请输入软件集成商">
+							</div>
+			        	</div>
+			        	<div class="row">
+			        		<div class="form-group col-sm-6">
+								<label for="softwareName">服务IP</label>
+								<input type="text" class="form-control" name="softwareName" id="softwareName" 
+							     placeholder="请输入服务IP">
+							</div>
+							<div class="form-group col-sm-6">
+								<label for="softwareName">服务端口</label>
+								<input type="text" class="form-control" name="softwareName" id="softwareName" 
+							     placeholder="请输入服务端口">
+							</div>
+			        	</div>
+			        	<div class="row">
+			        		<div class="form-group col-sm-6">
+								<label for="softwareName">软件实例名</label>
+								<input type="text" class="form-control" name="softwareName" id="softwareName" 
+							     placeholder="请输入软件实例名">
+							</div>
+							<div class="form-group col-sm-6">
+								<label for="softwareName">资源编码</label>
+								<input type="text" class="form-control" name="softwareName" id="softwareName" 
+							     placeholder="请输入资源编码">
+							</div>
+			        	</div>
+			        	<div class="row">
+			        		<div class="form-group col-sm-6">
+			        			<label for="softwareName">关联硬件设备
+									<button type="button" onclick="relateHardware()">选择</button>
+								</label>
+			        		</div>
+			        	</div>
 					</div>
 					<div class="modal-footer">
 			            <button type="button" class="btn btn-default" 
-			               data-dismiss="modal" onclick="districtAddFormReset()">关闭
+			               data-dismiss="modal" onclick="softwareAddFormReset()">关闭
 			            </button>
 			            <button type="submit" class="btn btn-primary">
 			               确认添加
@@ -139,7 +191,7 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="districtCabinetsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal fade" id="softHardwareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -147,18 +199,18 @@
 	                  &times;
 		            </button>
 		            <h4 class="modal-title">
-		                选择机柜
+		                关联硬件设备
 		            </h4>
 		        </div>
 
 		        <div class="modal-body">
-                    <table id="cabinetsModalTable">
+                    <table id="hardwaresModalTable">
                     </table>
 		        </div>
 		         <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                     </button>
-                    <button type="button" class="btn btn-primary" id="confirmCabinetsBtn">
+                    <button type="button" class="btn btn-primary" id="confirmHardwaresBtn">
                         确定
                     </button>
                 </div>
@@ -166,7 +218,7 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="districtUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal fade" id="softwareUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 	        <div class="modal-content">
 		        <div class="modal-header">
@@ -177,8 +229,8 @@
 		                区域编辑
 		            </h4>
 		        </div>
-		         <form id="districtUpdateForm">
-			        <div class="modal-body" id="districtUpdateBody">
+		         <form id="softwareUpdateForm">
+			        <div class="modal-body" id="softwareUpdateBody">
 			        </div>
 			        <div class="modal-footer">
 			           <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -213,10 +265,10 @@
     <!-- 自定义js -->
     <script src="../../../js/pub/common.js"></script>
     <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
- 	<script src="../../../js/xgtl/districtManage/districtManage.js"></script>
- 	<script src="../../../js/xgtl/districtManage/districtAdd.js"></script>
- 	<script src="../../../js/xgtl/districtManage/districtUpdate.js"></script>
- 	<script src="../../../js/xgtl/districtManage/districtDelete.js"></script>
+ 	<script src="../../../js/xgtl/software/softwareManage.js"></script>
+ 	<script src="../../../js/xgtl/software/softwareAdd.js"></script>
+ 	<script src="../../../js/xgtl/software/softwareUpdate.js"></script>
+ 	<script src="../../../js/xgtl/software/softwareDelete.js"></script>
  	
 </body>
 </html>

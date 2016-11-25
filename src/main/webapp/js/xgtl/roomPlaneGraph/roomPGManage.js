@@ -97,6 +97,9 @@ function pageInit() {
 	});
 }
 
+$('.modal').draggable({
+	handle:'.modal-header'
+});
 // function download(){
 // 	var fileName = '1.png';
 // 	var id = '531478698ca04c9abaa1bc2baa96c402';

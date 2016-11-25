@@ -344,6 +344,10 @@ function domainDelete(domainId){
     })
 }
 
+$('.modal').draggable({
+    handle:'.modal-header'
+});
+
 // //当前正在配置权限的菜单
 // var currentOptionDomainId;
 // //菜单配置

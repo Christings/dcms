@@ -221,6 +221,10 @@ function getIcon(iconClass){
     $("#menuIcon").addClass(iconClass);
 }
 
+$("#menuModal").draggable();
+$("#menuTreeModal").draggable();
+$("#menuOptionModal").draggable();
+
 /**
  * 新增或者更新菜单 模态框
  * @param menuId 新增时为父菜单，更新时为当前菜单
