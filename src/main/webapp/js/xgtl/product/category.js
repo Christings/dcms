@@ -89,7 +89,7 @@ function initTreeGird(container, dataList, parentIndex) {
         }
     }
 }
-
+$("#modal").draggable();
 function newUpdate(id,type) {
     if('new'==type){
         $("#modalTitle").text('新增分类');

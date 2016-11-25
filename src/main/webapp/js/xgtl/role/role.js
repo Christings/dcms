@@ -85,6 +85,7 @@ function pageInit() {
 	});
 }
 
+$("#roleModal").draggable();
 /**
  * 点击新增/修改
  * @param roleId

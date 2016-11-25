@@ -80,6 +80,53 @@ function pageInit() {
     });
 }
 
+function openUpload(){
+    $("#uploadModal").draggable();
+    $("#uploadModal").modal();
+}
+
+function uploadFile() {
+    var obj=document.getElementById("3sourceFile");
+    var file= obj.files[0];
+    if(obj.value == "选择3source文件..." || obj.value == ""){
+        DCMSUtils.Modal.toast('请选择需要上传的3source文件!','forbidden');
+        return false;
+    }
+    var stuff = obj.value.match(/^(.*)(\.)(.{1,8})$/)[3];
+    if(stuff != '3source'){
+        $("#3sourceFile").val('');
+        DCMSUtils.Modal.toast('请选择3source类型的文件上传!','forbidden');
+        return false;
+    }
+
+    var formData = new FormData();
+    formData.append('3sourceFile',file);
+    $("#uploadModal").modal('hide');
+    DCMSUtils.Modal.showLoading('文件上传中...');
+    $.ajax({
+        url:getContentPath()+"product/upload",
+        type:'post',
+        data: formData,
+        async:true,
+        processData: false,  // 告诉jQuery不要去处理发送的数据
+        contentType: false   // 告诉jQuery不要去设置Content-Type请求头
+    }).then(function(data){
+        DCMSUtils.Modal.hideLoading();
+        if(data.status==1){
+            $("#3sourceFile").val('');
+            DCMSUtils.Modal.toast('上传机房平面图信息成功'+data.msg,'');
+            setTimeout(function(){
+                dtApi.ajax.reload();
+            },1500);
+        }else {
+            DCMSUtils.Modal.toast(data.msg,'forbidden');
+        }
+    },function(error){
+        DCMSUtils.Modal.hideLoading();
+        DCMSUtils.Modal.toast('上传异常','forbidden');
+    })
+}
+
 function newUpdate(id,type) {
     if('update'==type){
         $("#modalTitle").text('编辑型号');

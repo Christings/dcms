@@ -12,7 +12,7 @@ var DCMSUtils={
 			var dtd=$.Deferred();
 			$.ajax({
 				type:"post",
-				url:getContentPath()+url,
+				url:url,
 				dataType: 'json',
 				data: params,
 				async:true
@@ -150,7 +150,7 @@ var DCMSBusi={
 		invoke:function (url,param) {
 			DCMSUtils.Modal.showLoading();
 			var dtd=$.Deferred();
-			DCMSUtils.Ajax.doPost(url,param).then(function(data){
+			DCMSUtils.Ajax.doPost(getContentPath()+url,param).then(function(data){
 				DCMSUtils.Modal.hideLoading();
 				console.log(data);
 				if(data){
