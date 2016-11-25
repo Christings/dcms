@@ -377,4 +377,9 @@ $("#confirmDomainBtn").click(function(){
 	    $("#useradd").modal('show');
 	}
 });
+
+$('.modal').draggable({
+	handle:'.modal-header'
+});
+
 // }

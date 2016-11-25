@@ -230,3 +230,7 @@ $("#confirmCabinetsBtn").click(function(){
 	    $("#districtAdd").modal('show');
 	}
 });
+
+$('.modal').draggable({
+	handle:'.modal-header'
+});
