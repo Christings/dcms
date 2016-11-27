@@ -12,6 +12,7 @@ public class CabinetForm extends CommonForm {
 	private String resourceCode;
 	private Integer status;
 	private String roomName;
+	private String direction;
 	// 排序设置
 	private String orderByClause;
 
@@ -53,5 +54,13 @@ public class CabinetForm extends CommonForm {
 
 	public void setOrderByClause(String orderByClause) {
 		this.orderByClause = orderByClause;
+	}
+
+	public String getDirection() {
+		return direction;
+	}
+
+	public void setDirection(String direction) {
+		this.direction = direction;
 	}
 }

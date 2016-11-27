@@ -1,20 +1,33 @@
 package com.web.util;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.servlet.http.HttpServletResponse;
 
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.web.bean.util.FileUtilBean;
+
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
 
 /**
  * 文件相关操作辅助类。
@@ -308,14 +321,15 @@ public class FileUtil {
 	public static boolean downloadFile(HttpServletResponse response, String filePath, String fileName) {
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
+		String path = Constant.FILE_UPLOAD_PATH + File.separator + filePath;// 获取路径
 		try {
 			if (StringUtil.isEmpty(fileName)) {
-				fileName = FileUtil.getFilename(filePath);
+				fileName = FileUtil.getFilename(path);
 			}
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("multipart/form-data");
 			response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
-			inputStream = new FileInputStream(new File(filePath));
+			inputStream = new FileInputStream(new File(path));
 			outputStream = response.getOutputStream();
 			byte[] bytes = new byte[1024];
 			int lenth;
@@ -354,7 +368,7 @@ public class FileUtil {
 			MultipartFile file = request.getFile(fileName);
 			if (null != file && file.getSize() > 0) {
 				String ext = FileUtil.getFileExt(file.getOriginalFilename());
-				String path = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH) + targetPath;// 获取路径
+				String path = Constant.FILE_UPLOAD_PATH + File.separator + targetPath;// 获取路径
 				if (!"zip".equalsIgnoreCase(ext)) {
 					needUnZIP = false;
 				}
@@ -376,8 +390,8 @@ public class FileUtil {
 						bean.setFileName(key);
 						bean.setNewFileName(newFile.getName());
 						bean.setFileExt(ext);
-						bean.setFileRealPath(path + "/" + newFile.getName());
-						bean.setFileParentPath(path);
+						bean.setFileRealPath(targetPath + "/" + newFile.getName());
+						bean.setFileParentPath(targetPath);
 						beans.add(bean);
 					}
 					if (inFile.exists()) {
@@ -388,8 +402,8 @@ public class FileUtil {
 					bean.setFileName(file.getName());
 					bean.setNewFileName(newFileName);
 					bean.setFileExt(ext);
-					bean.setFileRealPath(path + "/" + newFileName);
-					bean.setFileParentPath(path);
+					bean.setFileRealPath(targetPath + "/" + newFileName);
+					bean.setFileParentPath(targetPath);
 					beans.add(bean);
 				}
 			}
@@ -432,7 +446,6 @@ public class FileUtil {
 	 */
 	public static int deleteFiles(ArrayList<FileUtilBean> files) {
 		int count = 0;
-		String filePath = PropertiesUtil.getProperty(PropertiesUtil.FILE_UPLOAD_PATH);
 		for (FileUtilBean bean : files) {
 			String path = bean.getFileRealPath();
 			File file = new File(path);
@@ -451,6 +464,7 @@ public class FileUtil {
 		if (StringUtil.isEmpty(path)) {
 			return false;
 		}
+		path = Constant.FILE_UPLOAD_PATH+File.separator;
 		File file = new File(path);
 		if (file.exists()) {
 			return true;

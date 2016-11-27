@@ -43,7 +43,7 @@ function pageInit() {
             {title: '高度', data: 'height',name:'height'},
             {title: '额定功率', data: 'power',name:'power'},
             {title: '生产厂商', data: 'brand',name:'brand'},
-            {title: '设备分类', data: 'typeId',name:'typeId'},
+            {title: '设备分类', data: 'category.name',name:'category.name'},
             {title: '操作', data: 'id'}
         ],
         columnDefs:[{
@@ -81,51 +81,19 @@ function pageInit() {
 }
 
 function openUpload(){
-    $("#uploadModal").draggable();
-    $("#uploadModal").modal();
+    layer.open({
+        title:'型号上传',
+        type:2,
+        area: ['600px', '430px'],
+        fix: false, //不固定
+        closeBtn:1,
+        moveOut:true,
+        shadeClose:false,//点击遮罩层关闭弹出框
+        content: DCMSUtils.URL.getContentPath()+'webpages/xgtl/product/proUploader.html'
+    });
 }
 
-function uploadFile() {
-    var obj=document.getElementById("3sourceFile");
-    var file= obj.files[0];
-    if(obj.value == "选择3source文件..." || obj.value == ""){
-        DCMSUtils.Modal.toast('请选择需要上传的3source文件!','forbidden');
-        return false;
-    }
-    var stuff = obj.value.match(/^(.*)(\.)(.{1,8})$/)[3];
-    if(stuff != '3source'){
-        $("#3sourceFile").val('');
-        DCMSUtils.Modal.toast('请选择3source类型的文件上传!','forbidden');
-        return false;
-    }
 
-    var formData = new FormData();
-    formData.append('3sourceFile',file);
-    $("#uploadModal").modal('hide');
-    DCMSUtils.Modal.showLoading('文件上传中...');
-    $.ajax({
-        url:getContentPath()+"product/upload",
-        type:'post',
-        data: formData,
-        async:true,
-        processData: false,  // 告诉jQuery不要去处理发送的数据
-        contentType: false   // 告诉jQuery不要去设置Content-Type请求头
-    }).then(function(data){
-        DCMSUtils.Modal.hideLoading();
-        if(data.status==1){
-            $("#3sourceFile").val('');
-            DCMSUtils.Modal.toast('上传机房平面图信息成功'+data.msg,'');
-            setTimeout(function(){
-                dtApi.ajax.reload();
-            },1500);
-        }else {
-            DCMSUtils.Modal.toast(data.msg,'forbidden');
-        }
-    },function(error){
-        DCMSUtils.Modal.hideLoading();
-        DCMSUtils.Modal.toast('上传异常','forbidden');
-    })
-}
 
 function newUpdate(id,type) {
     if('update'==type){
@@ -135,8 +103,8 @@ function newUpdate(id,type) {
         var pro=DCMSUtils.SessionStorage.get("PRODUCT_MAP")[id];
         $("#proId").val(pro.id);
         $("#proName").val(pro.name);
-        $("#typeId").val(pro.typeId);
-        $("#typeName").val(pro.typeId);
+        $("#categoryId").val(pro.categoryId);
+        $("#typeName").val(pro.categoryId);
         $("#proBrand").val(pro.brand);
         $("#proHeight").val(pro.height);
         $("#proWeight").val(pro.weight);
@@ -160,7 +128,7 @@ $("#newUpdateForm").validate({
             minlength:2,
             maxlength:50
         },
-        typeId:{
+        categoryId:{
             require:true
         },
         proBrand:{
@@ -183,7 +151,7 @@ $("#newUpdateForm").validate({
     },
     messages:{
         proName:icon + "请输入2-50个字符的型号名称",
-        typeId:icon + "请选择型号分类",
+        categoryId:icon + "请选择型号分类",
         proBrand:icon + "请输入2-50个字符的生产厂商",
         proHeight:icon + "请输入合法的整数",
         proWeight:icon + "请输入合法的数字(小数)",
@@ -193,7 +161,7 @@ $("#newUpdateForm").validate({
         var obj={
             id:$("#proId").val(),
             name:$("#proName").val(),
-            typeId:$("#typeId").val(),
+            categoryId:$("#categoryId").val(),
             brand:$("#proBrand").val(),
             height:$("#proHeight").val(),
             weight:$("#proWeight").val(),
@@ -241,4 +209,72 @@ function deleteFun(id){
             DCMSUtils.Modal.toast('删除异常','forbidden');
         });
     })
+}
+
+var zTreeObj;
+var zTreeSetting={
+    data:{
+        simpleData:{
+            enable:true,
+            idKey:"id",
+            pIdKey:"parentId"
+        }
+    },
+    check:{
+        enable:false,
+        chkStyle:'checkbox'
+    },
+    view:{
+        nameIsHTML:true
+    },
+    callback:{
+        onClick:zTreeOnClick
+    }
+}
+
+var jsTreeIndex=0;
+function transDataToJsTree(menuList,jsIndex){
+    for(var i=0;i<menuList.length;i++){
+        var menu=menuList[i];
+        if(menu.children && menu.children.length>0){
+            menu.children=transDataToJsTree(menu.children,jsIndex);
+        }
+        if(jsIndex==0){
+            menu.parentId='';
+        }
+    }
+    return menuList;
+}
+
+function selectProType() {
+    DCMSUtils.Modal.showLoading();
+    DCMSBusi.Api.invoke('product/category/tree',null).then(function(data){
+        DCMSUtils.Modal.hideLoading();
+        if(data.status=='1'){
+            console.log(data);
+            // var TData={id:0,name:'分类',children:transDataToJsTree(data.data,jsTreeIndex)};
+            var TData=transDataToJsTree(data.data,jsTreeIndex);
+            console.log(TData);
+            zTreeObj=$.fn.zTree.init($("#typeZtree"),zTreeSetting,TData);
+            zTreeObj.expandAll(true);
+            $("#typeModal").modal();
+        }else{
+            DCMSUtils.Modal.toast('获取分类数据出错'+data.msg,'forbidden');
+        }
+    },function(error){
+        DCMSUtils.Modal.hideLoading();
+        DCMSUtils.Modal.toast('获取分类树异常','forbidden');
+    });
+}
+
+function zTreeOnClick(event, treeId, treeNode) {
+
+}
+
+function selectTreeNodeAll(){
+    zTreeObj.checkAllNodes(true);
+}
+
+function unSelectTreeNodeAll(){
+    zTreeObj.checkAllNodes(false);
 }

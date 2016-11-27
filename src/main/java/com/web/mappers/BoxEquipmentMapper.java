@@ -2,9 +2,11 @@ package com.web.mappers;
 
 import java.util.List;
 
+import com.web.bean.result.BoxEquipmentResult;
+import org.apache.ibatis.annotations.*;
+
 import com.web.entity.BoxEquipment;
 import com.web.example.BoxEquipmentExample;
-import org.apache.ibatis.annotations.*;
 
 public interface BoxEquipmentMapper {
 
@@ -66,4 +68,6 @@ public interface BoxEquipmentMapper {
         "where id = #{id,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(BoxEquipment record);
+
+    List<BoxEquipmentResult> selectWithEquipment(BoxEquipment boxEquipment);
 }

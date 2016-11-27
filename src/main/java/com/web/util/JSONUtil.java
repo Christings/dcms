@@ -61,6 +61,7 @@ public final class JSONUtil {
 	 * 读取文件内容转换成字符串
 	 */
 	public static String readJsonFile(String path) {
+		path = Constant.FILE_UPLOAD_PATH + File.separator + path;
 		File file = new File(path);
 		if (!file.exists()) {
 			return null;

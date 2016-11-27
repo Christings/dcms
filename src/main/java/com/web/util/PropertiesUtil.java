@@ -11,8 +11,6 @@ import java.util.Properties;
  */
 public class PropertiesUtil {
 
-	public static final String FILE_UPLOAD_PATH = "fileUpload.path";
-
 	public static String getProperty(String propKey) {
 		try {
 			Properties properties = new Properties();

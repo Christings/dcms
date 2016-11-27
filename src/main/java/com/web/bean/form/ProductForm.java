@@ -10,7 +10,7 @@ public class ProductForm extends CommonForm {
     /**
      * 设备类型ID
      */
-    private String typeId;
+    private String categoryId;
 
     /**
      * 生产厂商
@@ -42,12 +42,12 @@ public class ProductForm extends CommonForm {
      */
     private Integer status;
 
-    public String getTypeId() {
-        return typeId;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setTypeId(String typeId) {
-        this.typeId = typeId;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getBrand() {

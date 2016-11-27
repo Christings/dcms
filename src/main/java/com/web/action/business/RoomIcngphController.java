@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.web.entity.RoomIcngph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +23,15 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.test.MongoTest;
 import com.web.bean.form.RoomIcngphForm;
 import com.web.bean.util.FileUtilBean;
 import com.web.core.action.BaseController;
+import com.web.core.dao.impl.MongoDao;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
 import com.web.entity.Room;
+import com.web.entity.RoomIcngph;
 import com.web.example.RoomIcngphExample;
 import com.web.service.RoomIcngphService;
 import com.web.util.*;
@@ -49,6 +51,7 @@ public class RoomIcngphController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RoomIcngphController.class);
 	@Autowired
 	private RoomIcngphService roomIcngphService;
+
 
 	/**
 	 * 新增机房平面图
@@ -219,6 +222,7 @@ public class RoomIcngphController extends BaseController {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [RoomIcngph: {}]", JSON.toJSONString(icngph));
 		}
+		String path = Constant.FILE_UPLOAD_PATH + File.separator;// 获取路径
 		if (StringUtil.isEmpty(icngph.getId())) {
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "请求异常，入参ID不能为空");
 		}
@@ -226,15 +230,15 @@ public class RoomIcngphController extends BaseController {
 			icngph = roomIcngphService.getById(icngph.getId());
 			// 删除文件
 			if (StringUtil.isNotEmpty(icngph.getImageRealPath())) {
-				File file = new File(icngph.getImageRealPath());
+				File file = new File(path + icngph.getImageRealPath());
 				file.delete();
 			}
 			if (StringUtil.isNotEmpty(icngph.getJsonRealPath())) {
-				File file = new File(icngph.getJsonRealPath());
+				File file = new File(path + icngph.getJsonRealPath());
 				file.delete();
 			}
 			if (StringUtil.isNotEmpty(icngph.getYmlRealPath())) {
-				File file = new File(icngph.getYmlRealPath());
+				File file = new File(path + icngph.getYmlRealPath());
 				file.delete();
 			}
 			if (roomIcngphService.deleteById(icngph.getId()) > 0) {
@@ -512,7 +516,7 @@ public class RoomIcngphController extends BaseController {
 					continue;
 				}
 			}
-			if (StringUtil.isEmpty(roomIcngph.getId())) {
+			if (null == roomIcngph || StringUtil.isEmpty(roomIcngph.getId())) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "找不到此机房的相关信息");
 			} else {
 				operLogService.addBusinessLog(roomIcngph.getFloorName(), OperLog.operTypeEnum.select,

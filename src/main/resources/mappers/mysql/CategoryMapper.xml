@@ -81,7 +81,7 @@
             distinct
         </if>
         <include refid="Base_Column_List"/>
-        from t_s_category
+        from t_b_category
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -92,21 +92,21 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
-        from t_s_category
+        from t_b_category
         where id = #{id,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from t_s_category
+    delete from t_b_category
     where id = #{id,jdbcType=VARCHAR}
   </delete>
     <delete id="deleteByExample" parameterType="com.web.example.CategoryExample">
-        delete from t_s_category
+        delete from t_b_category
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
     <insert id="insert" parameterType="com.web.entity.Category">
-    insert into t_s_category (id, level, name, 
+    insert into t_b_category (id, level, name,
       description, parent_id, update_name, 
       update_date, create_name, create_date
       )
@@ -116,7 +116,7 @@
       )
   </insert>
     <insert id="insertSelective" parameterType="com.web.entity.Category">
-        insert into t_s_category
+        insert into t_b_category
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -177,13 +177,13 @@
         </trim>
     </insert>
     <select id="countByExample" parameterType="com.web.example.CategoryExample" resultType="java.lang.Integer">
-        select count(*) from t_s_category
+        select count(*) from t_b_category
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </select>
     <update id="updateByExampleSelective" parameterType="map">
-        update t_s_category
+        update t_b_category
         <set>
             <if test="record.id != null">
                 id = #{record.id,jdbcType=VARCHAR},
@@ -218,7 +218,7 @@
         </if>
     </update>
     <update id="updateByExample" parameterType="map">
-        update t_s_category
+        update t_b_category
         set id = #{record.id,jdbcType=VARCHAR},
         level = #{record.level,jdbcType=INTEGER},
         name = #{record.name,jdbcType=VARCHAR},
@@ -233,7 +233,7 @@
         </if>
     </update>
     <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.Category">
-        update t_s_category
+        update t_b_category
         <set>
             <if test="level != null">
                 level = #{level,jdbcType=INTEGER},
@@ -263,7 +263,7 @@
         where id = #{id,jdbcType=VARCHAR}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.web.entity.Category">
-    update t_s_category
+    update t_b_category
     set level = #{level,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
@@ -282,13 +282,13 @@
     <select id="selectByChildren" resultMap="TreeResultMap" parameterType="java.lang.String">
         select distinct
         <include refid="Base_Column_List"/>
-        from t_s_category
+        from t_b_category
         where parent_id= #{id,jdbcType=VARCHAR}
     </select>
     <select id="selectByTree" resultMap="TreeResultMap" parameterType="java.util.Map">
         select distinct
         <include refid="Base_Column_List"/>
-        from t_s_category
+        from t_b_category
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -303,7 +303,7 @@
             distinct
         </if>
         <include refid="Base_Column_List"/>
-        from t_s_category
+        from t_b_category
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
