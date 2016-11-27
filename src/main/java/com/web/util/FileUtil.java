@@ -464,6 +464,7 @@ public class FileUtil {
 		if (StringUtil.isEmpty(path)) {
 			return false;
 		}
+		path = Constant.FILE_UPLOAD_PATH+File.separator;
 		File file = new File(path);
 		if (file.exists()) {
 			return true;

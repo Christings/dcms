@@ -18,10 +18,10 @@ public interface RoomUserRelMapper {
 
 	int deleteByExample(RoomUserRelExample example);
 
-	@Delete({ "delete from t_b_service_room_user_rel", "where service_room_id = #{serviceRoomId,jdbcType=VARCHAR}" })
+	@Delete({ "delete from t_b_room_user_rel", "where service_room_id = #{serviceRoomId,jdbcType=VARCHAR}" })
 	int deleteByServiceRoomId(String serviceRoomId);
 
-	@Insert({ "insert into t_b_service_room_user_rel (service_room_id, user_id)",
+	@Insert({ "insert into t_b_room_user_rel (service_room_id, user_id)",
 			"values (#{serviceRoomId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR})" })
 	int insert(RoomUserRel record);
 
@@ -29,7 +29,7 @@ public interface RoomUserRelMapper {
 
 	List<RoomUserRel> selectByExample(RoomUserRelExample example);
 
-	@Select({ "select", "service_room_id, user_id", "from t_b_service_room_user_rel",
+	@Select({ "select", "service_room_id, user_id", "from t_b_room_user_rel",
 			"where service_room_id = #{serviceRoomId,jdbcType=VARCHAR}" })
 	@ResultMap("BaseResultMap")
 	List<RoomUserRel> selectByServiceRoomId(String serviceRoomId);
@@ -40,7 +40,7 @@ public interface RoomUserRelMapper {
 
 	int updateByPrimaryKeySelective(RoomUserRel record);
 
-	@Update({ "update t_b_service_room_user_rel", "set user_id = #{userId,jdbcType=VARCHAR}",
+	@Update({ "update t_b_room_user_rel", "set user_id = #{userId,jdbcType=VARCHAR}",
 			"where service_room_id = #{serviceRoomId,jdbcType=VARCHAR}" })
 	int updateByServiceRoomId(RoomUserRel record);
 }

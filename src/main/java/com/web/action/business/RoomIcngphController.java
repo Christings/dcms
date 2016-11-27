@@ -516,7 +516,7 @@ public class RoomIcngphController extends BaseController {
 					continue;
 				}
 			}
-			if (StringUtil.isEmpty(roomIcngph.getId())) {
+			if (null == roomIcngph || StringUtil.isEmpty(roomIcngph.getId())) {
 				return buildJSON(HttpStatus.BAD_REQUEST.value(), "找不到此机房的相关信息");
 			} else {
 				operLogService.addBusinessLog(roomIcngph.getFloorName(), OperLog.operTypeEnum.select,
