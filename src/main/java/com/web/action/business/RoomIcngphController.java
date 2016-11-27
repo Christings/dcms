@@ -222,6 +222,7 @@ public class RoomIcngphController extends BaseController {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info("request param: [RoomIcngph: {}]", JSON.toJSONString(icngph));
 		}
+		String path = Constant.FILE_UPLOAD_PATH + File.separator;// 获取路径
 		if (StringUtil.isEmpty(icngph.getId())) {
 			return buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "请求异常，入参ID不能为空");
 		}
@@ -229,15 +230,15 @@ public class RoomIcngphController extends BaseController {
 			icngph = roomIcngphService.getById(icngph.getId());
 			// 删除文件
 			if (StringUtil.isNotEmpty(icngph.getImageRealPath())) {
-				File file = new File(icngph.getImageRealPath());
+				File file = new File(path + icngph.getImageRealPath());
 				file.delete();
 			}
 			if (StringUtil.isNotEmpty(icngph.getJsonRealPath())) {
-				File file = new File(icngph.getJsonRealPath());
+				File file = new File(path + icngph.getJsonRealPath());
 				file.delete();
 			}
 			if (StringUtil.isNotEmpty(icngph.getYmlRealPath())) {
-				File file = new File(icngph.getYmlRealPath());
+				File file = new File(path + icngph.getYmlRealPath());
 				file.delete();
 			}
 			if (roomIcngphService.deleteById(icngph.getId()) > 0) {

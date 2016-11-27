@@ -1,5 +1,6 @@
 package com.web.action.business;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -361,12 +362,14 @@ public class RoomController extends BaseController {
 			return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "机房ID不能为空");
 		}
 		try {
+			String path = Constant.FILE_UPLOAD_PATH + File.separator;// 获取路径
 			room = roomService.getById(room.getId());
 			boolean isExist = FileUtil.checkFileExist(room.getImageUrl());
 			if (!isExist) {
 				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "文件不存在");
 			}
-			ImageUtil.getImage(room.getImageUrl(), FileUtil.getFilename(room.getImageUrl()), response);
+
+			ImageUtil.getImage(path + room.getImageUrl(), FileUtil.getFilename(path + room.getImageUrl()), response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "系统内部错误");
