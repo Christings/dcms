@@ -1,338 +1,425 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.web.mappers.ProductMapper" >
-  <resultMap id="BaseResultMap" type="com.web.entity.Product" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="type_id" property="typeId" jdbcType="VARCHAR" />
-    <result column="brand" property="brand" jdbcType="VARCHAR" />
-    <result column="height" property="height" jdbcType="INTEGER" />
-    <result column="weight" property="weight" jdbcType="REAL" />
-    <result column="power" property="power" jdbcType="REAL" />
-    <result column="extra" property="extra" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="update_name" property="updateName" jdbcType="VARCHAR" />
-    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
-    <result column="create_name" property="createName" jdbcType="VARCHAR" />
-    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+<mapper namespace="com.web.mappers.ProductMapper">
+    <resultMap id="BaseResultMap" type="com.web.entity.Product">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="brand" property="brand" jdbcType="VARCHAR"/>
+        <result column="height" property="height" jdbcType="INTEGER"/>
+        <result column="weight" property="weight" jdbcType="REAL"/>
+        <result column="power" property="power" jdbcType="REAL"/>
+        <result column="front_img_name" property="frontImgName" jdbcType="VARCHAR"/>
+        <result column="front_img_width" property="frontImgWidth" jdbcType="INTEGER"/>
+        <result column="front_img_height" property="frontImgHeight" jdbcType="INTEGER"/>
+        <result column="back_img_name" property="backImgName" jdbcType="VARCHAR"/>
+        <result column="back_img_width" property="backImgWidth" jdbcType="INTEGER"/>
+        <result column="back_img_height" property="backImgHeight" jdbcType="INTEGER"/>
+
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="update_name" property="updateName" jdbcType="VARCHAR"/>
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="create_name" property="createName" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <association column="category_id" property="category" javaType="com.web.entity.Category"
+                     select="com.web.mappers.CategoryMapper.selectByPrimaryKey"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List" >
-    id, name, type_id, brand, height, weight, power, extra, status, update_name, update_date, 
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, name, category_id, brand, height, weight, power, front_img_name,front_img_width,front_img_height,back_img_name,back_img_width,back_img_height, status, update_name, update_date,
     create_name, create_date
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.ProductExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from t_s_product
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_s_product
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from t_s_product
-    where id = #{id,jdbcType=VARCHAR}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.web.example.ProductExample" >
-    delete from t_s_product
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.web.entity.Product" >
-    insert into t_s_product (id, name, type_id, 
-      brand, height, weight, 
-      power, extra, status, 
-      update_name, update_date, create_name, 
-      create_date)
-    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{typeId,jdbcType=VARCHAR}, 
-      #{brand,jdbcType=VARCHAR}, #{height,jdbcType=INTEGER}, #{weight,jdbcType=REAL}, 
-      #{power,jdbcType=REAL}, #{extra,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP})
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.web.example.ProductExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_s_product
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_s_product
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from t_s_product
+        where id = #{id,jdbcType=VARCHAR}
+     </delete>
+    <delete id="deleteByExample" parameterType="com.web.example.ProductExample">
+        delete from t_s_product
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.web.entity.Product">
+        insert into t_s_product (id, name, category_id,
+          brand, height, weight,
+          power,front_img_name,front_img_width,front_img_height,
+          back_img_name,back_img_width,back_img_height, status,
+          update_name, update_date, create_name,
+          create_date)
+        values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{category.id,jdbcType=VARCHAR},
+           #{brand,jdbcType=VARCHAR}, #{height,jdbcType=INTEGER}, #{weight,jdbcType=REAL},
+            #{power,jdbcType=REAL},
+           #{front_img_name,jdbcType=VARCHAR},
+           #{front_img_width,jdbcType=INTEGER},
+           #{front_img_height,jdbcType=INTEGER},
+           #{back_img_name,jdbcType=VARCHAR},
+           #{back_img_width,jdbcType=INTEGER},
+           #{back_img_height,jdbcType=INTEGER},
+           #{status,jdbcType=INTEGER},
+            #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR},
+            #{createDate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.web.entity.Product" >
-    insert into t_s_product
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="typeId != null" >
-        type_id,
-      </if>
-      <if test="brand != null" >
-        brand,
-      </if>
-      <if test="height != null" >
-        height,
-      </if>
-      <if test="weight != null" >
-        weight,
-      </if>
-      <if test="power != null" >
-        power,
-      </if>
-      <if test="extra != null" >
-        extra,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="updateName != null" >
-        update_name,
-      </if>
-      <if test="updateDate != null" >
-        update_date,
-      </if>
-      <if test="createName != null" >
-        create_name,
-      </if>
-      <if test="createDate != null" >
-        create_date,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="typeId != null" >
-        #{typeId,jdbcType=VARCHAR},
-      </if>
-      <if test="brand != null" >
-        #{brand,jdbcType=VARCHAR},
-      </if>
-      <if test="height != null" >
-        #{height,jdbcType=INTEGER},
-      </if>
-      <if test="weight != null" >
-        #{weight,jdbcType=REAL},
-      </if>
-      <if test="power != null" >
-        #{power,jdbcType=REAL},
-      </if>
-      <if test="extra != null" >
-        #{extra,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="updateName != null" >
-        #{updateName,jdbcType=VARCHAR},
-      </if>
-      <if test="updateDate != null" >
-        #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createName != null" >
-        #{createName,jdbcType=VARCHAR},
-      </if>
-      <if test="createDate != null" >
-        #{createDate,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.web.example.ProductExample" resultType="java.lang.Integer" >
-    select count(*) from t_s_product
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update t_s_product
-    <set >
-      <if test="record.id != null" >
-        id = #{record.id,jdbcType=VARCHAR},
-      </if>
-      <if test="record.name != null" >
+    <insert id="insertSelective" parameterType="com.web.entity.Product">
+        insert into t_s_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="category.id != null">
+                category_id,
+            </if>
+            <if test="brand != null">
+                brand,
+            </if>
+            <if test="height != null">
+                height,
+            </if>
+            <if test="weight != null">
+                weight,
+            </if>
+            <if test="power != null">
+                power,
+            </if>
+            <if test="frontImgName != null">
+                front_img_name,
+            </if>
+            <if test="frontImgWidth != null">
+                front_img_width,
+            </if>
+            <if test="frontImgHeight != null">
+                front_img_height,
+            </if>
+            <if test="backImgName != null">
+                back_img_name,
+            </if>
+            <if test="backImgWidth != null">
+                back_img_width,
+            </if>
+            <if test="backImgHeight != null">
+                back_img_height,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="updateName != null">
+                update_name,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+            <if test="createName != null">
+                create_name,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="category.id != null">
+                #{category.id,jdbcType=VARCHAR},
+            </if>
+            <if test="brand != null">
+                #{brand,jdbcType=VARCHAR},
+            </if>
+            <if test="height != null">
+                #{height,jdbcType=INTEGER},
+            </if>
+            <if test="weight != null">
+                #{weight,jdbcType=REAL},
+            </if>
+            <if test="power != null">
+                #{power,jdbcType=REAL},
+            </if>
+            <if test="frontImgName != null">
+                #{frontImgName,jdbcType=VARCHAR},
+            </if>
+            <if test="frontImgWidth != null">
+                #{frontImgWidth,jdbcType=INTEGER},
+            </if>
+            <if test="frontImgHeight != null">
+                #{frontImgHeight,jdbcType=INTEGER},
+            </if>
+            <if test="backImgName != null">
+                 #{backImgName,jdbcType=VARCHAR},
+            </if>
+            <if test="backImgWidth != null">
+                #{backImgWidth,jdbcType=INTEGER},
+            </if>
+            <if test="backImgHeight != null">
+                #{backImgHeight,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="updateName != null">
+                #{updateName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.web.example.ProductExample" resultType="java.lang.Integer">
+        select count(*) from t_s_product
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_s_product
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.category.id != null">
+                category_id = #{record.category.id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.brand != null">
+                brand = #{record.brand,jdbcType=VARCHAR},
+            </if>
+            <if test="record.height != null">
+                height = #{record.height,jdbcType=INTEGER},
+            </if>
+            <if test="record.weight != null">
+                weight = #{record.weight,jdbcType=REAL},
+            </if>
+            <if test="record.power != null">
+                power = #{record.power,jdbcType=REAL},
+            </if>
+            <if test="record.frontImgName != null">
+                front_img_name = #{record.frontImgName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.frontImgWidth != null">
+                front_img_width = #{record.frontImgWidth,jdbcType=INTEGER},
+            </if>
+            <if test="record.frontImgHeight != null">
+                front_img_height = #{record.frontImgHeight,jdbcType=INTEGER},
+            </if>
+            <if test="record.backImgName != null">
+                back_img_name = #{record.backImgName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.backImgWidth != null">
+                back_img_width = #{record.backImgWidth,jdbcType=INTEGER},
+            </if>
+            <if test="record.backImgHeight != null">
+                back_img_height = #{record.backImgHeight,jdbcType=INTEGER},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=INTEGER},
+            </if>
+            <if test="record.updateName != null">
+                update_name = #{record.updateName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.updateDate != null">
+                update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.createName != null">
+                create_name = #{record.createName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createDate != null">
+                create_date = #{record.createDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_s_product
+        set id = #{record.id,jdbcType=VARCHAR},
         name = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.typeId != null" >
-        type_id = #{record.typeId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.brand != null" >
+        category_id = #{record.category.id,jdbcType=VARCHAR},
         brand = #{record.brand,jdbcType=VARCHAR},
-      </if>
-      <if test="record.height != null" >
         height = #{record.height,jdbcType=INTEGER},
-      </if>
-      <if test="record.weight != null" >
         weight = #{record.weight,jdbcType=REAL},
-      </if>
-      <if test="record.power != null" >
         power = #{record.power,jdbcType=REAL},
-      </if>
-      <if test="record.extra != null" >
-        extra = #{record.extra,jdbcType=VARCHAR},
-      </if>
-      <if test="record.status != null" >
+        front_img_name = #{record.frontImgName,jdbcType=VARCHAR},
+        front_img_width = #{record.frontImgWidth,jdbcType=INTEGER},
+        front_img_height = #{record.frontImgHeight,jdbcType=INTEGER},
+        back_img_name = #{record.backImgName,jdbcType=VARCHAR},
+        back_img_width = #{record.backImgWidth,jdbcType=INTEGER},
+        back_img_height = #{record.backImgHeight,jdbcType=INTEGER},
         status = #{record.status,jdbcType=INTEGER},
-      </if>
-      <if test="record.updateName != null" >
         update_name = #{record.updateName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.updateDate != null" >
         update_date = #{record.updateDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.createName != null" >
         create_name = #{record.createName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.createDate != null" >
-        create_date = #{record.createDate,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update t_s_product
-    set id = #{record.id,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      type_id = #{record.typeId,jdbcType=VARCHAR},
-      brand = #{record.brand,jdbcType=VARCHAR},
-      height = #{record.height,jdbcType=INTEGER},
-      weight = #{record.weight,jdbcType=REAL},
-      power = #{record.power,jdbcType=REAL},
-      extra = #{record.extra,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=INTEGER},
-      update_name = #{record.updateName,jdbcType=VARCHAR},
-      update_date = #{record.updateDate,jdbcType=TIMESTAMP},
-      create_name = #{record.createName,jdbcType=VARCHAR},
-      create_date = #{record.createDate,jdbcType=TIMESTAMP}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.Product" >
-    update t_s_product
-    <set >
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="typeId != null" >
-        type_id = #{typeId,jdbcType=VARCHAR},
-      </if>
-      <if test="brand != null" >
-        brand = #{brand,jdbcType=VARCHAR},
-      </if>
-      <if test="height != null" >
-        height = #{height,jdbcType=INTEGER},
-      </if>
-      <if test="weight != null" >
-        weight = #{weight,jdbcType=REAL},
-      </if>
-      <if test="power != null" >
-        power = #{power,jdbcType=REAL},
-      </if>
-      <if test="extra != null" >
-        extra = #{extra,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="updateName != null" >
-        update_name = #{updateName,jdbcType=VARCHAR},
-      </if>
-      <if test="updateDate != null" >
-        update_date = #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createName != null" >
-        create_name = #{createName,jdbcType=VARCHAR},
-      </if>
-      <if test="createDate != null" >
-        create_date = #{createDate,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.web.entity.Product" >
-    update t_s_product
-    set name = #{name,jdbcType=VARCHAR},
-      type_id = #{typeId,jdbcType=VARCHAR},
-      brand = #{brand,jdbcType=VARCHAR},
-      height = #{height,jdbcType=INTEGER},
-      weight = #{weight,jdbcType=REAL},
-      power = #{power,jdbcType=REAL},
-      extra = #{extra,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
-      update_name = #{updateName,jdbcType=VARCHAR},
-      update_date = #{updateDate,jdbcType=TIMESTAMP},
-      create_name = #{createName,jdbcType=VARCHAR},
-      create_date = #{createDate,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
+        create_date = #{record.createDate,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.web.entity.Product">
+        update t_s_product
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="category.id != null">
+                category_id = #{category.id,jdbcType=VARCHAR},
+            </if>
+            <if test="brand != null">
+                brand = #{brand,jdbcType=VARCHAR},
+            </if>
+            <if test="height != null">
+                height = #{height,jdbcType=INTEGER},
+            </if>
+            <if test="weight != null">
+                weight = #{weight,jdbcType=REAL},
+            </if>
+            <if test="power != null">
+                power = #{power,jdbcType=REAL},
+            </if>
+            <if test="frontImgName != null">
+                front_img_name = #{frontImgName,jdbcType=VARCHAR},
+            </if>
+            <if test="frontImgWidth != null">
+                front_img_width = #{frontImgWidth,jdbcType=INTEGER},
+            </if>
+            <if test="frontImgHeight != null">
+                front_img_height = #{frontImgHeight,jdbcType=INTEGER},
+            </if>
+            <if test="backImgName != null">
+                back_img_name = #{backImgName,jdbcType=VARCHAR},
+            </if>
+            <if test="backImgWidth != null">
+                back_img_width = #{backImgWidth,jdbcType=INTEGER},
+            </if>
+            <if test="backImgHeight != null">
+                back_img_height = #{backImgHeight,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="updateName != null">
+                update_name = #{updateName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                create_name = #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.web.entity.Product">
+        update t_s_product
+        set name = #{name,jdbcType=VARCHAR},
+          category_id = #{category.id,jdbcType=VARCHAR},
+          brand = #{brand,jdbcType=VARCHAR},
+          height = #{height,jdbcType=INTEGER},
+          weight = #{weight,jdbcType=REAL},
+          power = #{power,jdbcType=REAL},
+          front_img_name = #{record.frontImgName,jdbcType=VARCHAR},
+          front_img_width = #{record.frontImgWidth,jdbcType=INTEGER},
+          front_img_height = #{record.frontImgHeight,jdbcType=INTEGER},
+          back_img_name = #{record.backImgName,jdbcType=VARCHAR},
+          back_img_width = #{record.backImgWidth,jdbcType=INTEGER},
+          back_img_height = #{record.backImgHeight,jdbcType=INTEGER},
+          status = #{status,jdbcType=INTEGER},
+          update_name = #{updateName,jdbcType=VARCHAR},
+          update_date = #{updateDate,jdbcType=TIMESTAMP},
+          create_name = #{createName,jdbcType=VARCHAR},
+          create_date = #{createDate,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
 </mapper>
