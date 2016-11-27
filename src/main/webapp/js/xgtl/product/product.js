@@ -43,7 +43,7 @@ function pageInit() {
             {title: '高度', data: 'height',name:'height'},
             {title: '额定功率', data: 'power',name:'power'},
             {title: '生产厂商', data: 'brand',name:'brand'},
-            {title: '设备分类', data: 'typeId',name:'typeId'},
+            {title: '设备分类', data: 'category.name',name:'category.name'},
             {title: '操作', data: 'id'}
         ],
         columnDefs:[{
@@ -135,8 +135,8 @@ function newUpdate(id,type) {
         var pro=DCMSUtils.SessionStorage.get("PRODUCT_MAP")[id];
         $("#proId").val(pro.id);
         $("#proName").val(pro.name);
-        $("#typeId").val(pro.typeId);
-        $("#typeName").val(pro.typeId);
+        $("#categoryId").val(pro.categoryId);
+        $("#typeName").val(pro.categoryId);
         $("#proBrand").val(pro.brand);
         $("#proHeight").val(pro.height);
         $("#proWeight").val(pro.weight);
@@ -160,7 +160,7 @@ $("#newUpdateForm").validate({
             minlength:2,
             maxlength:50
         },
-        typeId:{
+        categoryId:{
             require:true
         },
         proBrand:{
@@ -183,7 +183,7 @@ $("#newUpdateForm").validate({
     },
     messages:{
         proName:icon + "请输入2-50个字符的型号名称",
-        typeId:icon + "请选择型号分类",
+        categoryId:icon + "请选择型号分类",
         proBrand:icon + "请输入2-50个字符的生产厂商",
         proHeight:icon + "请输入合法的整数",
         proWeight:icon + "请输入合法的数字(小数)",
@@ -193,7 +193,7 @@ $("#newUpdateForm").validate({
         var obj={
             id:$("#proId").val(),
             name:$("#proName").val(),
-            typeId:$("#typeId").val(),
+            categoryId:$("#categoryId").val(),
             brand:$("#proBrand").val(),
             height:$("#proHeight").val(),
             weight:$("#proWeight").val(),

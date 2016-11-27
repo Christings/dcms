@@ -401,9 +401,9 @@ public class CabinetController extends BaseController {
 				}
 				MultipartFile mFile = request.getFile(fileName);
 				if (null != mFile && mFile.getSize() > 0) {
-					ExcelUtil<CabinetExcel> excelUtil = new ExcelUtil<CabinetExcel>();
+					//ExcelUtil<CabinetExcel> excelUtil = new ExcelUtil<CabinetExcel>();
 					CabinetExcel excel = new CabinetExcel();
-					List<CabinetExcel> list = excelUtil.read(mFile.getInputStream(), new CabinetExcel());
+					List<CabinetExcel> list = null;//excelUtil.read(mFile.getInputStream(), new CabinetExcel());
 					for (int i = 0; i < list.size(); i++) {
 						excel = list.get(i);
 						Cabinet cabinet = new Cabinet();

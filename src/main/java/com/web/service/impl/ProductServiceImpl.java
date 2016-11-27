@@ -7,6 +7,7 @@ import com.web.entity.Product;
 import com.web.example.ProductExample;
 import com.web.mappers.ProductMapper;
 import com.web.service.ProductService;
+import com.web.util.UUIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,9 @@ public class ProductServiceImpl implements ProductService {
 			return 0 ;
 		}
 
+		if(null == product.getId() || "".equals(product.getId())){
+			product.setId(UUIDGenerator.generatorRandomUUID());
+		}
 		// 插入记录
 		int result = productMapper.insertSelective(product) ;
 
