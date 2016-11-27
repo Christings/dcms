@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>设备视图</title>
+    <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link rel="stylesheet" href="../../../3rd-libs/jquery-ui/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="../../../css/detail.css">
+    <script type="application/javascript" language="javascript">
+        baseUrl = '';
+    </script>
+</head>
+<body>
+
+<!--[[[设备信息区-->
+<div class="row-fluid">
+    <h4>
+        <center>设备: <span>A03-ODF1</span> 设备型号: <span>SYSTIMAX 1000 G2</span></center>
+    </h4>
+</div>
+<div class="row-fluid">
+    <center></center>
+</div>
+<div class="row-fluid">
+    <ul class="breadcrumb">
+        <li>
+            <a>所属机柜:<span class="divider">/</span> 位置: 39-42 </a>
+        </li>
+        <li style="float: right;"><a href="javascript:window.location.reload()">刷新</a></li>
+    </ul>
+</div>
+<!--]]]-->
+<!-- [[[ Tab区 -->
+<div class="row-fluid">
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a
+                href="http://demo.3ddcim.com/server/selectboards/?server_id=101082&amp;tab_id=ext-244#home">后视图</a></li>
+        <li><a href="http://demo.3ddcim.com/server/selectboards/?server_id=101082&amp;tab_id=ext-244#dynamic">跳线信息</a>
+        </li>
+        <li><a href="http://demo.3ddcim.com/server/selectboards/?server_id=101082&amp;tab_id=ext-244#fix">基础布线信息</a>
+        </li>
+        <li><a href="http://demo.3ddcim.com/server/selectboards/?server_id=101082&amp;tab_id=ext-244#patch-101155">A03-S01</a>
+        </li>
+        <li><a href="http://demo.3ddcim.com/server/selectboards/?server_id=101082&amp;tab_id=ext-244#patch-115229">1层北弱电井外网柜</a>
+        </li>
+        <li><a href="http://demo.3ddcim.com/server/selectboards/?server_id=101082&amp;tab_id=ext-244#patch-116324">4层北弱电井内网柜</a>
+        </li>
+        <li><a href="http://demo.3ddcim.com/server/selectboards/?server_id=101082&amp;tab_id=ext-244#zhineng">其他设备</a>
+        </li>
+        <li><a href="http://demo.3ddcim.com/server/selectboards/?server_id=101082&amp;tab_id=ext-244#remark">设备信息</a>
+        </li>
+        <li><a href="http://demo.3ddcim.com/server/selectboards/?server_id=101082&amp;tab_id=ext-244#topology">拓扑推演</a>
+        </li>
+    </ul>
+
+    <div id="main" class="tab-content">
+        <div class="tab-pane active" id="home"
+             style="transform-origin: 0px 0px 0px; transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) scale(1) translateZ(0px);">
+            <!--[[[-->
+            <table>
+                <tbody>
+                <tr>
+                    <td valign="top">
+                        <!--[[[-->
+                        <h3>A面</h3>
+                        <div style="position:relative; margin: 10px; height:358px; width: 1024px;">
+                            <img style="z-index:0; position: absolute; top: 0px; left: 0px; height: 358px;
+            width: 1024px;" src="./selectboards_files/saved_resource">
+                            <!--[[[-->
+                            <a data-port-id="544777" data-port-status="1" data-port-name="D-9/10"
+                               class="box port-idle port" style="position:absolute;
+    display:table-cell;
+    top:    210px; 
+    left:   307px; 
+    width:  37px; 
+    height: 36px; 
+    " title="D-9/10"></a>
+                            <!--[[[-->
+                            <a data-port-id="544778" data-port-status="1" data-port-name="A-11/12"
+                               class="box port-idle port" style="position:absolute;
+    display:table-cell;
+    top:    252px; 
+    left:   84px; 
+    width:  40px; 
+    height: 36px; 
+    " title="A-11/12"></a>
+                            <!--[[[-->
+                            <a data-port-id="544779" data-port-status="1" data-port-name="J-3/4"
+                               class="box port-idle port" style="position:absolute;
+    display:table-cell;
+    top:    85px; 
+    left:   664px; 
+    width:  36px; 
+    height: 35px; 
+    " title="J-3/4"></a>
+                            <!--[[[-->
+                            <a data-port-id="544780" data-port-status="2" data-port-name="D-7/8"
+                               class="box port-in-use port" style="position:absolute;
+    display:table-cell;
+    top:    169px; 
+    left:   307px; 
+    width:  37px; 
+    height: 35px; 
+    " title="D-7/8"></a>
+                            <!--[[[-->
+                        </div><!--]]]-->
+                    </td>
+                    <td>
+                        <!-- 选择板卡区 -->
+                        <div id="select-area" style="display:none;max-width: 200px;"></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--]]]-->
+        <div class="tab-pane" id="dynamic"><!--[[[-->
+            <table align="center" class="b-table" style="margin-top:10px;width:75%;text-align:left;">
+                <tbody>
+                <tr>
+                    <th>本端设备名称</th>
+                    <th>
+                        <div class="vr"></div>
+                    </th>
+                    <th>本端端口名称</th>
+                    <th>
+                        <div class="vr"></div>
+                    </th>
+                    <th>对端设备名称</th>
+                    <th>
+                        <div class="vr"></div>
+                    </th>
+                    <th>对端端口名称</th>
+                    <th>
+                        <div class="vr"></div>
+                    </th>
+                    <th>长度</th>
+                    <th>
+                        <div class="vr"></div>
+                    </th>
+                    <th>操作</th>
+                </tr>
+                <tr id="dynamicList">
+                    <td>A03-ODF1</td>
+                    <td>
+                        <div class="vr"></div>
+                    </td>
+                    <td>G-5/6</td>
+                    <td>
+                        <div class="vr"></div>
+                    </td>
+                    <td>A03-ODF1</td>
+                    <td>
+                        <div class="vr"></div>
+                    </td>
+                    <td>G-3/4</td>
+                    <td>
+                        <div class="vr"></div>
+                    </td>
+                    <td>0CM</td>
+                    <td>
+                        <div class="vr"></div>
+                    </td>
+                    <td>
+                        <img style="cursor:pointer;" onclick="doCommand();" src='http://localhost:8080/dcms/img/3D_location.png'>&nbsp;&nbsp;
+                        <i style="cursor:pointer;" class="glyphicon glyphicon-tag" title="标签" onclick="showReticleDialog(544794)")></i>&nbsp;&nbsp;
+                        <i style="cursor:pointer;" class="glyphicon glyphicon-link" title="业务" onclick="createBusiness(544794)"></i>&nbsp;&nbsp;
+                        <i style="cursor:pointer;" class="glyphicon glyphicon-remove" title="删除一跳" onclick="deleteReticle('A03-ODF1','G-5/6',565367, 0)"></i>&nbsp;&nbsp;
+                        <i style="cursor:pointer;" class="glyphicon glyphicon-remove-circle" title="删除整个链路" onclick="deleteReticle('A03-ODF1','G-5/6',565367, 1)"></i>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <!--]]]-->
+
+        <!--[[[-->
+        <div class="tab-pane" id="fix">
+            <table align="center" class="b-table" style="margin-top:10px;width:75%;text-align:left;">
+                <tbody>
+                <tr>
+                    <th>源设备名称</th>
+                    <th>
+                        <div class="vr"></div>
+                    </th>
+                    <th>源端口名称</th>
+                    <th>
+                        <div class="vr"></div>
+                    </th>
+                    <th>目的设备名称</th>
+                    <th>
+                        <div class="vr"></div>
+                    </th>
+                    <th>目的端口名称</th>
+                </tr>
+
+                <tr id="fixList">
+                    <td>A03-ODF1</td>
+                    <td>
+                        <div class="vr"></div>
+                    </td>
+                    <td>A-1/2</td>
+                    <td>
+                        <div class="vr"></div>
+                    </td>
+                    <td>F01-ODF4</td>
+                    <td>
+                        <div class="vr"></div>
+                    </td>
+                    <td>K-1/2</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <!--]]]-->
+        <!--[[[-->
+        <div class="tab-pane patch-list" id="patch-101155">
+            名称：A03-S01 <br>
+            位置：
+            <!--[[[-->
+            <h3>A面</h3>
+            <div style="position:relative; margin: 10px; height:269px; width: 1024px;">
+
+                <img style="z-index:0; position: absolute; top: 0px; left: 0px; height: 269px;
+            width: 1024px;" src="./selectboards_files/saved_resource(1)">
+
+
+                <!--[[[-->
+                <a data-port-id="101156" data-port-status="2" data-port-name="RJ-19" class="box port-in-use port"
+                   style="position:absolute;
+    display:table-cell;
+    top:    119px; 
+    left:   769px; 
+    width:  40px; 
+    height: 31px; 
+    " title="RJ-19"></a>
+                <!--[[[-->
+                <a data-port-id="101157" data-port-status="1" data-port-name="RJ-18" class="box port-idle port" style="position:absolute;
+    display:table-cell;
+    top:    119px; 
+    left:   726px; 
+    width:  38px; 
+    height: 31px; 
+    " title="RJ-18"></a>
+
+
+            </div><!--]]]-->
+        </div>
+        <!--[[[-->
+        <div class="tab-pane patch-list" id="patch-115229">
+            名称：1层北弱电井外网柜 <br>
+            位置：
+            <!--[[[-->
+            <h3>A面</h3>
+            <div style="position:relative; margin: 10px; height:358px; width: 1024px;">
+
+                <img style="z-index:0; position: absolute; top: 0px; left: 0px; height: 358px;
+            width: 1024px;" src="./selectboards_files/saved_resource">
+
+                <a data-port-id="544851" data-port-status="1" data-port-name="D-1/2" class="box port-idle port" style="position:absolute;
+    display:table-cell;
+    top:    45px; 
+    left:   308px; 
+    width:  37px; 
+    height: 35px; 
+    " title="D-1/2"></a>
+                <!--[[[-->
+                <a data-port-id="544852" data-port-status="2" data-port-name="E-3/4" class="box port-in-use port"
+                   style="position:absolute;
+    display:table-cell;
+    top:    85px; 
+    left:   378px; 
+    width:  39px; 
+    height: 35px; 
+    " title="E-3/4"></a>
+
+            </div><!--]]]-->
+        </div>
+        <!--[[[-->
+        <div class="tab-pane patch-list" id="patch-116324">
+            名称：4层北弱电井内网柜 <br>
+            位置：
+            <!--[[[-->
+            <h3>A面</h3>
+            <div style="position:relative; margin: 10px; height:358px; width: 1024px;">
+
+                <img style="z-index:0; position: absolute; top: 0px; left: 0px; height: 358px;
+            width: 1024px;" src="./selectboards_files/saved_resource">
+
+
+                <a data-port-id="544929" data-port-status="1" data-port-name="H-1/2" class="box port-idle port" style="position:absolute;
+    display:table-cell;
+    top:    45px; 
+    left:   593px; 
+    width:  35px; 
+    height: 35px; 
+    " title="H-1/2"></a>
+                <!--[[[-->
+                <a data-port-id="544930" data-port-status="2" data-port-name="G-9/10" class="box port-in-use port"
+                   style="position:absolute;
+    display:table-cell;
+    top:    210px; 
+    left:   521px; 
+    width:  36px; 
+    height: 36px; 
+    " title="G-9/10"></a>
+            </div><!--]]]-->
+
+        </div>
+        <!--]]]-->
+
+        <!--[[[ 其他设备 -->
+        <div class="tab-pane patch-list" id="zhineng">
+            <input type="text" id="other-serial">
+            <button id="other-serial-btn">加载</button>
+            <div id="custom-area"></div>
+        </div>
+        <!--]]]-->
+
+
+        <div class="tab-pane" id="remark">
+            <pre>A-&gt;F01-ODF4 K位
+B-&gt;F05-ODF1 B位
+C-&gt;F07-ODF1 B位
+D-&gt;F11-ODF4 K位
+L-&gt;G01-ODF7 B位
+M-&gt;A01-ODF7 B位
+</pre>
+        </div>
+
+
+        <!--]]]-->
+
+
+        <div class="tab-pane" id="topology">
+            <iframe style="margin:0px 0px 5px 0px; border: 0" height="700" width="800"
+                    src="saved_resource.html"></iframe>
+        </div>
+
+
+    </div>
+</div>
+<!--]]]-->
+
+
+<!--]]]-->
+
+<!--]]]-->
+
+<!--[[[ 自定义函数区-->
+<script type="text/javascript">
+    var equipmentName = 'A03-ODF1';
+    var equipmentId = '101082';
+    var tabId = 'ext-244';
+    var isDC = ('True' === 'True');
+</script>
+<script src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
+<script src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
+<script src="../../../3rd-libs/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../../../js/xgtl/equipment/selectboards.js"></script>
+<!--]]]-->
+
+<script src="../../../3rd-libs/jquery-ui/iscroll-zoom.js"></script>
+<script>
+    setTimeout(function () {
+        new IScroll('#main', {
+            zoom: true,
+            zoomMin: 0.5,
+            zoomMax: 1,
+            scrollX: false,
+            scrollY: true,
+            mouseWheel: true,
+            freeScroll: true,
+            wheelAction: 'zoom'
+        })
+    }, 100);
+    document.addEventListener('touchmove', function (e) {
+        e.preventDefault();
+    }, false);
+</script>
+
+
+<!--
+vim600: foldmarker=[[[,]]] ft=xhtml st=2 ts=2 sw=2
+-->
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable" tabindex="-1" role="dialog"
+     aria-describedby="show-reticle-dialog" aria-labelledby="ui-id-1" style="display: none;">
+    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span id="ui-id-1"
+                                                                                            class="ui-dialog-title">查看路径</span>
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close"
+                role="button" aria-disabled="false" title="close"><span
+                class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span
+                class="ui-button-text">close</span></button>
+    </div>
+    <div id="show-reticle-dialog" style="" class="ui-dialog-content ui-widget-content"><!--[[[-->
+        <pre style="cursor: pointer; width: 370px; height: 125px;" onclick="$(this).hide().next().show();return false;"
+             id="reticle-label"></pre>
+        <p style="display: none;">
+            <textarea id="reticle-label-input" style="font-family: Monaco;width: 370px; height: 100px;"></textarea>
+            <br>
+            <button onclick="$(this).parent().hide().prev().show().text($('#reticle-label-input').val());">修复
+            </button>
+        </p>
+    </div>
+</div>
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable" tabindex="-1" role="dialog"
+     aria-describedby="create-business-dialog" aria-labelledby="ui-id-2" style="display: none;">
+    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span id="ui-id-2"
+                                                                                            class="ui-dialog-title">创建业务</span>
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close"
+                role="button" aria-disabled="false" title="close"><span
+                class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span
+                class="ui-button-text">close</span></button>
+    </div>
+    <div id="create-business-dialog" class="form-horizontal ui-dialog-content ui-widget-content" style=""><!--[[[-->
+        <div class="control-group">
+
+            <!-- Text input-->
+            <label class="control-label" for="business-name">业务名称</label>
+
+            <div class="controls">
+                <input type="text" placeholder="请输入业务名称" class="input-xlarge" id="business-name">
+
+                <p class="help-block">50个字以内</p>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label"></label>
+
+            <!-- Button -->
+            <div class="controls">
+                <button class="btn btn-primary">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
