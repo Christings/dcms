@@ -26,8 +26,32 @@
         <result column="status" property="status" jdbcType="INTEGER"/>
     </resultMap>
 
+    <resultMap id="ProductResultMap" type="com.web.entity.Product" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="type_id" property="typeId" jdbcType="VARCHAR" />
+        <result column="brand" property="brand" jdbcType="VARCHAR" />
+        <result column="height" property="height" jdbcType="INTEGER" />
+        <result column="weight" property="weight" jdbcType="REAL" />
+        <result column="power" property="power" jdbcType="REAL" />
+        <result column="extra" property="extra" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="GridResultMap" type="com.web.bean.result.EquipmentResult" extends="BaseResultMap">
+        <association property="product" column="product_id" javaType="com.web.entity.Product" select="selectProduct">
+            <id property="id" column="product_id"/>
+            <result column="product_name" property="name"/>
+            <result column="height" property="height"/>
+        </association>
+    </resultMap>
+
     <sql id="Base_Column_List">
         ID,UPDATE_NAME,UPDATE_DATE,CREATE_NAME,CREATE_DATE,name,serial,rfid,biz,supplier_id,product_id,room_id,type,work_time,warranty_time,extra,remark,flags,status
+    </sql>
+
+    <sql id="Back_Image_Column_List">
+        ID,name,product_id,serial
     </sql>
 
     <select id="findAll" resultMap="BaseResultMap">
@@ -159,4 +183,24 @@
             </if>
         </trim>
     </insert>
+    <select id="selectForBackImage" resultMap="GridResultMap" parameterType="com.web.entity.Equipment">
+        SELECT
+        a.name,a.serial,a.rfid,a.biz,a.supplier_id,a.product_id,a.room_id,a.type,
+        a.work_time,a.warranty_time,a.remark,a.flags,a.status,
+        c.name product_name,c.height
+        FROM
+        t_b_equipment a, t_s_product c
+        WHERE
+        a.product_id = c.id
+        and a.id NOT IN (SELECT
+        b.equipment_id
+        FROM
+        t_b_box_equipment b)
+        <if test="type != null">
+            AND a.type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="serial != null">
+            AND a.serial like #{serial,jdbcType=VARCHAR}
+        </if>
+    </select>
 </mapper>

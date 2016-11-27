@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.web.entity.RoomIcngph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +23,15 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.test.MongoTest;
 import com.web.bean.form.RoomIcngphForm;
 import com.web.bean.util.FileUtilBean;
 import com.web.core.action.BaseController;
+import com.web.core.dao.impl.MongoDao;
 import com.web.core.util.page.Page;
 import com.web.entity.OperLog;
 import com.web.entity.Room;
+import com.web.entity.RoomIcngph;
 import com.web.example.RoomIcngphExample;
 import com.web.service.RoomIcngphService;
 import com.web.util.*;
@@ -49,6 +51,7 @@ public class RoomIcngphController extends BaseController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RoomIcngphController.class);
 	@Autowired
 	private RoomIcngphService roomIcngphService;
+
 
 	/**
 	 * 新增机房平面图

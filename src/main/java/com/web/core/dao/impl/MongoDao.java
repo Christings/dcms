@@ -41,6 +41,29 @@ public class MongoDao<T> implements IMongoDao<T> {
 	}
 
 	/**
+	 * 保存或更新对象
+	 */
+	public void saveOrUpdate(T obj, Map params) {
+		this.mongoTemplate.remove(this.getQuery(params),obj.getClass());
+		this.save(obj);
+	}
+
+	public T findTest(Class<T> t,String collectionName){
+		Criteria criteria = Criteria.where("cabinets").elemMatch(Criteria.where("resourceCode").is("test233"));
+		Query query = new Query();
+		query.addCriteria(criteria);
+		T entity = this.mongoTemplate.findOne(query,t,collectionName);
+		return entity;
+	}
+
+	/***
+	 * 根据实体查询集合
+	 * */
+	public T findOne(Class<T> tClass,Map params){
+		return mongoTemplate.findOne(this.getQuery(params),tClass);
+	}
+
+	/**
 	 * 保存对象
 	 * 
 	 * @param collectionName
@@ -48,6 +71,13 @@ public class MongoDao<T> implements IMongoDao<T> {
 	 */
 	public void save(T obj, String collectionName) {
 		this.mongoTemplate.save(obj, collectionName);
+	}
+
+	public void batchSave(List<T> objs, String collectionName){
+		for(T obj : objs){
+			this.mongoTemplate.remove(obj);
+			this.mongoTemplate.save(obj,collectionName);
+		}
 	}
 
 	/**
@@ -63,6 +93,10 @@ public class MongoDao<T> implements IMongoDao<T> {
 	public long count(Map<String, Object> params, String collectionName) {
 
 		return this.mongoTemplate.count(getQuery(params), collectionName);
+	}
+
+	public T findOne(Map params, Class<T> tClass, String collectionName){
+		return this.mongoTemplate.findOne(this.getQuery(params),tClass,collectionName);
 	}
 
 	/**

@@ -31,6 +31,7 @@ import jxl.write.WritableWorkbook;
 public class ExcelUtil {
 
 	public static LinkedHashMap<String, String> productFieldMap = new LinkedHashMap<String, String>();
+	public static LinkedHashMap<String, String> cabinetFieldMap = new LinkedHashMap<String, String>();
 	static {
 		productFieldMap.put("设备名称", "a");
 		productFieldMap.put("设备类型", "b");
@@ -52,6 +53,15 @@ public class ExcelUtil {
 		productFieldMap.put("功率(W)", "r");
 		productFieldMap.put("路由交换", "s");
 		productFieldMap.put("对端端口", "t");
+
+		//机柜
+		cabinetFieldMap.put("资源编码","a");
+		cabinetFieldMap.put("设备名称","b");
+		cabinetFieldMap.put("设备类型","c");
+		cabinetFieldMap.put("设备型号","d");
+		cabinetFieldMap.put("上级资源编号","e");
+		cabinetFieldMap.put("起始U数","f");
+		cabinetFieldMap.put("布局","g");
 	}
 
 	/**

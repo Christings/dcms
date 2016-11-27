@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.web.bean.result.BoxEquipmentResult;
+import com.web.bean.form.EquipmentForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.alibaba.fastjson.JSON;
 import com.web.bean.excel.cabinet.CabinetExcel;
 import com.web.bean.form.CabinetForm;
+import com.web.bean.result.BoxEquipmentResult;
 import com.web.bean.result.CabinetResult;
+import com.web.bean.result.EquipmentResult;
 import com.web.core.action.BaseController;
 import com.web.core.util.page.Page;
 import com.web.entity.*;
@@ -52,6 +54,8 @@ public class CabinetController extends BaseController {
 	private RoomIcngphService roomIcngphService;
 	@Autowired
 	private ProductService productService;
+	@Autowired
+	private EquipmentService equipmentService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CabinetController.class);
 
@@ -401,9 +405,8 @@ public class CabinetController extends BaseController {
 				}
 				MultipartFile mFile = request.getFile(fileName);
 				if (null != mFile && mFile.getSize() > 0) {
-					//ExcelUtil<CabinetExcel> excelUtil = new ExcelUtil<CabinetExcel>();
-					CabinetExcel excel = new CabinetExcel();
-					List<CabinetExcel> list = null;//excelUtil.read(mFile.getInputStream(), new CabinetExcel());
+					CabinetExcel excel = null;
+					List<CabinetExcel> list = ExcelUtil.excelToList(mFile.getInputStream(),null,CabinetExcel.class,ExcelUtil.cabinetFieldMap,null);
 					for (int i = 0; i < list.size(); i++) {
 						excel = list.get(i);
 						Cabinet cabinet = new Cabinet();
@@ -474,6 +477,33 @@ public class CabinetController extends BaseController {
 		}catch (Exception e){
 			e.printStackTrace();
 			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "数据导入失败！");
+		}
+	}
+
+	/**
+	 * 查询未上架设备
+	 *@param form
+	 */
+	@RequestMapping(value = "/getUnUpEquipment", method = { RequestMethod.GET, RequestMethod.POST })
+	public Object getUnUpEquipment(EquipmentForm form){
+		try {
+			// 校验参数
+			if (form.getPageSize() < 1 || form.getPageNum() < 1) {
+				return AllResult.buildJSON(HttpStatus.BAD_REQUEST.value(), "参数异常");
+			}
+			Equipment equipment = new Equipment();
+			equipment.setType(3);
+			if(StringUtil.isNotEmpty(form.getSerial())){
+				equipment.setSerial("%"+form.getSerial()+"%");
+			}
+			Page<EquipmentResult> queryResult  = equipmentService.selectForBackImagePage(form.getPageSize(),form.getPageNum(),equipment);
+			// 去除不需要的字段
+			String jsonStr = JSON.toJSONString(queryResult,
+					FastjsonUtils.newIgnorePropertyFilter("updateName", "updateCreate", "createName", "createDate"));
+			return AllResult.okJSON(JSON.parse(jsonStr));
+		}catch (Exception e){
+			e.printStackTrace();
+			return AllResult.buildJSON(HttpStatus.INTERNAL_SERVER_ERROR.value(), "获取未上架设备失败！");
 		}
 	}
 }
