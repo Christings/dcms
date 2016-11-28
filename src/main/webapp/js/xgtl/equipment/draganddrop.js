@@ -37,8 +37,24 @@ function searchNoShelfEqu() {
             }
             $("#store").html(storeHtml);
             $("#store-container").show();
+            $('#store').find( ".has" ).draggable({
+                cancel: "a.ui-icon", // clicking an icon won't initiate dragging
+                revert: "invalid", // when not dropped, the item will revert back to its initial position
+                containment: $( "#demo-frame" ).length ? "#demo-frame" : "document", // stick to demo-frame if present
+                //helper: 'clone',
+                cursor: "move",
+                cursorAt: {left:5, top:5}
+            });
         }
     });
+}
+
+function selectBoardDialog(equId,equName) {
+    var el = document.createElement("a");
+    document.body.appendChild(el);
+    el.href = 'selectboards.html'; //url 是你得到的连接
+    el.click();
+    document.body.removeChild(el);
 }
 
 (function() {
@@ -160,7 +176,7 @@ function searchNoShelfEqu() {
                     var equipmentname = reversed_levels[i]['name'];
                     var productid = reversed_levels[i]['product_id'];
                     cabinetView += '<td class="has" _eid="'+equipmentid+'" rowspan="'+last_pos+'"><img title="'+equipmentname+'" '+
-                        'onerror="//this.src=\'/images/__utm.gif\';" ondblclick="new top.SelectBoardDialog('+equipmentid+','+equipmentname+').show()"'+
+                        'onerror="//this.src=\'/images/__utm.gif\';" ondblclick="selectBoardDialog('+equipmentid+','+equipmentname+')"'+
                         'class="has" _eid="'+equipmentid+'" src="{{createUrl(\'product/image\', id='+productid+', front=1)}}"'+
                         'alt="'+equipmentname+'" style="width:600px; max-height: '+last_pos+' * 52}}px" /></td>';
                 }else{

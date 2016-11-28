@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)http://demo.3ddcim.com/server/reticlechart/?server_id=101082 -->
+<html><head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title></title>
+    <style>
+        #main {
+            width: 780px;
+            height: 680px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="main" _echarts_instance_="1479630177276" style="-webkit-tap-highlight-color: transparent; -webkit-user-select: none; background-color: rgba(0, 0, 0, 0);">
+    <div style="position: relative; overflow: hidden; width: 780px; height: 680px;"><div data-zr-dom-id="bg" style="position: absolute; left: 0px; top: 0px; width: 780px; height: 680px; -webkit-user-select: none;"></div>
+        <canvas width="780" height="680" data-zr-dom-id="0" style="position: absolute; left: 0px; top: 0px; width: 780px; height: 680px; -webkit-user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></canvas>
+        <canvas width="780" height="680" data-zr-dom-id="1" style="position: absolute; left: 0px; top: 0px; width: 780px; height: 680px; -webkit-user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></canvas>
+        <canvas width="780" height="680" data-zr-dom-id="_zrender_hover_" style="position: absolute; left: 0px; top: 0px; width: 780px; height: 680px; -webkit-user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></canvas>
+    </div>
+</div>
+
+<script src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
+<script src="../../../3rd-libs/echarts/echarts-all.js"></script>
+
+<script type="application/javascript">
+
+    series = {
+        type: 'force',
+        name: "配线",
+        ribbonType: false,
+        categories: [{
+            name: '配线架'
+        }, {
+            name: '设备'
+        }, {
+            name: '连线不完整的配线架'
+        }],
+        itemStyle: {
+            normal: {
+                label: {
+                    show: true,
+                    textStyle: {
+                        color: '#333'
+                    }
+                },
+                nodeStyle: {
+                    brushType: 'both',
+                    borderColor: 'rgba(255,215,0,0.4)',
+                    borderWidth: 1
+                },
+                linkStyle: {
+                    type: 'curve'
+                }
+            },
+            emphasis: {
+                label: {
+                    show: false
+                },
+                nodeStyle: {},
+                linkStyle: {}
+            }
+        },
+        useWorker: false,
+        minRadius: 15,
+        maxRadius: 25,
+        gravity: 1.1,
+        scaling: 1.1,
+        roam: 'move',
+        nodes: [{"category": 0, "id": 101082, "value": 30, "name": "A03-ODF1"}, {"category": 0, "id": 101082, "value": 30, "name": "A03-ODF1"}, {"category": 0, "id": 101082, "value": 30, "name": "A03-ODF1"}, {"category": 2, "id": 111974, "value": 10, "name": "F11-ODF4"}, {"category": 0, "id": 101082, "value": 30, "name": "A03-ODF1"}, {"category": 0, "id": 101082, "value": 30, "name": "A03-ODF1"}, {"category": 0, "id": 101082, "value": 30, "name": "A03-ODF1"}, {"category": 0, "id": 101082, "value": 30, "name": "A03-ODF1"}, {"category": 0, "id": 101082, "value": 30, "name": "A03-ODF1"}, {"category": 0, "id": 101082, "value": 30, "name": "A03-ODF1"}, {"category": 2, "id": 111974, "value": 10, "name": "F11-ODF4"}, {"category": 0, "id": 101082, "value": 30, "name": "A03-ODF1"}],
+        links: [{"source": "A03-ODF1", "cnt": 2, "target": "F11-ODF4", "weight": 20}, {"source": "A03-ODF1", "cnt": 5, "target": "A03-ODF1", "weight": 50}]
+    };
+
+    option = {
+        title: {
+            text: '拓扑推演',
+            x: 'right',
+            y: 'bottom'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: function (params) {
+                var data = params.data;
+                if (data.cnt) {
+                    return "";
+                } else {
+                    return data.name;
+                }
+            }
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                restore: {show: true},
+                magicType: {show: true, type: ['force', 'chord']},
+                saveAsImage: {show: true}
+            }
+        },
+        legend: {
+            x: 'left',
+            data: ['配线架', '设备', '连线不完整的配线架']
+        },
+        series: [series]
+    };
+
+    var myChart = echarts.init(document.getElementById('main'));
+    myChart.setOption(option);
+
+    serverIds = [101082];
+
+    function clickHandler(params) {
+
+        var id = params.data.id;
+
+        for (var i=0; i<serverIds.length; i++) {
+            if (id == serverIds[i]) {
+                return;
+            }
+        }
+
+        myChart.showLoading();
+
+        serverIds.push(id);
+
+        $.ajax({
+            url: '/server/multireticlechart/',
+            data: {
+                id: serverIds
+            },
+            dataType: 'json',
+            success: function (ret) {
+                if (!ret.nodes || !ret.links) {
+                    return;
+                }
+
+                if (ret.nodes.length === 0 || ret.links.length === 0) {
+                    return;
+                }
+
+                series.nodes = ret.nodes;
+                series.links = ret.links;
+                myChart.dispose();
+                myChart = echarts.init(document.getElementById('main'));
+                myChart.setOption(option, true);
+                myChart.on(echarts.config.EVENT.CLICK, clickHandler);
+            }
+        });
+
+    }
+
+    myChart.on(echarts.config.EVENT.CLICK, clickHandler);
+    try {
+        parent.reset(window.location.hash);
+    } catch(e) {}
+
+</script>
+
+</body></html>
