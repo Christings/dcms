@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>dcms</title>
+     <link href="../../../3rd-libs/bootstrap/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../../3rd-libs/datatables/datatables.bootstrap.css" rel="stylesheet">
+    <link href="../../../3rd-libs/datatables/datatables.css" rel="stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/lib/weui.css" rel="stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/css/jquery-weui.css" rel="stylesheet">
+    <link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="../../../css/animate.css" rel="stylesheet">
+    
+    
+    <link href="../../../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="../../../css/animate.css" rel="stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/lib/weui.css" rel = "stylesheet">
+    <link href="../../../3rd-libs/jquery-weui/css/jquery-weui.css" rel = "stylesheet">
+    <link href="../../../css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../../../css/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../../../3rd-libs/datatables/datatables.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../3rd-libs/jstree/themes/default/style.min.css">
+    <link href="../../../css/style2.css" rel="stylesheet">
+     <style>
+        .text-align-left {
+            text-align: left;
+        }
+
+        .text-align-right {
+            text-align: right;
+        }
+
+        .text-align-right > div,
+        .text-align-right > select {
+            margin-right: 6px;
+        }
+
+        .input-group-search {
+            display: inline-table;
+            width: 150px;
+            vertical-align: middle;
+        }
+       .modal-body{
+        	height:300px;
+        	overflow:scroll;
+        	overflow-x: auto;
+        	overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>区域管理</h5>
+                    </div>
+                    <div class="ibox-content">
+                    	<div class="col-md-2 text-align-left" id="upTable">
+                            <a data-toggle="modal" style="cursor:pointer" data-target="#districtAdd" onclick="getCPRoomList('districtRoomId','')" class="btn btn-primary ">添加区域</a>
+                        </div>
+                        <form id="queryForm">
+                            <div class="col-md-10 text-align-right">
+                                <div class="input-group-search">
+                                    <input name="searchDistrictname" type="text" class="form-control" id="searchDistrictname"
+                                           placeholder="区域名称">
+                                </div>
+                                <div class="input-group-search">
+                                    <input name="searchRoomName" type="text" class="form-control" id="searchRoomName"
+                                           placeholder="机房名称">
+                                </div>
+                                <button class="btn btn-primary" type="button" id="queryBtn">查询</button>
+                                <button class="btn btn-primary" type="button" id="resetBtn">重置</button>
+                            </div>
+                        </form>
+                        <table style="width:100%" id="districtListTable" class="table table-striped table-bordered table-hover dataTables-example">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<!-- 模态框（Modal） -->
+
+	<div class="modal fade" id="districtAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog">
+	        <div class="modal-content">
+		        <div class="modal-header">
+		            <button type="button" class="close" onclick="districtAddFormReset()" data-dismiss="modal" aria-hidden="true">
+	                  &times;
+		            </button>
+		            <h4 class="modal-title" id="myModalLabel">
+		                新增区域
+		            </h4>
+		        </div>
+		        <form role="form" id="districtAddForm">
+			        <div class="modal-body">
+						<div class="form-group">
+						  <label for="districtName">区域名称</label>
+						  <input type="text" class="form-control" name="districtName" id="districtName" 
+						     placeholder="请输入区域名称">
+						</div>
+						<div class="form-group">
+						  	<label for="distictRoomId">所属机房</label>
+						 	<select class="form-control m-b valid" onchange="selectRoom()" name="districtRoomId" id="districtRoomId">
+							</select>
+						</div>
+						<!-- <div class="form-group">
+						  <label for="cabinetResourceCodes">机柜资产编码</label>
+						  <textarea class="form-control" name="cabinetResourceCodes" id="cabinetResourceCodes" 
+						     placeholder="数据格式：A01,A02,A03..."></textarea>
+						</div> -->
+						<div class='form-group' >
+							<label class='col-sm-3'>机柜资产编码</label>
+							<input id="cabinetResourceCodes" name="cabinetResourceCodes"   style="display: none">
+							<input id="selectRoomId" style="display: none">
+							<div class='col-sm-9'>
+								<span id='cRCName' name="cRCName" style="width: 50%;"></span>&nbsp;&nbsp;&nbsp;&nbsp;<a id="selectCabinetsBtn" class="btn btn-primary btn-sm btn-outline">选择</a>
+							</div>
+						</div>
+						<div class="form-group">
+						  <label for="districtRemark">备注</label>
+						  <textarea class="form-control" name="districtRemark" id="districtRemark" 
+						     placeholder="备注"></textarea> 
+						</div>
+					</div>
+					<div class="modal-footer">
+			            <button type="button" class="btn btn-default" 
+			               data-dismiss="modal" onclick="districtAddFormReset()">关闭
+			            </button>
+			            <button type="submit" class="btn btn-primary">
+			               确认添加
+			            </button>
+		        	</div>
+				</form>
+			</div><!-- /.modal -->
+		</div>
+	</div>
+
+	<div class="modal fade" id="districtCabinetsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog">
+	        <div class="modal-content">
+		        <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                  &times;
+		            </button>
+		            <h4 class="modal-title">
+		                选择机柜
+		            </h4>
+		        </div>
+
+		        <div class="modal-body">
+                    <table id="cabinetsModalTable">
+                    </table>
+		        </div>
+		         <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmCabinetsBtn">
+                        确定
+                    </button>
+                </div>
+		    </div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="districtUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog">
+	        <div class="modal-content">
+		        <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                  &times;
+		            </button>
+		            <h4 class="modal-title" id="myModalLabel">
+		                区域编辑
+		            </h4>
+		        </div>
+		         <form id="districtUpdateForm">
+			        <div class="modal-body" id="districtUpdateBody">
+			        </div>
+			        <div class="modal-footer">
+			           <button type="button" class="btn btn-default" data-dismiss="modal">
+			           	关闭
+			            </button>
+			            <button type="submit" class="btn btn-primary">
+			            提交修改
+			           </button>
+		        	</div>
+	        	</form>
+		    </div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+
+	<script src="../../../3rd-libs/jquery/jquery-2.1.4.min.js"></script>
+	<script src="../../../3rd-libs/jstree/jstree.min.js"></script>
+    <script src="../../../3rd-libs/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../../3rd-libs/jquery-validation/jquery.validate.min.js"></script>
+    <script src="../../../3rd-libs/jquery-validation/localization/messages_zh.min.js"></script>
+    <script src="../../../3rd-libs/jquery-weui/js/jquery-weui.min.js"></script>
+    <script src="../../../3rd-libs/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Data Tables -->
+    <script src="../../../3rd-libs/datatables/datatables.js"></script>
+	<script src="../../../3rd-libs/datatables/datatables.bootstrap.js"></script>
+	<script src="../../../3rd-libs/datatables/datatables-custom.js"></script>
+
+	<script src="../../../3rd-libs/boostrap-table/bootstrap-table.min.js"></script>
+    <script src="../../../3rd-libs/boostrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+     <!-- Peity -->
+    
+	
+    <!-- 自定义js -->
+    <script src="../../../js/pub/common.js"></script>
+    <script src="../../../js/pub/utils.js" type="text/javascript" charset="utf-8"></script>
+ 	<script src="../../../js/xgtl/areaManage/areaManage.js"></script>
+ 	<script src="../../../js/xgtl/areaManage/areaAdd.js"></script>
+ 	<script src="../../../js/xgtl/areaManage/areaUpdate.js"></script>
+ 	<script src="../../../js/xgtl/areaManage/areaDelete.js"></script>
+ 	
+</body>
+</html>
