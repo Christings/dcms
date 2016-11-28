@@ -321,14 +321,15 @@ public class FileUtil {
 	public static boolean downloadFile(HttpServletResponse response, String filePath, String fileName) {
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
+		String path = Constant.FILE_UPLOAD_PATH + File.separator + filePath;// 获取路径
 		try {
 			if (StringUtil.isEmpty(fileName)) {
-				fileName = FileUtil.getFilename(filePath);
+				fileName = FileUtil.getFilename(path);
 			}
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("multipart/form-data");
 			response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
-			inputStream = new FileInputStream(new File(filePath));
+			inputStream = new FileInputStream(new File(path));
 			outputStream = response.getOutputStream();
 			byte[] bytes = new byte[1024];
 			int lenth;
@@ -389,8 +390,8 @@ public class FileUtil {
 						bean.setFileName(key);
 						bean.setNewFileName(newFile.getName());
 						bean.setFileExt(ext);
-						bean.setFileRealPath(path + "/" + newFile.getName());
-						bean.setFileParentPath(path);
+						bean.setFileRealPath(targetPath + "/" + newFile.getName());
+						bean.setFileParentPath(targetPath);
 						beans.add(bean);
 					}
 					if (inFile.exists()) {
@@ -401,8 +402,8 @@ public class FileUtil {
 					bean.setFileName(file.getName());
 					bean.setNewFileName(newFileName);
 					bean.setFileExt(ext);
-					bean.setFileRealPath(path + "/" + newFileName);
-					bean.setFileParentPath(path);
+					bean.setFileRealPath(targetPath + "/" + newFileName);
+					bean.setFileParentPath(targetPath);
 					beans.add(bean);
 				}
 			}
@@ -463,6 +464,7 @@ public class FileUtil {
 		if (StringUtil.isEmpty(path)) {
 			return false;
 		}
+		path = Constant.FILE_UPLOAD_PATH+File.separator;
 		File file = new File(path);
 		if (file.exists()) {
 			return true;

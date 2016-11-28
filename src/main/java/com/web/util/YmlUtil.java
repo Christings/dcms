@@ -23,9 +23,10 @@ public class YmlUtil {
 	 *            yml文件路径
 	 */
 	public static Map getYmlString(String url) throws IOException {
+		String path = Constant.FILE_UPLOAD_PATH+File.separator + url;
 		Yaml yml = new Yaml();
-		if (StringUtil.isNotEmpty(url)) {
-			File file = new File(url);
+		if (StringUtil.isNotEmpty(path)) {
+			File file = new File(path);
 			Map map = null;
 			String charset = FileUtil.getFileCharset(file);
 			InputStreamReader reader = new InputStreamReader(new FileInputStream(file), charset);

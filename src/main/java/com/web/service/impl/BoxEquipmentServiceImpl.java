@@ -1,6 +1,7 @@
 package com.web.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.web.bean.result.BoxEquipmentResult;
 import com.web.core.util.page.Page;
 import com.web.entity.BoxEquipment;
 import com.web.example.BoxEquipmentExample;
@@ -60,5 +61,15 @@ public class BoxEquipmentServiceImpl implements BoxEquipmentService{
     @Override
     public List<BoxEquipment> getAll() {
         return mapper.selectByExample(new BoxEquipmentExample());
+    }
+
+    @Override
+    public List<BoxEquipment> selectByExample(BoxEquipmentExample example){
+        return mapper.selectByExample(example);
+    }
+
+    @Override
+    public List<BoxEquipmentResult> selectWithEquipment(BoxEquipment boxEquipment){
+        return mapper.selectWithEquipment(boxEquipment);
     }
 }

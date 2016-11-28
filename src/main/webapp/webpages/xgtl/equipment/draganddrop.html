@@ -69,11 +69,11 @@
                                         <a class="btn btn-primary" href="?cabinet_id=100082&direction=1">机柜正面</a>
                                         <a class="btn btn-primary" href="?cabinet_id=100082&direction=2">机柜背面</a>
                                     </div>
-                                    <div class="btn-group">
+                                    <!--<div class="btn-group">
                                         <a class="btn btn-primary" href="?cabinet_id=100082&direction=3">左侧</a>
                                         <a class="btn btn-primary" href="?cabinet_id=100082&direction=4">中间</a>
                                         <a class="btn btn-primary" href="?cabinet_id=100082&direction=5">右侧</a>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <p style="font-size:12px">
                                 </p>
@@ -81,11 +81,12 @@
                                     <tr>
                                         <td _cid="26" class="cabinet-label empty">26</td>
                                         <td class="has" _eid="100465" rowspan="4">
-                                            <img title="A01-ODF5"
-                                                 onerror="//this.src='/images/__utm.gif';"
-                                                 ondblclick="new top.SelectBoardDialog(100465,'A01-ODF5').show()"
-                                                 class="has" _eid="100465" src="http://localhost:8080/dcms/img/database_add.png"
-                                                 alt="A01-ODF5" style="width:600px; max-height: 208px"/>
+                                            <a  href='#'>
+                                                <img title="A01-ODF5" onerror="//this.src='/images/__utm.gif';"
+                                                     ondblclick="selectBoardDialog(100465,'A01-ODF5',this)"
+                                                     class="has" _eid="100465" src="http://localhost:8080/dcms/img/database_add.png"
+                                                     alt="A01-ODF5" style="width:600px; max-height: 208px"/>
+                                            </a>
                                         </td>
                                         <td class="cabinet-label">26</td>
                                     </tr>
