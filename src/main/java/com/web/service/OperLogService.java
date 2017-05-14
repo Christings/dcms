@@ -32,7 +32,7 @@ public interface OperLogService {
 	 *            日记级别 成功或失败
 	 */
 	public int addSystemLog(OperLog.operTypeEnum operType, OperLog.actionSystemEnum systemAction, String operProp,
-			OperLog.logLevelEnum logLevel);
+                            OperLog.logLevelEnum logLevel);
 
 	/**
 	 * @param deviceName
@@ -45,7 +45,7 @@ public interface OperLogService {
 	 *            操作的属性（JSON字符串格式）
 	 */
 	public int addBusinessLog(String deviceName, OperLog.operTypeEnum operType, OperLog.actionBusinessEnum busiAction,
-			String operProp);
+                              String operProp);
 
 	/**
 	 * @param deviceName
@@ -60,7 +60,7 @@ public interface OperLogService {
 	 *            日志级别 成功或失败
 	 */
 	public int addBusinessLog(String deviceName, OperLog.operTypeEnum operType, OperLog.actionBusinessEnum busiAction, String operProp,
-			OperLog.logLevelEnum logLevel);
+                              OperLog.logLevelEnum logLevel);
 
 	/**
 	 * 分页查询日志

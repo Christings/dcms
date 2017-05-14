@@ -28,7 +28,7 @@ public interface MenuMapper {
     /**
      * 自定义查询返回树形菜单
      */
-    List<Menu> selectByTree(Map<String,String> params);
+    List<Menu> selectByTree(Map<String, String> params);
 
     Menu selectByPrimaryKey(String id);
 

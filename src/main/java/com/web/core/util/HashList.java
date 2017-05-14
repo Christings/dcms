@@ -80,9 +80,9 @@ public class HashList extends ArrayList<Map<String, Object>> {
 			return ((java.sql.Date) obj).toString();
 		} else if (obj != null && obj instanceof java.sql.Time) {
 			return ((java.sql.Time) obj).toString();
-		} else if (obj != null && obj instanceof java.sql.Timestamp) {
-			return ((java.sql.Timestamp) obj).toString();
-		} else if (obj != null && obj instanceof java.util.Date) {
+		} else if (obj != null && obj instanceof Timestamp) {
+			return ((Timestamp) obj).toString();
+		} else if (obj != null && obj instanceof Date) {
 			return getDate14(row, name);
 		} else if (obj != null && obj instanceof Clob) {
 			Clob c = ((Clob) obj);
@@ -179,7 +179,7 @@ public class HashList extends ArrayList<Map<String, Object>> {
 		}
 		Object obj = super.get(row).get(name);
 		if (obj != null && obj instanceof java.sql.Date) {
-			return new java.util.Date(((java.sql.Date) obj).getTime());
+			return new Date(((java.sql.Date) obj).getTime());
 		} else if (obj != null && obj instanceof java.sql.Time) {
 			String sDateTime = ((java.sql.Time) obj).toString();
 			Date date = null;
@@ -191,10 +191,10 @@ public class HashList extends ArrayList<Map<String, Object>> {
 				}
 			}
 			return date;
-		} else if (obj != null && obj instanceof java.sql.Timestamp) {
-			return new java.util.Date(((java.sql.Timestamp) obj).getTime());
-		} else if (obj != null && obj instanceof java.util.Date) {
-			return (java.util.Date) obj;
+		} else if (obj != null && obj instanceof Timestamp) {
+			return new Date(((Timestamp) obj).getTime());
+		} else if (obj != null && obj instanceof Date) {
+			return (Date) obj;
 		}
 		return null;
 	}
@@ -211,8 +211,8 @@ public class HashList extends ArrayList<Map<String, Object>> {
 			return null;
 		}
 		Object obj = super.get(row).get(name);
-		if (obj != null && obj instanceof java.sql.Timestamp) {
-			return ((java.sql.Timestamp) obj);
+		if (obj != null && obj instanceof Timestamp) {
+			return ((Timestamp) obj);
 		}
 		return null;
 	}

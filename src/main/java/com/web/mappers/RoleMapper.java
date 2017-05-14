@@ -33,5 +33,5 @@ public interface RoleMapper {
     /**
      * 自定义根据用户ID 返回角色信息
      */
-    List<Role> selectByUserId(Map<String,String> params);
+    List<Role> selectByUserId(Map<String, String> params);
 }

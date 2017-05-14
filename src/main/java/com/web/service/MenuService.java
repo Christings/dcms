@@ -35,7 +35,7 @@ public interface MenuService extends IService<Menu, String> {
      * @param params
      * @return
      */
-    List<Menu> getTree(Map<String,String> params);
+    List<Menu> getTree(Map<String, String> params);
 
     /**
      * 关联关系删除菜单

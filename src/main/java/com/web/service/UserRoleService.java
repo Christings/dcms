@@ -42,12 +42,12 @@ public interface UserRoleService extends IService<UserRole,String> {
      *
      * @return
      */
-    void batchRoleUser(String roleId,String[] userIds);
+    void batchRoleUser(String roleId, String[] userIds);
 
     /**
      * 批量根据用户保存角色
      *
      * @return
      */
-    void batchUserRole(String userId,String[] roleIds);
+    void batchUserRole(String userId, String[] roleIds);
 }

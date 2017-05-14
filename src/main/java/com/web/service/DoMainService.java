@@ -40,10 +40,10 @@ public interface DoMainService extends IService<DoMain, String> {
      * @param params
      * @return
      */
-    List<DoMain> getTree(Map<String,String> params);
+    List<DoMain> getTree(Map<String, String> params);
 
     /**
      * 根据用户ID查询域列表
      */
-    List<DoMain> getByUserId(Map<String,String> params);
+    List<DoMain> getByUserId(Map<String, String> params);
 }

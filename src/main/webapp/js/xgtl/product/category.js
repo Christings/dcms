@@ -63,6 +63,7 @@ function initTreeGird(container, dataList, parentIndex) {
         }
         trHtml += '">';
         trHtml += '<td>' + type.name + '</td>';
+        trHtml += '<td>' + type.coding + '</td>';
         trHtml += '<td>' + (type.description?type.description:'') + '</td>';
         trHtml += '<td>' +
             '<i class="glyphicon glyphicon-plus"   title="新增分类"     onclick="newUpdate(\''+type.id+'\',\'new\')"></i>&nbsp;&nbsp;' +
@@ -112,6 +113,7 @@ function newUpdate(id,type) {
         var type=DCMSUtils.SessionStorage.get("TYPE_DATA_MAP")[id];
         $("#typeId").val(type.id);
         $("#typeName").val(type.name);
+        $("#typeCoding").val(type.coding);
         $("#typeDesc").val(type.description);
 
         var pType=DCMSUtils.SessionStorage.get("TYPE_DATA_MAP")[type.parentId];
@@ -131,6 +133,10 @@ $("#newUpdateForm").validate({
             minlength:2,
             maxlength:50
         },
+        typeCoding: {
+            minlength: 2,
+            maxlength: 50
+        },
         typeDesc:{
             minlength:2,
             maxlength:120
@@ -138,12 +144,14 @@ $("#newUpdateForm").validate({
     },
     messages:{
         typeName:icon + "请输入2-50个字符的分类名称",
+        typeCoding:icon + "请输入2-50个字符的分类编码",
         typeDesc:icon + "请输入2-120个字符的分类描述"
     },
     submitHandler:function(form){
         var type={
             id:$("#typeId").val(),
             name:$("#typeName").val(),
+            coding:$("#typeCoding").val(),
             parentId:$("#typePId").val(),
             description:$("#typeDesc").val()
         }

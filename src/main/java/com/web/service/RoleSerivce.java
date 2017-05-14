@@ -26,10 +26,10 @@ public interface RoleSerivce extends IService<Role, String>{
 	 * @param example
 	 * @return
 	 */
-	Page<Role> getScrollData(int pageNum, int pageSize,  RoleExample example);
+	Page<Role> getScrollData(int pageNum, int pageSize, RoleExample example);
 
 	/**
 	 * 根据用户ID查询角色列表
      */
-	List<Role> getByUserId(Map<String,String> params);
+	List<Role> getByUserId(Map<String, String> params);
 }

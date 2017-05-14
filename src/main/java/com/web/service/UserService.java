@@ -52,5 +52,5 @@ public interface UserService extends IService<User,String> {
 	/**
 	 * 扩展批量删除用户
 	 */
-	int deleteBatch(String ... id);
+	int deleteBatch(String... id);
 }

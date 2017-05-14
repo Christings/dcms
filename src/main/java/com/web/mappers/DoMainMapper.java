@@ -28,7 +28,7 @@ public interface DoMainMapper {
     /**
      * 自定义查询返回树形域
      */
-    List<DoMain> selectByTree(Map<String,String> params);
+    List<DoMain> selectByTree(Map<String, String> params);
 
     DoMain selectByPrimaryKey(String id);
 
@@ -43,5 +43,5 @@ public interface DoMainMapper {
     /**
      * 自定义根据用户ID 返回角色信息
      */
-    List<DoMain> selectByUserId(Map<String,String> params);
+    List<DoMain> selectByUserId(Map<String, String> params);
 }

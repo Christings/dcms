@@ -14,7 +14,7 @@ public interface MenuRoleService extends IService<MenuRole, String> {
     /**
      * 根据查询条件返回List列表
      */
-    List<MenuRole> getRoleMenuOperation(String roleId,String menuId);
+    List<MenuRole> getRoleMenuOperation(String roleId, String menuId);
     /**
      * 根据角色ID 查询角色与菜单关系数据
      *
@@ -34,13 +34,13 @@ public interface MenuRoleService extends IService<MenuRole, String> {
      *
      * @return
      */
-    void batchRoleMenu(String roleId,String[] menuIds);
+    void batchRoleMenu(String roleId, String[] menuIds);
 
     /**
      * 批量根据菜单保存角色
      *
      * @return
      */
-    void batchMenuRole(String menuId,String[] roleIds);
+    void batchMenuRole(String menuId, String[] roleIds);
 
 }

@@ -815,7 +815,7 @@ public class StringUtil {
 			try {
 				Tstr = QJstr.substring(i, i + 1);
 				b = Tstr.getBytes("unicode");
-			} catch (java.io.UnsupportedEncodingException e) {
+			} catch (UnsupportedEncodingException e) {
 				if (logger.isErrorEnabled()) {
 					logger.error(e);
 				}
@@ -825,7 +825,7 @@ public class StringUtil {
 				b[3] = 0;
 				try {
 					outStr = outStr + new String(b, "unicode");
-				} catch (java.io.UnsupportedEncodingException ex) {
+				} catch (UnsupportedEncodingException ex) {
 					if (logger.isErrorEnabled()) {
 						logger.error(ex);
 					}
@@ -1723,7 +1723,7 @@ public class StringUtil {
 		String s = null;
 		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };// 用来将字节转换成16进制表示的字符
 		try {
-			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(source);
 			byte tmp[] = md.digest();// MD5 的计算结果是一个 128 位的长整数，
 			// 用字节表示就是 16 个字节

@@ -25,6 +25,9 @@
     <link href="../../../css/style.css" rel = "stylesheet">
     <link href="../../../css/style2.css" rel = "stylesheet">
 
+    <script href="../../../3rd-libs/select2/js/select2.js" ></script>
+    <link href="../../../3rd-libs/select2/css/select2.css" rel = "stylesheet">
+
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -42,9 +45,10 @@
                     <table style="width:100%;min-width: 1000px;" class="table tree table-striped table-bordered table-hover dataTables-example">
                         <thead>
                         <tr>
-                            <th style="width:30%;min-width: 300px;">分类名称</th>
-                            <th style="width:50%;min-width: 60px;">分类描述</th>
-                            <th style="width:20%;min-width: 120px;">操作</th>
+                            <th style="width:25%;min-width: 150px;">分类名称</th>
+                            <th style="width:25%;min-width: 150px;">分类编码</th>
+                            <th style="width:20%;min-width: 60px;">分类描述</th>
+                            <th style="width:30%;min-width: 120px;">操作</th>
                         </tr>
                         </thead>
                         <tbody id="treeBody">
@@ -84,6 +88,64 @@
                         <div class="col-sm-8">
                             <input id="categoryId" name="categoryId"  type="hidden">
                             <input id="typeName" name="typeName" minlength="2" type="text" class="form-control" required minlength="2" maxlength="50">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">分类编码：</label>
+                        <div class="col-sm-8">
+                            <input id="typeCodig" name="typeCodig" minlength="2" type="text" class="form-control" required minlength="2" maxlength="50">
+                            <!--<span minlength="2" type="text" class="form-control" required minlength="2" maxlength="50">-->
+                                 <!--<select id="typeCoding" name="typeCoding" minlength="2" class="form-control select2" required minlength="2" maxlength="50"-->
+                                         <!--style="width:347px;border:none;position:absolute;height:30px;margin-top:-5px;left:16px;"  onchange="this.parentNode.nextSibling.value=this.value">-->
+                                     <!--<option value="">自定义</option>-->
+                                     <!--<optgroup label="服务器设备">-->
+                                        <!--<option value="server">server</option>-->
+                                        <!--<option value="server-1">server-1</option>-->
+                                        <!--<option value="server-2">server-2</option>-->
+                                    <!--</optgroup>-->
+                                    <!--<optgroup label="网络设备">-->
+                                        <!--<option value="network">network</option>-->
+                                        <!--<option value="network-1">network-1</option>-->
+                                        <!--<option value="network-2">network-2</option>-->
+                                    <!--</optgroup>-->
+                                    <!--<optgroup label="刀笼设备">-->
+                                        <!--<option value="cage">cage</option>-->
+                                        <!--<option value="cage-1">cage-1</option>-->
+                                        <!--<option value="cage-2">cage-2</option>-->
+                                    <!--</optgroup>-->
+                                    <!--<optgroup label="刀片设备">-->
+                                        <!--<option value="blade">blade</option>-->
+                                        <!--<option value="blade-1">blade-1</option>-->
+                                        <!--<option value="blade-2">blade-2</option>-->
+                                    <!--</optgroup>-->
+                                    <!--<optgroup label="存储设备">-->
+                                        <!--<option value="storage">storage</option>-->
+                                        <!--<option value="storage-1">storage-1</option>-->
+                                        <!--<option value="storage-2">storage-2</option>-->
+                                    <!--</optgroup>-->
+                                    <!--<optgroup label="虚拟机">-->
+                                        <!--<option value="virtual">virtual</option>-->
+                                        <!--<option value="virtual-1">virtual-1</option>-->
+                                        <!--<option value="virtual-2">virtual-2</option>-->
+                                    <!--</optgroup>-->
+                                    <!--<optgroup label="视频设备">-->
+                                        <!--<option value="video">video</option>-->
+                                        <!--<option value="video-1">video-1</option>-->
+                                        <!--<option value="video-2">video-2</option>-->
+                                    <!--</optgroup>-->
+                                    <!--<optgroup label="安全设备">-->
+                                        <!--<option value="security">security</option>-->
+                                        <!--<option value="security-1">security-1</option>-->
+                                        <!--<option value="security-2">security-2</option>-->
+                                    <!--</optgroup>-->
+                                    <!--<optgroup label="配电设备">-->
+                                        <!--<option value="distribution">distribution</option>-->
+                                        <!--<option value="distribution-1">distribution-1</option>-->
+                                        <!--<option value="distribution-2">distribution-2</option>-->
+                                    <!--</optgroup>-->
+                                <!--</select>-->
+                            <!--</span><input  name="box" style="width:328px;border:none;position:absolute;height:30px;margin-top:-32px;left:16px;"/>-->
                         </div>
                     </div>
 
